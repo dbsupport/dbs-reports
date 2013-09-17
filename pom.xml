@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- parent>
+		<groupId>eb-biblioteka</groupId>
+		<artifactId>eb-pom</artifactId>
+		<version>10</version>
+	</parent-->
+
+	<groupId>pl.com.dbs</groupId>
+	<artifactId>dbs-reports</artifactId>
+	<name>dbs-reports</name>
+	<description>DataBase Support - Reports</description>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>app</module>
+		<module>web</module>
+	</modules>
+	
+	<properties>
+		<!-- eb.system.version>2.9.0-SNAPSHOT</eb.system.version>
+        <eb.soa.version>2.6.3</eb.soa.version>
+        <eb.serwis.autoryzacja.version>1.7.0</eb.serwis.autoryzacja.version-->
+		
+		<jstl.version>1.2</jstl.version>
+        <servlet.version>2.5</servlet.version>		
+		<spring.version>3.1.1.RELEASE</spring.version>
+		<spring.security.version>3.1.1.RELEASE</spring.security.version>
+		<tiles.version>2.2.2</tiles.version>
+		<bootstrap.version>2.3.1</bootstrap.version>
+        <jquery.version>1.9.0</jquery.version>		
+		<guava.version>12.0.1</guava.version>
+  		<jetty.version>8.1.5.v20120716</jetty.version>
+  		<jetty.jsp.version>8.1.4.v20120524</jetty.jsp.version>
+  		<eclipselink>2.5.0</eclipselink>
+  		<cglib>2.2.2</cglib>		
+	</properties>	
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- dependency>
+				<groupId>eb-biblioteka</groupId>
+				<artifactId>eb-system-web</artifactId>
+				<version>${eb.system.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>eb-biblioteka</groupId>
+				<artifactId>eb-system-core</artifactId>
+				<version>${eb.system.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>eb-biblioteka</groupId>
+				<artifactId>eb-system-db-core</artifactId>
+				<version>${eb.system.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>eb-biblioteka</groupId>
+				<artifactId>eb-system-db2</artifactId>
+				<version>${eb.system.version}</version>
+			</dependency>
+	        <dependency>
+	            <groupId>eb-biblioteka</groupId>
+	            <artifactId>eb-system-db3</artifactId>
+	            <version>${eb.system.version}</version>
+	        </dependency-->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+				<version>${servlet.version}</version>
+			</dependency>
+			<!-- acegi dependency -->
+			<!-- dependency>
+				<groupId>eb-biblioteka</groupId>
+				<artifactId>eb-serwis-autoryzacja-klient-web</artifactId>
+				<version>1.6.1</version>
+			</dependency-->
+			<!--
+				potrzebna dla eb-serwis-autoryzacja-klient-web bo exclude springa
+				wywalil elementy jms
+			-->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jms</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.8.1</version>
+				<scope>test</scope>
+			</dependency>	
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>

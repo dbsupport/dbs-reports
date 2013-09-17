@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+
+    <definition name="welcome" template="/WEB-INF/jsp/tiles/welcome.jsp">
+        <put-attribute name="pageid" type="string" value=""/>
+        <put-attribute name="title" type="string" value=""/>
+        <put-attribute name="content" type="string" value=""/>
+        <put-attribute name="bottom" type="string" value=""/>
+        <put-attribute name="header" value="/WEB-INF/jsp/tiles/welcomeheader.jsp"/>
+        <put-attribute name="messages" value="/WEB-INF/jsp/tiles/messages.jsp"/>
+        <put-attribute name="wait" value="/WEB-INF/jsp/tiles/wait.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/jsp/tiles/footer.jsp"/>
+    </definition>
+    
+    <definition name="main" template="/WEB-INF/jsp/tiles/main.jsp">
+        <put-attribute name="pageid" type="string" value=""/>
+        <put-attribute name="title" type="string" value=""/>
+        <put-attribute name="content" type="string" value=""/>
+        <put-attribute name="bottom" type="string" value=""/>
+        <put-attribute name="header" value="/WEB-INF/jsp/tiles/header.jsp"/>
+        <put-attribute name="menu" value="/WEB-INF/jsp/tiles/menu.jsp"/>
+        <put-attribute name="messages" value="/WEB-INF/jsp/tiles/messages.jsp"/>
+        <put-attribute name="wait" value="/WEB-INF/jsp/tiles/wait.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/jsp/tiles/footer.jsp"/>
+    </definition>    
+    
+</tiles-definitions>

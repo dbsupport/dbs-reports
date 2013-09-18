@@ -4,12 +4,6 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- parent>
-		<groupId>eb-biblioteka</groupId>
-		<artifactId>eb-pom</artifactId>
-		<version>10</version>
-	</parent-->
-
 	<groupId>pl.com.dbs</groupId>
 	<artifactId>dbs-reports</artifactId>
 	<name>dbs-reports</name>
@@ -23,10 +17,6 @@
 	</modules>
 	
 	<properties>
-		<!-- eb.system.version>2.9.0-SNAPSHOT</eb.system.version>
-        <eb.soa.version>2.6.3</eb.soa.version>
-        <eb.serwis.autoryzacja.version>1.7.0</eb.serwis.autoryzacja.version-->
-		
 		<jstl.version>1.2</jstl.version>
         <servlet.version>2.5</servlet.version>		
 		<spring.version>3.1.1.RELEASE</spring.version>
@@ -37,57 +27,150 @@
 		<guava.version>12.0.1</guava.version>
   		<jetty.version>8.1.5.v20120716</jetty.version>
   		<jetty.jsp.version>8.1.4.v20120524</jetty.jsp.version>
-  		<eclipselink>2.5.0</eclipselink>
-  		<cglib>2.2.2</cglib>		
+  		<eclipselink.version>2.5.0</eclipselink.version>
+  		<cglib.version>2.2.2</cglib.version>
+  		<log4j.version>1.2.17</log4j.version>		
 	</properties>	
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- dependency>
-				<groupId>eb-biblioteka</groupId>
-				<artifactId>eb-system-web</artifactId>
-				<version>${eb.system.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>eb-biblioteka</groupId>
-				<artifactId>eb-system-core</artifactId>
-				<version>${eb.system.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>eb-biblioteka</groupId>
-				<artifactId>eb-system-db-core</artifactId>
-				<version>${eb.system.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>eb-biblioteka</groupId>
-				<artifactId>eb-system-db2</artifactId>
-				<version>${eb.system.version}</version>
-			</dependency>
-	        <dependency>
-	            <groupId>eb-biblioteka</groupId>
-	            <artifactId>eb-system-db3</artifactId>
-	            <version>${eb.system.version}</version>
-	        </dependency-->
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>servlet-api</artifactId>
 				<version>${servlet.version}</version>
 			</dependency>
-			<!-- acegi dependency -->
-			<!-- dependency>
-				<groupId>eb-biblioteka</groupId>
-				<artifactId>eb-serwis-autoryzacja-klient-web</artifactId>
-				<version>1.6.1</version>
-			</dependency-->
-			<!--
-				potrzebna dla eb-serwis-autoryzacja-klient-web bo exclude springa
-				wywalil elementy jms
-			-->
+			<!-- Spring Security -->
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-openid</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>
+	        <dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-taglibs</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency> 
+	 		<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${spring.security.version}</version>
+			</dependency>			
+			
+			<!-- Spring -->
+	        <dependency>
+	            <groupId>org.springframework</groupId>
+	            <artifactId>spring-core</artifactId>
+	            <version>${spring.version}</version>
+	        </dependency>			
+	        <dependency>
+	            <groupId>org.springframework</groupId>
+	            <artifactId>spring-context</artifactId>
+	            <version>${spring.version}</version>
+	        </dependency> 	        
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-expression</artifactId>
+				<version>${spring.version}</version>
+			</dependency>			
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jms</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
+	        <dependency>
+	            <groupId>org.springframework</groupId>
+	            <artifactId>spring-web</artifactId>
+	            <version>${spring.version}</version>
+	        </dependency>			
+	        <dependency>
+	            <groupId>org.springframework</groupId>
+	            <artifactId>spring-webmvc</artifactId>
+	            <version>${spring.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.springframework</groupId>
+	            <artifactId>spring-aop</artifactId>
+	            <version>${spring.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.springframework</groupId>
+	            <artifactId>spring-jdbc</artifactId>
+	            <version>${spring.version}</version>
+	        </dependency>
+	        
+	        <!-- Tiles -->
+			<dependency>
+				<groupId>org.apache.tiles</groupId>
+				<artifactId>tiles-api</artifactId>
+				<version>${tiles.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>		
+			<dependency>
+				<groupId>org.apache.tiles</groupId>
+				<artifactId>tiles-core</artifactId>
+				<version>${tiles.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tiles</groupId>
+				<artifactId>tiles-template</artifactId>
+				<version>${tiles.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tiles</groupId>
+				<artifactId>tiles-jsp</artifactId>
+				<version>${tiles.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tiles</groupId>
+				<artifactId>tiles-servlet</artifactId>
+				<version>${tiles.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>    
+	        
+	        
+			
+			<dependency>
+				<groupId>org.eclipse.persistence</groupId>
+				<artifactId>eclipselink</artifactId>
+				<version>${eclipselink.version}</version>
+			</dependency>			
+			<dependency>
+				<groupId>cglib</groupId>
+				<artifactId>cglib</artifactId>
+				<version>${cglib.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			            			
+			
+			
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
@@ -96,13 +179,6 @@
 			</dependency>	
 		</dependencies>
 	</dependencyManagement>
-
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-
+	
+	
 </project>

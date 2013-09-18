@@ -23,6 +23,13 @@
  	For example @Controller and @Service. Make sure to set the correct base-package-->	
 	<context:component-scan base-package="pl.com.dbs.reports" />
 	
+	 <!-- the mvc resources tag does the magic -->
+	 <mvc:resources mapping="/bootstrap/**" location="/bootstrap/" />
+	 <mvc:resources mapping="/css/**" location="/css/" />
+	 <mvc:resources mapping="/jquery/**" location="/jquery/" />
+	 <mvc:resources mapping="/js/**" location="/js/" />
+	
+	
 	<!-- Configures the annotation-driven Spring MVC Controller programming model.
 	Note that, with Spring 3.0, this tag works in Servlet MVC only!  -->	
  	<tx:annotation-driven />
@@ -64,23 +71,6 @@
     	</property>
     </bean>  
     
-	<!-- bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-		<property name="exceptionMappings">
-		<props>
-			<prop key="java.lang.Exception">tiles/error</prop>
-		</props>
-		</property>
-	</bean-->    
-	<!-- 
-	<bean name="exceptionResolver" class="pl.eurobank.platnosciforum.support.error.ExceptionResolver">
-		<property name="exceptionMappings">
-			<props>
-				<prop key="java.lang.Throwable">error/error</prop>
-			</props>
-		</property>
-	</bean>	
-	 -->
-	
 	<mvc:annotation-driven/>
 	<!--  validator="globalValidator"/-->
 	<!-- bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/-->

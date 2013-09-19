@@ -1,6 +1,9 @@
-		
+<?xml version='1.0' encoding='utf-8'?>		
 	
-<Context>
+<Context path="/reports"
+         reloadable="true"
+         cachingAllowed="false"
+         antiResourceLocking="true">
 
     <!-- maxActive: Maximum number of database connections in pool. Make sure you
          configure your mysqld max_connections large enough to handle
@@ -32,9 +35,13 @@
                username="reports" password="reports" driverClassName="com.mysql.jdbc.Driver"
                url="jdbc:mysql://localhost:3306/javatest"/-->
                
-<Resource name="reports/jdbc/DataSource" auth="Container"
+<!-- Resource name="reports/jdbc/DataSource" auth="Container"
           type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
           url="jdbc:postgresql://localhost:5432/reports"
-          username="reports" password="reports" maxActive="20" maxIdle="10" maxWait="-1"/>               
+          username="reports" password="reports" maxActive="20" maxIdle="10" maxWait="-1"/-->
+          
+	<ResourceLink name="reports/jdbc/DataSource"
+   		global="reports/jdbc/DataSource"
+   		type="javax.sql.DataSource"/>                         
 
 </Context>

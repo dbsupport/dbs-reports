@@ -14,7 +14,7 @@
     
     <context:annotation-config />
     
-    <aop:config>
+    <!-- aop:config>
         <aop:pointcut id="logMetodaWykonaniePunktPrzeciecia"
             expression="execution(* pl.com.dbs.reports..*.*(..))" />
 
@@ -24,6 +24,6 @@
      
     </aop:config>
     
-    <bean id="logMetodaWykonanieAspekt" class="pl.com.dbs.reports..." />
+    <bean id="logMetodaWykonanieAspekt" class="pl.com.dbs.reports..." /-->
     
 </beans>

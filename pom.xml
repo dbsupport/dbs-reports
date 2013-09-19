@@ -19,14 +19,11 @@
 	<properties>
 		<jstl.version>1.2</jstl.version>
         <servlet.version>2.5</servlet.version>		
-		<spring.version>3.1.1.RELEASE</spring.version>
+		<spring.version>3.2.1.RELEASE</spring.version>
 		<spring.security.version>3.1.1.RELEASE</spring.security.version>
 		<tiles.version>2.2.2</tiles.version>
-		<bootstrap.version>2.3.1</bootstrap.version>
         <jquery.version>1.9.0</jquery.version>		
 		<guava.version>12.0.1</guava.version>
-  		<jetty.version>8.1.5.v20120716</jetty.version>
-  		<jetty.jsp.version>8.1.4.v20120524</jetty.jsp.version>
   		<eclipselink.version>2.5.0</eclipselink.version>
   		<cglib.version>2.2.2</cglib.version>
   		<log4j.version>1.2.17</log4j.version>		

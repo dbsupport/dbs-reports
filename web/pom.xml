@@ -97,13 +97,7 @@
 			<artifactId>tiles-servlet</artifactId>
 			<scope>compile</scope>
 		</dependency>    
-		
-		<!-- Bootstrap -->
-		<!-- dependency>
-    		<groupId>com.efsavage.twitter.bootstrap</groupId>
-    		<artifactId>bootstrap-maven</artifactId>
-    		<version>${bootstrap.version}</version>
-		</dependency-->
+
 		
         <dependency>
     		<groupId>com.google.guava</groupId>
@@ -111,40 +105,6 @@
     		<version>${guava.version}</version>
 		</dependency>
         
-	  <!-- JETTY DEPENDENCIES -->
-	  <!-- dependency>
-	    <groupId>org.eclipse.jetty</groupId>
-	    <artifactId>jetty-server</artifactId>
-	    <version>${jetty.version}</version>
-	  </dependency>
-	  <dependency>
-	    <groupId>org.eclipse.jetty</groupId>
-	    <artifactId>jetty-servlet</artifactId>
-	    <version>${jetty.version}</version>
-	  </dependency>
-	  <dependency>
-	    <groupId>org.eclipse.jetty</groupId>
-	    <artifactId>jetty-webapp</artifactId>
-	    <version>${jetty.version}</version>
-	  </dependency>
-	  <dependency>
-	    <groupId>org.eclipse.jetty</groupId>
-	    <artifactId>jetty-servlets</artifactId>
-	    <version>${jetty.version}</version>
-	  </dependency>
-	
-	  <dependency>
-	    <groupId>org.eclipse.jetty</groupId>
-	    <artifactId>jetty-jsp</artifactId>
-	    <version>${jetty.jsp.version}</version>
-	  </dependency>    
-	  <dependency>
-	    <groupId>javax.servlet</groupId>
-	    <artifactId>jstl</artifactId>
-	    <version>1.2</version>
-	    <scope>provided</scope>
-	  </dependency-->
-    
     </dependencies>
     
     <build>
@@ -164,33 +124,16 @@
         </resources>
         
         <plugins>
-			<!-- plugin>
-			        <groupId>org.mortbay.jetty</groupId>
-			        <artifactId>maven-jetty-plugin</artifactId>
-			        <version>6.1.10</version>
-			        <configuration>
-						<scanIntervalSeconds>10</scanIntervalSeconds>
-	                    <contextPath>/</contextPath>
-	                    <scanIntervalSeconds>10</scanIntervalSeconds>
-	                    <stopKey>STOP</stopKey>
-	                    <stopPort>8005</stopPort>
-	                    <port>8080</port>
-			        </configuration>
-			</plugin-->         
-			
 			<plugin>
 			    <groupId>org.apache.tomcat.maven</groupId>
 			    <artifactId>tomcat7-maven-plugin</artifactId>
 			    <configuration>
-			      <!-- http port -->
 			      <port>7001</port>
-			      <!-- application path always starts with /-->
 			      <path>/reports</path>
-			      <!-- optional path to a context file -->
-			      <contextFile>${basedir}/src/test/tomcat/context.xml</contextFile>
+			      <!-- serverXml></serverXml-->
+			      <contextFile>../../test/tomcat/context.xml</contextFile>
 			      <!-- addWarDependenciesInClassloader>true</addWarDependenciesInClassloader>
 			      <addContextWarDependencies>true</addContextWarDependencies-->
-			      <!-- optional system propoerties you want to add -->
 			      <!-- systemProperties>
 			        <appserver.base></appserver.base>
 			        <appserver.home></appserver.home>
@@ -205,18 +148,35 @@
 			    </configuration>
 			    <!-- For any extra dependencies needed when running embedded Tomcat (not WAR dependencies) add them below -->
 			    <!-- dependencies>
-			      <dependency>
-			        <groupId>org.apache.derby</groupId>
-			        <artifactId>derby</artifactId>
-			        <version>${derbyVersion}</version>
-			      </dependency>
-			      <dependency>
-			        <groupId>javax.mail</groupId>
-			        <artifactId>mail</artifactId>
-			        <version>1.4</version>
-			      </dependency>
 			    </dependencies-->
-			  </plugin>			
+			  </plugin>        
+        
+        
+	        <plugin>
+	                <groupId>com.googlecode.t7mp</groupId>
+	                <artifactId>maven-t7-plugin</artifactId>
+					<configuration>
+					        <tomcatHttpPort>7001</tomcatHttpPort>
+					        <tomcatShutdownPort>7005</tomcatShutdownPort>
+					        <tomcatShutdownCommand>SHUTDOWN</tomcatShutdownCommand>
+					        <tomcatVersion>7.0.6</tomcatVersion>
+					        <tomcatSetAwait>true</tomcatSetAwait>
+					        <tomcatConfigDirectory>${basedir}/src/main/tomcat/conf</tomcatConfigDirectory>
+					        <lookInside>false</lookInside>
+					        <systemProperties>
+					          <systemProperty>
+					            <key>XXXXX</key>
+					            <value>${basedir}</value>
+					          </systemProperty>
+					        </systemProperties>
+					        <libs>
+					        </libs>
+					        <webapps>
+					        </webapps>
+					</configuration>	                
+	        </plugin>        
+        
+		
 			
 			
         </plugins>
@@ -237,88 +197,35 @@
                         <warSourceExcludes>html/**</warSourceExcludes>
                     </configuration>
                 </plugin>
-				<plugin>
-		          <groupId>org.apache.tomcat.maven</groupId>
-		          <artifactId>tomcat6-maven-plugin</artifactId>
-		          <version>2.1</version>
-		        </plugin>                
+                
+                
 		        <plugin>
+		                <groupId>com.googlecode.t7mp</groupId>
+		                <artifactId>maven-t7-plugin</artifactId>
+		                <version>0.9.8</version>
+		        </plugin>
+		         		                        
+                <!-- plugin>
 		          <groupId>org.apache.tomcat.maven</groupId>
 		          <artifactId>tomcat7-maven-plugin</artifactId>
-		          <version>2.0</version>
-		        </plugin>                
+		          <version>2.1</version>
+		        </plugin-->
+		                        
             </plugins>
         </pluginManagement>
     </build>
-    
-    
-    
-    <profiles>
-        <profile>
-            <id>jrebel</id>
-			<build>
-				<finalName>${project.artifactId}-${envir}-${project.version}</finalName>
-				<filters>
-					<filter>../src/main/filters/${envir}.properties</filter>
-				</filters>
-				<resources>
-					<resource>
-						<directory>src/main/resources</directory>
-						<filtering>false</filtering>
-					</resource>
-					<resource>
-						<directory>src/main/resources-filter</directory>
-						<filtering>true</filtering>
-					</resource>
-				</resources>
-				<plugins>
-					<plugin>
-						<groupId>org.zeroturnaround</groupId>
-						<artifactId>jrebel-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>generate-rebel-xml</id>
-								<phase>process-resources</phase>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<argLine>-Xmx1024m</argLine>
-							<packaging>war</packaging>
-							<addResourcesDirToRebelXml>true</addResourcesDirToRebelXml>
-						    <web>
-						      <resources>
-						        <resource>
-						          <target>reports/</target>
-						          <directory>${basedir}/src/main/webapp</directory>
-						        </resource>        
-						      </resources>
-						    </web>
-						</configuration>
-					</plugin>
-				</plugins>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<artifactId>maven-war-plugin</artifactId>
-							<configuration>
-								<webResources>
-									<resource>
-										<directory>${basedir}/src/main/webapp-filter</directory>
-										<!-- UWAGA: aktualnie nie filtruje zapisu ${..}: MWAR-43 -->
-										<filtering>true</filtering>
-									</resource>
-								</webResources>
-								<warSourceExcludes>html/**</warSourceExcludes>
-							</configuration>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
-		        
-    </profiles>
+
+	<repositories>
+	        <repository>
+	                <id>sonatype-oss-repository</id>
+	                <url>https://oss.sonatype.org/content/groups/public</url>
+	                <releases>
+	                        <enabled>true</enabled>
+	                </releases>
+	                <snapshots>
+	                        <enabled>true</enabled>
+	                </snapshots>
+	        </repository>
+	</repositories>
     
 </project>

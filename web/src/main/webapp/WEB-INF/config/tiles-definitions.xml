@@ -4,13 +4,17 @@
        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 <tiles-definitions>
 
-    <definition name="tiles-welcome" template="/WEB-INF/jsp/tiles/welcome/template.jsp">
-        <put-attribute name="pageid" type="string" value=""/>
+    <definition name="tiles-security" template="/WEB-INF/jsp/tiles/security/template.jsp">
+        <put-attribute name="id" type="string" value=""/>
         <put-attribute name="title" type="string" value=""/>
         <put-attribute name="content" type="string" value=""/>
-        <put-attribute name="bottom" type="string" value=""/>
-        <put-attribute name="messages" value="/WEB-INF/jsp/tiles/common.messages.jsp"/>
-        <put-attribute name="wait" value="/WEB-INF/jsp/tiles/common/wait.jsp"/>
     </definition>
+    
+    <definition name="tiles-default" template="/WEB-INF/jsp/tiles/default/template.jsp">
+        <put-attribute name="id" type="string" value=""/>
+        <put-attribute name="title" type="string" value=""/>
+        <put-attribute name="content" type="string" value=""/>
+    </definition>
+    
     
 </tiles-definitions>

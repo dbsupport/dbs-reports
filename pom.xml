@@ -29,11 +29,18 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 		<eclipselink.version>2.5.0</eclipselink.version>
 		<cglib.version>2.2.2</cglib.version>
 		<log4j.version>1.2.17</log4j.version>
+		<commons.version>2.3</commons.version>
 		<tomcat.version>7.0.34</tomcat.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>${commons.version}</version>
+			</dependency>
+            		
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>servlet-api</artifactId>

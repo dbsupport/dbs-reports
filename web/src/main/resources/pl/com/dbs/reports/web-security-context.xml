@@ -10,8 +10,13 @@ xmlns="http://www.springframework.org/schema/beans"
 	<security:http use-expressions="true"
 				   auto-config="false"
 				   entry-point-ref="customAuthenticationEntryPoint">
+		<!-- to samo tez w web-context.xml -->
+		<security:intercept-url pattern="/css/**/*" access="permitAll"/>
+		<security:intercept-url pattern="/js/**/*" access="permitAll"/>
+		<security:intercept-url pattern="/img/**/*" access="permitAll"/>
+		<security:intercept-url pattern="/font/**/*" access="permitAll"/>
 		<security:intercept-url pattern="/security/login" access="permitAll" />
-		<security:intercept-url pattern="/security/failin" access="permitAll" />
+		<security:intercept-url pattern="/security/loginfailed" access="permitAll" />
 		<security:intercept-url pattern="/**/*" access="isFullyAuthenticated() and hasAnyRole('Test')" />
 		<security:intercept-url pattern="/*" access="isFullyAuthenticated() and hasAnyRole('Test')" />
 		<security:logout logout-url="/security/logout" delete-cookies="true" invalidate-session="true" logout-success-url="/security/login" />
@@ -29,26 +34,26 @@ xmlns="http://www.springframework.org/schema/beans"
 		class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
 		<property name="authenticationManager" ref="authenticationManager" />
 		<property name="filterProcessesUrl" value="/security/check" />
-		<property name="usernameParameter" value="security_username" />
-		<property name="passwordParameter" value="security_password" />
+		<property name="usernameParameter" value="username" />
+		<property name="passwordParameter" value="password" />
 		<property name="authenticationSuccessHandler" >
 			<bean id="customAuthenticationSuccessHandler" 
 				class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
 				<property name="alwaysUseDefaultTargetUrl" value="true" />
-				<property name="defaultTargetUrl" value="/test" />
+				<property name="defaultTargetUrl" value="/welcome" />
 			</bean>
 		</property>
 		<property name="authenticationFailureHandler">
 			<bean id="customAuthenticationFailureHandler" 
 				class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler">
-	  			 <property name="defaultFailureUrl" value="/security/failin?code=authenticate.not.authenticated" />
+	  			 <property name="defaultFailureUrl" value="/security/loginfailed?code=authenticate.not.authenticated" />
 	  			 <property name="exceptionMappings">
 		  			 <props>
-			            <prop key="org.springframework.security.authentication.BadCredentialsException">/security/failin?code=authenticate.bad.credentials</prop>
-			            <prop key="org.springframework.security.authentication.AccountExpiredException">/security/failin?code=authenticate.account.expired</prop>
-			            <prop key="org.springframework.security.authentication.CredentialsExpiredException">/security/failin?code=authenticate.password.change.required</prop>
-			            <prop key="org.springframework.security.authentication.AuthenticationException">/security/failin?code=authenticate.not.authenticated</prop>
-			            <prop key="org.springframework.security.authentication.LockedException">/security/failin?code=authenticate.account.locked</prop>
+			            <prop key="org.springframework.security.authentication.BadCredentialsException">/security/loginfailed?code=authenticate.bad.credentials</prop>
+			            <prop key="org.springframework.security.authentication.AccountExpiredException">/security/loginfailed?code=authenticate.account.expired</prop>
+			            <prop key="org.springframework.security.authentication.CredentialsExpiredException">/security/loginfailed?code=authenticate.password.change.required</prop>
+			            <prop key="org.springframework.security.authentication.AuthenticationException">/security/loginfailed?code=authenticate.not.authenticated</prop>
+			            <prop key="org.springframework.security.authentication.LockedException">/security/loginfailed?code=authenticate.account.locked</prop>
 			        </props>
 	  			 </property>
 	  		</bean>

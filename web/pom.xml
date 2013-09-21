@@ -22,10 +22,30 @@
             <version>${project.parent.version}</version>
         </dependency>
         
-        <dependency>
+        <!-- dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
-        </dependency>
+        </dependency-->
+        
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>3.0.1</version>
+		    <scope>provided</scope>
+		</dependency>        
+		<dependency>
+		    <groupId>javax.servlet.jsp</groupId>
+		    <artifactId>javax.servlet.jsp-api</artifactId>
+		    <version>2.2.1</version>
+		    <scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>javax.el</groupId>
+		    <artifactId>javax.el-api</artifactId>
+		    <version>2.2.2</version>
+		    <scope>provided</scope>
+		</dependency>        
         
         <!-- Spring 3 dependencies -->
         <dependency>
@@ -81,6 +101,12 @@
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-core</artifactId>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>jcl-over-slf4j</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
@@ -97,14 +123,55 @@
 			<artifactId>tiles-servlet</artifactId>
 			<scope>compile</scope>
 		</dependency>    
-
+		<dependency>
+		  	<groupId>jstl</groupId>
+		  	<artifactId>jstl</artifactId>
+		  	<scope>compile</scope>
+		</dependency>
+		<dependency>
+		  	<groupId>taglibs</groupId>
+		  	<artifactId>standard</artifactId>
+		  	<scope>compile</scope>
+		</dependency>
 		
         <dependency>
     		<groupId>com.google.guava</groupId>
     		<artifactId>guava</artifactId>
     		<version>${guava.version}</version>
 		</dependency>
-        
+
+		<!-- Tomcat embeded -->		
+		<!-- dependency>
+		    <groupId>org.apache.tomcat.embed</groupId>
+		    <artifactId>tomcat-embed-core</artifactId>
+		    <version>${tomcat.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.tomcat.embed</groupId>
+		    <artifactId>tomcat-embed-logging-juli</artifactId>
+		    <version>${tomcat.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.tomcat.embed</groupId>
+		    <artifactId>tomcat-embed-jasper</artifactId>
+		    <version>${tomcat.version}</version>
+		</dependency>
+		<dependency>
+		      <groupId>org.apache.tomcat</groupId>
+		      <artifactId>tomcat-jasper</artifactId>
+		      <version>${tomcat.version}</version>
+		</dependency>
+		<dependency>
+		      <groupId>org.apache.tomcat</groupId>
+		      <artifactId>tomcat-jasper-el</artifactId>
+		      <version>${tomcat.version}</version>
+		</dependency>
+		<dependency>
+		      <groupId>org.apache.tomcat</groupId>
+		      <artifactId>tomcat-jsp-api</artifactId>
+		      <version>${tomcat.version}</version>
+		</dependency-->		
+		
     </dependencies>
     
     <build>
@@ -123,65 +190,31 @@
             </resource>
         </resources>
         
-        <plugins>
+        <!-- plugins>
 			<plugin>
-			    <groupId>org.apache.tomcat.maven</groupId>
-			    <artifactId>tomcat7-maven-plugin</artifactId>
-			    <configuration>
-			      <port>7001</port>
-			      <path>/reports</path>
-			      <!-- serverXml></serverXml-->
-			      <contextFile>../../test/tomcat/context.xml</contextFile>
-			      <!-- addWarDependenciesInClassloader>true</addWarDependenciesInClassloader>
-			      <addContextWarDependencies>true</addContextWarDependencies-->
-			      <!-- systemProperties>
-			        <appserver.base></appserver.base>
-			        <appserver.home></appserver.home>
-			        <java.io.tmpdir></java.io.tmpdir>
-			      </systemProperties-->
-			      <!-- if you want to use test dependencies rather than only runtime -->
-			      <useTestClasspath>false</useTestClasspath>
-			      <!-- optional if you want to add some extra directories into the classloader -->
-			      <!-- additionalClasspathDirs>
-			        <additionalClasspathDir></additionalClasspathDir>
-			      </additionalClasspathDirs-->
-			    </configuration>
-			    <!-- For any extra dependencies needed when running embedded Tomcat (not WAR dependencies) add them below -->
-			    <!-- dependencies>
-			    </dependencies-->
-			  </plugin>        
-        
-        
-	        <plugin>
-	                <groupId>com.googlecode.t7mp</groupId>
-	                <artifactId>maven-t7-plugin</artifactId>
-					<configuration>
-					        <tomcatHttpPort>7001</tomcatHttpPort>
-					        <tomcatShutdownPort>7005</tomcatShutdownPort>
-					        <tomcatShutdownCommand>SHUTDOWN</tomcatShutdownCommand>
-					        <tomcatVersion>7.0.6</tomcatVersion>
-					        <tomcatSetAwait>true</tomcatSetAwait>
-					        <tomcatConfigDirectory>${basedir}/src/main/tomcat/conf</tomcatConfigDirectory>
-					        <lookInside>false</lookInside>
-					        <systemProperties>
-					          <systemProperty>
-					            <key>XXXXX</key>
-					            <value>${basedir}</value>
-					          </systemProperty>
-					        </systemProperties>
-					        <libs>
-					        </libs>
-					        <webapps>
-					        </webapps>
-					</configuration>	                
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>appassembler-maven-plugin</artifactId>
+	            <version>1.1.1</version>
+	            <configuration>
+	                <assembleDirectory>target</assembleDirectory>
+	                <programs>
+	                    <program>
+	                        <mainClass>launch.Main</mainClass>
+	                        <name>webapp</name>
+	                    </program>
+	                </programs>
+	            </configuration>
+	            <executions>
+	                <execution>
+	                    <phase>package</phase>
+	                    <goals>
+	                        <goal>assemble</goal>
+	                    </goals>
+	                </execution>
+	            </executions>
 	        </plugin>        
-        
-		
-			
-			
-        </plugins>
-        
-        
+        </plugins-->
+       
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -197,35 +230,9 @@
                         <warSourceExcludes>html/**</warSourceExcludes>
                     </configuration>
                 </plugin>
-                
-                
-		        <plugin>
-		                <groupId>com.googlecode.t7mp</groupId>
-		                <artifactId>maven-t7-plugin</artifactId>
-		                <version>0.9.8</version>
-		        </plugin>
-		         		                        
-                <!-- plugin>
-		          <groupId>org.apache.tomcat.maven</groupId>
-		          <artifactId>tomcat7-maven-plugin</artifactId>
-		          <version>2.1</version>
-		        </plugin-->
-		                        
             </plugins>
         </pluginManagement>
     </build>
 
-	<repositories>
-	        <repository>
-	                <id>sonatype-oss-repository</id>
-	                <url>https://oss.sonatype.org/content/groups/public</url>
-	                <releases>
-	                        <enabled>true</enabled>
-	                </releases>
-	                <snapshots>
-	                        <enabled>true</enabled>
-	                </snapshots>
-	        </repository>
-	</repositories>
     
 </project>

@@ -10,48 +10,45 @@ xmlns="http://www.springframework.org/schema/beans"
 	<security:http use-expressions="true"
 				   auto-config="false"
 				   entry-point-ref="customAuthenticationEntryPoint">
-		<security:intercept-url pattern="/login.ebk" access="permitAll" />
-		<security:intercept-url pattern="/login_fail.ebk" access="permitAll" />
-		<security:intercept-url pattern="/password_change.ebk" access="permitAll" />
-		<security:intercept-url pattern="/transfer/**/transfer.ebk" access="isFullyAuthenticated() and hasRole('PlatnosciForum-Przelew-Zleceniodawca')" />
-		<security:intercept-url pattern="/**/*.ebk" access="isFullyAuthenticated() and hasAnyRole('PlatnosciForum-Przelew-Zleceniodawca,PlatnosciForum-Przelew-AkceptacjaNiska,PlatnosciForum-Przelew-Akceptacja')" />
-		<security:intercept-url pattern="/*.ebk" access="isFullyAuthenticated() and hasAnyRole('PlatnosciForum-Przelew-Zleceniodawca,PlatnosciForum-Przelew-AkceptacjaNiska,PlatnosciForum-Przelew-Akceptacja')" />
-		<security:logout logout-url="/logout.ebk" delete-cookies="true" invalidate-session="true" logout-success-url="/login.ebk" />
-		<security:session-management invalid-session-url="/login.ebk" />
+		<security:intercept-url pattern="/security/login" access="permitAll" />
+		<security:intercept-url pattern="/security/failin" access="permitAll" />
+		<security:intercept-url pattern="/**/*" access="isFullyAuthenticated() and hasAnyRole('Test')" />
+		<security:intercept-url pattern="/*" access="isFullyAuthenticated() and hasAnyRole('Test')" />
+		<security:logout logout-url="/security/logout" delete-cookies="true" invalidate-session="true" logout-success-url="/security/login" />
+		<security:session-management invalid-session-url="/security/login" />
 		<security:custom-filter position="FORM_LOGIN_FILTER" ref="customAuthenticationFilter"/>
 		<security:access-denied-handler ref="support.access.denied.handler"/>
 	</security:http>
 	
 	<bean id="customAuthenticationEntryPoint" 
 	   class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-	   <property name="loginFormUrl" value="/login.ebk" />
+	   <property name="loginFormUrl" value="/security/login" />
 	</bean>
 
 	<bean id="customAuthenticationFilter"
 		class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
 		<property name="authenticationManager" ref="authenticationManager" />
-		<property name="filterProcessesUrl" value="/security_check.ebk" />
+		<property name="filterProcessesUrl" value="/security/check" />
 		<property name="usernameParameter" value="security_username" />
 		<property name="passwordParameter" value="security_password" />
 		<property name="authenticationSuccessHandler" >
 			<bean id="customAuthenticationSuccessHandler" 
 				class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
 				<property name="alwaysUseDefaultTargetUrl" value="true" />
-				<property name="defaultTargetUrl" value="/transfers/init/acceptance.ebk" />
+				<property name="defaultTargetUrl" value="/test" />
 			</bean>
 		</property>
 		<property name="authenticationFailureHandler">
 			<bean id="customAuthenticationFailureHandler" 
 				class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler">
-	  			 <property name="defaultFailureUrl" value="/login_fail.ebk?messageKey=authenticate.not.authenticated" />
+	  			 <property name="defaultFailureUrl" value="/security/failin?code=authenticate.not.authenticated" />
 	  			 <property name="exceptionMappings">
 		  			 <props>
-			            <prop key="org.springframework.security.authentication.BadCredentialsException">/login_fail.ebk?messageKey=authenticate.bad.credentials</prop>
-			            <prop key="org.springframework.security.authentication.AccountExpiredException">/login_fail.ebk?messageKey=authenticate.account.expired</prop>
-			            <prop key="org.springframework.security.authentication.CredentialsExpiredException">/password_change.ebk?messageKey=authenticate.password.change.required</prop>
-			            <prop key="pl.eurobank.platnosciforum.security.domain.AuthenticationTimeoutException">/login_fail.ebk?messageKey=authenticate.timeout</prop>
-			            <prop key="org.springframework.security.authentication.AuthenticationException">/login_fail.ebk?messageKey=authenticate.not.authenticated</prop>
-			            <prop key="org.springframework.security.authentication.LockedException">/login_fail.ebk?messageKey=authenticate.account.locked</prop>
+			            <prop key="org.springframework.security.authentication.BadCredentialsException">/security/failin?code=authenticate.bad.credentials</prop>
+			            <prop key="org.springframework.security.authentication.AccountExpiredException">/security/failin?code=authenticate.account.expired</prop>
+			            <prop key="org.springframework.security.authentication.CredentialsExpiredException">/security/failin?code=authenticate.password.change.required</prop>
+			            <prop key="org.springframework.security.authentication.AuthenticationException">/security/failin?code=authenticate.not.authenticated</prop>
+			            <prop key="org.springframework.security.authentication.LockedException">/security/failin?code=authenticate.account.locked</prop>
 			        </props>
 	  			 </property>
 	  		</bean>

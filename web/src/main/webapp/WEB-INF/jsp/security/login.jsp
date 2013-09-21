@@ -1,8 +1,8 @@
-<%@ include file="/WEB-INF/jsp/tiles/taglib.jsp" %>
+<%@ include file="/WEB-INF/jsp/tiles/common/taglib.jsp" %>
 <%@ page session="false" contentType="text/html; charset=UTF-8" %>
 
-<tiles:insertDefinition name="welcome" flush="true">
-<tiles:putAttribute name="pageid" type="string">eb-page-login</tiles:putAttribute>
+<tiles:insertDefinition name="tiles-welcome" flush="true">
+<tiles:putAttribute name="pageid" type="string">bds-page-login</tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">witamy w serwisie</tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 

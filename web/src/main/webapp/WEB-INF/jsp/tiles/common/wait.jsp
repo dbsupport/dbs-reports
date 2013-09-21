@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/tiles/taglib.jsp" %>
+<%@ include file="/WEB-INF/jsp/tiles/common/taglib.jsp" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <div class="modal hide fade" id="eb-wait">

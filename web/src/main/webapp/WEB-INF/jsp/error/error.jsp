@@ -1,4 +1,4 @@
-<%@ include file="/WEB-INF/jsp/tiles/taglib.jsp" %>
+<%@ include file="/WEB-INF/jsp/tiles/common/taglib.jsp" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <%--c:set var="env"><spring:message code="projekt.otoczenie"/></c:set --%>
@@ -8,21 +8,21 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<meta http-equiv="Content-Language" content="pl" />
-	<meta name="author" content="<spring:message code="projekt.organizacja" text="EuroBank SA"/>" />
-	<meta name="copyright" content="&copy; <spring:message code="projekt.organizacja" text="&copy; &copy; EuroBank SA"/>" />
-	<meta name="description" content="<spring:message code="projekt.opis" text="EuroBank - Płatności Forum" />" />
+	<meta name="author" content="<spring:message code="projekt.organizacja" text="DataBase Support SA"/>" />
+	<meta name="copyright" content="&copy; <spring:message code="projekt.organizacja" text="&copy; &copy; DataBase Support SA"/>" />
+	<meta name="description" content="<spring:message code="projekt.opis" text="DataBase Support - Raporty" />" />
 	<meta name="robots" content="none" />
 
-	<title><spring:message code="projekt.nazwa" text="eb-platnosciforum"/></title>
+	<title><spring:message code="projekt.nazwa" text="dbs-raports"/></title>
 	<base href="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>/"/>
 
-	<link rel="shortcut icon" href="gfx/eurobank.ico" type="image/x-icon" />
+	<!-- link rel="shortcut icon" href="gfx/.ico" type="image/x-icon" /-->
 	<script type="text/javascript" src="jquery/jquery.js"></script>
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.css" type="text/css"/>
 	<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 	
-	<link rel="stylesheet" href="css/eurobank.css" type="text/css"/>
-	<script type="text/javascript" src="js/eurobank.js"></script>
+	<link rel="stylesheet" href="css/dbs.css" type="text/css"/>
+	<script type="text/javascript" src="js/dbs.js"></script>
 	
 </head>
 
@@ -31,7 +31,7 @@
 	<div class="container-fluid" id="eb-container">
 	
 	    <div class="row-fluid" id="eb-header">
-	    	<%@ include file="../tiles/header.jsp" %>
+	    	
 	    </div>
 	
 		<div class="row-fluid" id="eb-center">

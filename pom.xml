@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -15,19 +16,21 @@
 		<module>app</module>
 		<module>web</module>
 	</modules>
-	
+
 	<properties>
-		<jstl.version>1.2</jstl.version>
-        <servlet.version>2.5</servlet.version>		
+		<servlet.version>3.0</servlet.version>
 		<spring.version>3.2.1.RELEASE</spring.version>
 		<spring.security.version>3.1.1.RELEASE</spring.security.version>
 		<tiles.version>2.2.2</tiles.version>
-        <jquery.version>1.9.0</jquery.version>		
+		<taglibs.version>1.1.2</taglibs.version>
+		<jstl.version>1.2</jstl.version>
+		<jquery.version>1.9.0</jquery.version>
 		<guava.version>12.0.1</guava.version>
-  		<eclipselink.version>2.5.0</eclipselink.version>
-  		<cglib.version>2.2.2</cglib.version>
-  		<log4j.version>1.2.17</log4j.version>		
-	</properties>	
+		<eclipselink.version>2.5.0</eclipselink.version>
+		<cglib.version>2.2.2</cglib.version>
+		<log4j.version>1.2.17</log4j.version>
+		<tomcat.version>7.0.34</tomcat.version>
+	</properties>
 
 	<dependencyManagement>
 		<dependencies>
@@ -52,28 +55,28 @@
 				<artifactId>spring-security-openid</artifactId>
 				<version>${spring.security.version}</version>
 			</dependency>
-	        <dependency>
+			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-taglibs</artifactId>
 				<version>${spring.security.version}</version>
-			</dependency> 
-	 		<dependency>
+			</dependency>
+			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-web</artifactId>
 				<version>${spring.security.version}</version>
-			</dependency>			
-			
+			</dependency>
+
 			<!-- Spring -->
-	        <dependency>
-	            <groupId>org.springframework</groupId>
-	            <artifactId>spring-core</artifactId>
-	            <version>${spring.version}</version>
-	        </dependency>			
-	        <dependency>
-	            <groupId>org.springframework</groupId>
-	            <artifactId>spring-context</artifactId>
-	            <version>${spring.version}</version>
-	        </dependency> 	        
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-beans</artifactId>
@@ -83,41 +86,46 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-expression</artifactId>
 				<version>${spring.version}</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jms</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-	        <dependency>
-	            <groupId>org.springframework</groupId>
-	            <artifactId>spring-web</artifactId>
-	            <version>${spring.version}</version>
-	        </dependency>			
-	        <dependency>
-	            <groupId>org.springframework</groupId>
-	            <artifactId>spring-webmvc</artifactId>
-	            <version>${spring.version}</version>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.springframework</groupId>
-	            <artifactId>spring-aop</artifactId>
-	            <version>${spring.version}</version>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.springframework</groupId>
-	            <artifactId>spring-jdbc</artifactId>
-	            <version>${spring.version}</version>
-	        </dependency>
-	        
-	        <!-- Tiles -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+			   <groupId>org.springframework</groupId>
+			   <artifactId>spring-orm</artifactId>
+			   <version>${spring.version}</version>
+			</dependency>			
+
+			<!-- Tiles -->
 			<dependency>
 				<groupId>org.apache.tiles</groupId>
 				<artifactId>tiles-api</artifactId>
 				<version>${tiles.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
-			</dependency>		
+			</dependency>
 			<dependency>
 				<groupId>org.apache.tiles</groupId>
 				<artifactId>tiles-core</artifactId>
@@ -145,15 +153,24 @@
 				<version>${tiles.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
-			</dependency>    
-	        
-	        
-			
+			</dependency>
+			<dependency>
+				<groupId>jstl</groupId>
+				<artifactId>jstl</artifactId>
+				<version>${jstl.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>taglibs</groupId>
+				<artifactId>standard</artifactId>
+				<version>${taglibs.version}</version>
+			</dependency>
+
+
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>eclipselink</artifactId>
 				<version>${eclipselink.version}</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>cglib</groupId>
 				<artifactId>cglib</artifactId>
@@ -165,17 +182,160 @@
 				<artifactId>log4j</artifactId>
 				<version>${log4j.version}</version>
 			</dependency>
-			            			
-			
-			
+
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.8.1</version>
 				<scope>test</scope>
-			</dependency>	
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
-	
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>1.0-beta-1</version>
+					<executions>
+						<execution>
+							<id>enforce-no-snapshots-deps</id>
+							<goals>
+								<goal>enforce</goal>
+							</goals>
+							<configuration>
+								<rules>
+									<requireReleaseDeps>
+										<message>WARN: UWAGA! Znaleziono zaleznosci SNAPOSHOT'owe!</message>
+									</requireReleaseDeps>
+								</rules>
+								<fail>false</fail>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<encoding>UTF8</encoding>
+						<optimize>true</optimize>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<configuration>
+						<encoding>UTF8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<configuration>
+						<archive>
+							<manifestSections>
+								<manifestSection>
+									<name>Application info:</name>
+									<manifestEntries>
+										<Nazwa>${pom.artifactId}</Nazwa>
+										<Wersja>${pom.version}</Wersja>
+										<Srodowisko>${envir}</Srodowisko>
+										<Wygenerowal>${user.name}</Wygenerowal>
+									</manifestEntries>
+								</manifestSection>
+							</manifestSections>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-war-plugin</artifactId>
+					<configuration>
+						<archive>
+							<manifestSections>
+								<manifestSection>
+									<name>Informacja o aplikacji</name>
+									<manifestEntries>
+										<Nazwa>${pom.artifactId}</Nazwa>
+										<Wersja>${pom.version}</Wersja>
+										<Srodowisko>${envir}</Srodowisko>
+										<Wygenerowal>${user.name}</Wygenerowal>
+									</manifestEntries>
+								</manifestSection>
+							</manifestSections>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-ejb-plugin</artifactId>
+					<configuration>
+						<archive>
+							<manifestSections>
+								<manifestSection>
+									<name>Informacja o aplikacji</name>
+									<manifestEntries>
+										<Nazwa>${pom.artifactId}</Nazwa>
+										<Wersja>${pom.version}</Wersja>
+										<Srodowisko>${envir}</Srodowisko>
+										<Wygenerowal>${user.name}</Wygenerowal>
+									</manifestEntries>
+								</manifestSection>
+							</manifestSections>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-ear-plugin</artifactId>
+					<configuration>
+						<archive>
+							<manifestSections>
+								<manifestSection>
+									<name>Informacja o aplikacji</name>
+									<manifestEntries>
+										<Nazwa>${pom.artifactId}</Nazwa>
+										<Wersja>${pom.version}</Wersja>
+										<Srodowisko>${envir}</Srodowisko>
+										<Wygenerowal>${user.name}</Wygenerowal>
+									</manifestEntries>
+								</manifestSection>
+							</manifestSections>
+						</archive>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<profiles>
+		<!-- domyslny profil: programisty -->
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<envir>dev</envir>
+			</properties>
+		</profile>
+		<profile>
+			<id>tes</id>
+			<properties>
+				<envir>tes</envir>
+			</properties>
+		</profile>
+		<profile>
+			<id>acc</id>
+			<properties>
+				<envir>acc</envir>
+			</properties>
+		</profile>
+		<profile>
+			<id>pro</id>
+			<properties>
+				<envir>pro</envir>
+			</properties>
+		</profile>
+	</profiles>
+
 </project>

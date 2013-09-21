@@ -1,6 +1,6 @@
-<%@ include file="/WEB-INF/jsp/tiles/taglib.jsp" %>
+<%@ include file="/WEB-INF/jsp/tiles/common/taglib.jsp" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="pl.eurobank.platnosciforum.support.messages.WebMessages" %>
+<%@ page import="pl.com.dbs.reports.support.web.WebMessages" %>
 
 <c:if test="${!empty eberrors}">
 	  <c:forEach items="${eberrors}" var="msg">

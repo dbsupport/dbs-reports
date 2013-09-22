@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.support.web;
+package pl.com.dbs.reports.support.web.message;
 
 import java.util.ArrayList;
 import java.util.List;

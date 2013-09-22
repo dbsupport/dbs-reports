@@ -9,9 +9,9 @@
     <div class="login-wrapper">
         <div class="box">
             <div class="content-wrap">
-				<form action="security_check.ebk" method="post" class="form-horizontal" onsubmit="return EB.OnSubmit(this);">
+				<form action="security/check" method="post" class="form-horizontal">
                 <h6>witamy w serwisie</h6>
-                <input name="username" class="form-control" type="text" placeholder="Login">
+                <input name="username" class="form-control" type="text" placeholder="Email">
                 <input name="password" class="form-control" type="password" placeholder="Hasło">
 				<div class="controls">
 	          		<button type="submit" name="login" class="btn-glow primary login">zaloguj się</button>

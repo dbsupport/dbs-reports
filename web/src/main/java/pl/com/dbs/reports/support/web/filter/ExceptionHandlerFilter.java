@@ -1,4 +1,4 @@
-package pl.com.dbs.reports.support.web;
+package pl.com.dbs.reports.support.web.filter;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -14,7 +14,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 /**
- * Filt przechwytujacy wyjatki - w przypadku ich wystapienia przekierowyje na strone z bledem. 
+ * Filtr przechwytujacy wyjatki - w przypadku ich wystapienia przekierowyje na strone z bledem. 
  * Kazdemu wyjatkowi przypisany jest ID.
  * 
  * @author krzysztof.kaziura@gmail.com

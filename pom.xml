@@ -7,8 +7,12 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<groupId>pl.com.dbs</groupId>
 	<artifactId>dbs-reports</artifactId>
-	<name>dbs-reports</name>
+	<name>DataBase Support - Reports</name>
 	<description>DataBase Support - Reports</description>
+	<organization>
+		<name>DataBase Support</name>
+		<url>http://www.dbs.com.pl/</url>
+	</organization>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -18,7 +22,11 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 	</modules>
 
 	<properties>
+		<commons.version>2.3</commons.version>
 		<servlet.version>3.0</servlet.version>
+		<servlet.api.version>3.0.1</servlet.api.version>
+		<servlet.jsp.api.version>2.2.1</servlet.jsp.api.version>
+		<el.api.version>2.2.2</el.api.version>
 		<spring.version>3.2.1.RELEASE</spring.version>
 		<spring.security.version>3.1.1.RELEASE</spring.security.version>
 		<tiles.version>2.2.2</tiles.version>
@@ -29,23 +37,37 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 		<eclipselink.version>2.5.0</eclipselink.version>
 		<cglib.version>2.2.2</cglib.version>
 		<log4j.version>1.2.17</log4j.version>
-		<commons.version>2.3</commons.version>
-		<tomcat.version>7.0.34</tomcat.version>
+		<slf4j.log4j12.version>1.5.2</slf4j.log4j12.version>
+		<postgresql.version>9.1-901.jdbc4</postgresql.version>
+		<oracle.version>10.2.0.2.00</oracle.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- Common -->
 			<dependency>
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
-            		
 			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>servlet-api</artifactId>
-				<version>${servlet.version}</version>
+				<groupId>cglib</groupId>
+				<artifactId>cglib</artifactId>
+				<version>${cglib.version}</version>
+				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>			
+			<dependency>
+			    <groupId>org.slf4j</groupId>
+			    <artifactId>slf4j-log4j12</artifactId>
+			    <version>${slf4j.log4j12.version}</version>
+			</dependency>
+            		
 			<!-- Spring Security -->
 			<dependency>
 				<groupId>org.springframework.security</groupId>
@@ -172,24 +194,49 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 				<version>${taglibs.version}</version>
 			</dependency>
 
-
+			<!-- Eclipselink -->
 			<dependency>
 				<groupId>org.eclipse.persistence</groupId>
 				<artifactId>eclipselink</artifactId>
 				<version>${eclipselink.version}</version>
 			</dependency>
+			
+			<!-- Drivers -->
+	        <dependency>
+	            <groupId>postgresql</groupId>
+	            <artifactId>postgresql</artifactId>
+	            <version>${postgresql.version}</version>
+	        </dependency>
 			<dependency>
-				<groupId>cglib</groupId>
-				<artifactId>cglib</artifactId>
-				<version>${cglib.version}</version>
-				<scope>provided</scope>
+				<groupId>com.oracle</groupId>
+				<artifactId>oracle</artifactId>
+				<version>${oracle.version}</version>
+			</dependency>
+            	        
+	        
+	        <!-- Servlet -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+				<version>${servlet.version}</version>
+			</dependency>	        
+			<dependency>
+			    <groupId>javax.servlet</groupId>
+			    <artifactId>javax.servlet-api</artifactId>
+			    <version>${servlet.api.version}</version>
+			</dependency>        
+			<dependency>
+			    <groupId>javax.servlet.jsp</groupId>
+			    <artifactId>javax.servlet.jsp-api</artifactId>
+			    <version>${servlet.jsp.api.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>${log4j.version}</version>
-			</dependency>
+		    	<groupId>javax.el</groupId>
+		    	<artifactId>javax.el-api</artifactId>
+		    	<version>${el.api.version}</version>
+			</dependency>  
 
+			<!-- Test -->
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
@@ -227,6 +274,7 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
 						<encoding>UTF8</encoding>
+						<fork>true</fork>
 						<optimize>true</optimize>
 						<source>1.6</source>
 						<target>1.6</target>
@@ -246,8 +294,8 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 								<manifestSection>
 									<name>Application info:</name>
 									<manifestEntries>
-										<Nazwa>${pom.artifactId}</Nazwa>
-										<Wersja>${pom.version}</Wersja>
+										<Nazwa>${project.artifactId}</Nazwa>
+										<Wersja>${project.version}</Wersja>
 										<Srodowisko>${envir}</Srodowisko>
 										<Wygenerowal>${user.name}</Wygenerowal>
 									</manifestEntries>
@@ -264,8 +312,8 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 								<manifestSection>
 									<name>Informacja o aplikacji</name>
 									<manifestEntries>
-										<Nazwa>${pom.artifactId}</Nazwa>
-										<Wersja>${pom.version}</Wersja>
+										<Nazwa>${project.artifactId}</Nazwa>
+										<Wersja>${project.version}</Wersja>
 										<Srodowisko>${envir}</Srodowisko>
 										<Wygenerowal>${user.name}</Wygenerowal>
 									</manifestEntries>
@@ -282,8 +330,8 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 								<manifestSection>
 									<name>Informacja o aplikacji</name>
 									<manifestEntries>
-										<Nazwa>${pom.artifactId}</Nazwa>
-										<Wersja>${pom.version}</Wersja>
+										<Nazwa>${project.artifactId}</Nazwa>
+										<Wersja>${project.version}</Wersja>
 										<Srodowisko>${envir}</Srodowisko>
 										<Wygenerowal>${user.name}</Wygenerowal>
 									</manifestEntries>
@@ -300,8 +348,8 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 								<manifestSection>
 									<name>Informacja o aplikacji</name>
 									<manifestEntries>
-										<Nazwa>${pom.artifactId}</Nazwa>
-										<Wersja>${pom.version}</Wersja>
+										<Nazwa>${project.artifactId}</Nazwa>
+										<Wersja>${project.version}</Wersja>
 										<Srodowisko>${envir}</Srodowisko>
 										<Wygenerowal>${user.name}</Wygenerowal>
 									</manifestEntries>

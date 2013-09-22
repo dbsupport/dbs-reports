@@ -16,9 +16,14 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
+		<!-- Commons -->
 		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>eclipselink</artifactId>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>		
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>
@@ -29,7 +34,13 @@
 			<artifactId>commons-lang</artifactId>
 		</dependency>
 		
+		<!-- Eclipselink -->
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+		</dependency>
 		
+		<!-- Spring Security -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
@@ -43,6 +54,7 @@
 			<artifactId>spring-security-openid</artifactId>
 		</dependency>
 		
+		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
@@ -55,32 +67,31 @@
 		   <groupId>org.springframework</groupId>
 		   <artifactId>spring-orm</artifactId>
 		</dependency>		
-		
-		
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>		
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-log4j12</artifactId>
-		    <version>1.5.2</version>
-		</dependency>
+
+		<!-- Drivers -->		
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+		<!-- dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>oracle</artifactId>
+		</dependency-->
     
+    
+    	<!-- Test -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>1.8.0.10</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>

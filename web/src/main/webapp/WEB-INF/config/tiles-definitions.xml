@@ -13,6 +13,7 @@
     <definition name="tiles-default" template="/WEB-INF/jsp/tiles/default/template.jsp">
         <put-attribute name="id" type="string" value=""/>
         <put-attribute name="title" type="string" value=""/>
+        <put-attribute name="css" type="string" value=""/>
         <put-attribute name="content" type="string" value=""/>
     </definition>
     

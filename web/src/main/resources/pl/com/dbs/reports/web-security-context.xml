@@ -17,8 +17,14 @@ xmlns="http://www.springframework.org/schema/beans"
 		<security:intercept-url pattern="/font/**/*" access="permitAll"/>
 		<security:intercept-url pattern="/security/login" access="permitAll" />
 		<security:intercept-url pattern="/security/loginfailed" access="permitAll" />
-		<security:intercept-url pattern="/**/*" access="isFullyAuthenticated() and hasAnyRole('Test')" />
-		<security:intercept-url pattern="/*" access="isFullyAuthenticated() and hasAnyRole('Test')" />
+		
+		<security:intercept-url pattern="/*" access="permitAll" />
+		<security:intercept-url pattern="/**/*" access="permitAll" />
+		
+		<!-- security:intercept-url pattern="/**/*" access="isFullyAuthenticated() and hasAnyRole('Test')" />
+		<security:intercept-url pattern="/*" access="isFullyAuthenticated() and hasAnyRole('Test')" /-->
+		
+		
 		<security:logout logout-url="/security/logout" delete-cookies="true" invalidate-session="true" logout-success-url="/security/login" />
 		<security:session-management invalid-session-url="/security/login" />
 		<security:custom-filter position="FORM_LOGIN_FILTER" ref="customAuthenticationFilter"/>
@@ -40,7 +46,7 @@ xmlns="http://www.springframework.org/schema/beans"
 			<bean id="customAuthenticationSuccessHandler" 
 				class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
 				<property name="alwaysUseDefaultTargetUrl" value="true" />
-				<property name="defaultTargetUrl" value="/welcome" />
+				<property name="defaultTargetUrl" value="/user/profile" />
 			</bean>
 		</property>
 		<property name="authenticationFailureHandler">

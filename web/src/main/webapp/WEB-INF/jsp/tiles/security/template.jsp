@@ -2,18 +2,19 @@
 <!DOCTYPE html>
 <html class="login-bg">
 <head>
-	<title><spring:message code="projekt.nazwa"/></title>
+	<title><spring:message code="project.name"/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta http-equiv="Content-Language" content="pl" />
-	<meta name="author" content="<spring:message code="projekt.organizacja"/>" />
-	<meta name="copyright" content="&copy; <spring:message code="projekt.organizacja"/>" />
-	<meta name="description" content="<spring:message code="projekt.opis"/>" />
+	<meta name="author" content="<spring:message code="project.organization.name"/> <spring:message code="project.organization.url"/>" />
+	<meta name="copyright" content="&copy; <spring:message code="project.organization.name"/>" />
+	<meta name="description" content="<spring:message code="project.desc"/>" />
+	<meta name="version" content="<spring:message code="project.version"/>"/>
 	<meta name="robots" content="none" />    
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<base href="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>/"/>
     <!-- bootstrap -->
     <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
-    <link href="css/bootstrap/bootstrap-responsive.css" rel="stylesheet">
+    <!-- link href="css/bootstrap/bootstrap-responsive.css" rel="stylesheet"-->
     <link href="css/bootstrap/bootstrap-overrides.css" type="text/css" rel="stylesheet">
 
     <!-- global styles -->
@@ -34,7 +35,7 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 </head>
-<body id=""<tiles:getAsString name="id"/>>
+<body id="<tiles:getAsString name="id"/>">
     <div class="header">
         <a href="">
             <img src="img/logo.png" class="logo" />
@@ -42,6 +43,11 @@
     </div>
     
     <tiles:insertAttribute name="content"/>
+    
+	<!-- scripts -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- script src="js/theme.js"></script-->    
 
 </body>
 </html>

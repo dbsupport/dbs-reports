@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import pl.com.dbs.reports.support.web.WebMessages;
+import pl.com.dbs.reports.support.web.message.WebMessages;
 
 /**
  * Logowanie itd
@@ -24,20 +24,15 @@ public class SecurityController {
 	@Autowired private WebMessages webmessages;
 	
 	@RequestMapping(value="/security/login", method = RequestMethod.GET)
-    public String login(RedirectAttributes ra, @RequestParam(value="code", required=false) String code) {
+    public String login(RedirectAttributes ra) {
 		return "security/login";
     }
 	
 	@RequestMapping(value="/security/loginfailed", method = RequestMethod.GET)
-    public String credentialsExpired(RedirectAttributes ra, @RequestParam(value="code", required=false) String code) {
+    public String loginfailed(RedirectAttributes ra, @RequestParam(value="code", required=false) String code) {
 		if (StringUtils.isEmpty(code)) webmessages.addError(ra, code);	
 		return "redirect:/security/login";
     }
-	
-	@RequestMapping(value="/welcome", method = RequestMethod.GET)
-    public String welcome() {
-		return "welcome";
-	}	
 	
 	@RequestMapping(value="/security/noaccess", method = RequestMethod.GET)
     public String noaccess(ModelMap model, @RequestParam(value="code", required=false) String code, RedirectAttributes ra) {

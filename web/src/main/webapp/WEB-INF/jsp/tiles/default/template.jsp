@@ -25,6 +25,7 @@
     <link rel="stylesheet" type="text/css" href="css/compiled/layout.css">
     <link rel="stylesheet" type="text/css" href="css/compiled/elements.css">
     <link rel="stylesheet" type="text/css" href="css/compiled/icons.css">
+    <link rel="stylesheet" type="text/css" href="css/dbs.css">
 
     <!-- this page specific styles -->
     <tiles:insertAttribute name="css"/>
@@ -37,13 +38,16 @@
     <![endif]-->
 </head>
 <body id="<tiles:getAsString name="id"/>">
+
     
     <%@ include file="/WEB-INF/jsp/tiles/default/navbar.jsp" %>
     
     <%@ include file="/WEB-INF/jsp/tiles/default/sidebar.jsp" %>
     
+    
     <!-- main container -->
     <div class="content">
+	 	
         <!-- settings changer -->
         <div class="skins-nav">
             <a href="#" class="skin first_nav selected">
@@ -53,7 +57,9 @@
                 <span class="icon"></span><span class="text">Ciemny</span>
             </a>
         </div>
-    
+        
+        <%@ include file="/WEB-INF/jsp/tiles/common/alerts.jsp" %>
+	 	
     	<tiles:insertAttribute name="content"/>
     </div>
     
@@ -61,7 +67,8 @@
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/theme.js"></script>
-    <script src="js/dbs.js"></script>    
+    <script src="js/dbs.js"></script> 
+    <tiles:insertAttribute name="js"/>   
 
 </body>
 </html>

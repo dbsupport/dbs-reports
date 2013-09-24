@@ -88,7 +88,7 @@ public final class FastLogFormatter extends SimpleFormatter {
 	 * @return a formatted log record
 	 */
 	@Override
-	public String format(final LogRecord pRecord) {
+	public synchronized String format(final LogRecord pRecord) {
 		if (!(pRecord instanceof EclipseLinkLogRecord)) {
 			return super.format(pRecord);
 		}

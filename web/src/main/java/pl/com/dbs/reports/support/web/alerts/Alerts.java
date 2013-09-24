@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.support.web.message;
+package pl.com.dbs.reports.support.web.alerts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,17 +9,17 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.FlashMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 /**
  * Uzywane do umieszczania komunikatow roznych typow we flashredirectie;
- * Wyswietlenie w messages.jsp
+ * Wyswietlenie w alerts.jsp
  * 
  * ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
  * HttpSession session = attr.getRequest().getSession();
@@ -27,43 +27,43 @@ import org.springframework.web.servlet.support.RequestContextUtils;
  * @author krzysztof.kaziura
  *
  */
-@Component("support.web.messages")
-public class WebMessages {
+@Component("support.web.alerts")
+public class Alerts {
 	/**
 	 * Success messages - green background
 	 */
-	private final static String SUCCESS_KEY = "ebsuccess";
+	private final static String SUCCESSES_KEY = "successes";
 	/**
 	 * Error messages - red background
 	 */
-	private final static String ERRORS_KEY = "eberrors";
+	private final static String ERRORS_KEY = "errors";
 	/**
 	 * Warning messages - yellow background
 	 */
-	private final static String WARNINGS_KEY = "ebwarnings";
+	private final static String WARNINGS_KEY = "warnings";
 	/**
 	 * Info messages - blue background
 	 */
-	private final static String INFOS_KEY = "ebinfos";
+	private final static String INFOS_KEY = "infos";
 	
 	@Autowired private MessageSource messageSource;
 	
 	/**
 	 * Umiesc komunikat spod podanego klucza 
 	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
-	 * w liscie w Redirect Attribute pod kluczem SUCCESS_KEY
+	 * w liscie w Redirect Attribute pod kluczem SUCCESSES_KEY
 	 */
 	public void addSuccess(RedirectAttributes ra, String code, String... args) {
-		addMessage(ra, SUCCESS_KEY, code, args);
+		addMessage(ra, SUCCESSES_KEY, code, args);
 	}
 	
 	/**
 	 * Umiesc komunikat spod podanego klucza 
 	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
-	 * w liscie w Redirect Attribute pod kluczem SUCCESS_KEY
+	 * w liscie w Redirect Attribute pod kluczem SUCCESSES_KEY
 	 */	
 	public void addSuccess(HttpServletRequest request, String code, String... args) {
-		addMessage(request, SUCCESS_KEY, code, args);
+		addMessage(request, SUCCESSES_KEY, code, args);
 	}
 	
 	/**
@@ -126,8 +126,8 @@ public class WebMessages {
 	 */
 	private void addMessage(RedirectAttributes ra, String key, String code, String... args) {
 		String msg = messageSource.getMessage(code, args, code, null);
-		msg = StringUtils.isEmpty(msg)?code:msg;
-		if (!StringUtils.isEmpty(msg)) {
+		msg = StringUtils.isBlank(msg)?code:msg;
+		if (!StringUtils.isBlank(msg)) {
 			List<String> messages = retreiveCollection(ra, key);
 			messages.add(msg);
 		}
@@ -135,8 +135,8 @@ public class WebMessages {
 	
 	private void addMessage(HttpServletRequest request, String key, String code, String... args) {
 		String msg = messageSource.getMessage(code, args, code, null);
-		msg = StringUtils.isEmpty(msg)?code:msg;
-		if (!StringUtils.isEmpty(msg)) {
+		msg = StringUtils.isBlank(msg)?code:msg;
+		if (!StringUtils.isBlank(msg)) {
 			List<String> messages = retreiveCollection(request, key);
 			messages.add(msg);
 		}
@@ -164,12 +164,13 @@ public class WebMessages {
 	
 	@SuppressWarnings("unchecked")
 	private List<String> retreiveCollection(HttpServletRequest request, String key) {
-		FlashMap outFlash = RequestContextUtils.getOutputFlashMap(request);
-		List<String> messages = new ArrayList<String>();
-		if (outFlash!=null) {
-			if (outFlash.get(key)==null) outFlash.put(key, new ArrayList<String>());
-			messages = (List<String>)outFlash.get(key);
-		}
+		List<String> messages = request.getAttribute(key)==null?new ArrayList<String>():(List<String>)request.getAttribute(key);
+		request.setAttribute(key, messages);
+//		FlashMap outFlash = RequestContextUtils.getOutputFlashMap(request);
+//		if (outFlash!=null) {
+//			if (outFlash.get(key)==null) outFlash.put(key, new ArrayList<String>());
+//			messages = (List<String>)outFlash.get(key);
+//		}
 		return messages;
 	}
 	

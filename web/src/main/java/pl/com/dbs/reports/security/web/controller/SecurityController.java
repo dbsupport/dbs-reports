@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import pl.com.dbs.reports.support.web.message.WebMessages;
+import pl.com.dbs.reports.support.web.alerts.Alerts;
 
 /**
  * Logowanie itd
@@ -21,7 +21,7 @@ import pl.com.dbs.reports.support.web.message.WebMessages;
  */
 @Controller
 public class SecurityController {
-	@Autowired private WebMessages webmessages;
+	@Autowired private Alerts webmessages;
 	
 	@RequestMapping(value="/security/login", method = RequestMethod.GET)
     public String login(RedirectAttributes ra) {

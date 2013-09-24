@@ -1,3 +1,6 @@
+<%@ include file="/WEB-INF/jsp/tiles/common/taglib.jsp" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
+
     <!-- navbar -->
     <header class="navbar navbar-inverse" role="banner">
         <div class="navbar-header">
@@ -7,7 +10,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html"><img src="img/logo.png"></a>
+            <a class="navbar-brand" href=""><img src="img/logo.png"></a>
         </div>
         <ul class="nav navbar-nav pull-right hidden-xs">
             <li class="hidden-xs hidden-sm">
@@ -68,7 +71,7 @@
                         <div class="messages">
                             <a href="#" class="item">
                                 <img src="img/contact-img.png" class="display" />
-                                <div class="name">Alejandra Galv·n</div>
+                                <div class="name">Alejandra Galv√°n</div>
                                 <div class="msg">
                                     There are many variations of available, but the majority have suffered alterations.
                                 </div>
@@ -76,7 +79,7 @@
                             </a>
                             <a href="#" class="item">
                                 <img src="img/contact-img2.png" class="display" />
-                                <div class="name">Alejandra Galv·n</div>
+                                <div class="name">Alejandra Galv√°n</div>
                                 <div class="msg">
                                     There are many variations of available, have suffered alterations.
                                 </div>
@@ -84,7 +87,7 @@
                             </a>
                             <a href="#" class="item last">
                                 <img src="img/contact-img.png" class="display" />
-                                <div class="name">Alejandra Galv·n</div>
+                                <div class="name">Alejandra Galv√°n</div>
                                 <div class="msg">
                                     There are many variations of available, but the majority have suffered alterations.
                                 </div>

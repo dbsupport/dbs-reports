@@ -14,7 +14,7 @@
                 <input name="username" class="form-control" type="text" placeholder="Email">
                 <input name="password" class="form-control" type="password" placeholder="Hasło">
 				<div class="controls">
-	          		<button type="submit" name="login" class="btn-glow primary login">zaloguj się</button>
+	          		<button type="submit" name="login" class="btn-glow primary login">Zaloguj się</button>
                 </div>                
 				</form>
             </div>

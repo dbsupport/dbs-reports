@@ -38,6 +38,8 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 		<cglib.version>2.2.2</cglib.version>
 		<log4j.version>1.2.17</log4j.version>
 		<slf4j.log4j12.version>1.5.2</slf4j.log4j12.version>
+		<validation.api.version>1.0.0.GA</validation.api.version>
+	    <hibernate.validator.version>4.3.1.Final</hibernate.validator.version>
 		<postgresql.version>9.1-901.jdbc4</postgresql.version>
 		<oracle.version>10.2.0.2.00</oracle.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -67,6 +69,16 @@ http://maven.apache.org/maven-v4_0_0.xsd">
 			    <artifactId>slf4j-log4j12</artifactId>
 			    <version>${slf4j.log4j12.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>javax.validation</groupId>
+			   	<artifactId>validation-api</artifactId>
+			   	<version>${validation.api.version}</version>
+			 </dependency>
+			<dependency> 	
+	            <groupId>org.hibernate</groupId>
+	            <artifactId>hibernate-validator</artifactId>
+	            <version>${hibernate.validator.version}</version>
+	        </dependency>			 	
             		
 			<!-- Spring Security -->
 			<dependency>

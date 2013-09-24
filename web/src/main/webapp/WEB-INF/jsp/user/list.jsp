@@ -9,16 +9,16 @@
 
         <div id="pad-wrapper" class="users-list">
             <div class="row header">
-                <h3>Users</h3>
+                <h3>Użytkownicy</h3>
                 <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
-                    <input type="text" class="col-md-5 search" placeholder="Type a user's name...">
+                    <input type="text" class="col-md-5 search" placeholder="Wpisz użytkownika...">
                     
                     <!-- custom popup filter -->
                     <!-- styles are located in css/elements.css -->
                     <!-- script that enables this dropdown is located in js/theme.js -->
                     <div class="ui-dropdown">
-                        <div class="head" data-toggle="tooltip" title="Click me!">
-                            Filter users
+                        <div class="head" data-toggle="tooltip" title="Kliknij mnie!">
+                            Wyfiltruj
                             <i class="arrow-down"></i>
                         </div>  
                         <div class="dialog">
@@ -28,33 +28,32 @@
                             </div>
                             <div class="body">
                                 <p class="title">
-                                    Show users where:
+                                    Pokaż wg:
                                 </p>
                                 <div class="form">
                                     <select>
-                                        <option>Name</option>
+                                        <option>Imię/Nazwisko</option>
                                         <option>Email</option>
-                                        <option>Number of orders</option>
-                                        <option>Signed up</option>
-                                        <option>Last seen</option>
+                                        <option>Data założenia</option>
+                                        <option>Ostatnie logowanie</option>
                                     </select>
                                     <select>
-                                        <option>is equal to</option>
-                                        <option>is not equal to</option>
-                                        <option>is greater than</option>
-                                        <option>starts with</option>
-                                        <option>contains</option>
+                                        <option>równa się</option>
+                                        <option>nie równa się</option>
+                                        <option>większe niż</option>
+                                        <option>zaczyna się</option>
+                                        <option>zawiera</option>
                                     </select>
                                     <input type="text" class="form-control" />
-                                    <a class="btn-flat small">Add filter</a>
+                                    <a class="btn-flat small">Dodaj filtr</a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <a href="new-user.html" class="btn-flat success pull-right">
+                    <a href="user/new" class="btn-flat success pull-right">
                         <span>&#43;</span>
-                        NEW USER
+                        NOWY UŻYTKOWNIK
                     </a>
                 </div>
             </div>

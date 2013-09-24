@@ -875,10 +875,10 @@ public final class CommonsLoggingSessionLog extends AbstractSessionLog {
 	protected final static void debug(final String message,
 			final boolean printStack) {
 		System.out.println(message);
-		if (printStack && FORCE_INTERNAL_DEBUG_STACK) {
-			// to inspect the calling stack :
-			new Throwable().printStackTrace(System.out);
-		}
+//		if (printStack && FORCE_INTERNAL_DEBUG_STACK) {
+//			// to inspect the calling stack :
+//			new Throwable().printStackTrace(System.out);
+//		}
 	}
 
 	/**

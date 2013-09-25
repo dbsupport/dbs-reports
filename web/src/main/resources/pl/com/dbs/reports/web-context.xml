@@ -35,7 +35,7 @@
 	Note that, with Spring 3.0, this tag works in Servlet MVC only!  -->	
  	<tx:annotation-driven />
      
-     <mvc:view-controller path="/" view-name="user/profile"/>
+    <mvc:view-controller path="/" view-name="profile"/>
      
     <!-- tiles -->
 	<!-- Helper class to configure Tiles 2.x for the Spring Framework -->
@@ -75,7 +75,5 @@
     </bean>  
     
 	<mvc:annotation-driven/>
-	<!--  validator="globalValidator"/-->
-	<!-- bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/-->
 	
 </beans>

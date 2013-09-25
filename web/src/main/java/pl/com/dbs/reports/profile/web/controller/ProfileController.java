@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.user.web.controller;
+package pl.com.dbs.reports.profile.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import pl.com.dbs.reports.profile.web.form.ProfileNewForm;
+import pl.com.dbs.reports.profile.web.validator.ProfileNewValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
-import pl.com.dbs.reports.user.web.form.UserNewForm;
-import pl.com.dbs.reports.user.web.validator.UserNewValidator;
 
 /**
  * Obsluga uzytkownikow
@@ -23,8 +23,8 @@ import pl.com.dbs.reports.user.web.validator.UserNewValidator;
  */
 @Controller
 @Scope("request")
-public class UserProfileController {
-	@Autowired private Alerts webmessages;
+public class ProfileController {
+	@Autowired private Alerts alerts;
 	
 //	@ModelAttribute(UserNewForm.KEY)
 //    public UserNewForm createForm() {
@@ -32,13 +32,13 @@ public class UserProfileController {
 //		return form;
 //    }		
 	
-	@RequestMapping(value="/user/profile", method = RequestMethod.GET)
-    public String profile(Model model) {
-		return "user/profile";
+	@RequestMapping(value="/profile", method = RequestMethod.GET)
+    public String get(Model model) {
+		return "profile/profile";
     }	
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
-		if (binder.getTarget() instanceof UserNewForm) binder.setValidator(new UserNewValidator());
+		if (binder.getTarget() instanceof ProfileNewForm) binder.setValidator(new ProfileNewValidator());
 	}
 }

@@ -13,9 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.FlashMap;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 /**
  * Uzywane do umieszczania komunikatow roznych typow we flashredirectie;
@@ -54,7 +52,7 @@ public class Alerts {
 	 * w liscie w Redirect Attribute pod kluczem SUCCESSES_KEY
 	 */
 	public void addSuccess(RedirectAttributes ra, String code, String... args) {
-		addMessage(ra, SUCCESSES_KEY, code, args);
+		addAlert(ra, SUCCESSES_KEY, code, args);
 	}
 	
 	/**
@@ -63,7 +61,7 @@ public class Alerts {
 	 * w liscie w Redirect Attribute pod kluczem SUCCESSES_KEY
 	 */	
 	public void addSuccess(HttpServletRequest request, String code, String... args) {
-		addMessage(request, SUCCESSES_KEY, code, args);
+		addAlert(request, SUCCESSES_KEY, code, args);
 	}
 	
 	/**
@@ -72,7 +70,7 @@ public class Alerts {
 	 * w liscie w Redirect Attribute pod kluczem ERRORS_KEY.
 	 */
 	public void addError(RedirectAttributes ra, String code, String... args) {
-		addMessage(ra, ERRORS_KEY, code, args);
+		addAlert(ra, ERRORS_KEY, code, args);
 	}
 
 	/**
@@ -81,7 +79,7 @@ public class Alerts {
 	 * w liscie w Redirect Attribute pod kluczem ERRORS_KEY.
 	 */
 	public void addError(HttpServletRequest request, String code, String... args) {
-		addMessage(request, ERRORS_KEY, code, args);
+		addAlert(request, ERRORS_KEY, code, args);
 	}
 	
 	/**
@@ -90,7 +88,7 @@ public class Alerts {
 	 * w liscie w Redirect Attribute pod kluczem WARNINGS_KEY.
 	 */
 	public void addWarning(RedirectAttributes ra, String code, String... args) {
-		addMessage(ra, WARNINGS_KEY, code, args);
+		addAlert(ra, WARNINGS_KEY, code, args);
 	}
 	
 	/**
@@ -99,7 +97,7 @@ public class Alerts {
 	 * w liscie w Redirect Attribute pod kluczem WARNINGS_KEY.
 	 */
 	public void addWarning(HttpServletRequest request, String code, String... args) {
-		addMessage(request, WARNINGS_KEY, code, args);
+		addAlert(request, WARNINGS_KEY, code, args);
 	}	
 	
 	/**
@@ -108,7 +106,7 @@ public class Alerts {
 	 * w liscie w Redirect Attribute pod kluczem INFOS_KEY.
 	 */
 	public void addInfo(RedirectAttributes ra, String code, String... args) {
-		addMessage(ra, INFOS_KEY, code, args);
+		addAlert(ra, INFOS_KEY, code, args);
 	}	
 	
 	/**
@@ -117,28 +115,28 @@ public class Alerts {
 	 * w liscie w Redirect Attribute pod kluczem INFOS_KEY.
 	 */
 	public void addInfo(HttpServletRequest request, String code, String... args) {
-		addMessage(request, INFOS_KEY, code, args);
+		addAlert(request, INFOS_KEY, code, args);
 	}		
 	
 	/**
 	 * Adds messages into collectio.
 	 * Only if given msg/code is no empty.
 	 */
-	private void addMessage(RedirectAttributes ra, String key, String code, String... args) {
+	private void addAlert(RedirectAttributes ra, String key, String code, String... args) {
 		String msg = messageSource.getMessage(code, args, code, null);
 		msg = StringUtils.isBlank(msg)?code:msg;
 		if (!StringUtils.isBlank(msg)) {
-			List<String> messages = retreiveCollection(ra, key);
-			messages.add(msg);
+			List<String> alerts = retreiveCollection(ra, key);
+			alerts.add(msg);
 		}
 	}
 	
-	private void addMessage(HttpServletRequest request, String key, String code, String... args) {
+	private void addAlert(HttpServletRequest request, String key, String code, String... args) {
 		String msg = messageSource.getMessage(code, args, code, null);
 		msg = StringUtils.isBlank(msg)?code:msg;
 		if (!StringUtils.isBlank(msg)) {
-			List<String> messages = retreiveCollection(request, key);
-			messages.add(msg);
+			List<String> alerts = retreiveCollection(request, key);
+			alerts.add(msg);
 		}
 	}	
 	
@@ -157,21 +155,26 @@ public class Alerts {
 			}
 		}
 		//..no messages yet? create new..
-		List<String> messages = new ArrayList<String>();
-		ra.addFlashAttribute(key, messages);
-		return messages;
+		List<String> alerts = new ArrayList<String>();
+		ra.addFlashAttribute(key, alerts);
+		return alerts;
 	}
 	
 	@SuppressWarnings("unchecked")
 	private List<String> retreiveCollection(HttpServletRequest request, String key) {
-		List<String> messages = request.getAttribute(key)==null?new ArrayList<String>():(List<String>)request.getAttribute(key);
-		request.setAttribute(key, messages);
+		List<String> alerts = request.getAttribute(key)==null?new ArrayList<String>():(List<String>)request.getAttribute(key);
+		request.setAttribute(key, alerts);
+//		Map<String, ?> map = RequestContextUtils.getInputFlashMap(request);
+//		if (map!=null) {
+//			if (map.get(key)==null) map.put(key, new ArrayList<String>());
+//			alerts = (List<String>)map.get(key);
+//		}
 //		FlashMap outFlash = RequestContextUtils.getOutputFlashMap(request);
 //		if (outFlash!=null) {
 //			if (outFlash.get(key)==null) outFlash.put(key, new ArrayList<String>());
 //			messages = (List<String>)outFlash.get(key);
 //		}
-		return messages;
+		return alerts;
 	}
 	
 }

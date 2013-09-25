@@ -21,6 +21,7 @@
     <link rel="stylesheet" type="text/css" href="css/compiled/layout.css">
     <link rel="stylesheet" type="text/css" href="css/compiled/elements.css">
     <link rel="stylesheet" type="text/css" href="css/compiled/icons.css">
+    <link rel="stylesheet" href="css/dbs/dbs-alerts.css" type="text/css" media="screen" />
 
     <!-- libraries -->
     <link rel="stylesheet" type="text/css" href="css/lib/font-awesome.css">
@@ -41,6 +42,10 @@
             <img src="img/logo.png" class="logo" />
         </a>
     </div>
+
+    <!-- main container -->
+    
+    <%@ include file="/WEB-INF/jsp/tiles/security/alerts.jsp" %>
     
     <tiles:insertAttribute name="content"/>
     

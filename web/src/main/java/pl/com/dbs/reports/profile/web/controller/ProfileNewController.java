@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.user.web.controller;
+package pl.com.dbs.reports.profile.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import pl.com.dbs.reports.profile.web.form.ProfileNewForm;
+import pl.com.dbs.reports.profile.web.validator.ProfileNewValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
-import pl.com.dbs.reports.user.web.form.UserNewForm;
-import pl.com.dbs.reports.user.web.validator.UserNewValidator;
 
 /**
  * Obsluga uzytkownikow
@@ -29,34 +29,34 @@ import pl.com.dbs.reports.user.web.validator.UserNewValidator;
  * @author krzysztof.kaziura@gmail.com
  */
 @Controller
-@SessionAttributes({UserNewForm.KEY})
+@SessionAttributes({ProfileNewForm.KEY})
 @Scope("request")
-public class UserNewController {
+public class ProfileNewController {
 	@Autowired private Alerts alerts;
 	
-	@ModelAttribute(UserNewForm.KEY)
-    public UserNewForm createForm() {
-		UserNewForm form = new UserNewForm();
+	@ModelAttribute(ProfileNewForm.KEY)
+    public ProfileNewForm createForm() {
+		ProfileNewForm form = new ProfileNewForm();
 		return form;
     }		
 	
-	@RequestMapping(value="/user/new", method = RequestMethod.GET)
-    public String userNew(Model model, @ModelAttribute(UserNewForm.KEY) final UserNewForm form) {
-		return "user/new";
+	@RequestMapping(value="/profile/new", method = RequestMethod.GET)
+    public String get(Model model, @ModelAttribute(ProfileNewForm.KEY) final ProfileNewForm form) {
+		return "profile/profile-new";
     }
 	
-	@RequestMapping(value= "/user/new", method = RequestMethod.POST)
-    public String userNewSubmit(@Valid @ModelAttribute(UserNewForm.KEY) final UserNewForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+	@RequestMapping(value= "/profile/new", method = RequestMethod.POST)
+    public String submit(@Valid @ModelAttribute(ProfileNewForm.KEY) final ProfileNewForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		if (!results.hasErrors()) {
-			alerts.addSuccess(request, "user.new.profile.added");
+			alerts.addSuccess(request, "profile.new.added");
 		}
 		
-		return "user/new";
+		return "profile/profile-new";
 		//return "redirect:/user/new"; 
 	}
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
-		if (binder.getTarget() instanceof UserNewForm) binder.setValidator(new UserNewValidator());
+		if (binder.getTarget() instanceof ProfileNewForm) binder.setValidator(new ProfileNewValidator());
 	}
 }

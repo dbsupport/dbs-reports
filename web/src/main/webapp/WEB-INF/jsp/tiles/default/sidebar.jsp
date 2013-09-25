@@ -6,8 +6,8 @@
     <!-- sidebar -->
     <div id="sidebar-nav">
 	       <ul id="dashboard-menu">
-            <li class="<c:if test="${fn:startsWith(id, 'dbs-page-user')}">active</c:if>">
-            	<c:if test="${fn:startsWith(id, 'dbs-page-user')}">
+            <li class="<c:if test="${fn:startsWith(id, 'dbs-page-profile')}">active</c:if>">
+            	<c:if test="${fn:startsWith(id, 'dbs-page-profile')}">
                 <div class="pointer">
                     <div class="arrow"></div>
                     <div class="arrow_border"></div>
@@ -18,10 +18,9 @@
                     <span>Start</span>
                     <i class="icon-chevron-down"></i>
                 </a>
-                <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-user')}">active</c:if>">
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-user-list')}">active</c:if>" href="user/list">Użytkownicy</a></li>
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-user-new')}">active</c:if>" href="user/new">Nowy użytkownik</a></li>
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-user-profile')}">active</c:if>" href="user/profile">Profil</a></li>
+                <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-profile')}">active</c:if>">
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-list')}">active</c:if>" href="profile/list">Profile</a></li>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-new')}">active</c:if>" href="profile/new">Nowy profil</a></li>
                 </ul>
             </li>
             <li>
@@ -38,7 +37,8 @@
                 </a>
                 <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-report')}">active</c:if>">
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-list')}">active</c:if>" href="report/list">Dostępne raporty</a></li>
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-import')}">active</c:if>" href="report/import">Import definicji</a></li>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-template-list')}">active</c:if>" href="report/template/list">Definicje</a></li>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-template-import')}">active</c:if>" href="report/template/import">Import definicji</a></li>
                 </ul>
             </li>
         </ul>

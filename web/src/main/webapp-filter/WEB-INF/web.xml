@@ -11,7 +11,7 @@
     
     <!-- welcome page AFTER success login -->
 	<welcome-file-list>
-	    <welcome-file>user/profile</welcome-file>
+	    <welcome-file>profile</welcome-file>
 	</welcome-file-list>    
     
     <!-- session -->
@@ -38,14 +38,6 @@
     </context-param>
     
     <!-- *** filters *** -->
-    <!-- filter>
-        <filter-name>Filtr Kodowanie Znakow</filter-name>
-        <filter-class>pl.eurobank.system.web.filtr.CSystemKodowanieFiltr</filter-class>
-        <init-param>
-            <param-name>kodowanie</param-name>
-            <param-value>UTF-8</param-value>
-        </init-param>
-    </filter-->
 	<filter>  
 	    <filter-name>encodingFilter</filter-name>  
 	    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>  
@@ -172,35 +164,35 @@
     
     <error-page>
         <error-code>400</error-code>
-        <location>/WEB-INF/jsp/error/error.jsp</location>
+        <location>/WEB-INF/jsp/error/error-400.jsp</location>
     </error-page>
     <error-page>
         <error-code>403</error-code>
-        <location>/WEB-INF/jsp/error/error.jsp</location>
+        <location>/WEB-INF/jsp/error/error-403.jsp</location>
     </error-page>
     <error-page>
         <error-code>404</error-code>
-        <location>/WEB-INF/jsp/error/error.jsp</location>
+        <location>/WEB-INF/jsp/error/error-404.jsp</location>
     </error-page>
     <error-page>
         <error-code>503</error-code>
-        <location>/WEB-INF/jsp/error/error.jsp</location>
+        <location>/WEB-INF/jsp/error/error-503.jsp</location>
     </error-page>   
    <error-page>
         <error-code>500</error-code>
-        <location>/WEB-INF/jsp/error/error.jsp</location>
+        <location>/WEB-INF/jsp/error/error-500.jsp</location>
     </error-page> 
     <error-page>
         <error-code>501</error-code>
-        <location>/WEB-INF/jsp/error/error.jsp</location>
+        <location>/WEB-INF/jsp/error/error-501.jsp</location>
     </error-page>
     <error-page>
         <error-code>502</error-code>
-        <location>/WEB-INF/jsp/error/error.jsp</location>
+        <location>/WEB-INF/jsp/error/error-502.jsp</location>
     </error-page>
     <error-page>
         <error-code>504</error-code>
-        <location>/WEB-INF/jsp/error/error.jsp</location>
+        <location>/WEB-INF/jsp/error/error-504.jsp</location>
     </error-page>
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>

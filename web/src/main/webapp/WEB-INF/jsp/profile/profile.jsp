@@ -2,7 +2,7 @@
 <%@ page session="false" contentType="text/html; charset=UTF-8" %>
 
 <tiles:insertDefinition name="tiles-default" flush="true">
-<tiles:putAttribute name="id" type="string">dbs-page-user-profile</tiles:putAttribute>
+<tiles:putAttribute name="id" type="string">dbs-page-profile</tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">profil użytkownika</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string"><link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" /></tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
@@ -18,8 +18,8 @@
                 <a class="btn-flat icon pull-right delete-user" data-toggle="tooltip" title="Delete user" data-placement="top">
                     <i class="icon-trash"></i>
                 </a>
-                 <a class="btn-flat icon large pull-right edit">
-                    Edit this person
+                 <a class="btn-flat icon large pull-right edit" href="profile/edit">
+                    Edytuj ten profil
                 </a>
             </div>
 
@@ -29,30 +29,30 @@
                     <div class="profile-box">
                         <!-- biography -->
                         <div class="col-md-12 section">
-                            <h6>Biography</h6>
+                            <h6>Notatki</h6>
                             <p>There are many variations of passages of Lorem Ipsum available but the majority have humour suffered alteration in believable some formhumour , by injected humour, or randomised words which don't look even slightly believable. </p>
                         </div>
 
-                        <h6>Recent orders</h6>
+                        <h6>Ostatnie raporty</h6>
                         <br>
                         <!-- recent orders table -->
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th class="col-md-2">
-                                        Order ID
+                                        ID
                                     </th>
                                     <th class="col-md-3">
                                         <span class="line"></span>
-                                        Date
+                                        Nazwa raportu
                                     </th>
                                     <th class="col-md-3">
                                         <span class="line"></span>
-                                        Items
+                                        Wielkość
                                     </th>
                                     <th class="col-md-3">
                                         <span class="line"></span>
-                                        Total amount
+                                        Data wykonania
                                     </th>
                                 </tr>
                             </thead>
@@ -60,44 +60,44 @@
                                 <!-- row -->
                                 <tr class="first">
                                     <td>
-                                        <a href="#">#459</a>
+                                        <a href="report/details">#459</a>
                                     </td>
                                     <td>
                                         Jan 03, 2013
                                     </td>
                                     <td>
-                                        3
+                                        2312kB
                                     </td>
                                     <td>
-                                        $ 3,500.00
+                                        Zeznanie ZUS
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a href="#">#510</a>
+                                        <a href="report/details">#510</a>
                                     </td>
                                     <td>
                                         Feb 22, 2013
                                     </td>
                                     <td>
-                                        5
+                                        5787kB
                                     </td>
                                     <td>
-                                        $ 800.00
+                                        Dzienna ilość operacji 
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a href="#">#618</a>
+                                        <a href="report/details">#618</a>
                                     </td>
                                     <td>
                                         Jan 03, 2013
                                     </td>
                                     <td>
-                                        8
+                                        8212kB
                                     </td>
                                     <td>
-                                        $ 3,499.99
+                                        PIT 37
                                     </td>
                                 </tr>
                             </tbody>
@@ -105,14 +105,14 @@
 
                         <!-- new comment form -->
                         <div class="col-md-12 section comment">
-                            <h6>Add a quick note</h6>
-                            <p>Add a note about this user to keep a history of your interactions.</p>
+                            <h6>Krótka notatka do profilu</h6>
+                            <p>Dodaj krótką notatkę by o czymś nie zapomnieć.</p>
                             <textarea></textarea>
-                            <a href="#">Attach files</a>
+                            <!-- a href="#">Attach files</a-->
                             <div class="col-md-12 submit-box pull-right">
-                                <input type="submit" class="btn-glow primary" value="Add Note">
-                                <span>OR</span>
-                                <input type="reset" value="Cancel" class="reset">
+                                <input type="submit" class="btn-glow primary" value="Dodaj notatkę">
+                                <span>&nbsp;</span>
+                                <input type="reset" value="Anuluj" class="reset">
                             </div>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
 
                 <!-- side address column -->
                 <div class="col-md-3 col-xs-12 address pull-right">
-                    <h6>Address</h6>
+                    <h6>Adres</h6>
                     <!-- iframe width="300" height="133" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com.mx/?ie=UTF8&amp;t=m&amp;ll=19.715081,-155.071421&amp;spn=0.010746,0.025749&amp;z=14&amp;output=embed"></iframe-->
                     <ul>
                         <li>2301 East Lamar Blvd. Suite 140. </li>

@@ -1,5 +1,6 @@
 <%@ include file="/WEB-INF/jsp/tiles/common/taglib.jsp" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
+
 <!DOCTYPE html>
 <html class="login-bg">
 <head>
@@ -13,60 +14,45 @@
 	<meta name="robots" content="none" />    
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<base href="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>/"/>
-	
     <!-- bootstrap -->
     <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
     <link href="css/bootstrap/bootstrap-overrides.css" type="text/css" rel="stylesheet">
-    
-    <!-- libraries -->
-    <link href="css/lib/font-awesome.css" type="text/css" rel="stylesheet" />    
 
     <!-- global styles -->
     <link rel="stylesheet" type="text/css" href="css/compiled/layout.css">
     <link rel="stylesheet" type="text/css" href="css/compiled/elements.css">
     <link rel="stylesheet" type="text/css" href="css/compiled/icons.css">
-    <link rel="stylesheet" href="css/dbs/dbs-alerts.css" type="text/css" media="screen" />
 
-    <!-- this page specific styles -->
-    <tiles:insertAttribute name="css"/>
+    <!-- libraries -->
+    <link rel="stylesheet" type="text/css" href="css/lib/font-awesome.css">
     
+    <!-- this page specific styles -->
+    <link rel="stylesheet" href="css/compiled/personal-info.css" type="text/css" media="screen" />
+
     <!-- open sans font -->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <!-- link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'-->
 
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 </head>
 <body id="<tiles:getAsString name="id"/>">
-
-    
-    <%@ include file="/WEB-INF/jsp/tiles/default/navbar.jsp" %>
-    
-    <%@ include file="/WEB-INF/jsp/tiles/default/sidebar.jsp" %>
-    
-    
-    <!-- main container -->
-    <div class="content">
-	 	
-        <!-- settings changer -->
-        <div class="skins-nav">
-            <a href="#" class="skin first_nav selected">
-                <span class="icon"></span><span class="text">Jasny</span>
-            </a>
-            <a href="#" class="skin second_nav" data-file="css/compiled/skins/dark.css">
-                <span class="icon"></span><span class="text">Ciemny</span>
-            </a>
+    <!-- navbar -->
+    <header class="navbar navbar-inverse" role="banner">
+        <div class="navbar-header">
+            <a class="navbar-brand" href=""><img src="img/logo.png"></a>
         </div>
-        
-        <%@ include file="/WEB-INF/jsp/tiles/default/alerts.jsp" %>
-	 	
-    	<tiles:insertAttribute name="content"/>
-    </div>
+    </header>
+    <!-- end navbar -->
     
+	<!-- main container .wide-content is used for this layout without sidebar :)  -->
+    <div class="content wide-content">
+		<tiles:insertAttribute name="content"/>
+    </div>
+    <!-- end main container -->    
+
 	<!-- scripts -->
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/theme.js"></script>
-
 </body>
 </html>

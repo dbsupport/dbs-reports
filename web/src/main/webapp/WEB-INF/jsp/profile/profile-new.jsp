@@ -2,7 +2,7 @@
 <%@ page session="false" contentType="text/html; charset=UTF-8" %>
 
 <tiles:insertDefinition name="tiles-default" flush="true">
-<tiles:putAttribute name="id" type="string">dbs-page-user-new</tiles:putAttribute>
+<tiles:putAttribute name="id" type="string">dbs-page-profile-new</tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">nowy użytkownik</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/new-user.css" type="text/css" media="screen" />
@@ -13,7 +13,7 @@
         <div id="pad-wrapper" class="new-user">
             <div class="row header">
                 <div class="col-md-12">
-                    <h3>Dodaj nowy profil</h3>
+                    <h3>Dodaj nowego użytkownika</h3>
                 </div>                
             </div>
             
@@ -21,7 +21,7 @@
                 <!-- left column -->
                 <div class="col-md-9 with-sidebar">
                     <div class="container">
-                    	<form:form method="post" commandName="userNewForm" action="user/new" class="new_user_form" enctype="application/x-www-form-urlencoded">
+                    	<form:form method="post" commandName="profileNewForm" action="profile/new" class="new_user_form" enctype="application/x-www-form-urlencoded">
                     	
                     		<spring:bind path="firstName">
                     		<c:if test="${status.error}"><c:set var="classes">error</c:set></c:if>
@@ -47,7 +47,7 @@
                                 <label>Adres:</label>
                                 <div class="address-fields">
                                     <input class="form-control" type="text" placeholder="Ulica" />
-                                    <input class="small form-control" type="text" placeholder="Misato" />
+                                    <input class="small form-control" type="text" placeholder="Miasto" />
                                     <input class="small form-control" type="text" placeholder="Województwo" />
                                     <input class="small last form-control" type="text" placeholder="Kod pocztowy" />
                                 </div>

@@ -1,0 +1,22 @@
+/**
+ * (c) dbs-reports
+ */
+
+#alerts-wrapper {
+  padding: 0px 50px;
+  margin-top: 55px;
+}
+
+#security-alerts-wrapper {
+  margin: 0 auto;
+  padding: 30px 0 30px;
+  float: none;
+  width: 400px;
+}
+
+#error-alerts-wrapper {
+  margin: 0 auto;
+  padding: 30px 0 30px;
+  float: none;
+  width: 400px;
+}

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.support.web.handler;
+package pl.com.dbs.reports.security.web.handler;
 
 import java.io.IOException;
 
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @author krzysztof.kaziura@gmail.com
  *
  */
-@Component("support.access.denied.handler")
+@Component("security.access.denied.handler")
 public class AccessDeniedHandler implements org.springframework.security.web.access.AccessDeniedHandler {
 	
 	/* (non-Javadoc)

@@ -1,18 +1,18 @@
 /**
  * 
  */
-package pl.com.dbs.reports.user.web.form;
+package pl.com.dbs.reports.profile.web.form;
 
 /**
  * @author krzysztof.kaziura@gmail.com
  * 
  **/
-public class UserNewForm {
-	public static final String KEY = "userNewForm";
+public class ProfileNewForm {
+	public static final String KEY = "profileNewForm";
 	
 	private String firstName;
 	
-	public UserNewForm() {}
+	public ProfileNewForm() {}
 	
 	public String getFirstName() {
 		return firstName;

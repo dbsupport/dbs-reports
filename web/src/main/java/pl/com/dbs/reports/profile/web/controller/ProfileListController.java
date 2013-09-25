@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.user.web.controller;
+package pl.com.dbs.reports.profile.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -19,8 +19,8 @@ import pl.com.dbs.reports.support.web.alerts.Alerts;
  */
 @Controller
 @Scope("request")
-public class UserListController {
-	@Autowired private Alerts webmessages;
+public class ProfileListController {
+	@Autowired private Alerts alerts;
 	
 //	@ModelAttribute(UserNewForm.KEY)
 //    public UserNewForm createForm() {
@@ -28,9 +28,9 @@ public class UserListController {
 //		return form;
 //    }		
 	
-	@RequestMapping(value="/user/list", method = RequestMethod.GET)
-    public String list(Model model) {
-		return "user/list";
+	@RequestMapping(value="/profile/list", method = RequestMethod.GET)
+    public String get(Model model) {
+		return "profile/profile-list";
     }
 	
 	

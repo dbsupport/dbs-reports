@@ -1,6 +1,0 @@
-/**
- * (c) dbs
- * 
- * Requires jquery
- */
-

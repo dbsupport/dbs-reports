@@ -14,9 +14,14 @@
         <put-attribute name="id" type="string" value=""/>
         <put-attribute name="title" type="string" value=""/>
         <put-attribute name="css" type="string" value=""/>
-        <put-attribute name="js" type="string" value=""/>
         <put-attribute name="content" type="string" value=""/>
     </definition>
     
+    <definition name="tiles-error" template="/WEB-INF/jsp/tiles/error/template.jsp">
+        <put-attribute name="id" type="string" value=""/>
+        <put-attribute name="title" type="string" value=""/>
+        <put-attribute name="css" type="string" value=""/>
+        <put-attribute name="content" type="string" value=""/>
+    </definition>    
     
 </tiles-definitions>

@@ -28,7 +28,7 @@ xmlns="http://www.springframework.org/schema/beans"
 		<security:logout logout-url="/security/logout" delete-cookies="true" invalidate-session="true" logout-success-url="/security/login" />
 		<security:session-management invalid-session-url="/security/login" />
 		<security:custom-filter position="FORM_LOGIN_FILTER" ref="customAuthenticationFilter"/>
-		<security:access-denied-handler ref="support.access.denied.handler"/>
+		<security:access-denied-handler ref="security.access.denied.handler"/>
 	</security:http>
 	
 	<bean id="customAuthenticationEntryPoint" 
@@ -46,7 +46,7 @@ xmlns="http://www.springframework.org/schema/beans"
 			<bean id="customAuthenticationSuccessHandler" 
 				class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
 				<property name="alwaysUseDefaultTargetUrl" value="true" />
-				<property name="defaultTargetUrl" value="/user/profile" />
+				<property name="defaultTargetUrl" value="/profile" />
 			</bean>
 		</property>
 		<property name="authenticationFailureHandler">

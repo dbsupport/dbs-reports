@@ -102,15 +102,13 @@
             </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle hidden-xs hidden-sm" data-toggle="dropdown">
-                    Your account
+                    Twoje konto
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="personal-info.html">Personal info</a></li>
-                    <li><a href="#">Account settings</a></li>
-                    <li><a href="#">Billing</a></li>
-                    <li><a href="#">Export your data</a></li>
-                    <li><a href="#">Send feedback</a></li>
+                    <li><a href="profile">Twój profil</a></li>
+                    <li><a href="report/list">Twoje raporty</a></li>
+                    <li><a href="report/template/list">Twoje definicje</a></li>
                 </ul>
             </li>
             <li class="settings hidden-xs hidden-sm">

@@ -10,8 +10,10 @@ import org.springframework.validation.Validator;
 import pl.com.dbs.reports.profile.web.form.ProfileNewForm;
 
 /**
- * @author krzysztof.kaziura@gmail.com
+ * TODO
  *
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
  */
 public class ProfileNewValidator implements Validator {
 	public ProfileNewValidator() {}

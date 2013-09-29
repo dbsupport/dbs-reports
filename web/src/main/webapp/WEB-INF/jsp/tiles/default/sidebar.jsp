@@ -36,9 +36,10 @@
                     <i class="icon-chevron-down"></i>
                 </a>
                 <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-report')}">active</c:if>">
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-list')}">active</c:if>" href="report/list">Dostępne raporty</a></li>
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-template-list')}">active</c:if>" href="report/template/list">Definicje</a></li>
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-template-import')}">active</c:if>" href="report/template/import">Import definicji</a></li>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-pattern-list')}">active</c:if>" href="report/pattern/list">Definicje</a></li>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-archives')}">active</c:if>" href="report/archives">Archiwum</a></li>
+                    <li>&nbsp;</li>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-pattern-import')}">active</c:if>" href="report/pattern/import">Import definicji</a></li>
                 </ul>
             </li>
         </ul>

@@ -10,15 +10,7 @@
 
         <div class="error-alerts-wrapper" id="pad-wrapper">
             <div class="row">
-                <!-- avatar column -->
-                <div class="col-md-3 col-md-offset-1 avatar-box">
-                    <div class="personal-image">
-                        <img src="img/dbs/error.png" class="avatar img-circle">
-                    </div>
-                </div>
-
-                <!-- edit form column -->
-                <div class="col-md-6 personal-info">
+                <div class="col-md-9 personal-info">
                     <div class="alert alert-danger">
                         <i class="icon-remove-sign"></i>Ups, problem... ten adres nie istnieje! (404)<br/>
  						Zgłoś błąd administratorowi podając powyższy kod błędu!                

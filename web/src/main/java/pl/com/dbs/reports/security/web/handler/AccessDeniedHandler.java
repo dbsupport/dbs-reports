@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 
 /**
  * Przekieruj na ... jesli nie ma dostepu.
- * 
- * @author krzysztof.kaziura@gmail.com
  *
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
  */
 @Component("security.access.denied.handler")
 public class AccessDeniedHandler implements org.springframework.security.web.access.AccessDeniedHandler {

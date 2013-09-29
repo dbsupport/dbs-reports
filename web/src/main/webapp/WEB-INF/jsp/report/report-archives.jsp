@@ -2,14 +2,14 @@
 <%@ page session="false" contentType="text/html; charset=UTF-8" %>
 
 <tiles:insertDefinition name="tiles-default" flush="true">
-<tiles:putAttribute name="id" type="string">dbs-page-report-list</tiles:putAttribute>
-<tiles:putAttribute name="title" type="string">lista dostępnych raportów</tiles:putAttribute>
+<tiles:putAttribute name="id" type="string">dbs-page-report-archives</tiles:putAttribute>
+<tiles:putAttribute name="title" type="string">lista raportów archiwalnych</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string"><link rel="stylesheet" href="css/compiled/user-list.css" type="text/css" media="screen" /></tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
         <div id="pad-wrapper" class="users-list">
             <div class="row header">
-                <h3>Raporty</h3>
+                <h3>Raporty archiwalne</h3>
                 <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
                     <input type="text" class="col-md-5 search" placeholder="Wpisz nazwę raportu...">
                     
@@ -51,7 +51,7 @@
                         </div>
                     </div>
 
-                    <a href="report/template/import" class="btn-flat success pull-right">
+                    <a href="report/pattern/import" class="btn-flat success pull-right">
                         <span>&#43;</span>
                         ZAIMPORTUJ DEFINICJĘ RAPORTU
                     </a>

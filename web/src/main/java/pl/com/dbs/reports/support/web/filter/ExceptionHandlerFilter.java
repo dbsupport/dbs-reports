@@ -17,7 +17,8 @@ import org.apache.log4j.Logger;
  * Filtr przechwytujacy wyjatki - w przypadku ich wystapienia przekierowyje na strone z bledem. 
  * Kazdemu wyjatkowi przypisany jest ID.
  * 
- * @author krzysztof.kaziura@gmail.com
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
  */
 public class ExceptionHandlerFilter implements Filter {
 	private String errorPath;

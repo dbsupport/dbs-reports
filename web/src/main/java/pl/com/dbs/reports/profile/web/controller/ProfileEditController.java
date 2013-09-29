@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -23,10 +24,12 @@ import pl.com.dbs.reports.profile.web.form.ProfileEditForm;
 import pl.com.dbs.reports.profile.web.validator.ProfileEditValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 
+
 /**
- * Obsluga uzytkownikow
- * 
- * @author krzysztof.kaziura@gmail.com
+ * Profil - edycja.
+ *
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
  */
 @Controller
 @SessionAttributes({ProfileEditForm.KEY})
@@ -44,6 +47,11 @@ public class ProfileEditController {
     public String get(Model model, @ModelAttribute(ProfileEditForm.KEY) final ProfileEditForm form) {
 		return "profile/profile-edit";
     }
+	
+	@RequestMapping(value="/profile/edit/{id}", method = RequestMethod.GET)
+    public String get(Model model, @ModelAttribute(ProfileEditForm.KEY) final ProfileEditForm form,  @PathVariable("id") Integer id) {
+		return "profile/profile-edit";
+    }	
 	
 	@RequestMapping(value= "/profile/edit", method = RequestMethod.POST)
     public String submit(@Valid @ModelAttribute(ProfileEditForm.KEY) final ProfileEditForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {

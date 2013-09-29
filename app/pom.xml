@@ -16,6 +16,12 @@
 	<packaging>jar</packaging>
 
 	<dependencies>
+        <dependency>
+            <groupId>pl.com.dbs</groupId>
+            <artifactId>dbs-reports-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>	
+	
 		<!-- Commons -->
 		<dependency>
 			<groupId>log4j</groupId>
@@ -32,6 +38,14 @@
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
+		</dependency>
+		<dependency>  
+			<groupId>commons-io</groupId>  
+		 	<artifactId>commons-io</artifactId>  
+		</dependency>
+        <dependency>
+    		<groupId>com.google.guava</groupId>
+    		<artifactId>guava</artifactId>
 		</dependency>
 		
 		<!-- Eclipselink -->

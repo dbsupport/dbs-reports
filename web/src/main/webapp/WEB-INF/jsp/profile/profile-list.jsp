@@ -3,7 +3,7 @@
 
 <tiles:insertDefinition name="tiles-default" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-profile-list</tiles:putAttribute>
-<tiles:putAttribute name="title" type="string">lista użytkowników</tiles:putAttribute>
+<tiles:putAttribute name="title" type="string">lista profili użytkowników</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/user-list.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-profile-list.css" type="text/css" media="screen" />
@@ -12,7 +12,7 @@
 
         <div id="pad-wrapper" class="users-list">
             <div class="row header">
-                <h3>Użytkownicy</h3>
+                <h3>Profile użytkowników</h3>
                 <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
                     <input type="text" class="col-md-5 search" placeholder="Wpisz użytkownika...">
                     
@@ -56,7 +56,7 @@
 
                     <a href="profile/new" class="btn-flat success pull-right">
                         <span>&#43;</span>
-                        NOWY UŻYTKOWNIK
+                        NOWY PROFIL
                     </a>
                 </div>
             </div>
@@ -95,7 +95,7 @@
                              </td>
                              <td>
                                 <img src="img/contact-img.png" class="img-circle avatar hidden-phone" />
-                                <a href="user/profile" class="name">Alejandra Galvan Castillo</a>
+                                <a href="profile/profile/1" class="name">Alejandra Galvan Castillo</a>
                                 <span class="subtext">Graphic Design</span>
                             </td>
                             <td>
@@ -109,7 +109,7 @@
                             </td>
                             <td>
                                     <ul class="actions">
-                                        <li><a href="profile/edit"><i class="table-edit" title="Edycja profilu"></i></a></li>
+                                        <li><a href="profile/edit/1"><i class="table-edit" title="Edycja profilu"></i></a></li>
                                         <li><i class="table-settings" title=""></i></li>
                                         <li class="last"><i class="table-delete" title="Usunięcie profilu"></i></li>
                                     </ul>

@@ -4,8 +4,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 
 /**
- * @author krzysztof.kaziura
+ * TODO
  *
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
  */
 public class AuthenticationToken extends UsernamePasswordAuthenticationToken {
 	private static final long serialVersionUID = 1L;

@@ -13,7 +13,7 @@
         <div id="pad-wrapper" class="new-user">
             <div class="row header">
                 <div class="col-md-12">
-                    <h3>Edytuj profil</h3>
+                    <h3>Edytuj profil użytkownika ...</h3>
                 </div>                
             </div>
             
@@ -21,7 +21,7 @@
                 <!-- left column -->
                 <div class="col-md-9 with-sidebar">
                     <div class="container">
-                    	<form:form method="post" commandName="profileEditForm" action="user/edit" class="new_user_form" enctype="application/x-www-form-urlencoded">
+                    	<form:form method="post" commandName="profileEditForm" action="user/edit" class="new_user_form" enctype="multipart/form-data">
                     	
                     		<spring:bind path="firstName">
                     		<c:if test="${status.error}"><c:set var="classes">error</c:set></c:if>
@@ -43,7 +43,7 @@
                                 <label>Telefon:</label>
                                 <input class="col-md-9 form-control" type="text" />
                             </div>
-                            <div class="col-md-12 field-box">
+                            <div class="col-md-9 field-box">
                                 <label>Adres:</label>
                                 <div class="address-fields">
                                     <input class="form-control" type="text" placeholder="Ulica" />
@@ -52,18 +52,18 @@
                                     <input class="small last form-control" type="text" placeholder="Kod pocztowy" />
                                 </div>
                             </div>
-                            <div class="col-md-12 field-box textarea personal-image">
+                            <div class="col-md-9 field-box textarea personal-image">
 	                        <label>Zdjęcie:</label>
 	                        <div class="address-fields">
 	                        	<input type="file" />
 	                        </div>
                             </div>
-                            <div class="col-md-12 field-box textarea">
+                            <div class="col-md-9 field-box textarea">
                                 <label>Notatki:</label>
                                 <textarea class="col-md-9"></textarea>
                                 <span class="charactersleft">Krótka notatka o profilu.</span>
                             </div>
-                            <div class="col-md-11 field-box actions">
+                            <div class="col-md-9 field-box actions">
                             	<button type="submit" name="submit" class="btn-glow primary">Zapisz profil</button>
                                 <span>&nbsp;</span>
                                 <input type="reset" value="Anuluj" class="reset"/>

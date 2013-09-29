@@ -1,7 +1,7 @@
 /*
  * Created on 2006-03-29
  */
-package pl.com.dbs.reports.support.web;
+package pl.com.dbs.reports.support.web.context;
 
 import javax.servlet.ServletContext;
 
@@ -16,9 +16,11 @@ import org.springframework.web.context.ContextLoader;
 
 /**
  * Ladowacz konktekstu springa, ktory uzywa SingletonBeanFactoryLocator zamiast
- * ContextSingletonBeanFactoryLocator. 
+ * ContextSingletonBeanFactoryLocator.
+ * @see web.xml 
  * 
- * @author krzysztof.kaziura@gmail.com
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
  */
 public class CSpringSingletonContextLoader extends ContextLoader {
     private final Log logger = LogFactory.getLog(CSpringSingletonContextLoader.class);

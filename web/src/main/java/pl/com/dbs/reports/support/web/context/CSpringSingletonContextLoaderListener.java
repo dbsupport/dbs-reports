@@ -1,15 +1,16 @@
 /*
  * Created on 2006-03-29
  */
-package pl.com.dbs.reports.support.web;
+package pl.com.dbs.reports.support.web.context;
 
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.ContextLoaderListener;
 
-
 /**
- * @author krzysztof.kaziura@gmail.com
+ * TODO
  *
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
  */
 public class CSpringSingletonContextLoaderListener extends ContextLoaderListener {
     protected ContextLoader createContextLoader() {

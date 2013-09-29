@@ -24,9 +24,10 @@ import pl.com.dbs.reports.profile.web.validator.ProfileNewValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 
 /**
- * Obsluga uzytkownikow
- * 
- * @author krzysztof.kaziura@gmail.com
+ * TODO
+ *
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
  */
 @Controller
 @SessionAttributes({ProfileNewForm.KEY})
@@ -52,7 +53,6 @@ public class ProfileNewController {
 		}
 		
 		return "profile/profile-new";
-		//return "redirect:/user/new"; 
 	}
 	
 	@InitBinder

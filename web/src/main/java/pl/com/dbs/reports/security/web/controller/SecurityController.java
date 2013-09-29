@@ -15,9 +15,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 
 /**
- * Logowanie itd
- * 
- * @author krzysztof.kaziura@gmail.com
+ * TODO
+ *
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
  */
 @Controller
 public class SecurityController {
@@ -40,8 +41,4 @@ public class SecurityController {
 		return "security/noaccess";
 	}	
 	
-//	@InitBinder
-//	protected void initBinder(WebDataBinder binder) {
-//		if (binder.getTarget() instanceof PasswordChangeForm) binder.setValidator(validator);
-//	}
 }

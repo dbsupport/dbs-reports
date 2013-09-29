@@ -22,6 +22,12 @@
             <version>${project.parent.version}</version>
         </dependency>
         
+		<!-- Commons -->  
+		<dependency>  
+			<groupId>commons-fileupload</groupId>  
+		 	<artifactId>commons-fileupload</artifactId>  
+		</dependency>  
+        
         <!-- Servlet -->
 		<dependency>
 		    <groupId>javax.servlet</groupId>
@@ -125,13 +131,6 @@
 		  	<artifactId>standard</artifactId>
 		  	<scope>compile</scope>
 		</dependency>
-		
-		<!-- Guava -->
-        <dependency>
-    		<groupId>com.google.guava</groupId>
-    		<artifactId>guava</artifactId>
-    		<version>${guava.version}</version>
-		</dependency>
 
 		<!-- Validation -->		
 		<dependency>
@@ -142,7 +141,6 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>		
-		
     </dependencies>
     
     <build>

@@ -4,10 +4,11 @@ import java.util.Collections;
 
 import org.springframework.security.core.userdetails.User;
 
-
 /**
- * Zalogowany operator/klient.
- * @author krzysztof.kaziura
+ * TODO
+ *
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
  */
 public class Operator extends User {
 	private static final long serialVersionUID = -2698295268207284285L;

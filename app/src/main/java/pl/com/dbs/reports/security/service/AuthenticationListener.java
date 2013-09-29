@@ -10,8 +10,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
 /**
- * @author lukasz.gazda/krzysztof.kaziura
+ * TODO
  *
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
  */
 @Component(value="authentication.listener")
 public class AuthenticationListener implements ApplicationListener<AbstractAuthenticationEvent> {

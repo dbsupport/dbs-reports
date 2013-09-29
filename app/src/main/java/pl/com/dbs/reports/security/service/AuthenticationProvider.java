@@ -1,7 +1,6 @@
 package pl.com.dbs.reports.security.service;
 
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,16 +13,16 @@ import pl.com.dbs.reports.security.domain.Operator;
 
 /**
  * Dostawca autentykacji.
- * 
- * @author krzysztof.kaziura@gmail.com
  *
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
  */
 @Component(value="authentication.provider")
 public class AuthenticationProvider implements org.springframework.security.authentication.AuthenticationProvider {
 	
 	@Autowired 
 	private AuthenticationService authenticationService;
-	private static final Logger log = Logger.getLogger(AuthenticationProvider.class);
+	//private static final Logger log = Logger.getLogger(AuthenticationProvider.class);
 	
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {

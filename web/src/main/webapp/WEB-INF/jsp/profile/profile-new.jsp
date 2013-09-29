@@ -3,7 +3,7 @@
 
 <tiles:insertDefinition name="tiles-default" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-profile-new</tiles:putAttribute>
-<tiles:putAttribute name="title" type="string">nowy użytkownik</tiles:putAttribute>
+<tiles:putAttribute name="title" type="string">nowy profil</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/new-user.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/compiled/form-wizard.css" type="text/css" media="screen" />
@@ -13,7 +13,7 @@
         <div id="pad-wrapper" class="new-user">
             <div class="row header">
                 <div class="col-md-12">
-                    <h3>Dodaj nowego użytkownika</h3>
+                    <h3>Dodaj profil użytkownika</h3>
                 </div>                
             </div>
             
@@ -21,7 +21,7 @@
                 <!-- left column -->
                 <div class="col-md-9 with-sidebar">
                     <div class="container">
-                    	<form:form method="post" commandName="profileNewForm" action="profile/new" class="new_user_form" enctype="application/x-www-form-urlencoded">
+                    	<form:form method="post" commandName="profileNewForm" action="profile/new" class="new_user_form" enctype="multipart/form-data">
                     	
                     		<spring:bind path="firstName">
                     		<c:if test="${status.error}"><c:set var="classes">error</c:set></c:if>

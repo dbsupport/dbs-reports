@@ -29,6 +29,8 @@ public class PatternManifestValidatorDefault {
 	 * Validate manifest file.
 	 */
 	public void validate(Manifest manifest) throws PatternManifestValidationException {
+		if (manifest==null) throw new PatternManifestValidationException(Pattern.ATTRIBUTE_SECTION);
+		
 		Attributes attrs = manifest.getAttributes(Pattern.ATTRIBUTE_SECTION);
 		if (attrs==null) throw new PatternManifestValidationException(Pattern.ATTRIBUTE_SECTION);
 		if (StringUtils.isBlank(attrs.getValue(Pattern.ATTRIBUTE_NAME))||!NAME_PATTERN.matcher(attrs.getValue(Pattern.ATTRIBUTE_NAME)).find())

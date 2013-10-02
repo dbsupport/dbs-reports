@@ -13,15 +13,30 @@
         <div id="pad-wrapper" class="new-user">
             <div class="row header">
                 <div class="col-md-12">
-                    <h3>Zaimportuj nowy szablon raportu</h3>
+                    <h3>Importuj nowy szablon raportu</h3>
                 </div>                
             </div>
             
             <div class="row form-wrapper">
                 <!-- left column -->
                 <div class="col-md-9 with-sidebar">
+                
+                    <div id="fuelux-wizard" class="wizard row">
+                        <ul class="wizard-steps">
+                            <li data-target="#step1" class="active">
+                                <span class="step">1</span>
+                                <span class="title">Wybierz szablon</span>
+                            </li>
+                            <li data-target="#step2">
+                                <span class="step">2</span>
+                                <span class="title">Zapisz szablon</span>
+                            </li>
+                        </ul>                            
+                    </div>                
+                
+                
                     <div class="container">
-                    	<form:form method="post" modelAttribute="reportPatternImportForm" action="report/pattern/import" class="new_user_form" enctype="multipart/form-data">
+                    	<form:form method="post" modelAttribute="reportPatternImportForm" action="report/pattern/import/read" class="new_user_form" enctype="multipart/form-data">
                     	
                     		<spring:bind path="file">
                     		<c:if test="${status.error}"><c:set var="classes">error</c:set></c:if>
@@ -33,7 +48,12 @@
                             </spring:bind>
                             
                             <div class="col-md-11 field-box actions">
-                            	<button type="submit" name="submit" class="btn-glow primary">Załaduj szablon</button>
+		                        <button type="submit" class="btn-glow primary btn-next" data-last="Finish">
+		                            Dalej <i class="icon-chevron-right"></i>
+		                        </button>
+		                        <!-- button type="button" class="btn-glow success btn-finish">
+		                            Zapisz
+		                        </button-->                            
                             </div>
                         </form:form>
                     </div>

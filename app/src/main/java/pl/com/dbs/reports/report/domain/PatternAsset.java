@@ -33,14 +33,11 @@ public class PatternAsset extends AEntity implements Asset {
 	
 	@Id
 	@Column(name = "id")
-	@SequenceGenerator(name = "sg_report_pattern_asset", sequenceName = "sre_pattern_asset", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sg_report_pattern_asset")
+	@SequenceGenerator(name = "sg_pattern_asset", sequenceName = "sre_pattern_asset", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sg_pattern_asset")
 	//@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "sg_report_pattern")
 	private Long id;
 
-	@Column(name = "name")
-	private String name;
-	
 	@Column(name = "path")
 	private String path;
 	
@@ -55,20 +52,19 @@ public class PatternAsset extends AEntity implements Asset {
 	
 	public PatternAsset() {/* JPA */}
 	
-	public PatternAsset(String name, byte[] content) {
+	public PatternAsset(String path, byte[] content) {
 		//Validate.isTrue(content.length>0, "Content is empty!");
-		this.name = name;
+		this.path = path;
 		this.content = content;
+	}
+	
+	public void addPattern(ReportPattern pattern) {
+		this.pattern = pattern;
 	}
 
 	@Override
 	public long getId() {
 		return id;
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 	@Override

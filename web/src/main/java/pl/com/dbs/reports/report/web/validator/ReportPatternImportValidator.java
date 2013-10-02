@@ -28,16 +28,17 @@ public class ReportPatternImportValidator implements Validator {
 	
 	@Override
 	public void validate(Object target, Errors errors) {
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "file", "errors.required");
-		
-		if (errors.hasErrors()) return;
-		
 		ReportPatternImportForm form = (ReportPatternImportForm)target;
-		if (form.getFile().getSize()<=0) errors.rejectValue("file", "report.import.file.empty");
+		
+		switch (form.getPage()) {
+		case 1:
+			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "file", "errors.required");
+			if (errors.hasErrors()) return;
+			if (form.getFile().getSize()<=0) errors.rejectValue("file", "report.import.file.empty");
+			break;
+		case 2:
+		}
+		
 		if (errors.hasErrors()) return;
-
-		
-		
 	}
-
 }

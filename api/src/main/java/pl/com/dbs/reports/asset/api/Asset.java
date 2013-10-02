@@ -16,11 +16,6 @@ public interface Asset {
 	long getId();
 
 	/**
-	 * A name of content
-	 */
-	String getName();
-	
-	/**
 	 * Optional path
 	 */
 	String getPath();

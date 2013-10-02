@@ -5,7 +5,6 @@ package pl.com.dbs.reports.report.api;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.jar.Manifest;
 
 
 /**
@@ -26,5 +25,5 @@ public interface PatternFactory {
 	 * Dokonaj walidacji danych wejsciowych.
 	 * Wyprodukuj obiekt wzorca (definicji) raportu.
 	 */
-	Pattern produce(File file, Manifest manifest) throws IOException, PatternManifestValidationException;
+	Pattern produce(File file) throws IOException, PatternManifestValidationException;
 }

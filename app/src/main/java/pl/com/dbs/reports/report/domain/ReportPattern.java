@@ -55,8 +55,8 @@ public class ReportPattern extends AEntity implements Pattern {
 	
 	@Id
 	@Column(name = "id")
-	@SequenceGenerator(name = "sg_report_pattern", sequenceName = "sre_pattern", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sg_report_pattern")
+	@SequenceGenerator(name = "sg_pattern", sequenceName = "sre_pattern", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sg_pattern")
 	//@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "sg_report_pattern")
 	private Long id;
 	
@@ -82,8 +82,8 @@ public class ReportPattern extends AEntity implements Pattern {
 	
 	public ReportPattern() {/* JPA */}
 	
-	public ReportPattern(Manifest manifest, Profile owner) {
-		Validate.notNull(manifest, "Manifest ise no more!");
+	public ReportPattern(Manifest manifest, List<PatternAsset> assets, Profile owner) {
+		Validate.notNull(manifest, "Manifest is no more!");
 		//Validate.notNull(owner, "Owner ise no more!");
 		this.uploadDate = new Date();
 		//this.owner = owner;
@@ -95,14 +95,15 @@ public class ReportPattern extends AEntity implements Pattern {
 			this.manifest = os.toString();
 		} catch (IOException e) {}
 		
-		this.assets = new ArrayList<PatternAsset>();
+		this.assets = assets;
+		for (PatternAsset asset : assets) asset.addPattern(this);
 	}
 	
 	public void addAsset(final PatternAsset asset) {
 		Validate.notNull(asset, "Asset is no more!");
-		Validate.notNull(asset.getName(), "Asset name is no more!");
-		if (Iterables.find(assets, new Predicate<Asset>() { @Override public boolean apply(Asset input) { return asset.getName().equals(input.getName()); } }, null)!=null)
-			throw new IllegalStateException("Asset "+asset.getName()+" already exists!");
+		Validate.notNull(asset.getPath(), "Asset path is no more!");
+		if (Iterables.find(assets, new Predicate<Asset>() { @Override public boolean apply(Asset input) { return asset.getPath().equals(input.getPath()); } }, null)!=null)
+			throw new IllegalStateException("Asset "+asset.getPath()+" already exists!");
 		this.assets.add(asset);
 	}
 

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import pl.com.dbs.reports.report.api.Pattern;
 import pl.com.dbs.reports.report.api.PatternFactory;
 import pl.com.dbs.reports.report.api.PatternManifestValidationException;
 import pl.com.dbs.reports.report.dao.PatternDao;
@@ -37,11 +36,10 @@ public class PatternService {
 	
 	
 	/**
-	 * Import package.
+	 * Read manifest and validate...
 	 */
-	@Transactional
-	public Pattern upload(File file) throws IOException, PatternManifestValidationException, ManifestNotFoundException, PatternFactoryNotFoundException {
-		logger.info("Uploading pattern file.");
+	public ReportPattern read(File file) throws IOException, PatternManifestValidationException, ManifestNotFoundException, PatternFactoryNotFoundException {
+		logger.info("Checking pattern file.");
 		/**
 		 * Find factory by manifest file ..
 		 */
@@ -50,14 +48,22 @@ public class PatternService {
 		/**
 		 * ..create and save entity..
 		 */
-		ReportPattern pattern = (ReportPattern)factory.produce(file, manifest);
+		return (ReportPattern)factory.produce(file);
+	}
+	
+	
+	/**
+	 * Import package.
+	 */
+	@Transactional
+	public ReportPattern upload(File file) throws IOException, PatternManifestValidationException, ManifestNotFoundException, PatternFactoryNotFoundException {
+		logger.info("Uploading pattern file.");
 		
+		ReportPattern pattern = read(file);
 		patternDao.create(pattern);
 		
 		return pattern;
 	}
-	
-	
 	
 	
 	/**

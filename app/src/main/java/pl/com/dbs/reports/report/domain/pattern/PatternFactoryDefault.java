@@ -6,7 +6,9 @@ package pl.com.dbs.reports.report.domain.pattern;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -48,19 +50,17 @@ public final class PatternFactoryDefault implements PatternFactory {
 	 * Wyprodukuj obiekt.
 	 */
 	@Override
-	public Pattern produce(File file, Manifest manifest) throws IOException, PatternManifestValidationException {
+	public Pattern produce(File file) throws IOException, PatternManifestValidationException {
 		Validate.notNull(file, "A file is no more!");
-		Validate.notNull(manifest, "Manifest file is no more!");
-		
-		//..validate manifest..
-		manifestValidator.validate(manifest);
+
 		
 		ZipFile zip = new ZipFile(file);
 		Validate.notNull(zip, "Zip file is no more!");
 		logger.info("Extracting zip file with default method:"+zip.getName());
 
-		//..instantiate report pattern..
-		ReportPattern pattern = new ReportPattern(manifest, null);
+		
+		Manifest manifest = null;
+		List<PatternAsset> assets = new ArrayList<PatternAsset>();
 
 		ZipEntry entry;
 		for (Enumeration<? extends ZipEntry> e = zip.entries(); e.hasMoreElements();) {
@@ -72,17 +72,22 @@ public final class PatternFactoryDefault implements PatternFactory {
             	continue;
             } else if (ManifestResolver.isManifestFile(entry.getName())) {
             	logger.info("Manifest found: "+entry.getName()+" Skipping.");
+            	BufferedInputStream bis = new BufferedInputStream(zip.getInputStream(entry));
+            	manifest = new Manifest(bis);            	
             	continue;
             } else {
             	logger.info("Asset file found: "+entry.getName());
             	StringBuilder sb = readZipEntry(zip, entry);
-                
                 //..create and add asset..
-            	pattern.addAsset(new PatternAsset(entry.getName(), String.valueOf(sb).getBytes()));
+            	assets.add(new PatternAsset(entry.getName(), String.valueOf(sb).getBytes()));
             }
         }
 		
-		return pattern;
+		//..validate manifest..
+		manifestValidator.validate(manifest);
+		
+		//..instantiate report pattern..
+		return new ReportPattern(manifest, assets, null);
 	}
 	
 	/**

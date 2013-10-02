@@ -6,7 +6,7 @@
 	version="2.1">
     <persistence-unit-metadata>
         <persistence-unit-defaults>
-            <schema>public</schema>
+            <schema>reports</schema>
         </persistence-unit-defaults>
     </persistence-unit-metadata>   	
 </entity-mappings>

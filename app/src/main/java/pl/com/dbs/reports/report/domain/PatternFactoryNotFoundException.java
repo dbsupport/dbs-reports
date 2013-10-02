@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain.pattern;
+package pl.com.dbs.reports.report.domain;
 
 
 /**
@@ -10,11 +10,11 @@ package pl.com.dbs.reports.report.domain.pattern;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class FactoryNotFoundException extends Exception {
+public class PatternFactoryNotFoundException extends Exception {
 	private static final long serialVersionUID = 1068361460625579431L;
 	private String factory;
 	
-	public FactoryNotFoundException(String factory) {
+	public PatternFactoryNotFoundException(String factory) {
 		super();
 		this.factory = factory;
 	}

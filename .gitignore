@@ -1,5 +1,17 @@
 /log
 
+/api/target
+
+/api/.settings
+
+/api/.classpath
+
+/api/.project
+
+/api/.springBeans
+
+/api/log
+
 /app/target
 
 /app/.settings

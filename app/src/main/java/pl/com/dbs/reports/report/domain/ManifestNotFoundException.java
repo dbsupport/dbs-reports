@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain.pattern;
+package pl.com.dbs.reports.report.domain;
 
 
 /**

@@ -14,7 +14,7 @@ public class AuthenticationToken extends UsernamePasswordAuthenticationToken {
 	private String gsid;
 	private String ticket;
 	
-	public AuthenticationToken(Operator user, String gsid, String ticket) {
+	public AuthenticationToken(Profile user, String gsid, String ticket) {
 		super(user, user.getPassword(), user.getAuthorities());
 		this.gsid = gsid;
 		this.ticket = ticket;
@@ -28,7 +28,7 @@ public class AuthenticationToken extends UsernamePasswordAuthenticationToken {
 		return ticket;
 	}
 	
-	public Operator getOperator() {
-		return (Operator) this.getPrincipal();
+	public Profile getOperator() {
+		return (Profile) this.getPrincipal();
 	}
 }

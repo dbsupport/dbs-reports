@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain.pattern;
+package pl.com.dbs.reports.report.domain;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -10,17 +10,18 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.apache.commons.lang.Validate;
-
-import pl.com.dbs.reports.asset.domain.Asset;
+import pl.com.dbs.reports.asset.api.Asset;
 import pl.com.dbs.reports.support.db.domain.AEntity;
 
 /**
- * TODO
+ * Report pattern asset.
+ * Pattern assets in separate table.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -40,33 +41,28 @@ public class PatternAsset extends AEntity implements Asset {
 	@Column(name = "name")
 	private String name;
 	
+	@Column(name = "path")
+	private String path;
+	
 	@Lob
 	@Column(name = "content")
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] content;
 	
+    @ManyToOne
+    @JoinColumn(name="pattern_id")
+	private ReportPattern pattern;
+	
 	public PatternAsset() {/* JPA */}
 	
 	public PatternAsset(String name, byte[] content) {
-		this(name);
-		Validate.isTrue(content.length>0, "Content is empty!");
+		//Validate.isTrue(content.length>0, "Content is empty!");
+		this.name = name;
 		this.content = content;
 	}
-	
-//	public PatternAsset(String name, StringBuilder sb) {
-//		this(name);
-//		this.content = String.valueOf(sb).getBytes();
-//	}
-	
-	private PatternAsset(String name) {
-		this.name = name;
-	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	public Long getId() {
+	@Override
+	public long getId() {
 		return id;
 	}
 
@@ -75,7 +71,13 @@ public class PatternAsset extends AEntity implements Asset {
 		return name;
 	}
 
+	@Override
 	public byte[] getContent() {
 		return content;
+	}
+
+	@Override
+	public String getPath() {
+		return path;
 	}
 }

@@ -24,8 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.com.dbs.reports.report.api.Pattern;
 import pl.com.dbs.reports.report.api.PatternManifestValidationException;
 import pl.com.dbs.reports.report.application.PatternService;
-import pl.com.dbs.reports.report.domain.pattern.FactoryNotFoundException;
-import pl.com.dbs.reports.report.domain.pattern.ManifestNotFoundException;
+import pl.com.dbs.reports.report.domain.ManifestNotFoundException;
+import pl.com.dbs.reports.report.domain.PatternFactoryNotFoundException;
 import pl.com.dbs.reports.report.web.form.ReportPatternImportForm;
 import pl.com.dbs.reports.report.web.validator.ReportPatternImportValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
@@ -67,11 +67,11 @@ public class ReportPatternImportController {
 		if (!results.hasErrors()) {
 			try {
 				Pattern pattern = patternService.upload(FileService.multipartToFile(form.getFile()));
-				alerts.addSuccess(request, "report.import.file.success", pattern.getManifest().getName(), pattern.getManifest().getVersion(), pattern.getManifest().getRoles().toString());
+				alerts.addSuccess(request, "report.import.file.success", pattern.getAttribute(Pattern.ATTRIBUTE_NAME), pattern.getAttribute(Pattern.ATTRIBUTE_VERSION), pattern.getAttribute(Pattern.ATTRIBUTE_ROLES));
 			} catch (ManifestNotFoundException e) {
 				alerts.addError(request, "report.import.manifest.error");
 				logger.error("report.import.manifest.error"+e.getMessage());
-			} catch (FactoryNotFoundException e) {
+			} catch (PatternFactoryNotFoundException e) {
 				alerts.addError(request, "report.import.factory.error", e.getFactory());
 				logger.error("report.import.factory.error"+e.getMessage());
 			} catch (PatternManifestValidationException e) {

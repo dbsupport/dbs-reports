@@ -8,7 +8,8 @@
 
 		<mapping-file>META-INF/reports_orm.xml</mapping-file>
 		
-
+		<class>pl.com.dbs.reports.report.domain.ReportPattern</class>
+		<class>pl.com.dbs.reports.report.domain.PatternAsset</class>
 		<exclude-unlisted-classes />
 
 		<properties>

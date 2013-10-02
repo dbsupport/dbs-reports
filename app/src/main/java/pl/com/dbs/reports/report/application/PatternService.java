@@ -11,14 +11,17 @@ import java.util.jar.Manifest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import pl.com.dbs.reports.report.api.Pattern;
 import pl.com.dbs.reports.report.api.PatternFactory;
 import pl.com.dbs.reports.report.api.PatternManifestValidationException;
-import pl.com.dbs.reports.report.domain.pattern.FactoryNotFoundException;
-import pl.com.dbs.reports.report.domain.pattern.ManifestNotFoundException;
-import pl.com.dbs.reports.report.domain.pattern.ManifestResolver;
-import pl.com.dbs.reports.report.domain.pattern.ReportPattern;
+import pl.com.dbs.reports.report.dao.PatternDao;
+import pl.com.dbs.reports.report.dao.PatternFilter;
+import pl.com.dbs.reports.report.domain.ManifestNotFoundException;
+import pl.com.dbs.reports.report.domain.ManifestResolver;
+import pl.com.dbs.reports.report.domain.PatternFactoryNotFoundException;
+import pl.com.dbs.reports.report.domain.ReportPattern;
 
 /**
  * TODO
@@ -30,11 +33,14 @@ import pl.com.dbs.reports.report.domain.pattern.ReportPattern;
 public class PatternService {
 	private static final Logger logger = Logger.getLogger(PatternService.class);
 	@Autowired private ManifestResolver manifestResolver;
+	@Autowired private PatternDao patternDao;
+	
 	
 	/**
 	 * Import package.
 	 */
-	public Pattern upload(File file) throws IOException, PatternManifestValidationException, ManifestNotFoundException, FactoryNotFoundException {
+	@Transactional
+	public Pattern upload(File file) throws IOException, PatternManifestValidationException, ManifestNotFoundException, PatternFactoryNotFoundException {
 		logger.info("Uploading pattern file.");
 		/**
 		 * Find factory by manifest file ..
@@ -44,7 +50,9 @@ public class PatternService {
 		/**
 		 * ..create and save entity..
 		 */
-		Pattern pattern = factory.produce(file, manifest);
+		ReportPattern pattern = (ReportPattern)factory.produce(file, manifest);
+		
+		patternDao.create(pattern);
 		
 		return pattern;
 	}

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain;
+package pl.com.dbs.reports.report.pattern.application;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -20,9 +20,10 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pl.com.dbs.reports.report.api.Pattern;
-import pl.com.dbs.reports.report.api.PatternFactory;
-import pl.com.dbs.reports.report.domain.pattern.PatternFactoryDefault;
+import pl.com.dbs.reports.api.inner.report.pattern.Pattern;
+import pl.com.dbs.reports.api.inner.report.pattern.PatternFactory;
+import pl.com.dbs.reports.report.pattern.domain.PatternManifestNotFoundException;
+import pl.com.dbs.reports.report.pattern.domain.PatternFactoryNotFoundException;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -33,9 +34,9 @@ import com.google.common.collect.Iterables;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-@Service("reports.pattern.manifest.resolver")
-public class ManifestResolver {
-	private static final Log logger = LogFactory.getLog(ManifestResolver.class);
+@Service("report.pattern.manifest.resolver")
+public class PatternManifestResolver {
+	private static final Log logger = LogFactory.getLog(PatternManifestResolver.class);
 	private static final java.util.regex.Pattern MANIFEST_PATTERN = java.util.regex.Pattern.compile("^manifest(\\..+)*$",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	
 	@Autowired private List<PatternFactory> factories;
@@ -48,9 +49,9 @@ public class ManifestResolver {
 	public PatternFactory resolveFactory(Manifest manifest) throws PatternFactoryNotFoundException {
 		Validate.notNull(manifest, "Manifest is no more!");
 		
-		Attributes attrs = manifest.getMainAttributes();
+		Attributes attrs = manifest.getAttributes(Pattern.ATTRIBUTE_SECTION);
 		//..given or default factory..
-		final String factory = StringUtils.isBlank(attrs.getValue(Pattern.ATTRIBUTE_FACTORY))?PatternFactoryDefault.class.getName():attrs.getValue(Pattern.ATTRIBUTE_FACTORY);
+		final String factory = StringUtils.isBlank(attrs.getValue(Pattern.ATTRIBUTE_PATTERN_FACTORY))?PatternFactoryDefault.class.getName():attrs.getValue(Pattern.ATTRIBUTE_PATTERN_FACTORY);
 		
 		PatternFactory result = Iterables.find(factories, new Predicate<PatternFactory>() {  
 				public boolean apply(PatternFactory f) {  
@@ -70,7 +71,7 @@ public class ManifestResolver {
 	 * Find manifest in zip file.
 	 * First occurance.
 	 */
-	public Manifest findManifest(File file) throws IOException, ManifestNotFoundException {
+	public Manifest findManifest(File file) throws IOException, PatternManifestNotFoundException {
 		Validate.notNull(file, "A file is no more!");
 		ZipFile zip = new ZipFile(file);
 		Validate.notNull(zip, "Zip file is no more!");
@@ -92,7 +93,7 @@ public class ManifestResolver {
         }
 		zip.close();
 		logger.warn("Manifest file NOT found in: "+file.getName());
-		throw new ManifestNotFoundException();
+		throw new PatternManifestNotFoundException();
 	}	
 
 	/**

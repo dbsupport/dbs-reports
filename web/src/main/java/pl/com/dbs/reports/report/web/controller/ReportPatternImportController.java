@@ -22,11 +22,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import pl.com.dbs.reports.report.api.Pattern;
-import pl.com.dbs.reports.report.api.PatternManifestValidationException;
-import pl.com.dbs.reports.report.application.PatternService;
-import pl.com.dbs.reports.report.domain.ManifestNotFoundException;
-import pl.com.dbs.reports.report.domain.PatternFactoryNotFoundException;
+import pl.com.dbs.reports.api.inner.report.pattern.Pattern;
+import pl.com.dbs.reports.api.inner.report.pattern.PatternValidationException;
+import pl.com.dbs.reports.report.pattern.application.PatternService;
+import pl.com.dbs.reports.report.pattern.domain.PatternFactoryNotFoundException;
+import pl.com.dbs.reports.report.pattern.domain.PatternFactoryProduceException;
+import pl.com.dbs.reports.report.pattern.domain.PatternManifestNotFoundException;
 import pl.com.dbs.reports.report.web.form.ReportPatternImportForm;
 import pl.com.dbs.reports.report.web.validator.ReportPatternImportValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
@@ -97,7 +98,7 @@ public class ReportPatternImportController {
 		if (!results.hasErrors()) {
 			try {
 				Pattern pattern = patternService.upload(FileService.multipartToFile(form.getFile()));
-				alerts.addSuccess(request, "report.import.file.success", pattern.getAttribute(Pattern.ATTRIBUTE_NAME), pattern.getAttribute(Pattern.ATTRIBUTE_VERSION), pattern.getAttribute(Pattern.ATTRIBUTE_ROLES));
+				alerts.addSuccess(request, "report.import.file.success", pattern.getAttribute(Pattern.ATTRIBUTE_PATTERN_NAME), pattern.getAttribute(Pattern.ATTRIBUTE_PATTERN_VERSION), pattern.getAttribute(Pattern.ATTRIBUTE_ROLES));
 				return "redirect:/report/pattern/import";
 			} catch (Exception e) {
 				exception(e, request, ra);
@@ -108,14 +109,17 @@ public class ReportPatternImportController {
 	}
 	
 	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {
-		if (e instanceof ManifestNotFoundException) {
+		if (e instanceof PatternManifestNotFoundException) {
 			alerts.addError(request, "report.import.manifest.error");
-			logger.error("report.import.manifest.error"+e.getMessage());
+			logger.error("report.import.manifest.error:"+e.getMessage());
 		} else if (e instanceof PatternFactoryNotFoundException) {
 			alerts.addError(request, "report.import.factory.error", ((PatternFactoryNotFoundException)e).getFactory());
-			logger.error("report.import.factory.error"+e.getMessage());
-		} else if (e instanceof PatternManifestValidationException) {
-			alerts.addError(request, "report.manifest.validation.error", ((PatternManifestValidationException)e).getAttr());
+			logger.error("report.import.factory.error:"+e.getMessage());
+		} else if (e instanceof PatternFactoryProduceException) {
+			alerts.addError(request, "report.manifest.produce.error", ((PatternFactoryProduceException)e).getFactory().getName());
+			logger.error("report.manifest.produce.error:"+e.getMessage());
+		} else if (e instanceof PatternValidationException) {
+			alerts.addError(request, "report.manifest.validation.error", ((PatternValidationException)e).getAttr());
 			logger.error("report.manifest.validation.error:"+e.getMessage());
 		} else if (e instanceof IOException) {
 			alerts.addError(request, "report.import.file.ioexception", e.getMessage());

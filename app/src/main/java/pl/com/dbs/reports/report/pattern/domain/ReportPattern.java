@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain;
+package pl.com.dbs.reports.report.pattern.domain;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -30,13 +30,10 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 
-import pl.com.dbs.reports.asset.api.Asset;
-import pl.com.dbs.reports.profile.domain.Profile;
-import pl.com.dbs.reports.report.api.Pattern;
+import pl.com.dbs.reports.api.inner.asset.Asset;
+import pl.com.dbs.reports.api.inner.report.pattern.Pattern;
+import pl.com.dbs.reports.security.domain.ProfileUser;
 import pl.com.dbs.reports.support.db.domain.AEntity;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 /**
  * Encja z wzocem raportu.
@@ -82,7 +79,7 @@ public class ReportPattern extends AEntity implements Pattern {
 	
 	public ReportPattern() {/* JPA */}
 	
-	public ReportPattern(Manifest manifest, List<PatternAsset> assets, Profile owner) {
+	public ReportPattern(Manifest manifest, List<PatternAsset> assets, ProfileUser owner) {
 		Validate.notNull(manifest, "Manifest is no more!");
 		//Validate.notNull(owner, "Owner ise no more!");
 		this.uploadDate = new Date();
@@ -99,13 +96,13 @@ public class ReportPattern extends AEntity implements Pattern {
 		for (PatternAsset asset : assets) asset.addPattern(this);
 	}
 	
-	public void addAsset(final PatternAsset asset) {
-		Validate.notNull(asset, "Asset is no more!");
-		Validate.notNull(asset.getPath(), "Asset path is no more!");
-		if (Iterables.find(assets, new Predicate<Asset>() { @Override public boolean apply(Asset input) { return asset.getPath().equals(input.getPath()); } }, null)!=null)
-			throw new IllegalStateException("Asset "+asset.getPath()+" already exists!");
-		this.assets.add(asset);
-	}
+//	public void addAsset(final PatternAsset asset) {
+//		Validate.notNull(asset, "Asset is no more!");
+//		Validate.notNull(asset.getPath(), "Asset path is no more!");
+//		if (Iterables.find(assets, new Predicate<Asset>() { @Override public boolean apply(Asset input) { return asset.getPath().equals(input.getPath()); } }, null)!=null)
+//			throw new IllegalStateException("Asset "+asset.getPath()+" already exists!");
+//		this.assets.add(asset);
+//	}
 
 	public List<String> getRoles() {
 		String roles = getAttribute(Pattern.ATTRIBUTE_ROLES);
@@ -116,6 +113,12 @@ public class ReportPattern extends AEntity implements Pattern {
 				if (!result.contains(role)) result.add(role);
 		}
 		return result;			
+	}
+	
+
+	@Override
+	public Date getUploadDate() {
+		return uploadDate;
 	}
 
 	@Override
@@ -137,6 +140,11 @@ public class ReportPattern extends AEntity implements Pattern {
 	public String getAttribute(String key) {
 		Attributes attrs = getManifest().getAttributes(Pattern.ATTRIBUTE_SECTION);
 		return attrs.getValue(key);
+	}
+
+	@Override
+	public long getId() {
+		return id;
 	}
 
 }

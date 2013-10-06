@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import pl.com.dbs.reports.report.pattern.application.PatternService;
 import pl.com.dbs.reports.report.web.form.ReportPatternListForm;
 import pl.com.dbs.reports.report.web.validator.ReportPatternListValidator;
+import pl.com.dbs.reports.report.web.view.ReportPatternView;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 
 
@@ -35,6 +37,7 @@ import pl.com.dbs.reports.support.web.alerts.Alerts;
 @Scope("request")
 public class ReportPatternListController {
 	@Autowired private Alerts alerts;
+	@Autowired private PatternService patternService;
 	
 	@ModelAttribute(ReportPatternListForm.KEY)
     public ReportPatternListForm createForm() {
@@ -43,17 +46,17 @@ public class ReportPatternListController {
     }		
 	
 	@RequestMapping(value="/report/pattern/list", method = RequestMethod.GET)
-    public String get(Model model) {
+    public String get(Model model, @ModelAttribute(ReportPatternListForm.KEY) final ReportPatternListForm form) {
+		model.addAttribute("patterns", ReportPatternView.build(patternService.find(form.getFilter())));
 		return "report/report-pattern-list";
     }
 	
 	@RequestMapping(value= "/report/pattern/list", method = RequestMethod.POST)
-    public String submit(@Valid @ModelAttribute(ReportPatternListForm.KEY) final ReportPatternListForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+    public String submit(Model model, @Valid @ModelAttribute(ReportPatternListForm.KEY) final ReportPatternListForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		if (!results.hasErrors()) {
-
 		}
 		
-		return "report/report-pattern-list";
+		return "redirect:/report/pattern/list";
 	}	
 	
 	@InitBinder

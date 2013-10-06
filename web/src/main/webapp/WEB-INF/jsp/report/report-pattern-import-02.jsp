@@ -65,12 +65,18 @@
                                 	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportPatternImportForm.pattern.roles}">
                             	</div>
                         	</div>                        	
-                    	 	<!-- div class="field-box">
-                            	<label>Silnik:</label>
+                    	 	<div class="field-box">
+                            	<label>Silnik raportów:</label>
                             	<div class="col-md-12">
-                                	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportPatternImportForm.pattern.factory}">
+                                	<input class="form-control inline-input" type="text" readonly="readonly" value="<spring:message code="${reportPatternImportForm.pattern.factory}" text="${reportPatternImportForm.pattern.factory}"/>">
                             	</div>
-                        	</div-->
+                        	</div>
+	                        <div class="field-box">
+	                            <label>Manifest:</label>
+	                            <div class="col-md-9">
+	                                <textarea class="form-control" rows="4" readonly="readonly"><c:out value="${reportPatternImportForm.pattern.manifest}"/></textarea>
+	                            </div>
+	                        </div>                        	
                     	
                             <div class="col-md-11 field-box actions">
 		                        <button type="button" class="btn-glow primary btn-prev" onclick="location.href='report/pattern/import/read'"> 

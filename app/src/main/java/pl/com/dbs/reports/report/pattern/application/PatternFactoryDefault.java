@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain.pattern;
+package pl.com.dbs.reports.report.pattern.application;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -19,12 +19,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pl.com.dbs.reports.report.api.Pattern;
-import pl.com.dbs.reports.report.api.PatternFactory;
-import pl.com.dbs.reports.report.api.PatternManifestValidationException;
-import pl.com.dbs.reports.report.domain.ManifestResolver;
-import pl.com.dbs.reports.report.domain.PatternAsset;
-import pl.com.dbs.reports.report.domain.ReportPattern;
+import pl.com.dbs.reports.api.inner.report.pattern.Pattern;
+import pl.com.dbs.reports.api.inner.report.pattern.PatternFactory;
+import pl.com.dbs.reports.api.inner.report.pattern.PatternValidationException;
+import pl.com.dbs.reports.report.pattern.domain.PatternAsset;
+import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 
 /**
  * Domyslna obsluga paczek z wzorcami (definicjami) raportow.
@@ -38,7 +37,8 @@ public final class PatternFactoryDefault implements PatternFactory {
 	private static final Log logger = LogFactory.getLog(PatternFactoryDefault.class);
 	
 	@Autowired private PatternManifestValidatorDefault manifestValidator;
-	@Autowired private ManifestResolver manifestResolver;
+	@Autowired private PatternContentValidatorDefault contentValidator;
+	@Autowired private PatternManifestResolver manifestResolver;
 	
 	public PatternFactoryDefault() {}
 	
@@ -50,7 +50,7 @@ public final class PatternFactoryDefault implements PatternFactory {
 	 * Wyprodukuj obiekt.
 	 */
 	@Override
-	public Pattern produce(File file) throws IOException, PatternManifestValidationException {
+	public Pattern produce(File file) throws IOException, PatternValidationException {
 		Validate.notNull(file, "A file is no more!");
 
 		
@@ -70,8 +70,8 @@ public final class PatternFactoryDefault implements PatternFactory {
             if (entry.isDirectory()) {
             	logger.info("Directory found: "+entry.getName()+" Skipping.");
             	continue;
-            } else if (ManifestResolver.isManifestFile(entry.getName())) {
-            	logger.info("Manifest found: "+entry.getName()+" Skipping.");
+            } else if (PatternManifestResolver.isManifestFile(entry.getName())) {
+            	logger.info("Manifest found: "+entry.getName());
             	BufferedInputStream bis = new BufferedInputStream(zip.getInputStream(entry));
             	manifest = new Manifest(bis);            	
             	continue;
@@ -85,6 +85,8 @@ public final class PatternFactoryDefault implements PatternFactory {
 		
 		//..validate manifest..
 		manifestValidator.validate(manifest);
+		//..validate content..
+		contentValidator.validate(manifest, assets);
 		
 		//..instantiate report pattern..
 		return new ReportPattern(manifest, assets, null);

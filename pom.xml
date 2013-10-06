@@ -17,7 +17,6 @@
 	<modules>
 		<module>app</module>
 		<module>web</module>
-    	<module>api</module>
   </modules>
 
 	<properties>
@@ -48,6 +47,12 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>pl.com.dbs</groupId>
+				<artifactId>dbs-reports-client-app</artifactId>
+				<version>${dbs.reports.client.version}</version>
+			</dependency> 		
+		
 			<!-- Common -->
 			<dependency>
 				<groupId>commons-lang</groupId>
@@ -323,10 +328,10 @@
 								<manifestSection>
 									<name>Application info:</name>
 									<manifestEntries>
-										<Nazwa>${project.artifactId}</Nazwa>
-										<Wersja>${project.version}</Wersja>
-										<Srodowisko>${envir}</Srodowisko>
-										<Wygenerowal>${user.name}</Wygenerowal>
+										<ArtifactName>${project.artifactId}</ArtifactName>
+										<ArtifactVersion>${project.version}</ArtifactVersion>
+										<Environament>${envir}</Environament>
+										<Builder>${user.name}</Builder>
 									</manifestEntries>
 								</manifestSection>
 							</manifestSections>
@@ -335,52 +340,17 @@
 				</plugin>
 				<plugin>
 					<artifactId>maven-war-plugin</artifactId>
+					<version>2.2</version>
 					<configuration>
 						<archive>
 							<manifestSections>
 								<manifestSection>
-									<name>Informacja o aplikacji</name>
+									<name>Application info:</name>
 									<manifestEntries>
-										<Nazwa>${project.artifactId}</Nazwa>
-										<Wersja>${project.version}</Wersja>
-										<Srodowisko>${envir}</Srodowisko>
-										<Wygenerowal>${user.name}</Wygenerowal>
-									</manifestEntries>
-								</manifestSection>
-							</manifestSections>
-						</archive>
-					</configuration>
-				</plugin>
-				<plugin>
-					<artifactId>maven-ejb-plugin</artifactId>
-					<configuration>
-						<archive>
-							<manifestSections>
-								<manifestSection>
-									<name>Informacja o aplikacji</name>
-									<manifestEntries>
-										<Nazwa>${project.artifactId}</Nazwa>
-										<Wersja>${project.version}</Wersja>
-										<Srodowisko>${envir}</Srodowisko>
-										<Wygenerowal>${user.name}</Wygenerowal>
-									</manifestEntries>
-								</manifestSection>
-							</manifestSections>
-						</archive>
-					</configuration>
-				</plugin>
-				<plugin>
-					<artifactId>maven-ear-plugin</artifactId>
-					<configuration>
-						<archive>
-							<manifestSections>
-								<manifestSection>
-									<name>Informacja o aplikacji</name>
-									<manifestEntries>
-										<Nazwa>${project.artifactId}</Nazwa>
-										<Wersja>${project.version}</Wersja>
-										<Srodowisko>${envir}</Srodowisko>
-										<Wygenerowal>${user.name}</Wygenerowal>
+										<ArtifactName>${project.artifactId}</ArtifactName>
+										<ArtifactVersion>${project.version}</ArtifactVersion>
+										<Environament>${envir}</Environament>
+										<Builder>${user.name}</Builder>
 									</manifestEntries>
 								</manifestSection>
 							</manifestSections>
@@ -400,6 +370,7 @@
 			</activation>
 			<properties>
 				<envir>dev</envir>
+				<dbs.reports.client.version>auchan-1.0.0-SNAPSHOT</dbs.reports.client.version>
 			</properties>
 		</profile>
 		<profile>

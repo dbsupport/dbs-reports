@@ -9,7 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import pl.com.dbs.reports.security.domain.AuthenticationToken;
-import pl.com.dbs.reports.security.domain.Profile;
+import pl.com.dbs.reports.security.domain.ProfileUser;
 
 /**
  * Dostawca autentykacji.
@@ -31,7 +31,7 @@ public class AuthenticationProvider implements org.springframework.security.auth
 			//String clientIp = ((WebAuthenticationDetails) authentication.getDetails()).getRemoteAddress();
 			if (!login.equals("test")&&!password.equals("test"))
 				throw new BadCredentialsException("");
-			return new AuthenticationToken(new Profile(),"gsid", "ticket");
+			return new AuthenticationToken(new ProfileUser(),"gsid", "ticket");
 	    	
 	}
 	

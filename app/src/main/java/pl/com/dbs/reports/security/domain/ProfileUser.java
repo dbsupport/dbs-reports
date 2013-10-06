@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.User;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class Profile extends User {
+public class ProfileUser extends User {
 	private static final long serialVersionUID = -2698295268207284285L;
 	
 	private String firstname;
@@ -21,7 +21,7 @@ public class Profile extends User {
 	private String identityType;
 	//private List<OperatorGroup> groups;
 
-	public Profile() {
+	public ProfileUser() {
 		super("test", "PROTECTED", Collections.EMPTY_LIST);
 	}
 	

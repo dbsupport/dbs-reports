@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain;
+package pl.com.dbs.reports.report.pattern.domain;
 
 
 /**
@@ -10,10 +10,10 @@ package pl.com.dbs.reports.report.domain;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class ManifestNotFoundException extends Exception {
+public class PatternManifestNotFoundException extends Exception {
 	private static final long serialVersionUID = 8701874169828554493L;
 
-	public ManifestNotFoundException() {
+	public PatternManifestNotFoundException() {
 		super();
 	}
 	

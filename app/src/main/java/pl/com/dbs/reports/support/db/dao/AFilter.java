@@ -3,6 +3,9 @@
  */
 package pl.com.dbs.reports.support.db.dao;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 import pl.com.dbs.reports.support.db.domain.IEntity;
 import pl.com.dbs.reports.support.filter.Filter;
 
@@ -18,10 +21,6 @@ public abstract class AFilter<T extends IEntity> extends Filter {
 		super();
 	}
 
-//	/**
-//	 * @return lista elementow tworzacych podzapytania dotyczace poszczegolnych
-//	 * pol filtra
-//	 */
 //	public abstract List<IPoleWyszukiwanie> getPolaWyszukiwania();
 //
 //	/**
@@ -41,12 +40,12 @@ public abstract class AFilter<T extends IEntity> extends Filter {
 //		return getSorter() != null && getSorter().isWlaczony();
 //	}
 //	
-//	/**
-//	 * @return klasa ktorej dotyczylo bedzie zapytanie (new ReadAllQuery(klasa))
-//	 */
-//	@SuppressWarnings("unchecked")
-//	public Class<T> getClazz(){
-//		Type klasa = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-//		return (Class<T>) klasa;
-//	}
+	/**
+	 * klasa ktorej dotyczylo bedzie zapytanie (new ReadAllQuery(klasa))
+	 */
+	@SuppressWarnings("unchecked")
+	public Class<T> getClazz(){
+		Type klasa = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		return (Class<T>) klasa;
+	}
 }

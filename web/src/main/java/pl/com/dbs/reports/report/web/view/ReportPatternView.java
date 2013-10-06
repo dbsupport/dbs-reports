@@ -3,9 +3,17 @@
  */
 package pl.com.dbs.reports.report.web.view;
 
-import java.util.jar.Attributes;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import pl.com.dbs.reports.report.api.Pattern;
+import org.apache.commons.lang.StringUtils;
+
+import pl.com.dbs.reports.api.inner.report.pattern.Pattern;
+import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 
 /**
  * TODO
@@ -19,14 +27,32 @@ public class ReportPatternView {
 	private String factory;
 	private String author;
 	private String roles;
+	private String manifest;
+	private Pattern pattern;
+	
+	public static List<ReportPatternView> build(List<ReportPattern> patterns) {
+		List<ReportPatternView> result = new ArrayList<ReportPatternView>();
+		for (ReportPattern pattern : patterns) result.add(new ReportPatternView(pattern));
+		return result;
+	}
 	
 	public ReportPatternView(Pattern pattern) {
-		Attributes attrs = pattern.getManifest().getAttributes(Pattern.ATTRIBUTE_SECTION);
-		this.name = attrs.getValue(Pattern.ATTRIBUTE_NAME);
-		this.version = attrs.getValue(Pattern.ATTRIBUTE_VERSION);
-		this.factory = attrs.getValue(Pattern.ATTRIBUTE_FACTORY);
-		this.author = attrs.getValue(Pattern.ATTRIBUTE_AUTHOR);
-		this.roles = attrs.getValue(Pattern.ATTRIBUTE_ROLES);
+		this.name = pattern.getAttribute(Pattern.ATTRIBUTE_PATTERN_NAME);
+		this.version = pattern.getAttribute(Pattern.ATTRIBUTE_PATTERN_VERSION);
+		this.author = pattern.getAttribute(Pattern.ATTRIBUTE_PATTERN_AUTHOR);
+		this.roles = pattern.getAttribute(Pattern.ATTRIBUTE_ROLES);
+		
+		this.factory = pattern.getAttribute(Pattern.ATTRIBUTE_PATTERN_FACTORY);
+		if (StringUtils.isBlank(this.factory)) this.factory = "report.pattern.factory.default";
+		
+		try {
+			OutputStream os = new ByteArrayOutputStream();
+			pattern.getManifest().write(os);
+			os.close();
+			this.manifest = os.toString();
+		} catch (IOException e) {}		
+		
+		this.pattern = pattern;
 	}
 
 	public String getName() {
@@ -48,4 +74,16 @@ public class ReportPatternView {
 	public String getRoles() {
 		return roles;
 	}
+
+	public String getManifest() {
+		return manifest;
+	}
+
+	public Date getUploadDate() {
+		return pattern.getUploadDate();
+	}
+	
+	public long getId() {
+		return pattern.getId();
+	}	
 }

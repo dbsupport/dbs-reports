@@ -16,12 +16,13 @@
     <packaging>war</packaging>
     
     <dependencies>
+		<!-- Custom -->
         <dependency>
             <groupId>pl.com.dbs</groupId>
             <artifactId>dbs-reports-app</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        
+		        
 		<!-- Commons -->  
 		<dependency>  
 			<groupId>commons-fileupload</groupId>  
@@ -164,7 +165,7 @@
                 <plugin>
                     <artifactId>maven-war-plugin</artifactId>
                     <configuration>
-                        <webResources>l
+                        <webResources>
                             <resource>
                                 <directory>${basedir}/src/main/webapp-filter</directory>
                                 <!-- UWAGA: aktualnie nie filtruje zapisu ${..}: MWAR-43 -->
@@ -172,6 +173,7 @@
                             </resource>
                         </webResources>
                         <warSourceExcludes>html/**</warSourceExcludes>
+                        <warName>${project.artifactId}-${envir}-${dbs.reports.client.version}-${project.version}</warName>
                     </configuration>
                 </plugin>
             </plugins>

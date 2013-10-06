@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain;
+package pl.com.dbs.reports.report.pattern.domain;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import pl.com.dbs.reports.asset.api.Asset;
+import pl.com.dbs.reports.api.inner.asset.Asset;
 import pl.com.dbs.reports.support.db.domain.AEntity;
 
 /**
@@ -76,4 +76,13 @@ public class PatternAsset extends AEntity implements Asset {
 	public String getPath() {
 		return path;
 	}
+	
+	public String getContentAsString() {
+		return String.valueOf(content);	
+	}
+	
+	public String getExtension() {
+		return path.lastIndexOf(".")>=0?path.substring(path.lastIndexOf(".")):"";
+	}
+	
 }

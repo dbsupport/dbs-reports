@@ -38,6 +38,7 @@
 	
 	<jdbc:embedded-database id="reports.test.data.source" type="HSQL">
 		<jdbc:script location="classpath:/pl/com/dbs/reports/schema.sql"/>
+		<jdbc:script location="classpath:/pl/com/dbs/reports/data.sql"/>
 	</jdbc:embedded-database>
 
 	<bean id="jpaVendorAdapter"

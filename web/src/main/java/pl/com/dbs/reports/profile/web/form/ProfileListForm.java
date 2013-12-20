@@ -3,6 +3,8 @@
  */
 package pl.com.dbs.reports.profile.web.form;
 
+import pl.com.dbs.reports.profile.dao.ProfilesFilter;
+
 /**
  * TODO
  *
@@ -11,7 +13,16 @@ package pl.com.dbs.reports.profile.web.form;
  */
 public class ProfileListForm {
 	public static final String KEY = "profileListForm";
+	private ProfilesFilter filter = new ProfilesFilter(20);
 	
 	public ProfileListForm() {}
+
+	public ProfilesFilter getFilter() {
+		return filter;
+	}
+
+	public void setFilter(ProfilesFilter filter) {
+		this.filter = filter;
+	}
 	
 }

@@ -5,6 +5,8 @@ package pl.com.dbs.reports.report.domain;
 
 import java.util.Map;
 
+import pl.com.dbs.reports.api.report.ReportType;
+
 /**
  * TODO
  *
@@ -15,9 +17,7 @@ public interface ReportGeneration {
 
 	long getPatternId();
 	
-	long getAssetId();
-	
 	Map<String, String> getParams();
 	
-	String getExt();
+	ReportType getType();
 }

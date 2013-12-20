@@ -86,7 +86,7 @@
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
     </listener>
     <listener>
-        <listener-class>pl.com.dbs.reports.support.web.context.CSpringSingletonContextLoaderListener</listener-class>
+        <listener-class>pl.com.dbs.reports.support.web.context.SpringSingletonContextLoaderListener</listener-class>
     </listener>
     
     <!-- *** servlets *** -->

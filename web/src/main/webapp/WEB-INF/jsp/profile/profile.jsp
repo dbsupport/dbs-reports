@@ -11,9 +11,31 @@
             <!-- header -->
             <div class="row header">
                 <div class="col-md-8">
+                	<div class="col-md-1">
                     <img src="img/contact-profile.png" class="avatar img-circle">
-                    <h3 class="name">Alejandra Galván Castillo</h3>
-                    <span class="area">Graphic Designer</span>
+                    </div>
+                    <div class="col-md-5">
+                    <h3 class="name">${profile.name}</h3>
+                    <span class="area">
+                    <c:forEach var="authority" items="${profile.authorities}" varStatus="rstatus">
+                    <spring:message code="${authority.authority}" text="${authority.authority}"/>
+                    </c:forEach>
+                    </span>
+                    <c:if test="${profile.global}">
+                    <br/>
+                    <span class="area">
+                    <c:forEach var="authority" items="${profile.hrauthorities}" varStatus="rstatus">
+                    <spring:message code="${authority.name}" text="${authority.name}"/>
+                    </c:forEach>
+                    </span>
+                    </c:if>
+                    <br/>
+                    <span class="area">
+                    <c:forEach var="access" items="${profile.accesses}" varStatus="rstatus">
+                    <spring:message code="${access.name}" text="${access.name}"/>
+                    </c:forEach>
+                    </span>
+                    </div>
                 </div>
                 <a class="btn-flat icon pull-right delete-user" data-toggle="tooltip" title="Delete user" data-placement="top">
                     <i class="icon-trash"></i>

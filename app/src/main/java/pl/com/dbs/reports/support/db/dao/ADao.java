@@ -85,12 +85,20 @@ public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,ID
 	protected List<T> executeQuery(Query query) {
 		return query.getResultList();
 	}
+	
+	@SuppressWarnings("unchecked")
+	protected T executeSingleQuery(Query query) {
+		try {
+			return (T)query.getSingleResult();
+		} catch (NoResultException e) {}
+		return null;
+	}
 
 	private int count(String sql) {
 		return executeQuery(sql).size();
 	}
 	
-	private int count(CriteriaQuery criteria) {
+	private int count(CriteriaQuery<T> criteria) {
 		Query query = getEntityManager().createQuery(criteria);
 		return executeQuery(query).size();
 	}

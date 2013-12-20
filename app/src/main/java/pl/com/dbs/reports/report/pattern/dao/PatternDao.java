@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
@@ -39,19 +40,27 @@ public class PatternDao extends ADao<ReportPattern, Long> {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<ReportPattern> cq = cb.createQuery(ReportPattern.class);
 	    final Root<ReportPattern> q = cq.from(ReportPattern.class);
-	    //final TypedQuery<ReportPattern> tq = em.createQuery(cq);
 	    
-	    if (!filter.getRoles().isEmpty()) {
-		    //cq.select(q).where(q.get("roles").in(filter.getRoles()));
-		    cq.where(q.get("roles").in(filter.getRoles()));
+	    Predicate p = cb.conjunction();
+	    if (!filter.getAccesses().isEmpty()) {
+	    	p = cb.and(p, q.get("accesses").in(filter.getAccesses()));
+	    } else {
+	    	p = cb.and(p, q.get("accesses").isNull());
+	    }
+	    if (filter.getName()!=null) {
+	    	p = cb.and(p, cb.equal(q.get("name"), filter.getName()));
+	    }
+	    if (filter.getVersion()!=null) {
+	    	p = cb.and(p, cb.equal(q.get("version"), filter.getVersion()));
+	    }
+	    if (filter.getFactory()!=null) {
+	    	p = cb.and(p, cb.equal(q.get("factory"), filter.getFactory()));
 	    }
 	    if (filter.getId()!=null) {
-	    	cq.where(cb.equal(q.get("id"), filter.getId()));
-//		    ParameterExpression<Long> p = cb.parameter(Long.class);
-//		    tq.setParameter(p, filter.getId());
-//		    cq.select(q).where(cb.equal(q.get("id"), p));
+	    	p = cb.and(p, cb.equal(q.get("id"), filter.getId()));
 	    }
-		
+	    
+	    cq.where(p);
 		return executeQuery(cq, filter);
 	}
 }

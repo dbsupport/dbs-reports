@@ -1,0 +1,39 @@
+/**
+ * 
+ */
+package pl.com.dbs.reports.report.pattern.service.validator;
+
+import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import pl.com.dbs.reports.api.report.pattern.Pattern;
+import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
+import pl.com.dbs.reports.api.report.pattern.PatternValidator;
+import pl.com.dbs.reports.report.pattern.dao.PatternDao;
+import pl.com.dbs.reports.report.pattern.dao.PatternFilter;
+
+
+/**
+ * Validate ext to files.
+ *
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @coptyright (c) 2013
+ */
+@Service
+public class PatternContentUniqueValidator extends PatternValidator {
+	@Autowired private PatternDao patternDao;
+	
+	@Override
+	public void validate(Pattern pattern) throws PatternValidationException {
+//		PatternFilter filter = new PatternFilter(pattern.getName(), pattern.getVersion(), pattern.getFactory());
+//		if (!patternDao.find(filter).isEmpty()) 
+//			throw new PatternValidationException("report.import.manifest.not.unique", Arrays.asList(new String[] {pattern.getName(), pattern.getVersion()}));
+	}
+
+	@Override
+	public int getOrder() {
+		return 8000;
+	}	
+}

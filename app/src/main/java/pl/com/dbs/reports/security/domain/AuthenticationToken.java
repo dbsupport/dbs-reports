@@ -1,7 +1,12 @@
+/**
+ * 
+ */
 package pl.com.dbs.reports.security.domain;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
 
+import pl.com.dbs.reports.profile.domain.Profile;
 
 /**
  * TODO
@@ -10,25 +15,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
  * @coptyright (c) 2013
  */
 public class AuthenticationToken extends UsernamePasswordAuthenticationToken {
-	private static final long serialVersionUID = 1L;
-	private String gsid;
-	private String ticket;
+	private static final long serialVersionUID = -8551936501903237500L;
+	private Profile profile;
 	
-	public AuthenticationToken(ProfileUser user, String gsid, String ticket) {
-		super(user, user.getPassword(), user.getAuthorities());
-		this.gsid = gsid;
-		this.ticket = ticket;
+	public AuthenticationToken(Profile profile, String passwd) {
+		super(new User(profile.getLogin(), passwd, profile.getAuthorities()), passwd, profile.getAuthorities());
+		this.profile = profile;
 	}
 
-	public String getGsid() {
-		return gsid;
-	}
-
-	public String getTicket() {
-		return ticket;
+	public Profile getProfile() {
+		return profile;
 	}
 	
-	public ProfileUser getOperator() {
-		return (ProfileUser) this.getPrincipal();
-	}
 }

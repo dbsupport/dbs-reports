@@ -57,8 +57,8 @@ import org.apache.commons.logging.LogFactory;
 		//FIXME:
 		String gsid = UNDEFINED;
 		if (gsid != null) return gsid;
-		else logger.warn("Sesja uzytkownika pusta [brak gsid]. Nie mozna prawidlowo wypelnic pola ["
-	                    + "idSesjaMod] przed zapisem obiektu. Pole wypelniono wartoscia '" + UNDEFINED + "'");
-			return UNDEFINED;
+		
+		logger.warn("Sesja uzytkownika pusta [brak gsid]. Nie mozna prawidlowo wypelnic pola ["+ IEntity.EDIT_GSID+"] przed zapisem obiektu. Pole wypelniono wartoscia '" + UNDEFINED + "'");
+		return UNDEFINED;
 	}
 }

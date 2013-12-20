@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 
 /**
@@ -26,6 +27,7 @@ public class ProfileController {
 	
 	@RequestMapping(value="/profile", method = RequestMethod.GET)
     public String get(Model model) {
+		model.addAttribute("profile", SessionContext.getProfile());
 		return "profile/profile";
     }
 	

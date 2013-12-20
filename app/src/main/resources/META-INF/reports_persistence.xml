@@ -9,7 +9,15 @@
 		<mapping-file>META-INF/reports_orm.xml</mapping-file>
 		
 		<class>pl.com.dbs.reports.report.pattern.domain.ReportPattern</class>
-		<class>pl.com.dbs.reports.report.pattern.domain.PatternAsset</class>
+		<class>pl.com.dbs.reports.report.pattern.domain.ReportPatternTransformate</class>
+		<class>pl.com.dbs.reports.report.pattern.domain.ReportPatternInflater</class>
+		<class>pl.com.dbs.reports.report.domain.Report</class>
+		<class>pl.com.dbs.reports.profile.domain.Profile</class>
+		<class>pl.com.dbs.reports.profile.domain.ProfileAuthority</class>
+		<class>pl.com.dbs.reports.profile.domain.ProfileAccess</class>
+		<class>pl.com.dbs.reports.profile.domain.ProfileAddress</class>
+		<class>pl.com.dbs.reports.profile.domain.ProfilePhoto</class>
+		
 		<exclude-unlisted-classes />
 
 		<properties>

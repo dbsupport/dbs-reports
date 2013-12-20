@@ -14,11 +14,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import pl.com.dbs.reports.report.service.ReportService;
 import pl.com.dbs.reports.report.web.form.ReportArchivesForm;
 import pl.com.dbs.reports.report.web.validator.ReportArchivesValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
@@ -35,15 +37,23 @@ import pl.com.dbs.reports.support.web.alerts.Alerts;
 @Scope("request")
 public class ReportArchivesController {
 	@Autowired private Alerts alerts;
+	@Autowired private ReportService reportService;
 	
 	@ModelAttribute(ReportArchivesForm.KEY)
     public ReportArchivesForm createForm() {
 		ReportArchivesForm form = new ReportArchivesForm();
 		return form;
+    }
+	
+	@RequestMapping(value="/report/archives/{id}", method = RequestMethod.GET)
+    public String get(Model model, @PathVariable("id") Long id, @ModelAttribute(ReportArchivesForm.KEY) final ReportArchivesForm form) {
+		//todo
+		return "redirect:/report/archives";
     }		
 	
 	@RequestMapping(value="/report/archives", method = RequestMethod.GET)
-    public String get(Model model) {
+    public String get(Model model, @ModelAttribute(ReportArchivesForm.KEY) final ReportArchivesForm form) {
+		model.addAttribute("reports", reportService.find(form.getFilter()));
 		return "report/report-archives";
     }
 	

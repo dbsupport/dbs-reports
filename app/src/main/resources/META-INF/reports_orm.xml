@@ -2,12 +2,16 @@
 <entity-mappings
 	xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.eclipse.org/eclipselink/xsds/persistence/orm http://www.eclipse.org/eclipselink/xsds/eclipselink_orm_2_1.xsd"
-	version="2.1">
+	xsi:schemaLocation="http://www.eclipse.org/eclipselink/xsds/persistence/orm http://www.eclipse.org/eclipselink/xsds/eclipselink_orm_2_5.xsd"
+	version="2.5">
+    
     <persistence-unit-metadata>
         <persistence-unit-defaults>
             <schema>reports</schema>
         </persistence-unit-defaults>
-    </persistence-unit-metadata>   	
+    </persistence-unit-metadata>
+    
+    <converter class="pl.com.dbs.reports.report.pattern.domain.ReportPatternManifestConverter"/>
+       	
 </entity-mappings>
 

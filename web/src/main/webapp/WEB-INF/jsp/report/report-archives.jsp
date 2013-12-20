@@ -4,7 +4,10 @@
 <tiles:insertDefinition name="tiles-default" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-report-archives</tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">lista raportów archiwalnych</tiles:putAttribute>
-<tiles:putAttribute name="css" type="string"><link rel="stylesheet" href="css/compiled/user-list.css" type="text/css" media="screen" /></tiles:putAttribute>
+<tiles:putAttribute name="css" type="string">
+<link rel="stylesheet" href="css/compiled/user-list.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/dbs/dbs-profile-list.css" type="text/css" media="screen" />
+</tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
         <div id="pad-wrapper" class="users-list">
@@ -64,17 +67,17 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th class="col-md-4 sortable">
-                                    Nazwa
+                                <th class="col-md-3 sortable">
+                                    Nazwa pliku
                                 </th>
                                 <th class="col-md-3 sortable">
-                                    <span class="line"></span>Typ
+                                    <span class="line"></span>Definicja
                                 </th>
                                 <th class="col-md-2 sortable">
                                     <span class="line"></span>Data wygenerowania
                                 </th>
-                                <th class="col-md-3 sortable align-right">
-                                    <span class="line"></span>Właściciel
+                                <th class="col-md-4 sortable">
+                                    <span class="line"></span>Wygenerował
                                 </th>
                                 <th class="col-md-3 sortable align-right">
                                     <span class="line"></span>
@@ -82,159 +85,32 @@
                             </tr>
                         </thead>
                         <tbody>
+                        <c:forEach items="${reports}" var="report">
                         <!-- row -->
                         <tr class="first">
                             <td>
-                                <a href="#"></a>
+                                ${report.name}
                             </td>
                             <td>
-                                Mar 13, 2012
+                                <a href="report/pattern/details/${report.pattern.id}">${report.pattern.name} ${report.pattern.version}</a>
                             </td>
                             <td>
-                                 4,500.00
+                            	<fmt:formatDate value="${report.generationDate}" type="both" pattern="dd-MM-yyyy HH:mm:ss" />
                             </td>
-                            <td class="align-right">
+                            <td class="align-left">
                                 <img src="img/contact-img.png" class="img-circle avatar hidden-phone" />
-                                <a href="user-profile.html" class="name">Alejandra Galvan Castillo</a>
-                                <span class="subtext">Graphic Design</span>
-                            </td>
-                        </tr>
-                        <!-- row -->
-                        <tr>
-                            <td>
-                                <img src="img/contact-img2.png" class="img-circle avatar hidden-phone" />
-                                <a href="user-profile.html" class="name">Alejandra Galvan Castillo</a>
-                                <span class="subtext">Graphic Design</span>
-                            </td>
-                            <td>
-                                Jun 03, 2012
-                            </td>
-                            <td>
-                                 549.99
+                                <a href="profile/" class="name">${report.creator.name}</a>
+                                <span class="subtext">...</span>
                             </td>
                             <td class="align-right">
-                                <a href="#">alejandra@canvas.com</a>
-                            </td>
+	                            <ul class="actions">
+	                                <li><a href="report/view/${report.id}"><i class="table-edit" title="Podgląd"></i></a></li>
+	                                <li><a href="report/pattern/details/${pattern.id}"><i class="table-settings" title="Wyślij email'em"></i></a></li>
+	                                <li class="last"><a href="report/delete/${report.id}"><i class="table-delete" title="Usuń raport"></i></a></li>
+	                            </ul>
+                            </td>                             
                         </tr>
-                        <!-- row -->
-                        <tr>
-                            <td>
-                                <img src="img/contact-img.png" class="img-circle avatar hidden-phone" />
-                                <a href="user-profile.html" class="name">Alejandra Galvan Castillo</a>
-                                <span class="subtext">Graphic Design</span>
-                            </td>
-                            <td>
-                                Mar 01, 2013
-                            </td>
-                            <td>
-                                 30.00
-                            </td>
-                            <td class="align-right">
-                                <a href="#">alejandra@canvas.com</a>
-                            </td>
-                        </tr>
-                        <!-- row -->
-                        <tr>
-                            <td>
-                                <img src="img/contact-img2.png" class="img-circle avatar hidden-phone" />
-                                <a href="user-profile.html" class="name">Alejandra Galvan Castillo</a>
-                                <span class="subtext">Graphic Design</span>
-                            </td>
-                            <td>
-                                Jan 28, 2012
-                            </td>
-                            <td>
-                                 1,320.00
-                            </td>
-                            <td class="align-right">
-                                <a href="#">alejandra@canvas.com</a>
-                            </td>
-                        </tr>
-                        <!-- row -->
-                        <tr>
-                            <td>
-                                <img src="img/contact-img.png" class="img-circle avatar hidden-phone" />
-                                <a href="user-profile.html" class="name">Alejandra Galvan Castillo</a>
-                                <span class="subtext">Graphic Design</span>
-                            </td>
-                            <td>
-                                May 16, 2012
-                            </td>
-                            <td>
-                                 89.99
-                            </td>
-                            <td class="align-right">
-                                <a href="#">alejandra@canvas.com</a>
-                            </td>
-                        </tr>
-                        <!-- row -->
-                        <tr>
-                            <td>
-                                <img src="img/contact-img2.png" class="img-circle avatar hidden-phone" />
-                                <a href="user-profile.html" class="name">Alejandra Galvan Castillo</a>
-                                <span class="subtext">Graphic Design</span>
-                            </td>
-                            <td>
-                                Sep 06, 2012
-                            </td>
-                            <td>
-                                 344.00
-                            </td>
-                            <td class="align-right">
-                                <a href="#">alejandra@canvas.com</a>
-                            </td>
-                        </tr>
-                        <!-- row -->
-                        <tr>
-                            <td>
-                                <img src="img/contact-img.png" class="img-circle avatar hidden-phone" />
-                                <a href="user-profile.html" class="name">Alejandra Galvan Castillo</a>
-                                <span class="subtext">Graphic Design</span>
-                            </td>
-                            <td>
-                                Jul 13, 2012
-                            </td>
-                            <td>
-                                 800.00
-                            </td>
-                            <td class="align-right">
-                                <a href="#">alejandra@canvas.com</a>
-                            </td>
-                        </tr>
-                        <!-- row -->
-                        <tr>
-                            <td>
-                                <img src="img/contact-img2.png" class="img-circle avatar hidden-phone" />
-                                <a href="user-profile.html" class="name">Alejandra Galvan Castillo</a>
-                                <span class="subtext">Graphic Design</span>
-                            </td>
-                            <td>
-                                Feb 13, 2013
-                            </td>
-                            <td>
-                                 250.00
-                            </td>
-                            <td class="align-right">
-                                <a href="#">alejandra@canvas.com</a>
-                            </td>
-                        </tr>
-                        <!-- row -->
-                        <tr>
-                            <td>
-                                <img src="img/contact-img.png" class="img-circle avatar hidden-phone" />
-                                <a href="user-profile.html" class="name">Alejandra Galvan Castillo</a>
-                                <span class="subtext">Graphic Design</span>
-                            </td>
-                            <td>
-                                Feb 27, 2013
-                            </td>
-                            <td>
-                                 1,300.00
-                            </td>
-                            <td class="align-right">
-                                <a href="#">alejandra@canvas.com</a>
-                            </td>
-                        </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>                

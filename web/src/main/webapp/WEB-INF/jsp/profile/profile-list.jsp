@@ -67,20 +67,20 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th class="col-md-1">
-                                    &nbsp;
-                                </th>                            
-                                <th class="col-md-4 sortable">
+                                <th class="col-md-2 sortable"><span class="line"></span>
                                     Imię/Nazwisko
                                 </th>
-                                <th class="col-md-3 sortable">
-                                    <span class="line"></span>Data założenia
-                                </th>
                                 <th class="col-md-2 sortable">
-                                    <span class="line"></span>Ilość raportów
+                                    Login
                                 </th>
-                                <th class="col-md-3 sortable">
-                                    <span class="line"></span>Email
+                                <th class="col-md-2 sortable"><span class="line"></span>
+                                    Email
+                                </th>
+                                <th class="col-md-2 sortable"><span class="line"></span>
+                                    Telefon
+                                </th>
+                                <th class="col-md-2"><span class="line"></span>
+                                    Adres
                                 </th>
                                 <th class="col-md-3 align-right">
                                     <span class="line"></span>&nbsp;
@@ -88,87 +88,61 @@
                             </tr>
                         </thead>
                         <tbody>
+
+						<c:forEach items="${profiles}" var="profile" varStatus="rstatus">                        
                         <!-- row -->
                         <tr class="first">
-                            <td>
-                                <input type="checkbox">
-                             </td>
                              <td>
                                 <img src="img/contact-img.png" class="img-circle avatar hidden-phone" />
-                                <a href="profile/profile/1" class="name">Alejandra Galvan Castillo</a>
-                                <span class="subtext">Graphic Design</span>
+                                <a href="profile/${profile.id}" class="name">${profile.name}</a>
+			                    <span class="subtext">
+			                    <c:forEach var="authority" items="${profile.authorities}" varStatus="rstatus">
+			                    <spring:message code="${authority.authority}" text="${authority.authority}"/>
+			                    </c:forEach>
+			                    
+			                    <c:if test="${profile.global}">
+			                    <br/>
+			                    <c:forEach var="authority" items="${profile.hrauthorities}" varStatus="rstatus">
+			                    <spring:message code="${authority.name}" text="${authority.name}"/>
+			                    </c:forEach>
+			                    </c:if>
+			                    
+			                    <br/>
+			                    <c:forEach var="access" items="${profile.accesses}" varStatus="rstatus">
+			                    <spring:message code="${access.name}" text="${access.name}"/>
+			                    </c:forEach>
+			                    
+			                    </span>                                
                             </td>
                             <td>
-                                Mar 13, 2012
+                               ${profile.login}
                             </td>
                             <td>
-                                 4,500.00
+                                 ${profile.email}
                             </td>
                             <td>
-                                <a href="profile">alejandra@canvas.com</a>
+                                ${profile.phone}
                             </td>
+                            <td>
+                            	<c:if test="${!empty profile.address}">
+                                <c:out value="${profile.address.street}"/><span>&nbsp;</span>
+                                ${profile.address.city}<span>&nbsp;</span>
+                                ${profile.address.state}<span>&nbsp;</span>
+                                ${profile.address.zipcode}
+                                </c:if>
+                            </td>
+                            
+                            
                             <td>
                                     <ul class="actions">
-                                        <li><a href="profile/edit/1"><i class="table-edit" title="Edycja profilu"></i></a></li>
+                                        <li><a href="profile/edit/${profile.id}"><i class="table-edit" title="Edycja profilu"></i></a></li>
                                         <li><i class="table-settings" title=""></i></li>
                                         <li class="last"><i class="table-delete" title="Usunięcie profilu"></i></li>
                                     </ul>
                              </td>                            
                         </tr>
-                        <!-- row -->
-                        <tr>
-                            <td>
-                                <input type="checkbox">
-                             </td>                        
-                            <td>
-                                <img src="img/contact-img2.png" class="img-circle avatar hidden-phone" />
-                                <a href="user-profile.html" class="name">Alejandra Galvan Castillo</a>
-                                <span class="subtext">Graphic Design</span>
-                            </td>
-                            <td>
-                                Jun 03, 2012
-                            </td>
-                            <td>
-                                 549.99
-                            </td>
-                            <td>
-                                <a href="#">alejandra@canvas.com</a>
-                            </td>
-                            <td>
-                                    <ul class="actions">
-                                        <li><i class="table-edit"></i></li>
-                                        <li><i class="table-settings"></i></li>
-                                        <li class="last"><i class="table-delete"></i></li>
-                                    </ul>
-                             </td>                              
-                        </tr>
-                        <!-- row -->
-                        <tr>
-                            <td>
-                                <input type="checkbox">
-                             </td>                        
-                            <td>
-                                <img src="img/contact-img.png" class="img-circle avatar hidden-phone" />
-                                <a href="user-profile.html" class="name">Alejandra Galvan Castillo</a>
-                                <span class="subtext">Graphic Design</span>
-                            </td>
-                            <td>
-                                Mar 01, 2013
-                            </td>
-                            <td>
-                                 30.00
-                            </td>
-                            <td>
-                                <a href="#">alejandra@canvas.com</a>
-                            </td>
-                            <td>
-                                    <ul class="actions">
-                                        <li><i class="table-edit"></i></li>
-                                        <li><i class="table-settings"></i></li>
-                                        <li class="last"><i class="table-delete"></i></li>
-                                    </ul>
-                             </td>                              
-                        </tr>
+                        </c:forEach>
+                        
                         </tbody>
                     </table>
                 </div>                

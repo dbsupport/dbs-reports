@@ -4,23 +4,33 @@
 package pl.com.dbs.reports.report.domain;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Basic;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import pl.com.dbs.reports.api.inner.report.pattern.Pattern;
+import org.apache.commons.lang.Validate;
+
+import pl.com.dbs.reports.api.report.pattern.Pattern;
+import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
+import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.db.domain.AEntity;
 
 
@@ -31,7 +41,9 @@ import pl.com.dbs.reports.support.db.domain.AEntity;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class Report extends AEntity implements pl.com.dbs.reports.api.inner.report.Report {
+@Entity
+@Table(name = "tre_report")
+public class Report extends AEntity implements pl.com.dbs.reports.api.report.Report {
 	private static final long serialVersionUID = 391747562802238863L;
 	
 	@Id
@@ -47,12 +59,19 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.inner.repo
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "params")
-	private String params;
+    @ElementCollection
+    @MapKeyColumn(name="name")
+    @Column(name="value")
+    @CollectionTable(name="tre_report_parameter", joinColumns=@JoinColumn(name="report_id"))
+    private Map<String, String> parameters = new HashMap<String, String>(); 
 	
     @OneToOne
     @JoinColumn(name="pattern_id")	
 	private ReportPattern pattern;
+    
+	@OneToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="creator_id")
+    private Profile creator;    
     
 	@Lob
 	@Column(name = "content")
@@ -61,23 +80,26 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.inner.repo
 
     public Report() {/* JPA */}
     
-    public Report(ReportPattern pattern, String name, String params) {
+    public Report(Pattern pattern, String name, Map<String, String> params) {
     	this.generationDate = new Date();
-    	this.pattern = pattern;
+    	Validate.notNull(pattern, "Pattern is no more!");
+    	this.pattern = (ReportPattern)pattern;
+		Profile profile = SessionContext.getProfile();
+		Validate.notNull(profile, "Profile is no more!");
+		this.creator = profile;
+		Validate.notEmpty(name, "Name is no more!");
     	this.name = name;
-    	this.params = params;
+    	this.parameters = params;
     }
     
 	@Override
 	public Pattern getPattern() {
-		// TODO Auto-generated method stub
-		return null;
+		return pattern;
 	}
 
 	@Override
 	public Date getGenerationDate() {
-		// TODO Auto-generated method stub
-		return null;
+		return generationDate;
 	}
 
 	@Override
@@ -91,13 +113,17 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.inner.repo
 	}
 
 	@Override
-	public Map<String, String> getParams() {
-		return null;
+	public Map<String, String> getParameters() {
+		return parameters;
 	}
 
 	@Override
 	public byte[] getContent() {
 		return content;
+	}
+
+	public Profile getCreator() {
+		return creator;
 	}
 
 }

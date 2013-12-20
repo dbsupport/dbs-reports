@@ -1,0 +1,25 @@
+/**
+ * (c) dbs-reports
+ */
+input[type="password"] { 
+  width: 75%;
+}
+
+.new-user .form-wrapper .address-fields .field-box {
+	width: 30%;
+	margin-right: 5px;
+}
+
+.new-user .form-wrapper .address-fields .field-box input[type="text"] {	
+	margin-top:0;
+	width: 95%;
+}
+
+.new-user .form-wrapper .address-fields .field-box:first-child {
+	width: 100%;
+}
+	
+.new-user .form-wrapper .address-fields .field-box:first-child input[type="text"] {
+	width: 100%;
+}
+	

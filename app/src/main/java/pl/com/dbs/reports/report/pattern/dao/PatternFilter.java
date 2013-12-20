@@ -6,7 +6,12 @@ package pl.com.dbs.reports.report.pattern.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
+
+import pl.com.dbs.reports.profile.domain.Profile;
+import pl.com.dbs.reports.profile.domain.ProfileAccess;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
+import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.db.dao.AFilter;
 
 /**
@@ -17,25 +22,50 @@ import pl.com.dbs.reports.support.db.dao.AFilter;
  */
 public class PatternFilter extends AFilter<ReportPattern> {
 	private Long id;
-	private List<String> roles = new ArrayList<String>();
+	private String version;
+	private String name;
+	private String factory;
+	private List<String> accesses = new ArrayList<String>();
+
+	public PatternFilter(String name, String version, String factory) {
+		this.name = name;
+		this.version = version;
+		this.factory = factory;
+	}
+	
 	
 	public PatternFilter(int size) {
 		getPager().setPageSize(size);
 	}
 	
-	public List<String> getRoles() {
-		return roles;
+	public List<String> getAccesses() {
+		return accesses;
 	}
 
-	public void addRole(String role) {
-		if (!roles.contains(role)) roles.add(role);
+	public void setCurrentAccesses() {
+		Profile profile = SessionContext.getProfile();
+		Validate.notNull(profile, "Profile is no more!");
+		this.accesses = new ArrayList<String>();
+		for (ProfileAccess access : profile.getAccesses())
+			this.accesses.add(access.getName());
 	}
 	
-	public void removeRole(String role) {
-		if (roles.contains(role)) roles.remove(role);
-	}	
-
 	public Long getId() {
 		return id;
+	}
+
+
+	public String getVersion() {
+		return version;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public String getFactory() {
+		return factory;
 	}
 }

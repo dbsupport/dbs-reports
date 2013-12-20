@@ -3,7 +3,9 @@
  */
 package pl.com.dbs.reports.support.db.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Version;
@@ -15,11 +17,13 @@ import javax.persistence.Version;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
+@MappedSuperclass
 public abstract class AEntity implements IEntity {
 	private static final long serialVersionUID = 1L;
 
     @Version
-	private Integer stamp;
+    @Column(name=IEntity.STAMP)
+	private Long stamp;
     
     @Embedded
     private Attributes attributes;

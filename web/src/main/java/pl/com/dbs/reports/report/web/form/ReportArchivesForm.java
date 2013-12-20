@@ -3,6 +3,8 @@
  */
 package pl.com.dbs.reports.report.web.form;
 
+import pl.com.dbs.reports.report.dao.ReportFilter;
+
 
 /**
  * TODO
@@ -12,7 +14,15 @@ package pl.com.dbs.reports.report.web.form;
  */
 public class ReportArchivesForm {
 	public static final String KEY = "reportArchivesForm";
+	private ReportFilter filter = new ReportFilter(5);
 	
 	public ReportArchivesForm() {}
 	
+	public ReportFilter getFilter() {
+		return filter;
+	}
+
+	public void setFilter(ReportFilter filter) {
+		this.filter = filter;
+	}	
 }

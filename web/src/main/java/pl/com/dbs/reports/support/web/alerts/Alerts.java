@@ -149,7 +149,7 @@ public class Alerts {
 		Map<String, ?> attributes = ra.getFlashAttributes();
 		if (attributes != null) {
 			for (Map.Entry<String, ?> attr : attributes.entrySet()) {
-				if (key.equalsIgnoreCase(attr.getKey())) {//&&attr.getValue() instanceof List<?>) {
+				if (key.equalsIgnoreCase(attr.getKey())) {
 					return (List<String>)attr.getValue();
 				}
 			}

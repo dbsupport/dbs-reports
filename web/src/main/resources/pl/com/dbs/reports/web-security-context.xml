@@ -10,6 +10,7 @@ xmlns="http://www.springframework.org/schema/beans"
 	<security:http use-expressions="true"
 				   auto-config="false"
 				   entry-point-ref="customAuthenticationEntryPoint">
+		
 		<!-- to samo tez w web-context.xml -->
 		<security:intercept-url pattern="/css/**/*" access="permitAll"/>
 		<security:intercept-url pattern="/js/**/*" access="permitAll"/>
@@ -17,13 +18,15 @@ xmlns="http://www.springframework.org/schema/beans"
 		<security:intercept-url pattern="/font/**/*" access="permitAll"/>
 		<security:intercept-url pattern="/security/login" access="permitAll" />
 		<security:intercept-url pattern="/security/loginfailed" access="permitAll" />
+		<security:intercept-url pattern="/security/noaccess" access="permitAll" />
 		
-		<security:intercept-url pattern="/*" access="permitAll" />
-		<security:intercept-url pattern="/**/*" access="permitAll" />
+		<!-- security:intercept-url pattern="/*" access="permitAll" />
+		<security:intercept-url pattern="/**/*" access="permitAll" /-->
 		
-		<!-- security:intercept-url pattern="/**/*" access="isFullyAuthenticated() and hasAnyRole('Test')" />
-		<security:intercept-url pattern="/*" access="isFullyAuthenticated() and hasAnyRole('Test')" /-->
-		
+		<security:intercept-url pattern="/profile/new/**" access="isFullyAuthenticated() and hasAnyRole('authority-admin,authority-management')" />
+		<security:intercept-url pattern="/report/pattern/import/**" access="isFullyAuthenticated() and hasAnyRole('authority-admin,authority-management')" />
+		<security:intercept-url pattern="/**/*" access="isFullyAuthenticated() and hasAnyRole('authority-admin,authority-management,authority-user')" />
+		<security:intercept-url pattern="/*" access="isFullyAuthenticated() and hasAnyRole('authority-admin,authority-management,authority-user')" />
 		
 		<security:logout logout-url="/security/logout" delete-cookies="true" invalidate-session="true" logout-success-url="/security/login" />
 		<security:session-management invalid-session-url="/security/login" />
@@ -46,7 +49,7 @@ xmlns="http://www.springframework.org/schema/beans"
 			<bean id="customAuthenticationSuccessHandler" 
 				class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
 				<property name="alwaysUseDefaultTargetUrl" value="true" />
-				<property name="defaultTargetUrl" value="/profile" />
+				<property name="defaultTargetUrl" value="/security/entrypoint" />
 			</bean>
 		</property>
 		<property name="authenticationFailureHandler">

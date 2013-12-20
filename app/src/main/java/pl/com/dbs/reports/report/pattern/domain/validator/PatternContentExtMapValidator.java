@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.pattern.service.validator;
+package pl.com.dbs.reports.report.pattern.domain.validator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
-import pl.com.dbs.reports.api.report.ReportType;
+import pl.com.dbs.reports.api.report.ReportFormat;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
@@ -23,7 +23,7 @@ import com.google.common.collect.Iterables;
 
 
 /**
- * Validate ext to files.
+ * Validate extensions map.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -45,7 +45,7 @@ public class PatternContentExtMapValidator extends PatternValidator {
 				 * Find pairs filename=ext
 				 */
 			    Matcher m = ReportPatternManifest.EXTENSION_PATTERN.matcher(token);
-			    if (!m.matches()) throw new PatternValidationException("report.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_EXTENSION_MAP);
+			    if (!m.matches()) throw new PatternValidationException("report.pattern.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_EXTENSION_MAP);
 			    m.reset();
 			    while (m.find()) {
 			    	/**
@@ -59,8 +59,8 @@ public class PatternContentExtMapValidator extends PatternValidator {
 			    			return file.equalsIgnoreCase(input.getName());
 			    		}
 			    	}, null);
-			    	if (transformate==null) throw new PatternValidationException("report.import.content.validation.error", Arrays.asList(new String[] {file}));
-			    	if (ReportType.of(ext)==null) throw new PatternValidationException("report.import.content.validation.error", Arrays.asList(new String[] {token}));
+			    	if (transformate==null) throw new PatternValidationException("report.pattern.import.content.validation.error", Arrays.asList(new String[] {file}));
+			    	if (ReportFormat.of(ext)==null) throw new PatternValidationException("report.pattern.import.content.validation.error", Arrays.asList(new String[] {token}));
 			    }
 			}
 		}		

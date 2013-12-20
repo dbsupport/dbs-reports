@@ -7,12 +7,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * TODO
+ * Pager implementation.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
 public class Pager implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private final transient Log log = LogFactory.getLog(getClass());
 	public static final int NO_LIMIT = -1;
 
@@ -60,6 +61,11 @@ public class Pager implements Serializable{
 	public void setPageSize(int size) {
 		this.pageSize = size <= 0?NO_LIMIT:size;
 	}
+	
+	public void setNoLimitPageSize() {
+		this.pageSize = NO_LIMIT;
+	}
+	
 
 	
 	/**

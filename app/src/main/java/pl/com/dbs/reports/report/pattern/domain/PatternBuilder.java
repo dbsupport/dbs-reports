@@ -1,13 +1,16 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.pattern.service;
+package pl.com.dbs.reports.report.pattern.domain;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.zip.ZipEntry;
@@ -18,13 +21,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
-import pl.com.dbs.reports.api.report.ReportType;
+import pl.com.dbs.reports.api.report.ReportFormat;
 import pl.com.dbs.reports.api.report.pattern.PatternManifest;
 import pl.com.dbs.reports.profile.domain.Profile;
-import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
-import pl.com.dbs.reports.report.pattern.domain.ReportPatternInflater;
-import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
-import pl.com.dbs.reports.report.pattern.domain.ReportPatternTransformate;
 
 /**
  * TODO
@@ -39,6 +38,8 @@ final class PatternBuilder {
 	private Profile profile;
 	private List<ReportPatternTransformate> transformates;
 	private List<ReportPatternInflater> inflaters;
+	private List<ReportPatternForm> forms;
+	private Map<String, byte[]> inits;
 	
 	private PatternManifestBuilder manifestBuilder;
 	
@@ -55,6 +56,8 @@ final class PatternBuilder {
 		this.content = content;
 		this.transformates = new ArrayList<ReportPatternTransformate>();
 		this.inflaters = new ArrayList<ReportPatternInflater>();
+		this.forms = new ArrayList<ReportPatternForm>();
+		this.inits = new HashMap<String, byte[]>();
 		
 		manifestBuilder = new PatternManifestBuilder(content);
 	}
@@ -64,21 +67,25 @@ final class PatternBuilder {
 		
 		resolveTransformates();
 		resolveInflaters();		
+		resolveForms();
+		resolveInitFiles();
 		
 		/**
 		 * FIXME: assigment of inflaters..
 		 */
 		for (ReportPatternTransformate t : transformates) t.setInflaters(inflaters);
 		
-		this.pattern = new ReportPattern(this.content,
-										this.profile,
+		this.pattern = new ReportPattern(content,
+										profile,
 										manifestBuilder.getName(),
 										manifestBuilder.getVersion(),
 										manifestBuilder.getAuthor(),
 										manifestBuilder.getFactory(),
 										manifestBuilder.getManifest(),
 										manifestBuilder.getAccesses(),
-										transformates);
+										transformates,
+										forms);
+		this.pattern.addInits(inits);
 		return this;
 	}
 	
@@ -114,10 +121,50 @@ final class PatternBuilder {
 		while ((entry = zip.getNextEntry()) != null) {
             if (entry.isDirectory()) { 
             	continue;
-            } else if (isTransformation(entry.getName())) {
-            	ReportType type = resolveType(entry.getName());
+            } else if (isTransformate(entry.getName())) {
+            	ReportFormat type = resolveType(entry.getName());
             	logger.info("Transformate found in file: "+entry.getName()+" as :"+(type!=null?type.getExt():"?"));
            		transformates.add(new ReportPatternTransformate(readZipEntry(zip, entry), entry.getName(), type));
+            }
+        }
+	}		
+	
+	/**
+	 * Input forms definitions..
+	 */
+	private void resolveForms() throws IOException {
+		Validate.notNull(content, "Content is no more!");
+		ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(content));
+		Validate.notNull(zip, "A zip file is no more!");
+
+		logger.info("Resolving forms..");
+		ZipEntry entry = null;
+		while ((entry = zip.getNextEntry()) != null) {
+            if (entry.isDirectory()) { 
+            	continue;
+            } else if (isForm(entry.getName())) {
+            	logger.info("Form found in file: "+entry.getName());
+           		forms.add(new ReportPatternForm(readZipEntry(zip, entry), entry.getName()));
+            }
+        }
+	}
+	
+	/**
+	 * Some init sqls?
+	 */
+	private void resolveInitFiles() throws IOException {
+		Validate.notNull(content, "Content is no more!");
+		ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(content));
+		Validate.notNull(zip, "A zip file is no more!");
+
+		logger.info("Resolving init files..");
+		ZipEntry entry = null;
+		while ((entry = zip.getNextEntry()) != null) {
+            if (entry.isDirectory()) { 
+            	continue;
+            } else if (isInitFile(entry.getName())) {
+            	logger.info("Init file found in file: "+entry.getName());
+            	this.inits.put(entry.getName(), readZipEntry(zip, entry));
             }
         }
 	}		
@@ -140,15 +187,31 @@ final class PatternBuilder {
         return false;
 	}		
 	
-	private boolean isTransformation(String filename) {
-		return !isManifestFile(filename)
-				&&!isInitFile(filename)
-				&&!isInflater(filename);
-	}
-	
+	/**
+	 * Is this inflater file?
+	 */
 	private boolean isInflater(String filename) {
 		return ReportPatternManifest.INFLATER_PATTERN.matcher(filename).find()&&!isInitFile(filename);
 	}
+	
+	/**
+	 * Is this form file?
+	 */
+	private boolean isForm(String filename) {
+		PatternManifest manifest = manifestBuilder.getManifest();
+		Validate.notNull(manifest, "Manifest is no more!");
+		
+		String forms = manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_FORM_FILENAME);		
+
+		if (!StringUtils.isBlank(forms)) {
+			StringTokenizer st = new StringTokenizer(forms, ";");
+			while (st.hasMoreTokens()) {
+				final String token = StringUtils.trim(st.nextToken());
+				if (token.equalsIgnoreCase(filename)) return true;
+			}
+		}
+        return false;
+	}	
 	
 	/**
 	 * Is this manifest file name?
@@ -157,7 +220,17 @@ final class PatternBuilder {
         return ReportPatternManifest.MANIFEST_PATTERN.matcher(filename).find();
 	}	
 	
-	private ReportType resolveType(final String name) throws IOException {
+	/**
+	 * Transformate can be anything..
+	 */
+	private boolean isTransformate(String filename) {
+		return !isManifestFile(filename)
+				&&!isInitFile(filename)
+				&&!isInflater(filename)
+				&&!isForm(filename);
+	}		
+	
+	private ReportFormat resolveType(final String name) throws IOException {
 		PatternManifest manifest = manifestBuilder.getManifest();
 		Validate.notNull(manifest, "Manifest is no more!");
 		String exts = manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_EXTENSION_MAP);	
@@ -178,12 +251,12 @@ final class PatternBuilder {
 			    	 */
 			    	final String filename = StringUtils.trim(m.group(1));
 			    	final String ext = StringUtils.trim(m.group(2));
-			    	if (name.equalsIgnoreCase(filename)) return ReportType.of(ext);
+			    	if (name.equalsIgnoreCase(filename)) return ReportFormat.of(ext);
 			    }
 			}
 		}
 		//..resolve from extension..
-		return ReportType.of(name);
+		return ReportFormat.of(name);
 	}	
 	
 
@@ -191,9 +264,19 @@ final class PatternBuilder {
 	 * Read entry part of zip.
 	 */
 	private byte[] readZipEntry(final ZipInputStream zip, final ZipEntry entry) throws IOException {
-		byte[] result = new byte[(int)entry.getSize()];
-		zip.read(result);
-		return result;
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1024];
+		int bytes;
+//		long count = 0;
+//		long size = entry.getSize();
+//	    while (-1 != (bytes = zip.read(buffer)) && count < size) {
+//	        output.write(buffer, 0, bytes);
+//	        count += bytes;
+//	    }		
+		while ((bytes = zip.read(buffer)) != -1) 
+	        output.write(buffer, 0, bytes);
+	    
+	    output.close();
+	    return output.toByteArray();
 	}
-	
 }

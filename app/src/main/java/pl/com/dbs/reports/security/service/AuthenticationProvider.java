@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import pl.com.dbs.reports.api.security.SecurityAuthenticatinException;
 import pl.com.dbs.reports.api.security.SecurityService;
 import pl.com.dbs.reports.api.security.SecurityUser;
+import pl.com.dbs.reports.api.support.db.ConnectionService;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.service.ProfileService;
 import pl.com.dbs.reports.security.domain.AuthenticationToken;
@@ -26,12 +27,15 @@ import pl.com.dbs.reports.security.domain.SecurityContextDefault;
 public class AuthenticationProvider implements org.springframework.security.authentication.AuthenticationProvider {
 	@Autowired private ProfileService profileService;
 	@Autowired private SecurityService securityService;
+	@Autowired private ConnectionService connectionService;
 	
 	//private static final Logger log = Logger.getLogger(AuthenticationProvider.class);
 	
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		SecurityContextDefault context = new SecurityContextDefault((String) authentication.getPrincipal(), (String) authentication.getCredentials());
+		SecurityContextDefault context = new SecurityContextDefault((String) authentication.getPrincipal(), 
+																	(String) authentication.getCredentials(), 
+																	connectionService.getContext());
 		//..is there a LOCAL user?
 		Profile profile = profileService.find(context.getLogin());
 			

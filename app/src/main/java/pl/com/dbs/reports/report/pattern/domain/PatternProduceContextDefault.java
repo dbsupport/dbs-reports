@@ -1,19 +1,19 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.pattern.service;
+package pl.com.dbs.reports.report.pattern.domain;
 
 import java.io.File;
 
-import pl.com.dbs.reports.api.report.pattern.PatternFactoryContext;
+import pl.com.dbs.reports.api.report.pattern.PatternProduceContext;
 
 /**
- * TODO
+ * Get data from file.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public interface PatternFactoryContextDefault extends PatternFactoryContext {
+public interface PatternProduceContextDefault extends PatternProduceContext {
 
 	/**
 	 * Import from file.

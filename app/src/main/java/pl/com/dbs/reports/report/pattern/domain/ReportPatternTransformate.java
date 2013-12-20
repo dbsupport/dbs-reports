@@ -22,7 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import pl.com.dbs.reports.api.report.ReportType;
+import pl.com.dbs.reports.api.report.ReportFormat;
 import pl.com.dbs.reports.api.report.pattern.PatternInflater;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.support.db.domain.IEntity;
@@ -49,16 +49,16 @@ public class ReportPatternTransformate implements IEntity, PatternTransformate {
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "type")
+	@Column(name = "format")
 	@Enumerated(EnumType.STRING)
-	private ReportType type;
+	private ReportFormat format;
 	
 	@Lob
 	@Column(name = "content")
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] content;
 	
-	@OneToMany(mappedBy="transformate")
+	@OneToMany(mappedBy="transformate", orphanRemoval=true)
 	private List<ReportPatternInflater> inflaters;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
@@ -67,13 +67,13 @@ public class ReportPatternTransformate implements IEntity, PatternTransformate {
 	
 	public ReportPatternTransformate() { /* JPA*/ }
 	
-	public ReportPatternTransformate(final byte[] content, final String name, final ReportType type) {
+	public ReportPatternTransformate(final byte[] content, final String name, final ReportFormat format) {
 //		Validate.notNull(content, "A content is no more!");
 //		Validate.isTrue(content.length>0, "A content is 0!");
 //		Validate.notEmpty(name, "A name is no more!");
 //		Validate.notNull(type, "A type is no more!");
 		this.name = name;
-		this.type = type;
+		this.format = format;
 		this.content = content;
 		this.inflaters = new ArrayList<ReportPatternInflater>();
 	}
@@ -93,8 +93,8 @@ public class ReportPatternTransformate implements IEntity, PatternTransformate {
 	}
 
 	@Override
-	public ReportType getType() {
-		return type;
+	public ReportFormat getFormat() {
+		return format;
 	}
 
 	@Override

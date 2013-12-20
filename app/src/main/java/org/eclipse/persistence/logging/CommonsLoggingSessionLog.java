@@ -1,24 +1,19 @@
 package org.eclipse.persistence.logging;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.apache.commons.logging.impl.Log4JLogger;
-
-import org.apache.log4j.Logger;
-
-import org.eclipse.persistence.sessions.Session;
-
 import java.io.OutputStream;
-
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.impl.Log4JLogger;
+import org.apache.log4j.Logger;
+import org.eclipse.persistence.sessions.Session;
 
 /**
  * PUBLIC: This is a wrapper class for org.apache.commons.logging.Log. It is

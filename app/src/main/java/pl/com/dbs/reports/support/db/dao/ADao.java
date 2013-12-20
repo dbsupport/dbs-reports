@@ -13,12 +13,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 
 import org.apache.commons.lang.Validate;
 
 import pl.com.dbs.reports.support.db.domain.IEntity;
 import pl.com.dbs.reports.support.filter.Filter;
 import pl.com.dbs.reports.support.filter.Pager;
+import pl.com.dbs.reports.support.filter.SorterField;
 
 /**
  * TODO
@@ -94,11 +96,21 @@ public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,ID
 		return null;
 	}
 
-	private int count(String sql) {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected T executeSingleQuery(CriteriaQuery criteria) {
+		try {
+			Query query = getEntityManager().createQuery(criteria);
+			return (T)query.getSingleResult();
+		} catch (NoResultException e) {}
+		return null;
+	}
+	
+
+	protected int count(String sql) {
 		return executeQuery(sql).size();
 	}
 	
-	private int count(CriteriaQuery<T> criteria) {
+	protected int count(CriteriaQuery<T> criteria) {
 		Query query = getEntityManager().createQuery(criteria);
 		return executeQuery(query).size();
 	}
@@ -109,7 +121,7 @@ public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,ID
 
 		List<T> result = new ArrayList<T>();
 
-    	if (filter != null&& filter.getPager() != null&& filter.getPager().getPageSize() != Pager.NO_LIMIT) {
+    	if (filter != null && filter.getPager() != null && filter.getPager().getPageSize() != Pager.NO_LIMIT) {
     		int all = count(sql);
 			filter.getPager().setDataSize(all);
 			if(all > 0) {
@@ -120,16 +132,61 @@ public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,ID
 			}
     	} else {
             result = executeQuery(sql);
-           	filter.getPager().setDataSize(result.size());
+           	//filter.getPager().setDataSize(result.size());
         }
     	return result;
 	}
 	
+//	@SuppressWarnings({"unchecked", "rawtypes"})
+//	protected List<T> executeQuery(CriteriaQuery criteria, Filter filter) {
+//		Query query = getEntityManager().createQuery(criteria);
+//
+//		List<T> result = new ArrayList<T>();
+//		
+//		
+//    	if (filter != null && filter.getSorter() != null && filter.getSorter().isOn()) {
+//    		Class clazz = getClazz();
+//    		Root<?> c = criteria.from(clazz);
+//    		CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+//    		for (SorterField field : filter.getSorter().getFields()) {
+//    			criteria.orderBy(field.isAsc()?cb.asc(c.get(field.getName())):cb.desc(c.get(field.getName())));
+//    		}
+//    	}		
+//
+//    	if (filter!=null && filter.isPaging()) {
+//    		int all = count(criteria);
+//			filter.getPager().setDataSize(all);
+//			if(all > 0) {
+//				int max = filter.getPager().getDataEnd() - filter.getPager().getDataStart() + 1;
+//				query.setFirstResult(filter.getPager().getDataStart()-1);
+//				query.setMaxResults(max);
+//				result = query.getResultList();
+//			}
+//    	} else {
+//            result = executeQuery(query);
+//           	//filter.getPager().setDataSize(result.size());
+//        }
+//    	return result;
+//	}
+	
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	protected List<T> executeQuery(CriteriaQuery criteria, Filter filter) {
-		Query query = getEntityManager().createQuery(criteria);
-
+	protected List<T> executeQuery(IContextDao context) {
 		List<T> result = new ArrayList<T>();
+		Validate.notNull(context, "A contex is null!");
+		CriteriaQuery<T> criteria = context.getCriteria();
+		Validate.notNull(criteria, "A criteria is null!");
+		Filter filter = context.getFilter();
+		
+		
+    	if (filter != null && filter.getSorter() != null && filter.getSorter().isOn() && context.getBuilder()!=null) {
+    		List<Order> orders = new ArrayList<Order>();
+    		for (SorterField field : filter.getSorter().getFields()) {
+    			orders.add(field.isAsc()?context.getBuilder().asc(context.getRoot().get(field.getName())):context.getBuilder().desc(context.getRoot().get(field.getName())));
+    		}
+    		criteria.orderBy(orders);
+    	}
+    	
+    	Query query = getEntityManager().createQuery(criteria);
 
     	if (filter!=null && filter.isPaging()) {
     		int all = count(criteria);
@@ -142,10 +199,10 @@ public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,ID
 			}
     	} else {
             result = executeQuery(query);
-           	filter.getPager().setDataSize(result.size());
+           	//filter.getPager().setDataSize(result.size());
         }
     	return result;
-	}
+	}	
 	
 //	@SuppressWarnings({"unchecked"})
 //	protected List<T> executeQuery(Query query, Filter filter) {

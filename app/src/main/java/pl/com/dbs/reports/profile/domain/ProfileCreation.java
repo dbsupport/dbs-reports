@@ -4,6 +4,10 @@
 package pl.com.dbs.reports.profile.domain;
 
 import java.io.File;
+import java.util.List;
+
+import pl.com.dbs.reports.access.domain.Access;
+import pl.com.dbs.reports.authority.domain.Authority;
 
 /**
  * TODO
@@ -18,9 +22,11 @@ public interface ProfileCreation {
 	String getLastName();
 	String getEmail();
 	String getPhone();
-	
 	Address getAddress();
 	File 	getPhoto();
+	
+	List<Authority> getAuthorities();
+	List<Access> getAccesses();
 	
 	interface Address {
 		String getStreet();

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.pattern.service.validator;
+package pl.com.dbs.reports.report.pattern.domain.validator;
 
 import java.util.Arrays;
 
@@ -16,7 +16,7 @@ import pl.com.dbs.reports.report.pattern.dao.PatternFilter;
 
 
 /**
- * Validate ext to files.
+ * Is there already active pattern with that name/version/factory values? 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -27,9 +27,9 @@ public class PatternContentUniqueValidator extends PatternValidator {
 	
 	@Override
 	public void validate(Pattern pattern) throws PatternValidationException {
-//		PatternFilter filter = new PatternFilter(pattern.getName(), pattern.getVersion(), pattern.getFactory());
-//		if (!patternDao.find(filter).isEmpty()) 
-//			throw new PatternValidationException("report.import.manifest.not.unique", Arrays.asList(new String[] {pattern.getName(), pattern.getVersion()}));
+		PatternFilter filter = new PatternFilter(pattern.getName(), pattern.getVersion(), pattern.getFactory());
+		if (!patternDao.findExactMatch(filter).isEmpty()) 
+			throw new PatternValidationException("report.pattern.import.manifest.not.unique", Arrays.asList(new String[] {pattern.getName(), pattern.getVersion()}));
 	}
 
 	@Override

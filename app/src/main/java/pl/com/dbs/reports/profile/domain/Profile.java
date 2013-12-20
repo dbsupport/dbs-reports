@@ -23,9 +23,13 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 
+import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.api.security.SecurityAuthority;
+import pl.com.dbs.reports.authority.domain.Authority;
 import pl.com.dbs.reports.support.db.domain.AEntity;
+import pl.com.dbs.reports.support.utils.separator.Separator;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 /**
@@ -38,6 +42,7 @@ import com.google.common.collect.Iterables;
 @Table(name = "tpr_profile")
 public class Profile extends AEntity {
 	private static final long serialVersionUID = 301060274149701349L;
+	public static final String PARAMETER_UUID = "IN_NUDOSS";
 	
 	@Id
 	@Column(name = "id")
@@ -67,7 +72,7 @@ public class Profile extends AEntity {
 	@JoinColumn(name="address_id")	
 	private ProfileAddress address;
 	
-	@OneToOne(fetch=FetchType.EAGER, orphanRemoval=true)
+	@OneToOne(fetch=FetchType.LAZY, orphanRemoval=true)
 	@JoinColumn(name="photo_id")	
 	private ProfilePhoto photo;
 	
@@ -76,19 +81,19 @@ public class Profile extends AEntity {
 	 * Acces to some functionality (i.e. reports).
 	 */
 	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(name="tpr_profile_access",
+	@JoinTable(name="tpr_access",
 		      joinColumns={@JoinColumn(name="profile_id", referencedColumnName="id")},
 		      inverseJoinColumns={@JoinColumn(name="access_id", referencedColumnName="id")})	
-	private List<ProfileAccess> accesses = new ArrayList<ProfileAccess>();
+	private List<Access> accesses = new ArrayList<Access>();
 	
 	/**
 	 * Access to part of application (i.e. to import patterns).
 	 */
     @ManyToMany
-    @JoinTable(name = "tpr_profile_authority", 
+    @JoinTable(name = "tpr_authority", 
   		joinColumns={@JoinColumn(name="profile_id", referencedColumnName="id")},
   		inverseJoinColumns={@JoinColumn(name="authority_id", referencedColumnName="id")})
-	private List<ProfileAuthority> authorities = new ArrayList<ProfileAuthority>();	
+	private List<Authority> authorities = new ArrayList<Authority>();	
 	
     @Transient
     private List<SecurityAuthority> hrauthorities = new ArrayList<SecurityAuthority>();
@@ -103,39 +108,60 @@ public class Profile extends AEntity {
 		this.phone = form.getPhone();
 	}
 	
-	public void addAccess(ProfileAccess access) {
+	public void modify(ProfileModification form) {
+		this.email = form.getEmail();
+		this.name = form.getFirstName() +" "+form.getLastName();
+		this.passwd = !StringUtils.isBlank(form.getPasswd())?form.getPasswd():this.passwd;
+		this.phone = form.getPhone();
+	}
+	
+	public void addAccess(Access access) {
 		Validate.notNull(access, "Access cant be null!");
 		if (!accesses.contains(access))
 			this.accesses.add(access);
 	}
 	
-	public void removeAccess(ProfileAccess access) {
+	public void removeAccess(Access access) {
 		Validate.notNull(access, "Access cant be null!");
 		if (accesses.contains(access))
 			this.accesses.remove(access);
 	}
 	
+	public void removeAccesses() {
+		this.accesses = new ArrayList<Access>();
+	}
 	
-	public void addAuthority(ProfileAuthority authority) {
+	public void addAuthority(Authority authority) {
 		Validate.notNull(authority, "Authority cant be null!");
 		if (!authorities.contains(authority))
 			this.authorities.add(authority);
 	}
 	
-	public void removeAuthority(ProfileAuthority authority) {
+	public void removeAuthority(Authority authority) {
 		Validate.notNull(authority, "Authority cant be null!");
 		if (authorities.contains(authority))
 			this.authorities.remove(authority);
+	}
+	
+	public void removeAuthorities() {
+		this.authorities = new ArrayList<Authority>();
 	}
 
 	public void addAddress(ProfileAddress address) {
 		this.address = address;
 	}
 	
+	public void removeAddress() {
+		this.address = null;
+	}
+	
 	public void addPhoto(ProfilePhoto photo) {
 		this.photo = photo;
 	}
 	
+	public void removePhoto() {
+		this.photo = null;
+	}	
 	
 	public void initHRAuthorities(List<SecurityAuthority> hrauthorities) {
 		this.hrauthorities = !Iterables.isEmpty(hrauthorities)?hrauthorities:new ArrayList<SecurityAuthority>();
@@ -148,6 +174,10 @@ public class Profile extends AEntity {
 	public boolean hasAddress() {
 		return getAddress()!=null;
 	}
+	
+	public boolean hasPhoto() {
+		return getPhoto()!=null;
+	}	
 	
 
 	public Long getId() {
@@ -170,24 +200,47 @@ public class Profile extends AEntity {
 		return passwd;
 	}
 
-	public List<ProfileAuthority> getAuthorities() {
+	public List<Authority> getAuthorities() {
 		return authorities;
 	}
 	
-	public List<String> getAuthoritiesAsString() {
-		List<String> result = new ArrayList<String>();
-		for (ProfileAuthority authority : authorities) result.add(authority.getName()); 
-		return result;
-	}
-
 	public List<SecurityAuthority> getHrauthorities() {
 		return hrauthorities;
 	}
 	
-	public List<ProfileAccess> getAccesses() {
+	public List<Access> getAccesses() {
 		return accesses;
 	}
-
+	
+	public boolean hasAccess(final String access) {
+		return Iterables.find(accesses, new Predicate<Access>() {
+			@Override
+			public boolean apply(Access input) {
+				return input.isAlike(access);
+			}
+		}, null)!=null;
+	}	
+	
+	public String getAccessesAsString() {
+		StringBuffer sb = new StringBuffer();
+		Separator s = new Separator(", ");
+		for (Access access : accesses) sb.append(s).append(access.getName()); 
+		return sb.toString();
+	}
+	
+	public String getAuthoritiesAsString() {
+		StringBuffer sb = new StringBuffer();
+		Separator s = new Separator(", ");		
+		for (Authority authority : authorities) sb.append(s).append(authority.getName()); 
+		return sb.toString();
+	}	
+	
+	public String getHrauthoritiesAsString() {
+		StringBuffer sb = new StringBuffer();
+		Separator s = new Separator(", ");		
+		for (SecurityAuthority authority : hrauthorities) sb.append(s).append(authority.getName()); 
+		return sb.toString();
+	}
 
 	public String getEmail() {
 		return email;
@@ -201,6 +254,10 @@ public class Profile extends AEntity {
 
 	public ProfileAddress getAddress() {
 		return address;
+	}
+
+	public ProfilePhoto getPhoto() {
+		return photo;
 	}
 	
 }

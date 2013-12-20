@@ -13,10 +13,21 @@ import pl.com.dbs.reports.support.db.dao.AFilter;
  * @coptyright (c) 2013
  */
 public class ProfilesFilter extends AFilter<Profile> {
+	private static final int DEFAULT_PAGER_SIZE = 10;
+	private String name;
 	
-	public ProfilesFilter(int size) {
-		getPager().setPageSize(size);
+	public ProfilesFilter() {
+		getPager().setPageSize(DEFAULT_PAGER_SIZE);
 		getSorter().add("name", true);
+		getSorter().add("login", true);
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public void putName(String name) {
+		this.name = name;
 	}
 
+	
 }

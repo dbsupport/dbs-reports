@@ -1,11 +1,12 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.pattern.service;
+package pl.com.dbs.reports.report.pattern.domain;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -19,7 +20,7 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import pl.com.dbs.reports.api.report.pattern.PatternManifest;
-import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
+import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
 
 /**
  * TODO
@@ -29,9 +30,8 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
  */
 final class PatternManifestBuilder {
 	private static final Logger logger = Logger.getLogger(PatternManifestBuilder.class);
-	
-	
-	
+	private static byte[] ZIP_CHUNK = { 'P', 'K', 0x3, 0x4 };
+
 	private byte[] content;	
 	private String name;
 	private String version;
@@ -42,8 +42,10 @@ final class PatternManifestBuilder {
 	private String nameTemplate;
 	private String factory;
 	
-	public PatternManifestBuilder(final File file) throws IOException {
+	public PatternManifestBuilder(final File file) throws IOException, PatternValidationException {
 		this(FileUtils.readFileToByteArray(file));
+		if (file==null) throw new PatternValidationException("report.pattern.import.file.empty");
+		if (!isZip(file)) throw new PatternValidationException("report.pattern.import.file.no.zip");
 	}
 	
 	public PatternManifestBuilder(final byte[] content) {
@@ -152,5 +154,27 @@ final class PatternManifestBuilder {
 	private static boolean isManifestFile(String filename) {
         return ReportPatternManifest.MANIFEST_PATTERN.matcher(filename).find();
 	}
+	
+	/**
+	 * Is this a zip file?
+	 */
+	private static boolean isZip(File file) {
+		boolean isZip = true;
+		byte[] buffer = new byte[ZIP_CHUNK.length];
+		try {
+			RandomAccessFile raf = new RandomAccessFile(file, "r");
+			raf.readFully(buffer);
+			for (int i = 0; i < ZIP_CHUNK.length; i++) {
+				if (buffer[i] != ZIP_CHUNK[i]) {
+				    isZip = false;
+				    break;
+				}
+			}
+			raf.close();
+		} catch (Throwable e) {
+			isZip = false;
+		}
+			return isZip;
+		}		
 	
 }

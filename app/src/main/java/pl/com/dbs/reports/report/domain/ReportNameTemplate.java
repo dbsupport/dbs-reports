@@ -10,7 +10,7 @@ package pl.com.dbs.reports.report.domain;
  * @coptyright (c) 2013
  */
 public enum ReportNameTemplate {
-	FILENAME(1, "filename"), DATE_TIME(2, "date-time"), DATE(3, "date-time");
+	FILENAME(1, "filename"), DATE_TIME(2, "date-time"), DATE(3, "date");
 	
 	private int id;
 	private String key;
@@ -30,5 +30,9 @@ public enum ReportNameTemplate {
 	
 	public int getId() {
 		return id;
+	}
+
+	public String getVkey() {
+		return vkey;
 	}
 }

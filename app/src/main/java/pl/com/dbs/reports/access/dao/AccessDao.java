@@ -1,19 +1,21 @@
 /**
  * 
  */
-package pl.com.dbs.reports.profile.dao;
+package pl.com.dbs.reports.access.dao;
+
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Predicate;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import pl.com.dbs.reports.profile.domain.ProfileAccess;
+import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.support.db.dao.ADao;
+import pl.com.dbs.reports.support.db.dao.ContextDao;
+import pl.com.dbs.reports.support.db.dao.IContextDao;
 
 /**
  * TODO
@@ -22,7 +24,7 @@ import pl.com.dbs.reports.support.db.dao.ADao;
  * @coptyright (c) 2013
  */
 @Repository
-public class ProfileAccessDao extends ADao<ProfileAccess, Long> {
+public class AccessDao extends ADao<Access, Long> {
 
 	@PersistenceContext
 	private EntityManager em;	
@@ -32,16 +34,18 @@ public class ProfileAccessDao extends ADao<ProfileAccess, Long> {
 		return em;
 	}
 	
-	public ProfileAccess find(String name) {
-		Validate.notEmpty(name, "name is no more!");
-		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<ProfileAccess> cq = cb.createQuery(ProfileAccess.class);
-	    final Root<ProfileAccess> q = cq.from(ProfileAccess.class);
+	public List<Access> find(AccessFilter filter) {
+		IContextDao<Access> c = new ContextDao<Access>(em, Access.class, filter);
+
+	    Predicate p = c.getBuilder().conjunction();
+
+	    if (!StringUtils.isBlank(filter.getName())) {
+	    	p = c.getBuilder().and(p, c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("name")), "%"+filter.getName().toUpperCase()+"%"));
+	    }		
 	    
-	    cq.where(cb.equal(q.get("name"), name));
-		return executeSingleQuery(getEntityManager().createQuery(cq));
+	    c.getCriteria().where(p);
+				
+		return executeQuery(c);
 	}
-	
-	
 	
 }

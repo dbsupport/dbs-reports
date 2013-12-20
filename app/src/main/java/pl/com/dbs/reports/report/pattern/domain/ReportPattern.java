@@ -5,7 +5,11 @@ package pl.com.dbs.reports.report.pattern.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.CollectionTable;
@@ -25,14 +29,19 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.Validate;
 
+import pl.com.dbs.reports.access.domain.Access;
+import pl.com.dbs.reports.api.report.ReportFormat;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternManifest;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.profile.domain.Profile;
+import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.db.domain.AEntity;
+import pl.com.dbs.reports.support.utils.separator.Separator;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -58,11 +67,14 @@ public class ReportPattern extends AEntity implements Pattern {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sg_pattern")
 	private Long id;
 	
+	@Column(name = "active")
+	private boolean active;	
+	
 	@Column(name = "upload_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date uploadDate;
 
-	@OneToOne(fetch=FetchType.EAGER)
+	@OneToOne(fetch=FetchType.EAGER, orphanRemoval=false)
     @JoinColumn(name="creator_id")
     private Profile creator;
 	
@@ -76,18 +88,27 @@ public class ReportPattern extends AEntity implements Pattern {
 	private String author;
 	
 	@Column(name = "factory")
-	private String factory;	
+	private String factory;
 	
 	@Convert(converter=ReportPatternManifestConverter.class)
 	private ReportPatternManifest manifest;
 	
 	@ElementCollection(fetch=FetchType.EAGER)
-	@CollectionTable(name = "tre_pattern_access",  joinColumns = @JoinColumn(name = "pattern_id"))
+	@CollectionTable(name = "tre_pattern_access", joinColumns = @JoinColumn(name = "pattern_id"))
 	@Column(name = "name")
     private List<String> accesses = new ArrayList<String>();
 	
-	@OneToMany(mappedBy="pattern")
-    private List<ReportPatternTransformate> transformates = new ArrayList<ReportPatternTransformate>();	
+	@OneToMany(mappedBy="pattern", orphanRemoval=true)
+    private List<ReportPatternTransformate> transformates = new ArrayList<ReportPatternTransformate>();
+	
+	@OneToMany(mappedBy="pattern", orphanRemoval=true)
+    private List<ReportPatternForm> forms = new ArrayList<ReportPatternForm>();
+	
+	/**
+	 * Init sqls. Accessed only while import (NOT PERSIST) 
+	 */
+	@Transient
+	private Map<String, byte[]> inits = new HashMap<String, byte[]>();
 	
 	@Lob
 	@Column(name = "content")
@@ -104,7 +125,8 @@ public class ReportPattern extends AEntity implements Pattern {
 						 final String factory, 
 						 final PatternManifest manifest,
 						 final List<String> accesses,
-						 final List<ReportPatternTransformate> transformates) {
+						 final List<ReportPatternTransformate> transformates,
+						 final List<ReportPatternForm> forms) {
 		Validate.isTrue(content.length>0, "A content is 0!");
 		Validate.notNull(creator, "Creator is no more!");
 	
@@ -118,8 +140,18 @@ public class ReportPattern extends AEntity implements Pattern {
 		this.accesses = accesses;
 		this.transformates = transformates;
 		this.content = content;
+		this.forms = forms;
+		this.active = true;
 		
 		for (ReportPatternTransformate t : transformates) t.setPattern(this);
+		for (ReportPatternForm f : forms) f.setPattern(this);
+	}
+	
+	/**
+	 * Deactivate entity.
+	 */
+	public void deactivate() {
+		this.active = false;
 	}
 
 	@Override
@@ -152,9 +184,24 @@ public class ReportPattern extends AEntity implements Pattern {
 		return transformates;
 	}
 	
-	
+	@Override
+	public List<ReportPatternForm> getForms() {
+		return forms;
+	}
+
+	/**
+	 * Get first form.
+	 */
+	public ReportPatternForm getForm() {
+		return forms!=null&&!forms.isEmpty()?forms.get(0):null;
+	}
+
 	public long getId() {
 		return id;
+	}
+
+	public boolean isActive() {
+		return active;
 	}
 
 	public String getAuthor() {
@@ -175,17 +222,50 @@ public class ReportPattern extends AEntity implements Pattern {
 	
 	public String getAccessesAsString() {
 		StringBuffer sb = new StringBuffer();
-		for (String access : accesses) sb.append(access).append(" ");
+		Separator s = new Separator(", ");
+		for (String access : accesses) sb.append(s).append(access);
 		return sb.toString();
 	}	
 	
-	public boolean isAccessible(final String... access) {
-		for (final String a : access)
+	/**
+	 * Is pattern accessigle for given accesses collection?
+	 */
+	public boolean isAccessible(final List<Access> accesses) {
+		for (final Access access : accesses)
 			if (Iterables.find(this.accesses, new Predicate<String>() {
 					@Override
-					public boolean apply(String input) { return input.equals(a); }
+					public boolean apply(String input) { return input.equals(access.getName()); }
 				}, null)!=null) return true;
 		return false;
 	}
+	
+	/**
+	 * Is accessible for session user?
+	 */
+	public boolean isAccessible() {
+		return SessionContext.getProfile()!=null&&isAccessible(SessionContext.getProfile().getAccesses());
+	}
+	
+	public List<ReportFormat> getFormats() {
+		Set<ReportFormat> result = new HashSet<ReportFormat>();
+		for (ReportPatternTransformate transformate : transformates) 
+			result.add(transformate.getFormat());
+		return new ArrayList<ReportFormat>(result);		
+	}
+	
+	public String getFormatsAsString() {
+		StringBuffer sb = new StringBuffer();
+		Separator s = new Separator(",");
+		for (ReportFormat format : getFormats()) sb.append(s).append(format.getExt());
+		return sb.toString();		
+	}
 
+	public void addInits(Map<String, byte[]> inits) {
+		if (inits != null) this.inits.putAll(inits);
+	}
+
+	public Map<String, byte[]> getInits() {
+		return this.inits;
+	}
+	
 }

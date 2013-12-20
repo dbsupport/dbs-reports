@@ -15,14 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.com.dbs.reports.api.report.pattern.PatternFactory;
 import pl.com.dbs.reports.api.report.pattern.PatternFactoryNotFoundException;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
+import pl.com.dbs.reports.report.dao.ReportDao;
 import pl.com.dbs.reports.report.pattern.dao.PatternDao;
 import pl.com.dbs.reports.report.pattern.dao.PatternFilter;
+import pl.com.dbs.reports.report.pattern.dao.PatternFormDao;
 import pl.com.dbs.reports.report.pattern.dao.PatternInflaterDao;
 import pl.com.dbs.reports.report.pattern.dao.PatternTransformateDao;
+import pl.com.dbs.reports.report.pattern.domain.PatternManifestResolver;
+import pl.com.dbs.reports.report.pattern.domain.PatternProduceContextDefault;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
+import pl.com.dbs.reports.report.pattern.domain.ReportPatternForm;
 import pl.com.dbs.reports.report.pattern.domain.ReportPatternInflater;
 import pl.com.dbs.reports.report.pattern.domain.ReportPatternTransformate;
-import pl.com.dbs.reports.report.service.ReportService;
 
 /**
  * TODO
@@ -33,12 +37,12 @@ import pl.com.dbs.reports.report.service.ReportService;
 @Service("report.pattern.service")
 public class PatternService {
 	private static final Logger logger = Logger.getLogger(PatternService.class);
-	@Autowired private ManifestResolver manifestResolver;
+	@Autowired private PatternManifestResolver manifestResolver;
 	@Autowired private PatternDao patternDao;
+	@Autowired private ReportDao reportDao;
 	@Autowired private PatternTransformateDao patternTransformateDao;
 	@Autowired private PatternInflaterDao patternInflaterDao;
-	
-	@Autowired private ReportService reportService;
+	@Autowired private PatternFormDao patternFormDao;
 	
 	/**
 	 * Read manifest and validate...
@@ -52,7 +56,7 @@ public class PatternService {
 		/**
 		 * ..create context (source is file)..
 		 */
-		PatternFactoryContextDefault context = new PatternFactoryContextDefault() {
+		PatternProduceContextDefault context = new PatternProduceContextDefault() {
 			@Override
 			public File getFile() {
 				return file;
@@ -77,9 +81,23 @@ public class PatternService {
 			}
 			patternTransformateDao.create(t);
 		}
+		for (ReportPatternForm f : (List<ReportPatternForm>)pattern.getForms()) {
+			patternFormDao.create(f);
+		}		
 		patternDao.create(pattern);
 		
 		return pattern;
+	}
+
+	/**
+	 * Deactivate pattern.
+	 * If pattern has NO archives - erase it for good.
+	 */
+	@Transactional
+	public void delete(long id) {
+		ReportPattern pattern = patternDao.find(id);
+		if (reportDao.countByPattern(pattern)>0) pattern.deactivate();
+		else  patternDao.erase(pattern);
 	}
 	
 	
@@ -87,7 +105,6 @@ public class PatternService {
 	 * Find by filter.
 	 */
 	public List<ReportPattern> find(PatternFilter filter) {
-		filter.setCurrentAccesses();
 		return patternDao.find(filter);
 	}
 	
@@ -95,8 +112,7 @@ public class PatternService {
 	 * Find by id.
 	 */
 	public ReportPattern find(long id) {
-		return patternDao.find(id);
-	}	
-	
-	
+		PatternFilter filter = new PatternFilter(id);
+		return patternDao.findSingle(filter);
+	}
 }

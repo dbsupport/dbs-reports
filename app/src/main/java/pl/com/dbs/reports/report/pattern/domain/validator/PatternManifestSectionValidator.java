@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.pattern.service.validator;
+package pl.com.dbs.reports.report.pattern.domain.validator;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -32,18 +32,18 @@ public class PatternManifestSectionValidator extends PatternValidator {
 	@Override
 	public void validate(Pattern pattern) throws PatternValidationException {
 		PatternManifest manifest = pattern.getManifest();
-		if (manifest==null) throw new PatternValidationException("report.import.manifest.read.error");
+		if (manifest==null) throw new PatternValidationException("report.pattern.import.manifest.read.error");
 		
-		if (manifest.getPatternAttributes()==null) throw new PatternValidationException("report.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_SECTION);
+		if (manifest.getPatternAttributes()==null) throw new PatternValidationException("report.pattern.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_SECTION);
 		
 		if (StringUtils.isBlank(manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_PATTERN_NAME))||!NAME_PATTERN.matcher(manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_PATTERN_NAME)).find())
-			throw new PatternValidationException("report.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_PATTERN_NAME);
+			throw new PatternValidationException("report.pattern.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_PATTERN_NAME);
 		if (StringUtils.isBlank(manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_PATTERN_VERSION))||!VERSION_PATTERN.matcher(manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_PATTERN_VERSION)).find())
-			throw new PatternValidationException("report.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_PATTERN_VERSION);
+			throw new PatternValidationException("report.pattern.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_PATTERN_VERSION);
 		if (StringUtils.isBlank(manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_PATTERN_AUTHOR))||!AUTHOR_PATTERN.matcher(manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_PATTERN_AUTHOR)).find())
-			throw new PatternValidationException("report.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_PATTERN_AUTHOR);
+			throw new PatternValidationException("report.pattern.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_PATTERN_AUTHOR);
 		if (!StringUtils.isBlank(manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_PATTERN_FACTORY))&&!FACTORY_PATTERN.matcher(manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_PATTERN_FACTORY)).find())
-			throw new PatternValidationException("report.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_PATTERN_FACTORY);
+			throw new PatternValidationException("report.pattern.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_PATTERN_FACTORY);
 	}
 
 	@Override

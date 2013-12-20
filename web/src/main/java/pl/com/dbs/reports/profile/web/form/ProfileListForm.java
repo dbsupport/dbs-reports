@@ -13,7 +13,8 @@ import pl.com.dbs.reports.profile.dao.ProfilesFilter;
  */
 public class ProfileListForm {
 	public static final String KEY = "profileListForm";
-	private ProfilesFilter filter = new ProfilesFilter(20);
+	private String name;
+	private ProfilesFilter filter = new ProfilesFilter();
 	
 	public ProfileListForm() {}
 
@@ -21,8 +22,12 @@ public class ProfileListForm {
 		return filter;
 	}
 
-	public void setFilter(ProfilesFilter filter) {
-		this.filter = filter;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }

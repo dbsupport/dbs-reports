@@ -1,12 +1,13 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.web.controller;
+package pl.com.dbs.reports.report.pattern.web.controller;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.com.dbs.reports.api.report.pattern.PatternFactoryNotFoundException;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
+import pl.com.dbs.reports.report.pattern.domain.ReportPatternForm;
 import pl.com.dbs.reports.report.pattern.service.PatternService;
-import pl.com.dbs.reports.report.web.form.ReportPatternImportForm;
-import pl.com.dbs.reports.report.web.validator.ReportPatternImportValidator;
+import pl.com.dbs.reports.report.pattern.web.form.PatternImportForm;
+import pl.com.dbs.reports.report.pattern.web.validator.PatternImportValidator;
+import pl.com.dbs.reports.report.web.form.ReportExecuteForm;
+import pl.com.dbs.reports.report.web.validator.ReportExecuteValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
-import pl.com.dbs.reports.support.web.file.FileService;
+import pl.com.dbs.reports.support.web.file.FileMeta;
+import pl.com.dbs.reports.support.web.form.DFormBuilder;
 
 
 /**
- * TODO
+ * Import report pattern.
  * 
  * http://www.beingjavaguys.com/2013/08/spring-mvc-file-upload-example.html
  * 
@@ -45,76 +50,108 @@ import pl.com.dbs.reports.support.web.file.FileService;
  * @coptyright (c) 2013
  */
 @Controller
-@SessionAttributes({ReportPatternImportForm.KEY})
+@SessionAttributes({PatternImportForm.KEY})
 @Scope("request")
-public class ReportPatternImportController {
-	private static final Logger logger = Logger.getLogger(ReportPatternImportController.class);
+public class PatternImportController {
+	private static final Logger logger = Logger.getLogger(PatternImportController.class);
 	@Autowired private Alerts alerts;
 	@Autowired private MessageSource messageSource;
 	@Autowired private PatternService patternService;
 	
-	@ModelAttribute(ReportPatternImportForm.KEY)
-    public ReportPatternImportForm createForm() {
-		return new ReportPatternImportForm();
+	@ModelAttribute(PatternImportForm.KEY)
+    public PatternImportForm createForm() {
+		return new PatternImportForm();
+    }
+	
+	@ModelAttribute(ReportExecuteForm.KEY)
+    public ReportExecuteForm createForm(@ModelAttribute(PatternImportForm.KEY) final PatternImportForm form, HttpServletRequest request, RedirectAttributes ra) {
+		//..build test form only for form mapping..
+		if (form.getPattern()!=null&&form.getPattern().getForm()!=null) {//&&request.getServletPath().contains("/report/pattern/import/form")) {
+			try {
+				ReportPatternForm rpf = form.getPattern().getForm();
+				DFormBuilder<ReportExecuteForm> builder = new DFormBuilder<ReportExecuteForm>(rpf.getContent(), ReportExecuteForm.class);
+				ReportExecuteForm tform = builder.build().getForm();
+				tform.reset(form.getPattern());
+				return tform;
+			} catch (Exception e) {
+				exception(e, request, ra);
+			}
+		}
+		return null;
     }		
 	
 	@RequestMapping(value="/report/pattern/import", method = RequestMethod.GET)
-    public String init(Model model, @ModelAttribute(ReportPatternImportForm.KEY) ReportPatternImportForm form, RedirectAttributes ra) {
+    public String init(Model model, @ModelAttribute(PatternImportForm.KEY) PatternImportForm form, RedirectAttributes ra) {
 		form.reset();
 		return "redirect:/report/pattern/import/read";
     }
 	
 	@RequestMapping(value="/report/pattern/import/read", method = RequestMethod.GET)
-    public String read(Model model, @ModelAttribute(ReportPatternImportForm.KEY) ReportPatternImportForm form, HttpServletRequest request) {
-		return "report/report-pattern-import-read";
+    public String read(Model model, @ModelAttribute(PatternImportForm.KEY) PatternImportForm form, HttpServletRequest request) {
+		return "report/pattern/pattern-import-read";
     }
 	
-	@RequestMapping(value="/report/pattern/import/write", method = RequestMethod.GET)
-    public String write(Model model, @ModelAttribute(ReportPatternImportForm.KEY) ReportPatternImportForm form, HttpServletRequest request) {
+	@RequestMapping(value="/report/pattern/import/summary", method = RequestMethod.GET)
+    public String summary(Model model, @ModelAttribute(PatternImportForm.KEY) PatternImportForm form, HttpServletRequest request) {
 		if (form.getFile()==null||form.getPattern()==null) return "redirect:/report/pattern/import";
-		return "report/report-pattern-import-write";
+		return "report/pattern/pattern-import-summary";
     }		
+
+	@RequestMapping(value="/report/pattern/import/form", method = RequestMethod.GET)
+    public String form(Model model, @ModelAttribute(ReportExecuteForm.KEY) final ReportExecuteForm form, HttpServletRequest request, RedirectAttributes ra) {
+		return "report/pattern/pattern-import-form";
+    }
+	
+	
 	
 	@RequestMapping(value= "/report/pattern/import/read", method = RequestMethod.POST)
-    public String read(@Valid @ModelAttribute(ReportPatternImportForm.KEY) final ReportPatternImportForm form, 
+    public String read(@Valid @ModelAttribute(PatternImportForm.KEY) final PatternImportForm form, 
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		if (!results.hasErrors()) {
 			try {
-				ReportPattern pattern = patternService.read(FileService.multipartToFile(form.getFile()));
+				ReportPattern pattern = patternService.read(FileMeta.multipartToFile(form.getFile()));
 				form.setup(pattern);
-				return "redirect:/report/pattern/import/write";
+				return "redirect:/report/pattern/import/summary";
 			} catch (Exception e) {
 				exception(e, request, ra);
 			}
 		}
 		
-		return "report/report-pattern-import-read";
+		return "report/pattern/pattern-import-read";
 	}
-	
-	@RequestMapping(value= "/report/pattern/import/write", method = RequestMethod.POST)
-    public String write(@Valid @ModelAttribute(ReportPatternImportForm.KEY) final ReportPatternImportForm form, 
+
+	@RequestMapping(value= "/report/pattern/import/summary", method = RequestMethod.POST)
+    public String summary(@Valid @ModelAttribute(PatternImportForm.KEY) final PatternImportForm form, 
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		if (!results.hasErrors()) {
 			try {
-				ReportPattern pattern = patternService.upload(FileService.multipartToFile(form.getFile()));
-				alerts.addSuccess(ra, "report.import.file.success", pattern.getName(), pattern.getVersion(), pattern.getAccessesAsString());
-				form.reset();
+				//..upload and save..
+				ReportPattern pattern = patternService.upload(FileMeta.multipartToFile(form.getFile()));
+				alerts.addSuccess(ra, "report.pattern.import.file.success", pattern.getName(), pattern.getVersion(), pattern.getAccessesAsString());
+				form.reset();	
 				return "redirect:/report/pattern/list";
 			} catch (Exception e) {
 				exception(e, request, ra);
 			}
 		}
 		
-		return "report/report-pattern-import-write";
+		return "report/pattern/pattern-import-summary";
+	}
+
+	@RequestMapping(value= "/report/pattern/import/form", method = RequestMethod.POST)
+    public String form(@Valid @ModelAttribute(ReportExecuteForm.KEY) final ReportExecuteForm form, 
+    		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+		return "report/pattern/pattern-import-form";
 	}
 	
+
 	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {
 		if (e instanceof PatternFactoryNotFoundException) {
-			alerts.addError(request, "report.import.factory.error", ((PatternFactoryNotFoundException)e).getFactory());
-			logger.error("report.import.factory.error:"+e.getMessage());
+			alerts.addError(request, "report.pattern.import.factory.error", ((PatternFactoryNotFoundException)e).getFactory());
+			logger.error("report.pattern.import.factory.error:"+e.getMessage());
 		} else if (e instanceof IOException) {
-			alerts.addError(request, "report.import.file.ioexception", e.getMessage());
-			logger.error("report.import.file.ioexception"+e.getMessage());
+			alerts.addError(request, "report.pattern.import.file.ioexception", e.getMessage());
+			logger.error("report.pattern.import.file.ioexception"+e.getMessage());
 		} else if (e instanceof PatternValidationException) {
 			String msg = e.getMessage();
 			if (((PatternValidationException) e).getCode()!=null) {
@@ -125,15 +162,19 @@ public class ReportPatternImportController {
 				alerts.addError(request, msg);
 				logger.error(msg);
 			}
+		} else if (e instanceof JAXBException) {
+			alerts.addError(request, "report.execute.jaxbexception", ((JAXBException)e).getLinkedException().getMessage());
+			logger.error("report.execute.jaxbexception:"+((JAXBException)e).getLinkedException().getMessage());
 		} else {
-			alerts.addError(request, "report.import.file.unknown", e.getMessage());
-			logger.error("report.import.file.unknown:"+e.getMessage());
+			alerts.addError(request, "report.pattern.import.file.unknown", e.getMessage());
+			logger.error("report.pattern.import.file.unknown:"+e.getMessage());
 		}
 	}
 	
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
-		if (binder.getTarget() instanceof ReportPatternImportForm) binder.setValidator(new ReportPatternImportValidator());
+		if (binder.getTarget() instanceof PatternImportForm) binder.setValidator(new PatternImportValidator());
+		if (binder.getTarget() instanceof ReportExecuteForm) binder.setValidator(new ReportExecuteValidator());
 	}
 }

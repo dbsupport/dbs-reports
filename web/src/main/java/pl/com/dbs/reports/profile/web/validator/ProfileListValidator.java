@@ -30,6 +30,9 @@ public class ProfileListValidator implements Validator {
 		ProfileListForm form = (ProfileListForm)target;
 
 		if (errors.hasErrors()) return;
+		
+		form.getFilter().putName(form.getName());
 	}
+	
 
 }

@@ -4,14 +4,15 @@
 package pl.com.dbs.reports.profile.web.form;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.lang.StringUtils;
 
+import pl.com.dbs.reports.access.domain.Access;
+import pl.com.dbs.reports.authority.domain.Authority;
 import pl.com.dbs.reports.profile.domain.ProfileCreation;
-import pl.com.dbs.reports.support.web.file.FileService;
+import pl.com.dbs.reports.support.web.file.FileMeta;
 import pl.com.dbs.reports.support.web.form.AForm;
 
 /**
@@ -35,9 +36,10 @@ public class ProfileNewForm extends AForm implements ProfileCreation {
 	private String state;
 	private String zipCode;
 	
-	private List<String> accesses = new ArrayList<String>();
+	private List<Access> accesses = new ArrayList<Access>();
+	private List<Authority> authorities = new ArrayList<Authority>();
 	
-	private MultipartFile  file;
+	private FileMeta  photo;
 	
 	public ProfileNewForm() {}
 	
@@ -53,8 +55,9 @@ public class ProfileNewForm extends AForm implements ProfileCreation {
 		this.city = null;
 		this.state = null;
 		this.zipCode = null;
-		this.file = null;
-		this.accesses = new ArrayList<String>();
+		this.photo = null;
+		this.accesses = new ArrayList<Access>();
+		this.authorities = new ArrayList<Authority>();
 	}
 	
 
@@ -90,6 +93,8 @@ public class ProfileNewForm extends AForm implements ProfileCreation {
 	
 	@Override
 	public Address getAddress() {
+		if (StringUtils.isBlank(street)&&StringUtils.isBlank(city)&&StringUtils.isBlank(state)&&StringUtils.isBlank(zipCode)) return null;
+		
 		return new Address() {
 			@Override
 			public String getStreet() {
@@ -112,14 +117,19 @@ public class ProfileNewForm extends AForm implements ProfileCreation {
 
 	@Override
 	public File getPhoto()  {
-		try {
-			return FileService.multipartToFile(getFile());
-		} catch (IOException e) {}
-		return null;
+		return this.photo!=null?this.photo.getFile():null;
 	}
 	
-	
+	@Override
+	public List<Authority> getAuthorities() {
+		return authorities;
+	}
 
+	@Override
+	public List<Access> getAccesses() {
+		return accesses;
+	}
+	
 	public String getStreet() {
 		return street;
 	}
@@ -134,10 +144,6 @@ public class ProfileNewForm extends AForm implements ProfileCreation {
 
 	public String getZipCode() {
 		return zipCode;
-	}
-
-	public MultipartFile getFile() {
-		return file;
 	}
 
 	public void setLogin(String login) {
@@ -176,22 +182,23 @@ public class ProfileNewForm extends AForm implements ProfileCreation {
 		this.zipCode = zipCode;
 	}
 
-	public void setFile(MultipartFile file) {
-		this.file = file;
-	}
-
-	public List<String> getAccesses() {
-		return accesses;
-	}
-
-	public void setAccesses(List<String> accesses) {
-		this.accesses = accesses;
-	}
-
-
 	public void setPasswd(String passwd) {
 		this.passwd = passwd;
 	}
 
+	public void setAccesses(List<Access> accesses) {
+		this.accesses = accesses;
+	}
 
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
+	}
+	
+	public void addPhoto(FileMeta file) {
+		this.photo = file;
+	}
+	
+	public boolean isPhoto() {
+		return this.photo!=null;
+	}
 }

@@ -41,8 +41,11 @@ public class Sorter implements Serializable{
 	public void remove(String name) {
 		fields.remove(new SorterField(name));
 	}
-	
-	public void reorder(String name) {
+
+	/**
+	 * Called from jsp
+	 */
+	public void setReorder(String name) {
 		SorterField field = find(name);
 		if (field == null) {
 			field = new SorterField(name);

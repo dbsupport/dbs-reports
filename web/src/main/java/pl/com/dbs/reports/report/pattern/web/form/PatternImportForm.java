@@ -1,26 +1,29 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.web.form;
+package pl.com.dbs.reports.report.pattern.web.form;
+
+import javax.xml.bind.JAXBException;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import pl.com.dbs.reports.api.report.pattern.Pattern;
+import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.support.web.form.AForm;
 
 
 /**
- * TODO
+ * Importing form.
+ * Contains INSIDE form of imported pattern (for preview)
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class ReportPatternImportForm extends AForm {
-	public static final String KEY = "reportPatternImportForm";
+public class PatternImportForm extends AForm {
+	public static final String KEY = "patternImportForm";
 	private MultipartFile  file;
-	private Pattern pattern;
+	private ReportPattern pattern;
 	
-	public ReportPatternImportForm() {}
+	public PatternImportForm() {}
 	
 	public void reset() {
 		super.reset();
@@ -28,7 +31,7 @@ public class ReportPatternImportForm extends AForm {
 		this.pattern = null;
 	}
 	
-	public void setup(Pattern pattern) {
+	public void setup(ReportPattern pattern) throws JAXBException {
 		this.pattern = pattern;
 	}
 	
@@ -40,7 +43,11 @@ public class ReportPatternImportForm extends AForm {
 		this.file = file;
 	}
 
-	public Pattern getPattern() {
+	public ReportPattern getPattern() {
 		return pattern;
+	}
+	
+	public boolean isForm() {
+		return this.pattern!=null&&this.pattern.getForm()!=null;
 	}
 }

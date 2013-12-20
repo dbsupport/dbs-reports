@@ -4,46 +4,57 @@
 <tiles:insertDefinition name="tiles-default" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-profile-profile</tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">profil użytkownika</tiles:putAttribute>
-<tiles:putAttribute name="css" type="string"><link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" /></tiles:putAttribute>
+<tiles:putAttribute name="css" type="string">
+<link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/dbs/dbs-profile.css" type="text/css" media="screen" />
+</tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
         <div id="pad-wrapper" class="user-profile">
             <!-- header -->
             <div class="row header">
-                <div class="col-md-8">
-                	<div class="col-md-1">
-                    <img src="img/contact-profile.png" class="avatar img-circle">
+                <div class="col-md-12">
+                	<div class="">
+                   	<c:if test="${!empty profile.photo}">
+						<img src="profile/photo/${profile.photo.id}" class="img-circle avatar" />
+                   	</c:if>
+					<c:if test="${empty profile.photo}">
+                    	<img src="img/no-img-personal.png" class="img-circle avatar" />
+                    </c:if>
                     </div>
                     <div class="col-md-5">
                     <h3 class="name">${profile.name}</h3>
+                    
+                    <c:if test="${!empty profile.authoritiesAsString}">
+                    <br/>
                     <span class="area">
-                    <c:forEach var="authority" items="${profile.authorities}" varStatus="rstatus">
-                    <spring:message code="${authority.authority}" text="${authority.authority}"/>
-                    </c:forEach>
+                    <c:out value="${profile.authoritiesAsString}"/>
                     </span>
+                    </c:if>
+                    
+                    <c:if test="${!empty profile.accessesAsString}">
+                    <br/>
+                    <span class="area">
+                    <c:out value="${profile.accessesAsString}"/>
+                    </span>
+                    </c:if>
+                    
                     <c:if test="${profile.global}">
                     <br/>
                     <span class="area">
-                    <c:forEach var="authority" items="${profile.hrauthorities}" varStatus="rstatus">
-                    <spring:message code="${authority.name}" text="${authority.name}"/>
-                    </c:forEach>
+                    Profil HR<c:if test="${!empty profile.hrauthoritiesAsString}">: <c:out value="${profile.hrauthoritiesAsString}"/></c:if>
                     </span>
+                    
                     </c:if>
-                    <br/>
-                    <span class="area">
-                    <c:forEach var="access" items="${profile.accesses}" varStatus="rstatus">
-                    <spring:message code="${access.name}" text="${access.name}"/>
-                    </c:forEach>
-                    </span>
                     </div>
                 </div>
-                <a class="btn-flat icon pull-right delete-user" data-toggle="tooltip" title="Delete user" data-placement="top">
-                    <i class="icon-trash"></i>
-                </a>
-                 <a class="btn-flat icon large pull-right edit" href="profile/edit">
-                    Edytuj ten profil
-                </a>
-            </div>
+                
+                <div class="col-md-5 pull-right">
+	                <a class="btn-flat icon pull-right delete-user" href="profile/delete/${profile.id}" data-toggle="tooltip" title="Usuń profil" data-placement="top"><i class="icon-trash"></i></a>
+	                <a class="btn-flat icon large pull-right edit" href="profile/edit/${profile.id}" data-toggle="tooltip" title="Edytuj profil">Edytuj ten profil</a>
+                </div>
+                
+             </div>
 
             <div class="row profile">
                 <!-- bio, new note & orders column -->
@@ -55,75 +66,48 @@
                             <p>There are many variations of passages of Lorem Ipsum available but the majority have humour suffered alteration in believable some formhumour , by injected humour, or randomised words which don't look even slightly believable. </p>
                         </div>
 
+						<c:if test="${!empty reports}">
                         <h6>Ostatnie raporty</h6>
-                        <br>
-                        <!-- recent orders table -->
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th class="col-md-2">
-                                        ID
-                                    </th>
-                                    <th class="col-md-3">
-                                        <span class="line"></span>
-                                        Nazwa raportu
-                                    </th>
-                                    <th class="col-md-3">
-                                        <span class="line"></span>
-                                        Wielkość
-                                    </th>
-                                    <th class="col-md-3">
-                                        <span class="line"></span>
-                                        Data wykonania
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- row -->
-                                <tr class="first">
-                                    <td>
-                                        <a href="report/details">#459</a>
-                                    </td>
-                                    <td>
-                                        Jan 03, 2013
-                                    </td>
-                                    <td>
-                                        2312kB
-                                    </td>
-                                    <td>
-                                        Zeznanie ZUS
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a href="report/details">#510</a>
-                                    </td>
-                                    <td>
-                                        Feb 22, 2013
-                                    </td>
-                                    <td>
-                                        5787kB
-                                    </td>
-                                    <td>
-                                        Dzienna ilość operacji 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a href="report/details">#618</a>
-                                    </td>
-                                    <td>
-                                        Jan 03, 2013
-                                    </td>
-                                    <td>
-                                        8212kB
-                                    </td>
-                                    <td>
-                                        PIT 37
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+			            <div class="row">
+			                <div class="col-md-12">
+			                    <table class="table table-hover">
+			                        <thead>
+			                            <tr>
+			                                <th class="col-md-3 sortable">Nazwa pliku
+			                                </th>
+			                                <th class="col-md-2 sortable">Data wygenerowania
+			                                    <span class="line"></span>
+			                                </th>
+			                                <th class="col-md-2 sortable">
+			                                    <span class="line"></span>Definicja
+			                                </th>
+			                            </tr>
+			                        </thead>
+			                        <tbody>
+			                        <c:forEach items="${reports}" var="report">
+			                        <!-- row -->
+			                        <tr class="first">
+			                            <td>
+			                            	<a href="report/archives/display/${report.id}" title="Podgląd">${report.name}</a>
+			                                
+			                            </td>
+			                            <td>
+			                            	<fmt:formatDate value="${report.generationDate}" type="both" pattern="dd-MM-yyyy HH:mm:ss" />
+			                            </td>
+			                            <td>
+			                            <c:choose>
+			                            <c:when test="${report.pattern.active eq true}"><a href="report/pattern/details/${report.pattern.id}">${report.pattern.name} ${report.pattern.version}</a></c:when>
+			                            <c:otherwise>${report.pattern.name} ${report.pattern.version}</c:otherwise>
+			                            </c:choose>
+			                            </td>
+			                        </tr>
+			                        </c:forEach>
+			                        </tbody>
+			                    </table>
+			                </div>                
+			            </div>
+			            
+			            </c:if>
 
                         <!-- new comment form -->
                         <div class="col-md-12 section comment">

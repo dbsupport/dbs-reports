@@ -4,24 +4,61 @@
        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 <tiles-definitions>
 
-    <definition name="tiles-security" template="/WEB-INF/jsp/tiles/security/template.jsp">
-        <put-attribute name="id" type="string" value=""/>
-        <put-attribute name="title" type="string" value=""/>
-        <put-attribute name="content" type="string" value=""/>
-    </definition>
-    
     <definition name="tiles-default" template="/WEB-INF/jsp/tiles/default/template.jsp">
         <put-attribute name="id" type="string" value=""/>
         <put-attribute name="title" type="string" value=""/>
         <put-attribute name="css" type="string" value=""/>
+        <put-attribute name="js" type="string" value=""/>
         <put-attribute name="content" type="string" value=""/>
     </definition>
+
+    <definition name="tiles-security" template="/WEB-INF/jsp/tiles/security/template.jsp" extends="tiles-default">
+    </definition>
     
-    <definition name="tiles-error" template="/WEB-INF/jsp/tiles/error/template.jsp">
-        <put-attribute name="id" type="string" value=""/>
-        <put-attribute name="title" type="string" value=""/>
-        <put-attribute name="css" type="string" value=""/>
-        <put-attribute name="content" type="string" value=""/>
+    <definition name="tiles-wizard" template="/WEB-INF/jsp/tiles/default/wizard.jsp" extends="tiles-default">
+        <put-attribute name="steps" type="string" value=""/>
+        <put-attribute name="step" type="string" value="1"/>
+    </definition>
+    
+    <definition name="tiles-browser" template="/WEB-INF/jsp/tiles/default/browser.jsp" extends="tiles-default">
+        <put-attribute name="form" type="string" value=""/>
     </definition>    
+    
+    <definition name="tiles-error" template="/WEB-INF/jsp/tiles/error/template.jsp" extends="tiles-default">
+    </definition>
+    
+    <definition name="tiles-pager" template="/WEB-INF/jsp/tiles/default/pager.jsp">
+    	<put-attribute name="pages" type="string" value="5"/>
+    	<put-attribute name="class" type="string" value="pagination pull-right"/>
+    </definition>
+    
+	<definition name="tiles-sorter" template="/WEB-INF/jsp/tiles/default/sorter.jsp">
+    	<put-attribute name="label" type="string" value=""/>
+    	<put-attribute name="name" type="string" value=""/>
+    	<put-attribute name="class" type="string" value=""/>
+    	<put-attribute name="classasc" type="string" value=""/>
+    	<put-attribute name="classdesc" type="string" value=""/>
+    </definition> 
+    
+    <definition name="tiles-field">
+    	<put-attribute name="name" type="string" value=""/>
+    	<put-attribute name="label" type="string" value=""/>
+    	<put-attribute name="value" type="string" value=""/>
+    	<put-attribute name="tooltip" type="string" value=""/>
+    	<put-attribute name="format" type="string" value=""/>
+    	
+        <put-attribute name="class" type="string" value="field-box"/>
+        <put-attribute name="errorclass" type="string" value="error"/>
+        <put-attribute name="inputclass" type="string" value="form-control"/>
+        <put-attribute name="contentclass" type="string" value="col-md-12"/>
+        <put-attribute name="attributes" type="string" value=""/>
+    </definition>    
+    
+    <definition name="tiles-field-text" template="/WEB-INF/jsp/tiles/default/field-text.jsp" extends="tiles-field">
+    </definition>
+    
+    <definition name="tiles-field-date" template="/WEB-INF/jsp/tiles/default/field-date.jsp" extends="tiles-field">
+    </definition>
+    
     
 </tiles-definitions>

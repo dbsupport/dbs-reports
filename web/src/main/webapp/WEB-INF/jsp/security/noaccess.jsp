@@ -3,7 +3,7 @@
 
 <tiles:insertDefinition name="tiles-default" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-noaccess</tiles:putAttribute>
-<tiles:putAttribute name="title" type="string">brak dostępu</tiles:putAttribute>
+<tiles:putAttribute name="title" type="string">Brak dostępu</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string"><link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" /></tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 

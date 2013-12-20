@@ -1,103 +1,71 @@
 <%@ include file="/WEB-INF/jsp/tiles/common/taglib.jsp" %>
 <%@ page session="false" contentType="text/html; charset=UTF-8" %>
 
-<tiles:insertDefinition name="tiles-default" flush="true">
+<tiles:insertDefinition name="tiles-wizard" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-profile-new</tiles:putAttribute>
-<tiles:putAttribute name="title" type="string">nowy profil</tiles:putAttribute>
+<tiles:putAttribute name="title" type="string">Nowy profil</tiles:putAttribute>
+<tiles:putAttribute name="steps" type="string">Wprowadź personalia;Nadaj uprawnienia;Zapisz</tiles:putAttribute>
+<tiles:putAttribute name="step" type="string">3</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/new-user.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/compiled/form-wizard.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/dbs/dbs-wizard.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/dbs/dbs-profile.css" type="text/css" media="screen" />
 </tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
-        <div id="pad-wrapper" class="new-user">
-            <div class="row header">
-                <div class="col-md-12">
-                    <h3>Dodaj profil użytkownika</h3>
-                </div>                
-            </div>
-            
-            <div class="row form-wrapper">
-                <!-- left column -->
-                <div class="col-md-9 with-sidebar">
-                
-                    <div id="fuelux-wizard" class="wizard row">
-                        <ul class="wizard-steps">
-                            <li data-target="#step1">
-                                <span class="step">1</span>
-                                <span class="title">Wprowadź dane profilu</span>
-                            </li>
-                            <li data-target="#step2" class="active">
-                                <span class="step">2</span>
-                                <span class="title">Zapisz profil</span>
-                            </li>
-                        </ul>                            
-                    </div>                 
-                
-                    <div class="step-content">
-                    <div class="step-pane active" id="step2">
-                    <div class="row form-wrapper">
-                    <div class="col-md-12">                   
-                
-                    	<form:form method="post" modelAttribute="profileNewForm" action="profile/new/summary" class="new_user_form" enctype="multipart/form-data">
-							<input type="hidden" name="page" value="2">
-                            <div class="col-md-12 field-box">
-                                <label>Login:</label>
-                                <input class="form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.login}"/>
-                            </div>
-                            <div class="col-md-12 field-box">
-                                <label>Imię:</label>
-                                <input class="form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.firstName}"/>
-                            </div>
-                            <div class="col-md-12 field-box">
-                                <label>Nazwisko:</label>
-                                <input class="form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.lastName}"/>
-                            </div>
-                            <div class="col-md-12 field-box">
-                                <label>Email:</label>
-                                <input class="form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.email}"/>
-                            </div>
-                            <div class="col-md-12 field-box">
-                                <label>Telefon:</label>
-                                <input class="form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.phone}"/>
-                            </div>
-                            <div class="col-md-12 field-box">
-                                <label>Adres:</label>
-                                <div class="address-fields">
-                                	<input class="form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.street}"/>
-                                    <input class="small form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.city}"/>
-                                    <input class="small form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.state}"/>
-                                    <input class="small form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.zipCode}"/>
-                                </div>
-                            </div>
-                            <div class="col-md-12 field-box textarea personal-image">
-                            
-                            </div>
-                            <div class="col-md-11 field-box actions">
-		                        <button type="button" class="btn-glow primary btn-prev" onclick="location.href='profile/new/form'"><i class="icon-chevron-left"></i>&nbsp;Popraw</button>
-		                        <button type="submit" class="btn-glow success btn-finish">Zapisz profil!</button>                            
-                            </div>
 
-                        </form:form>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                </div>
+<form:form method="post" modelAttribute="profileNewForm" action="profile/new/summary" class="" enctype="multipart/form-data">
+	<input type="hidden" name="page" value="3">
+	<c:if test="${profileNewForm.photo}">
+		<div class="field-box">
+       		<div class="col-md-1">
+           		<img src="profile/new/photo" class="avatar img-circle">
+           	</div>
+       </div>
+	</c:if>
+    <div class="field-box">
+        <label>Login</label>
+        <input class="form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.login}"/>
+    </div>
+    <div class="field-box">
+        <label>Imię/Nazwisko</label>
+        <input class="form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.firstName} ${profileNewForm.lastName}"/>
+    </div>
+    <div class="field-box">
+        <label>Email</label>
+        <input class="form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.email}"/>
+    </div>
+    <div class="field-box">
+        <label>Telefon</label>
+        <input class="form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.phone}"/>
+    </div>
+    <div class="field-box">
+        <label>Adres</label>
+       	<input class="form-control inline-input" type="text" readonly="readonly" value="${profileNewForm.street} ${profileNewForm.zipCode} ${profileNewForm.city} ${profileNewForm.state}"/>
+    </div>
+    <div class="field-box">
+        <label>Uprawnienia dostępu</label>
+        <c:set var="authorities">
+        <c:forEach items="${profileNewForm.authorities}" var="authority" varStatus="status"><spring:message code="${authority.name}" text="${authority.name}"></spring:message><c:if test="${!status.last}">, </c:if></c:forEach>
+        </c:set>
+       	<input class="form-control inline-input" type="text" readonly="readonly" value="${authorities}"/>
+    </div>
+    <div class="field-box">
+        <label>Uprawnienia raportowania</label>
+        <c:set var="accesses">
+        <c:forEach items="${profileNewForm.accesses}" var="access" varStatus="status"><spring:message code="${access.name}" text="${access.name}"></spring:message><c:if test="${!status.last}">, </c:if></c:forEach>
+        </c:set>
+       	<input class="form-control inline-input" type="text" readonly="readonly" value="${accesses}"/>
+    </div>
+                    
+	<div class="wizard-actions">
+		<button type="button" class="btn-glow primary btn-prev" onclick="location.href='profile/new/access'"><i class="icon-chevron-left"></i>&nbsp;Popraw</button><span>&nbsp;</span>
+		<button type="submit" class="btn-glow success btn-finish" style="display: inline-block;" data-last="Zapisz">Zapisz profil!</button><span>&nbsp;</span>                            
+	</div>
 
-                <!-- side right column -->
-                <div class="col-md-3 form-sidebar pull-right">
-                    <h6>Sidebar text for instructions</h6>
-                    <p>Add multiple users at once</p>
-                    <p>Choose one of the following file types:</p>
-                    <ul>
-                        <li><a href="#">Upload a vCard file</a></li>
-                        <li><a href="#">Import from a CSV file</a></li>
-                        <li><a href="#">Import from an Excel file</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+</form:form>
+
         
 </tiles:putAttribute>
 </tiles:insertDefinition>        

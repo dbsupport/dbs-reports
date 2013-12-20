@@ -1,25 +1,26 @@
 /**
  * (c) dbs-reports
  */
-input[type="password"] { 
-  width: 75%;
+
+
+.address-fields .field-box {
+	width: 200px;
+	margin-right: 4px;
+	margin-bottom:0px;
 }
 
-.new-user .form-wrapper .address-fields .field-box {
-	width: 30%;
-	margin-right: 5px;
-}
-
-.new-user .form-wrapper .address-fields .field-box input[type="text"] {	
-	margin-top:0;
-	width: 95%;
-}
-
-.new-user .form-wrapper .address-fields .field-box:first-child {
+.address-fields .field-box input { 
 	width: 100%;
 }
-	
-.new-user .form-wrapper .address-fields .field-box:first-child input[type="text"] {
-	width: 100%;
+
+.address-fields .alert-msg { 
+	margin-left:0px;
 }
-	
+
+img.avatar {
+  float: left;
+  margin-right: 14px;
+  max-width: 100px;
+  margin-top:32px;	
+}
+

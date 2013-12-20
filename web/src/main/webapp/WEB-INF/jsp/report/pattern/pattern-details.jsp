@@ -4,50 +4,60 @@
 <tiles:insertDefinition name="tiles-default" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-report-pattern-details</tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">definicja raportu</tiles:putAttribute>
-<tiles:putAttribute name="css" type="string"><link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" /></tiles:putAttribute>
+<tiles:putAttribute name="css" type="string">
+<link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/dbs/dbs-profile.css" type="text/css" media="screen" />
+</tiles:putAttribute>
+<tiles:putAttribute name="js" type="string">
+<script src="js/dbs/dbs-pattern-details.js"></script>
+</tiles:putAttribute> 
 <tiles:putAttribute name="content" type="string">
 
         <div id="pad-wrapper" class="user-profile">
             <!-- header -->
             <div class="row header">
                 <div class="col-md-1">
-                    <img src="img/contact-profile.png" class="avatar img-circle">
+                   	<c:if test="${!empty pattern.creator.photo}">
+						<img src="profile/photo/${pattern.creator.photo.id}" class="img-circle avatar" />
+                   	</c:if>
+					<c:if test="${empty pattern.creator.photo}">
+                    	<img src="img/no-img-personal.png" class="img-circle avatar" />
+                    </c:if>
                 </div>
                 <div class="col-md-5">
-                <h3 class="name">${pattern.name}</h3>
+                	<h3 class="name">${pattern.name}</h3>
                     <span class="area">${pattern.version}</span><br/>
                     <span class="area">${pattern.accessesAsString}</span><br/>
                     <span class="area">${pattern.author}</span><br/>
                 </div>
                 
-                <a href="report/archives/${pattern.id}" class="btn-flat icon large pull-right edit">
-                    Pokaż raporty
-                </a>             
-                   
-                <a class="btn-flat icon pull-right delete-user" data-toggle="tooltip" title="Skasuj definicję" data-placement="top">
-                    <i class="icon-trash"></i>
-                </a>
+                <div class="col-md-5 pull-right">
+                	<a href="report/execute/${pattern.id}" class="btn-flat success pull-right delete-user"><span>&#43;</span>GENERUJ RAPORT</a>
+	                <a href="#" data-url="report/pattern/delete/${pattern.id}" class="btn-flat icon pull-right delete-user pattern-delete" data-toggle="tooltip" title="Skasuj definicję" data-placement="top"><i class="icon-trash"></i></a>
+	                <a href="report/archives/${pattern.id}" class="btn-flat icon large pull-right edit">Pokaż raporty</a>             
+                </div>
             </div>
 
             <div class="row profile">
-                <!-- bio, new note & orders column -->
+
                 <div class="col-md-9 bio">
                     <div class="profile-box">
-                        <!-- biography -->
                         <div class="col-md-12 section">
-                            <h6>Notatki</h6>
-                            <p>There are many variations of passages of Lorem Ipsum available but the majority have humour suffered alteration in believable some formhumour , by injected humour, or randomised words which don't look even slightly believable. </p>
+                            <h6>Szczegóły</h6>
+                            <p>Formaty: ${pattern.formatsAsString}</p>
+                            <p>Data importu: <fmt:formatDate value="${pattern.uploadDate}"/></p>
+                            <p>Zaimportował: ${pattern.creator.name}</p>
+                            <c:if test="${!empty pattern.form}"><p>Formularz: ${pattern.form.name}</p></c:if>
+                            
                         </div>
-
-                        <h6>Manifest</h6>
-                        <br>
-
-                        <div class="">
+					</div>
+					<div class="profile-box">
+						<div class="col-md-12 section">
+                        	<h6>Manifest</h6>
                             <div class="col-md-12">
-                                <textarea class="form-control" rows="8" readonly="readonly"><c:out value="${pattern.manifest}"/></textarea>
+                                <textarea class="form-control" rows="8" readonly="readonly"><c:out value="${pattern.manifest.text}"/></textarea>
                             </div>
                         </div>
-
                     </div>
                 </div>
 

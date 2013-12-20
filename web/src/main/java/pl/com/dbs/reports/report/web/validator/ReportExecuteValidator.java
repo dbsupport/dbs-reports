@@ -35,11 +35,10 @@ public class ReportExecuteValidator implements Validator {
 		if (errors.hasErrors()) return;
 		
 		switch (form.getPage()) {
-		case 1:
-		break;
-		case 2:
-		break;
 		case 3:
+		case 2:
+		case 1:
+			form.validate(errors);
 		break;
 		}
 	}

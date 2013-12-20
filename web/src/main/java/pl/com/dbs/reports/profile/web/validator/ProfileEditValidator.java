@@ -3,10 +3,13 @@
  */
 package pl.com.dbs.reports.profile.web.validator;
 
+import java.util.regex.Matcher;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import pl.com.dbs.reports.profile.service.ProfileService;
 import pl.com.dbs.reports.profile.web.form.ProfileEditForm;
 
 /**
@@ -15,8 +18,10 @@ import pl.com.dbs.reports.profile.web.form.ProfileEditForm;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class ProfileEditValidator implements Validator {
-	public ProfileEditValidator() {}
+public class ProfileEditValidator extends ProfileNewValidator implements Validator {
+	public ProfileEditValidator(ProfileService profileService) {
+		super(profileService);
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.springframework.validation.Validator#supports(java.lang.Class)
@@ -29,9 +34,22 @@ public class ProfileEditValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		ProfileEditForm form = (ProfileEditForm)target;
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "errors.required");
+		
+		validateSyntax(target, errors);
 
+		if (!StringUtils.isBlank(form.getPasswd())) {
+			if (form.getPasswd().length()<PASSWD_MIN) errors.rejectValue("passwd", "errors.min.text", new Integer[]{PASSWD_MIN}, "errors.min.text");
+			if (form.getPasswd().length()>PASSWD_MAX) errors.rejectValue("passwd", "errors.max.text", new Integer[]{PASSWD_MAX}, "errors.max.text");				
+		}
+		
 		if (errors.hasErrors()) return;
+		
+		if (form.getLogin().length()<LOGIN_MIN) errors.rejectValue("login", "errors.min.text", new Integer[]{LOGIN_MIN}, "errors.min.text");
+		if (form.getLogin().length()>LOGIN_MAX) errors.rejectValue("login", "errors.max.text", new Integer[]{LOGIN_MAX}, "errors.max.text");
+		
+		Matcher ml = LOGIN_PATTERN.matcher(form.getLogin());
+		if (!ml.matches()) errors.rejectValue("login", "errors.regexp");			
+		
 	}
 
 }

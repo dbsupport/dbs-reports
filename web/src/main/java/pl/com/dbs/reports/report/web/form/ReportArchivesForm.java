@@ -4,6 +4,7 @@
 package pl.com.dbs.reports.report.web.form;
 
 import pl.com.dbs.reports.report.dao.ReportFilter;
+import pl.com.dbs.reports.support.web.form.AForm;
 
 
 /**
@@ -12,11 +13,30 @@ import pl.com.dbs.reports.report.dao.ReportFilter;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class ReportArchivesForm {
+public class ReportArchivesForm extends AForm {
 	public static final String KEY = "reportArchivesForm";
-	private ReportFilter filter = new ReportFilter(5);
+	private String name;
+	private ReportFilter filter = new ReportFilter();
 	
 	public ReportArchivesForm() {}
+	
+	public void reset(Long id) {
+		super.reset();
+		this.filter = new ReportFilter();
+		this.filter.putId(id);
+	}
+	
+	public void reset() {
+		super.reset();
+		this.filter = new ReportFilter();
+	}
+
+	public void reset(String name) {
+		super.reset();
+		this.filter = new ReportFilter();
+		this.filter.putName(name);
+	}
+
 	
 	public ReportFilter getFilter() {
 		return filter;
@@ -24,5 +44,13 @@ public class ReportArchivesForm {
 
 	public void setFilter(ReportFilter filter) {
 		this.filter = filter;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}	
 }

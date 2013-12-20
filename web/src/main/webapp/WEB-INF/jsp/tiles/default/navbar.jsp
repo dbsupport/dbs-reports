@@ -107,8 +107,8 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="profile">Twój profil</a></li>
-                    <li><a href="report/list">Twoje raporty</a></li>
-                    <li><a href="report/template/list">Twoje definicje</a></li>
+                    <li><a href="report/archives/current">Twoje raporty</a></li>
+                    <li><a href="report/pattern/list/current">Twoje definicje</a></li>
                 </ul>
             </li>
             <li class="settings hidden-xs hidden-sm">

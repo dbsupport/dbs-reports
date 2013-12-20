@@ -30,6 +30,8 @@ public class ReportArchivesValidator implements Validator {
 		ReportArchivesForm form = (ReportArchivesForm)target;
 
 		if (errors.hasErrors()) return;
+		
+		form.getFilter().putName(form.getName());
 	}
 
 }

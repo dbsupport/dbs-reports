@@ -19,8 +19,11 @@
                     <i class="icon-chevron-down"></i>
                 </a>
                 <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-profile')}">active</c:if>">
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-list')}">active</c:if>" href="profile/list">Profile</a></li>
+                	<li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-profile')}">active</c:if>" href="profile">Twój profil</a></li>
+                	<sec:authorize access="hasAnyRole('Admin,Management')">
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-list')}">active</c:if>" href="profile/list">Lista profili</a></li>
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-new')}">active</c:if>" href="profile/new">Nowy profil</a></li>
+                    </sec:authorize>
                 </ul>
             </li>
             <li>
@@ -36,12 +39,35 @@
                     <i class="icon-chevron-down"></i>
                 </a>
                 <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-report')}">active</c:if>">
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-pattern-list')}">active</c:if>" href="report/pattern/list">Definicje</a></li>
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-archives')}">active</c:if>" href="report/archives">Archiwum</a></li>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-pattern-list')}">active</c:if>" href="report/pattern/list/init">Definicje</a></li>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-archives')}">active</c:if>" href="report/archives/init">Archiwum</a></li>
                     <li>&nbsp;</li>
+                    <sec:authorize access="hasAnyRole('Admin,Management')">
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-pattern-import')}">active</c:if>" href="report/pattern/import">Import definicji</a></li>
+                    </sec:authorize>
                 </ul>
             </li>
+            <sec:authorize access="hasAnyRole('Admin,Management')">
+            <li>
+            	<c:if test="${fn:startsWith(id, 'dbs-page-access') or fn:startsWith(id, 'dbs-page-parameter')}">
+                <div class="pointer">
+                    <div class="arrow"></div>
+                    <div class="arrow_border"></div>
+                </div>
+                </c:if>            
+                <a class="dropdown-toggle" href="#">
+                    <i class="icon-cog"></i>
+                    <span>Administ.</span>
+                    <i class="icon-chevron-down"></i>
+                </a>
+                <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-access') or fn:startsWith(id, 'dbs-page-parameter')}">active</c:if>">
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-access-list')}">active</c:if>" href="access/list">Uprawnienia raportowe</a></li>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-access-new')}">active</c:if>" href="access/new">Nowe uprawnienie raportowe</a></li>
+                	<li>&nbsp;</li>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-parameter-edit')}">active</c:if>" href="param/edit">Parametry systemowe</a></li>
+                </ul>
+            </li>            
+            </sec:authorize>
         </ul>
     </div>
     <!-- end sidebar -->

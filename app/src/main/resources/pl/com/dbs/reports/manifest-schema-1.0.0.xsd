@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2013 sp1 (http://www.altova.com) by ﻿Death Song (Death Song) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.dbs.com.pl/reports/1.0/manifest" xmlns:xlink="http://www.w3.org/1999/xlink" targetNamespace="http://www.dbs.com.pl/reports/1.0/manifest" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="Manifest">
 		<xs:annotation>
 			<xs:documentation>Comment describing your root element</xs:documentation>
@@ -41,6 +41,11 @@
 							</xs:restriction>
 						</xs:simpleType>
 					</xs:element>
+					<xs:element name="Reports-Form-Filename" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Form definition filename.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
 					<xs:element name="Reports-Init-Sql" type="xs:string" minOccurs="0">
 						<xs:annotation>
 							<xs:documentation>Lista (;) plikow SQL do walidacji paczki przy imporcie. 
@@ -62,10 +67,12 @@ wzorzec.rtf=rtf</xs:documentation>
 							<xs:documentation>Domyslnie:
 ${filename}-${date-time}
 
-Przyklady:
-raport-${date}
+Dopuszczalne zmienne:
+- ${filename}
+- ${date-time}
+- ${date}
 
-Powinna byc zaimplementowana obsluga zmiennych podanych w atrybutach.</xs:documentation>
+PS.Powinna byc zaimplementowana obsluga zmiennych podanych w atrybutach.</xs:documentation>
 						</xs:annotation>
 						<xs:complexType>
 							<xs:attribute name="filename" type="xs:string"/>

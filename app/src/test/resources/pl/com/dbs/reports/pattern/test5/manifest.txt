@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Created-By: 1.2 (Sun Microsystems Inc.)
+
+Name: Database-Support-Reports
+Reports-Pattern-Name: PIT-666
+Reports-Pattern-Version: 6.6.6
+Reports-Pattern-Author: JanKowalski
+Reports-Accesses: Raporty-PIT
+Reports-Extension-Map: wzor.rtf=rtf;
+Reports-Init-Sql: init.sql
+Reports-Name-Template: PIT666-${date-time}
+Reports-Form-Filename: form.invalid.xml

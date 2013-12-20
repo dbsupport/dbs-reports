@@ -1,0 +1,11 @@
+/**
+ * (c) dbs-reports
+ */
+ 
+textarea.form-control, input[type="password"], input[type="file"] {
+	width: 400px;
+}
+
+.multiselect {
+	width:400px;
+}

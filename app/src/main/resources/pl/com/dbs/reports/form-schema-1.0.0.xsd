@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+xmlns="http://www.dbs.com.pl/reports/1.0/form" 
+targetNamespace="http://www.dbs.com.pl/reports/1.0/form" 
+elementFormDefault="qualified" attributeFormDefault="unqualified"
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.dbs.com.pl/reports/1.0/form" targetNamespace="http://www.dbs.com.pl/reports/1.0/form" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="form">
+		<xs:annotation>
+			<xs:documentation>Dynamic form</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="fields" type="fields" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="stop" type="xs:boolean" default="false">
+				<xs:annotation>
+					<xs:documentation>Stop after first error?</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="fields">
+		<xs:annotation>
+			<xs:documentation>Groups fields.
+Renderer tries to group them on view too.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="field" type="field" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="field">
+		<xs:annotation>
+			<xs:documentation>Form's field.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="validator" type="validator" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Field validators - chain. 
+Order counts.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Input variable name (unique).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="type" type="field-type" use="required">
+			<xs:annotation>
+				<xs:documentation>Type of input field.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="label" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>Description.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="value" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>Initiating value.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="tooltip" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>Title/placeholder.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="format" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>Format of input (only if rendering tag can provide, otherwise will be ignored)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="field-type">
+		<xs:annotation>
+			<xs:documentation>Availale fields types.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="text"/>
+			<xs:enumeration value="number"/>
+			<xs:enumeration value="date"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:annotation/>
+	<xs:complexType name="validator">
+		<xs:annotation>
+			<xs:documentation>A Validator (abstract)</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="type" type="validator-type" use="required">
+					<xs:annotation>
+						<xs:documentation>Type of validator.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="stop" type="xs:boolean" default="false">
+					<xs:annotation>
+						<xs:documentation>If true and validator rises problem then stops chain processing.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="validator-type">
+		<xs:annotation>
+			<xs:documentation>Availale validators types.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="required"/>
+			<xs:enumeration value="min"/>
+			<xs:enumeration value="max"/>
+			<xs:enumeration value="before"/>
+			<xs:enumeration value="after"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:annotation/>
+</xs:schema>

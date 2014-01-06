@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import pl.com.dbs.reports.api.report.ReportFormat;
+import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.report.domain.Report;
 import pl.com.dbs.reports.report.domain.ReportGeneration;
@@ -22,7 +22,7 @@ import com.google.common.collect.Lists;
 
 
 /**
- * TODO
+ * Report generation form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -33,7 +33,7 @@ public class ReportExecuteForm extends DForm implements ReportGeneration {
 	public static final String KEY = "reportGenerationForm";
 	private ReportPattern pattern;
 	private String name;
-	private ReportFormat format;
+	private PatternFormat format;
 	private Report report;
 	
 	public ReportExecuteForm() {
@@ -44,7 +44,7 @@ public class ReportExecuteForm extends DForm implements ReportGeneration {
 		super.reset();
 		this.pattern = pattern;
 		this.name = pattern.getManifest().getNameTemplate();
-		List<ReportFormat> formats = getFormats();
+		List<PatternFormat> formats = getFormats();
 		if (formats.size()==1) this.format = formats.get(0);
 	}
 
@@ -52,8 +52,14 @@ public class ReportExecuteForm extends DForm implements ReportGeneration {
 		this.name = name;
 	}
 
-	public void setFormat(String format) {
-		this.format = ReportFormat.of(format);
+	public void setFormat(String value) {
+		for (PatternFormat format : getFormats()) {
+			if (format.getExt().equalsIgnoreCase(value)) {
+				this.format = format;
+				return;
+			}
+		}
+		this.format = null;
 	}
 
 	public void addReport(Report report) {
@@ -64,8 +70,8 @@ public class ReportExecuteForm extends DForm implements ReportGeneration {
 		return report;
 	}
 	
-	public List<ReportFormat> getFormats() {
-		Set<ReportFormat> result = new HashSet<ReportFormat>();
+	public List<PatternFormat> getFormats() {
+		Set<PatternFormat> result = new HashSet<PatternFormat>();
 		if (pattern!=null) {
 			for (PatternTransformate transformate : pattern.getTransformates())
 				result.add(transformate.getFormat());
@@ -79,7 +85,7 @@ public class ReportExecuteForm extends DForm implements ReportGeneration {
 	}
 
 	@Override
-	public ReportFormat getFormat() {
+	public PatternFormat getFormat() {
 		return format;
 	}
 
@@ -87,4 +93,8 @@ public class ReportExecuteForm extends DForm implements ReportGeneration {
 	public String getName() {
 		return name;
 	}
+	
+	public String getFullname() {
+		return name+"."+format.getExt();
+	}	
 }

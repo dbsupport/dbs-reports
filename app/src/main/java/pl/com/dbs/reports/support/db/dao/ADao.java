@@ -23,7 +23,7 @@ import pl.com.dbs.reports.support.filter.Pager;
 import pl.com.dbs.reports.support.filter.SorterField;
 
 /**
- * TODO
+ * Base CRUD.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -203,6 +203,14 @@ public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,ID
         }
     	return result;
 	}	
+
+	/**
+	 * Return FIRST or none.
+	 */
+	protected T executeQuerySingle(IContextDao context) {
+		List<T> result = executeQuery(context);
+    	return result.isEmpty()?null:result.get(0);
+	}		
 	
 //	@SuppressWarnings({"unchecked"})
 //	protected List<T> executeQuery(Query query, Filter filter) {

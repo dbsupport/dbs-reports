@@ -5,8 +5,8 @@ package pl.com.dbs.reports.report.domain;
 
 import java.util.Map;
 
-import pl.com.dbs.reports.api.report.ReportFormat;
 import pl.com.dbs.reports.api.report.ReportProduceContext;
+import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 
 /**
@@ -22,5 +22,5 @@ public interface ReportProduceContextDefault extends ReportProduceContext {
 	
 	Map<String, String> getParameters();
 	
-	ReportFormat getFormat();
+	PatternFormat getFormat();
 }

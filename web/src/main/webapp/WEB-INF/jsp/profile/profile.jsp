@@ -2,12 +2,16 @@
 <%@ page session="false" contentType="text/html; charset=UTF-8" %>
 
 <tiles:insertDefinition name="tiles-default" flush="true">
-<tiles:putAttribute name="id" type="string">dbs-page-profile-profile</tiles:putAttribute>
+<tiles:putAttribute name="id" type="string">dbs-page-profile-profile<c:if test="${profile.id eq sprofile.id}">-current</c:if></tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">profil użytkownika</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-profile.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/dbs/dbs-wizard.css" type="text/css" media="screen" />
 </tiles:putAttribute>
+<tiles:putAttribute name="js" type="string">
+<script src="js/dbs/dbs-profile.js"></script>
+</tiles:putAttribute> 
 <tiles:putAttribute name="content" type="string">
 
         <div id="pad-wrapper" class="user-profile">
@@ -23,7 +27,23 @@
                     </c:if>
                     </div>
                     <div class="col-md-5">
-                    <h3 class="name">${profile.name}</h3>
+                    
+                    <h3 class="name">
+                    <c:choose>
+                    <c:when test="${profile.global}">${profile.description}</c:when>
+                    <c:otherwise>${profile.name}</c:otherwise>
+                    </c:choose>
+                    </h3>
+                    
+                    <br/>
+                    <span class="area">
+                    <c:out value="${profile.login}"/>
+                    </span>                    
+                    
+                    <c:if test="${profile.accepted ne true}">
+                    <br/>
+                    <span class="area inactive">profil nieaktywny</span>
+                    </c:if>                
                     
                     <c:if test="${!empty profile.authoritiesAsString}">
                     <br/>
@@ -42,16 +62,28 @@
                     <c:if test="${profile.global}">
                     <br/>
                     <span class="area">
-                    Profil HR<c:if test="${!empty profile.hrauthoritiesAsString}">: <c:out value="${profile.hrauthoritiesAsString}"/></c:if>
+                    Profil HR<c:if test="${!empty profile.clientAuthoritiesAsString}">: <c:out value="${profile.clientAuthoritiesAsString}"/></c:if>
                     </span>
                     
                     </c:if>
                     </div>
                 </div>
                 
+                
                 <div class="col-md-5 pull-right">
-	                <a class="btn-flat icon pull-right delete-user" href="profile/delete/${profile.id}" data-toggle="tooltip" title="Usuń profil" data-placement="top"><i class="icon-trash"></i></a>
+                	<sec:authorize access="hasAnyRole('Admin,Management')">
+                	<c:if test="${profile.id ne sprofile.id}">
+	                	<c:if test="${profile.accepted ne true}">
+	                	<a class="btn-flat icon pull-right accept" href="profile/accept/${profile.id}" data-toggle="tooltip" title="Aktywuj profil" data-placement="top"><i class="icon-asterisk"></i></a>
+	                	</c:if>
+	                	<c:if test="${profile.accepted eq true}">
+	                	<a class="btn-flat icon pull-right unaccept" href="profile/unaccept/${profile.id}" data-toggle="tooltip" title="Dezaktywuj profil" data-placement="top"><i class="icon-ban-circle"></i></a>
+	                	</c:if>
+	                	<a class="btn-flat icon pull-right delete-user" href="profile/delete/${profile.id}" data-toggle="tooltip" title="Usuń profil" data-placement="top"><i class="icon-trash"></i></a>
+                	</c:if>
+                	
 	                <a class="btn-flat icon large pull-right edit" href="profile/edit/${profile.id}" data-toggle="tooltip" title="Edytuj profil">Edytuj ten profil</a>
+	                </sec:authorize>
                 </div>
                 
              </div>
@@ -60,27 +92,51 @@
                 <!-- bio, new note & orders column -->
                 <div class="col-md-9 bio">
                     <div class="profile-box">
-                        <!-- biography -->
-                        <div class="col-md-12 section">
-                            <h6>Notatki</h6>
-                            <p>There are many variations of passages of Lorem Ipsum available but the majority have humour suffered alteration in believable some formhumour , by injected humour, or randomised words which don't look even slightly believable. </p>
-                        </div>
+                    
+                        <!-- new comment form -->
+                        <div class="col-md-12 section comment">
+                            <h6>Krótka notatka do profilu</h6>
+                            <p>
+                            <c:choose>
+                            <c:when test="${not empty profile.note}">Notatkę napisał: ${profile.note.editor.name}</c:when>
+                            <c:otherwise>Dodaj krótką notatkę by o czymś nie zapomnieć.</c:otherwise>
+                            </c:choose>
+                            </p>
+                            
+                            <form:form method="post" modelAttribute="profileForm" action="profile/note" class="">
+	                    	<spring:bind path="note">
+	                    	<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
+                            <div class="field-box ${classes}">
+							        <form:textarea path="note" cssClass="form-control" rows="4" cols="20" placeholder="Notatka"/>
+	                                <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
+	                        </div>                           
+                            </spring:bind>                            
+                            
+                            <div class="col-md-12 submit-box pull-right">
+                                <input type="submit" class="btn-glow primary" value="Dodaj notatkę">
+                            </div>
+                            </form:form>
+                            
+                        </div>                    
 
 						<c:if test="${!empty reports}">
-                        <h6>Ostatnie raporty</h6>
+                        <h3>Niezarchiwizowane raporty (${fn:length(reports)}/${maxtemp})</h3>
 			            <div class="row">
-			                <div class="col-md-12">
+			                <div class="col-md-11">
 			                    <table class="table table-hover">
 			                        <thead>
 			                            <tr>
-			                                <th class="col-md-3 sortable">Nazwa pliku
+			                                <th class="col-md-3">Nazwa pliku
 			                                </th>
-			                                <th class="col-md-2 sortable">Data wygenerowania
+			                                <th class="col-md-2">Data wygenerowania
 			                                    <span class="line"></span>
 			                                </th>
-			                                <th class="col-md-2 sortable">
+			                                <th class="col-md-2">
 			                                    <span class="line"></span>Definicja
 			                                </th>
+			                                <th class="align-right">
+			                                    <span class="line"></span>&nbsp;
+			                                </th>   			                                
 			                            </tr>
 			                        </thead>
 			                        <tbody>
@@ -100,27 +156,21 @@
 			                            <c:otherwise>${report.pattern.name} ${report.pattern.version}</c:otherwise>
 			                            </c:choose>
 			                            </td>
+			                            <td class="align-right">
+				                            <ul class="actions">
+				                                <li class="last"><a href="report/archives/archive/${report.id}"><i class="tool" title="Przenieś do archiwum"></i>&nbsp;</a></li>
+				                                <li class="last"><a href="#" class="report-delete" data-url="profile/report/archives/delete/${report.id}"><i class="table-delete" title="Usuń"></i>&nbsp;</a></li>
+				                            </ul>
+			                            </td>			                            
 			                        </tr>
 			                        </c:forEach>
 			                        </tbody>
 			                    </table>
 			                </div>                
 			            </div>
-			            
 			            </c:if>
 
-                        <!-- new comment form -->
-                        <div class="col-md-12 section comment">
-                            <h6>Krótka notatka do profilu</h6>
-                            <p>Dodaj krótką notatkę by o czymś nie zapomnieć.</p>
-                            <textarea></textarea>
-                            <!-- a href="#">Attach files</a-->
-                            <div class="col-md-12 submit-box pull-right">
-                                <input type="submit" class="btn-glow primary" value="Dodaj notatkę">
-                                <span>&nbsp;</span>
-                                <input type="reset" value="Anuluj" class="reset">
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 

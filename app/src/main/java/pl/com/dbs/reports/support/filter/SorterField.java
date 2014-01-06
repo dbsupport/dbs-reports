@@ -3,7 +3,7 @@ package pl.com.dbs.reports.support.filter;
 import java.io.Serializable;
 
 /**
- * TODO
+ * Sorted field.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

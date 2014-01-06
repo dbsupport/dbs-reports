@@ -4,7 +4,8 @@
 package pl.com.dbs.reports.report.domain;
 
 /**
- * TODO
+ * Report template enum.
+ * @see Manifest ATTRIBUTE_NAME_TEMPLATE
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

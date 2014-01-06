@@ -5,6 +5,8 @@ package pl.com.dbs.reports.parameter.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -13,7 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import pl.com.dbs.reports.support.db.domain.IEntity;
 
 /**
- * TODO
+ * Parameters.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -33,10 +35,18 @@ public class Parameter implements IEntity {
 	@Column(name = "value")
 	private String value;
 	
+	@Column(name = "type")
+	@Enumerated(EnumType.STRING)
+	private ParameterType type;
+	
 	public Parameter() {}
 
 	public String getKey() {
 		return key;
+	}
+
+	public ParameterType getType() {
+		return type;
 	}
 
 	public void changeValue(String value) {

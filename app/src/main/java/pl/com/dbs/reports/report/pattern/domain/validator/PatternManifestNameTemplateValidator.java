@@ -44,7 +44,7 @@ public class PatternManifestNameTemplateValidator extends PatternValidator {
 
 	@Override
 	public int getOrder() {
-		return 10000;
+		return 2;
 	}		
 	
 }

@@ -26,3 +26,13 @@
 .users-list .table ul.actions i:hover {
   opacity: 1;
 }
+
+
+.users-list .table a.name.inactive {
+	color: inactivecaption;
+}
+
+.users-list .table a.name.deleted {
+	color: inactivecaption;
+	text-decoration: line-through;
+}

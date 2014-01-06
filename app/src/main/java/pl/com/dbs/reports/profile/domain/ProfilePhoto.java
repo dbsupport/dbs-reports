@@ -19,7 +19,7 @@ import org.apache.commons.io.FileUtils;
 import pl.com.dbs.reports.support.db.domain.IEntity;
 
 /**
- * TODO
+ * Profile photo data.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

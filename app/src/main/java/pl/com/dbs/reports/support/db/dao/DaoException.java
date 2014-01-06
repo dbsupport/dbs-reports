@@ -4,7 +4,7 @@
 package pl.com.dbs.reports.support.db.dao;
 
 /**
- * TODO
+ * Sth went wrond during db operation.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

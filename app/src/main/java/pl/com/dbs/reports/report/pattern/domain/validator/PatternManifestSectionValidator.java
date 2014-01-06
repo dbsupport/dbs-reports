@@ -48,7 +48,7 @@ public class PatternManifestSectionValidator extends PatternValidator {
 
 	@Override
 	public int getOrder() {
-		return HIGHEST_PRECEDENCE;
+		return 1;
 	}
 	
 }

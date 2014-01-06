@@ -10,7 +10,7 @@ import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.authority.domain.Authority;
 
 /**
- * TODO
+ * Locally creation profile data.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -24,6 +24,7 @@ public interface ProfileCreation {
 	String getPhone();
 	Address getAddress();
 	File 	getPhoto();
+	boolean isAccepted();
 	
 	List<Authority> getAuthorities();
 	List<Access> getAccesses();

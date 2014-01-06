@@ -34,8 +34,8 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.Validate;
 
 import pl.com.dbs.reports.access.domain.Access;
-import pl.com.dbs.reports.api.report.ReportFormat;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
+import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.api.report.pattern.PatternManifest;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.profile.domain.Profile;
@@ -110,6 +110,9 @@ public class ReportPattern extends AEntity implements Pattern {
 	@Transient
 	private Map<String, byte[]> inits = new HashMap<String, byte[]>();
 	
+	@Column(name = "filename")
+	private String filename;	
+	
 	@Lob
 	@Column(name = "content")
 	@Basic(fetch = FetchType.LAZY)
@@ -117,34 +120,26 @@ public class ReportPattern extends AEntity implements Pattern {
 	
 	public ReportPattern() {/* JPA */}
 	
-	public ReportPattern(final byte[] content, 
-						 final Profile creator, 
-						 final String name, 
-						 final String version, 
-						 final String author, 
-						 final String factory, 
-						 final PatternManifest manifest,
-						 final List<String> accesses,
-						 final List<ReportPatternTransformate> transformates,
-						 final List<ReportPatternForm> forms) {
-		Validate.isTrue(content.length>0, "A content is 0!");
-		Validate.notNull(creator, "Creator is no more!");
+	public ReportPattern(ReportPatternCreation context) {
+		Validate.isTrue(context.getContent().length>0, "A content is 0!");
+		Validate.notNull(context.getCreator(), "Creator is no more!");
 	
 		this.uploadDate = new Date();
-		this.creator = creator;
-		this.name = name;		
-		this.version = version;
-		this.author = author;
-		this.factory = factory;
-		this.manifest = (ReportPatternManifest)manifest;
-		this.accesses = accesses;
-		this.transformates = transformates;
-		this.content = content;
-		this.forms = forms;
+		this.creator = context.getCreator();
+		this.name = context.getName();		
+		this.version = context.getVersion();
+		this.author = context.getAuthor();
+		this.factory = context.getFactory();
+		this.manifest = (ReportPatternManifest)context.getManifest();
+		this.accesses = context.getAccesses();
+		this.transformates = context.getTransformates();
+		this.filename = context.getFilename();
+		this.content = context.getContent();
+		this.forms = context.getForms();
 		this.active = true;
 		
-		for (ReportPatternTransformate t : transformates) t.setPattern(this);
-		for (ReportPatternForm f : forms) f.setPattern(this);
+		for (ReportPatternTransformate t : context.getTransformates()) t.setPattern(this);
+		for (ReportPatternForm f : context.getForms()) f.setPattern(this);
 	}
 	
 	/**
@@ -216,6 +211,10 @@ public class ReportPattern extends AEntity implements Pattern {
 		return content;
 	}
 	
+	public String getFilename() {
+		return filename;
+	}
+
 	public List<String> getAccesses() {
 		return accesses;
 	}
@@ -246,17 +245,17 @@ public class ReportPattern extends AEntity implements Pattern {
 		return SessionContext.getProfile()!=null&&isAccessible(SessionContext.getProfile().getAccesses());
 	}
 	
-	public List<ReportFormat> getFormats() {
-		Set<ReportFormat> result = new HashSet<ReportFormat>();
+	public List<PatternFormat> getFormats() {
+		Set<PatternFormat> result = new HashSet<PatternFormat>();
 		for (ReportPatternTransformate transformate : transformates) 
 			result.add(transformate.getFormat());
-		return new ArrayList<ReportFormat>(result);		
+		return new ArrayList<PatternFormat>(result);		
 	}
 	
 	public String getFormatsAsString() {
 		StringBuffer sb = new StringBuffer();
 		Separator s = new Separator(",");
-		for (ReportFormat format : getFormats()) sb.append(s).append(format.getExt());
+		for (PatternFormat format : getFormats()) sb.append(s).append(format.getFormat().getDefaultExt());
 		return sb.toString();		
 	}
 

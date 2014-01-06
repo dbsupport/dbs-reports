@@ -20,8 +20,13 @@
 	<context:annotation-config />
 	
 	<!-- Scans the classpath for annotated components that will be auto-registered as Spring beans.
- 	For example @Controller and @Service. Make sure to set the correct base-package-->	
-	<context:component-scan base-package="pl.com.dbs.reports" />
+ 	For example @Controller and @Service. Make sure to set the correct base-package
+ 	UWAGA!
+ 	pl.com.dbs.reports.**.web.* - skanuje tylko pakiet z web, 
+ 	dzieki czemu nie powtarza skanowania dla aplikacji.
+ 	Dzieki temu nie ma np. dwoch ClientDataSource  
+ 	-->	
+	<context:component-scan base-package="pl.com.dbs.reports.**.web.*" />
 	
 	 <!-- the mvc resources tag does the magic -->
 	 <!-- to samo tez w web-security-context.xml -->

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.com.dbs.reports.parameter.domain.Parameter;
+import pl.com.dbs.reports.parameter.domain.ParameterType;
 import pl.com.dbs.reports.support.web.form.AForm;
 
 
@@ -43,10 +44,12 @@ public class ParameterEditForm extends AForm {
 	public class Param { 
 		private String key;
 		private String value;
+		private ParameterType type;
 		
 		Param(Parameter param) {
 			this.key = param.getKey();
 			this.value = param.toString();
+			this.type = param.getType();
 		}
 
 		public String getKey() {
@@ -63,6 +66,10 @@ public class ParameterEditForm extends AForm {
 
 		public void setValue(String value) {
 			this.value = value;
+		}
+
+		public ParameterType getType() {
+			return type;
 		}
 	}
 	

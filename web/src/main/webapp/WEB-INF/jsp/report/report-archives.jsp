@@ -8,7 +8,9 @@
 <link rel="stylesheet" href="css/compiled/user-list.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-browser.css" type="text/css" media="screen" />
 </tiles:putAttribute>
-
+<tiles:putAttribute name="js" type="string">
+<script src="js/dbs/dbs-report-archives.js"></script>
+</tiles:putAttribute> 
 <tiles:putAttribute name="form" type="string">
                 <form:form method="post" modelAttribute="reportArchivesForm" action="report/archives" class="">
                		<form:input path="name" cssClass="col-md-5 search" placeholder="Wyszukaj..." onblur="this.form.submit();"/>
@@ -53,7 +55,7 @@
                         <!-- row -->
                         <tr class="first">
                             <td>
-                                ${report.name}
+                                <a href="report/archives/display/${report.id}" title="Podgląd">${report.name}</a>
                             </td>
                             <td>
                             	<fmt:formatDate value="${report.generationDate}" type="both" pattern="dd-MM-yyyy HH:mm:ss" />
@@ -65,19 +67,20 @@
                             </c:choose>
                             </td>
                             <td class="align-left">
-                             	<c:if test="${!empty report.creator.photo}">
-                                <img src="profile/photo/${report.creator.photo.id}" class="img-circle avatar" />
-                             	</c:if>
-                             	<c:if test="${empty report.creator.photo}">
-                             	<img src="img/no-img-personal.png" class="img-circle avatar" />
-                             	</c:if>
-                                <a href="profile/${report.creator.id}" class="name">${report.creator.name}</a>
+                            	<c:choose>
+                            	<c:when test="${!empty report.creator.photo and report.creator.active eq true}"><img src="profile/photo/${report.creator.photo.id}" class="img-circle avatar" /></c:when>
+                            	<c:otherwise><img src="img/no-img-personal.png" class="img-circle avatar" /></c:otherwise>
+                            	</c:choose>
+                            	
+                            	<c:choose>
+                            	<c:when test="${report.creator.active eq true and report.creator.accepted eq true}"><a href="profile/${report.creator.id}" class="name"><c:choose><c:when test="${report.creator.global}">${report.creator.description}</c:when><c:otherwise>${report.creator.name}</c:otherwise></c:choose></a></c:when>
+                            	<c:when test="${report.creator.active eq true and report.creator.accepted eq false}"><a href="profile/${report.creator.id}" class="name inactive"><c:choose><c:when test="${report.creator.global}">${report.creator.description}</c:when><c:otherwise>${report.creator.name}</c:otherwise></c:choose></a></c:when>
+                            	<c:otherwise><a class="name deleted"><c:choose><c:when test="${report.creator.global}">${report.creator.description}</c:when><c:otherwise>${report.creator.name}</c:otherwise></c:choose></a></c:otherwise>
+                            	</c:choose>
                             </td>
                             <td class="align-right">
 	                            <ul class="actions">
-	                                <li><a href="report/archives/display/${report.id}"><i class="table-edit" title="Podgląd"></i></a></li>
-	                                <li><a href="report/archives/email/${pattern.id}"><i class="table-settings" title="Wyślij email'em"></i></a></li>
-	                                <li class="last"><a href="report/archives/delete/${report.id}"><i class="table-delete" title="Usuń raport"></i></a></li>
+	                                <li class="last"><a href="#" class="report-delete" data-url="report/archives/delete/${report.id}"><i class="table-delete" title="Usuń raport"></i></a></li>
 	                            </ul>
                             </td>                             
                         </tr>

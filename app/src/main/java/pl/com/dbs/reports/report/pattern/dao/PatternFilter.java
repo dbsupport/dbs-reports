@@ -12,11 +12,12 @@ import org.apache.commons.lang.Validate;
 import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
+import pl.com.dbs.reports.report.pattern.domain.ReportPattern_;
 import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.db.dao.AFilter;
 
 /**
- * TODO
+ * Report pattern filter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -40,8 +41,8 @@ public class PatternFilter extends AFilter<ReportPattern> {
 		for (Access access : profile.getAccesses())
 			this.accesses.add(access.getName());
 		getPager().setPageSize(DEFAULT_PAGER_SIZE);
-		getSorter().add("uploadDate", false);
-		getSorter().add("name", true);
+		getSorter().add(ReportPattern_.uploadDate.getName(), false);
+		getSorter().add(ReportPattern_.name.getName(), true);
 	}
 	
 	public PatternFilter(long id) {

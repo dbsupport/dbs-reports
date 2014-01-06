@@ -15,7 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import pl.com.dbs.reports.support.db.domain.IEntity;
 
 /**
- * TODO
+ * Application access roles.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -24,6 +24,9 @@ import pl.com.dbs.reports.support.db.domain.IEntity;
 @Table(name = "tau_authority")
 public class Authority implements IEntity, GrantedAuthority {
 	private static final long serialVersionUID = 4370570750104490857L;
+	public static final String USER = "User";
+	public static final String MANAGEMENT = "Management";
+	public static final String ADMIN = "Admin";
 	
 	@Id
 	@Column(name = "id")

@@ -3,6 +3,7 @@
  */
 package pl.com.dbs.reports.report.web.form;
 
+import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.dao.ReportFilter;
 import pl.com.dbs.reports.support.web.form.AForm;
 
@@ -31,10 +32,10 @@ public class ReportArchivesForm extends AForm {
 		this.filter = new ReportFilter();
 	}
 
-	public void reset(String name) {
+	public void reset(Profile profile) {
 		super.reset();
 		this.filter = new ReportFilter();
-		this.filter.putName(name);
+		this.filter.putName(profile.getName());
 	}
 
 	

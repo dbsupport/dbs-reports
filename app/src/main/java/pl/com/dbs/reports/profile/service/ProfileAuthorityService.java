@@ -12,7 +12,7 @@ import pl.com.dbs.reports.authority.domain.Authority;
 import pl.com.dbs.reports.profile.dao.ProfileAuthorityDao;
 
 /**
- * TODO
+ * Authority service.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

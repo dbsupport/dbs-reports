@@ -6,6 +6,7 @@
     <!-- sidebar -->
     <div id="sidebar-nav">
 	       <ul id="dashboard-menu">
+	       <sec:authorize access="hasAnyRole('User,Admin,Management')">
             <li class="<c:if test="${fn:startsWith(id, 'dbs-page-profile')}">active</c:if>">
             	<c:if test="${fn:startsWith(id, 'dbs-page-profile')}">
                 <div class="pointer">
@@ -19,13 +20,15 @@
                     <i class="icon-chevron-down"></i>
                 </a>
                 <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-profile')}">active</c:if>">
-                	<li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-profile')}">active</c:if>" href="profile">Twój profil</a></li>
+                	<li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-profile-current')}">active</c:if>" href="profile">Twój profil</a></li>
                 	<sec:authorize access="hasAnyRole('Admin,Management')">
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-list')}">active</c:if>" href="profile/list">Lista profili</a></li>
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-new')}">active</c:if>" href="profile/new">Nowy profil</a></li>
                     </sec:authorize>
                 </ul>
             </li>
+            </sec:authorize>
+            <sec:authorize access="hasAnyRole('User,Admin,Management')">
             <li>
             	<c:if test="${fn:startsWith(id, 'dbs-page-report')}">
                 <div class="pointer">
@@ -47,6 +50,7 @@
                     </sec:authorize>
                 </ul>
             </li>
+            </sec:authorize>
             <sec:authorize access="hasAnyRole('Admin,Management')">
             <li>
             	<c:if test="${fn:startsWith(id, 'dbs-page-access') or fn:startsWith(id, 'dbs-page-parameter')}">
@@ -64,7 +68,7 @@
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-access-list')}">active</c:if>" href="access/list">Uprawnienia raportowe</a></li>
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-access-new')}">active</c:if>" href="access/new">Nowe uprawnienie raportowe</a></li>
                 	<li>&nbsp;</li>
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-parameter-edit')}">active</c:if>" href="param/edit">Parametry systemowe</a></li>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-parameter-edit')}">active</c:if>" href="param/edit">Parametry bazy danych</a></li>
                 </ul>
             </li>            
             </sec:authorize>

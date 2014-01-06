@@ -10,7 +10,7 @@ import pl.com.dbs.reports.profile.dao.ProfilePhotoDao;
 import pl.com.dbs.reports.profile.domain.ProfilePhoto;
 
 /**
- * TODO
+ * Profile photo service.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

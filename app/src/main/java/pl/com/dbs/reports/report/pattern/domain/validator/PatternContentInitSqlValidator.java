@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
 import pl.com.dbs.reports.api.report.pattern.PatternValidator;
-import pl.com.dbs.reports.api.support.db.ConnectionContext;
-import pl.com.dbs.reports.api.support.db.ConnectionService;
 import pl.com.dbs.reports.api.support.db.SqlExecutor;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
@@ -31,7 +29,6 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
 @Service
 public class PatternContentInitSqlValidator extends PatternValidator {
 	@Autowired private SqlExecutor executor;
-	@Autowired private ConnectionService connectionService;
 
 	@Override
 	public void validate(Pattern pattern) throws PatternValidationException {
@@ -41,8 +38,6 @@ public class PatternContentInitSqlValidator extends PatternValidator {
 		ReportPattern rpattern = (ReportPattern)pattern;
 		
 		if (!StringUtils.isBlank(sql)) {
-			ConnectionContext context = connectionService.getContext();
-			
 			StringTokenizer st = new StringTokenizer(sql, ";");
 			while (st.hasMoreTokens()) {
 				final String token = StringUtils.trim(st.nextToken());
@@ -54,7 +49,7 @@ public class PatternContentInitSqlValidator extends PatternValidator {
 				 * Try execute safetly...
 				 */
 				try {
-					executor.execute(context, new String(content));
+					executor.execute(new String(content));
 				} catch (Exception e) {
 					throw new PatternValidationException(e, "report.pattern.import.content.validation.detailed.error", Arrays.asList(new String[] {token, e.getMessage()}));
 				}
@@ -64,6 +59,6 @@ public class PatternContentInitSqlValidator extends PatternValidator {
 
 	@Override
 	public int getOrder() {
-		return 6000;
+		return 5;
 	}	
 }

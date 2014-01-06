@@ -29,33 +29,35 @@
 					        <input class="form-control inline-input" type="text" readonly="readonly" value="${profileEditForm.login}"/>
 					    </div>										
 						
-                   		<spring:bind path="passwd">
-                   		<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
-                        <div class="field-box ${classes}">
-	                        <label>Hasło</label>
-                                <input name="passwd" class="form-control" type="password" placeholder="Hasło"/>
-                                <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
-                        </div>
-                        </spring:bind>
-
-                    	
-                   		<spring:bind path="firstName">
-                   		<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
-                        <div class="field-box ${classes}">
-                        <label>Imię</label>
-                                <form:input path="firstName" cssClass="form-control" placeholder="Imię"/>
-                                <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
-                        </div>
-                        </spring:bind>
-	                            
-                   		<spring:bind path="lastName">
-                   		<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
-                        <div class="field-box ${classes}">
-                            <label>Nazwisko</label>
-                                <form:input path="lastName" cssClass="form-control" placeholder="Nazwisko"/>
-                                <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
-                        </div>
-                        </spring:bind>
+						<c:if test="${profileEditForm.global ne true}">
+	                   		<spring:bind path="passwd">
+	                   		<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
+	                        <div class="field-box ${classes}">
+		                        <label>Hasło</label>
+	                                <input name="passwd" class="form-control" type="password" placeholder="Hasło"/>
+	                                <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
+	                                <span class="alert-msg"><i class="icon-ok-sign"></i> Jeśli nie podasz nie zostanie zmienione</span>
+	                        </div>
+	                        </spring:bind>
+	                    	
+	                   		<spring:bind path="firstName">
+	                   		<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
+	                        <div class="field-box ${classes}">
+	                        <label>Imię</label>
+	                                <form:input path="firstName" cssClass="form-control" placeholder="Imię"/>
+	                                <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
+	                        </div>
+	                        </spring:bind>
+		                            
+	                   		<spring:bind path="lastName">
+	                   		<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
+	                        <div class="field-box ${classes}">
+	                            <label>Nazwisko</label>
+	                                <form:input path="lastName" cssClass="form-control" placeholder="Nazwisko"/>
+	                                <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
+	                        </div>
+	                        </spring:bind>
+                        </c:if>
                            
                     	<spring:bind path="email">
                         <c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>

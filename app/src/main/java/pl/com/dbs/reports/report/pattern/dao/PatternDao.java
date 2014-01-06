@@ -15,14 +15,16 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import pl.com.dbs.reports.profile.domain.Profile;
+import pl.com.dbs.reports.profile.domain.Profile_;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
+import pl.com.dbs.reports.report.pattern.domain.ReportPattern_;
 import pl.com.dbs.reports.support.db.dao.ADao;
 import pl.com.dbs.reports.support.db.dao.ContextDao;
 import pl.com.dbs.reports.support.db.dao.IContextDao;
 
 
 /**
- * TODO
+ * Pattern CRUD.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -46,23 +48,25 @@ public class PatternDao extends ADao<ReportPattern, Long> {
 		IContextDao<ReportPattern> c = new ContextDao<ReportPattern>(em, ReportPattern.class, filter);
 	    
 		Predicate p = c.getBuilder().conjunction();
-	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get("active"), 1));
+	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(ReportPattern_.active), 1));
 	    
 	    if (!filter.getAccesses().isEmpty()) {
-	    	p = c.getBuilder().and(p, c.getRoot().get("accesses").in(filter.getAccesses()));
+	    	p = c.getBuilder().and(p, c.getRoot().get(ReportPattern_.accesses).in(filter.getAccesses()));
 	    } else {
-	    	p = c.getBuilder().and(p, c.getRoot().get("accesses").isNull());
+	    	p = c.getBuilder().and(p, c.getRoot().get(ReportPattern_.accesses).isNull());
 	    }
 	    if (!StringUtils.isBlank(filter.getName())) {
-	    	Predicate ex1 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("name")), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex2 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("version")), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex3 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("author")), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex4 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("factory")), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex1 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(ReportPattern_.name)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex2 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(ReportPattern_.version)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex3 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(ReportPattern_.author)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex4 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(ReportPattern_.factory)), "%"+filter.getName().toUpperCase()+"%");
 	    	
-	    	Join<ReportPattern, Profile> a = c.getRoot().join("creator", JoinType.LEFT);
-	    	Predicate ex5 = c.getBuilder().like(c.getBuilder().upper(a.<String>get("name")), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex6 = c.getBuilder().like(c.getBuilder().upper(a.<String>get("login")), "%"+filter.getName().toUpperCase()+"%");
-	    	p = c.getBuilder().or(ex1, ex2, ex3, ex4, ex5, ex6);	    	
+	    	Join<ReportPattern, Profile> a = c.getRoot().join(ReportPattern_.creator, JoinType.LEFT);
+	    	Predicate ex5 = c.getBuilder().like(c.getBuilder().upper(a.<String>get(Profile_.firstname)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex6 = c.getBuilder().like(c.getBuilder().upper(a.<String>get(Profile_.lastname)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex7 = c.getBuilder().like(c.getBuilder().upper(a.<String>get(Profile_.description)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex8 = c.getBuilder().like(c.getBuilder().upper(a.<String>get(Profile_.login)), "%"+filter.getName().toUpperCase()+"%");
+	    	p = c.getBuilder().or(ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8);	    	
 	    }
 //	    if (!StringUtils.isBlank(filter.getVersion())) {
 //	    	p = c.getBuilder().and(p, c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("version")), "%"+filter.getVersion().toUpperCase()+"%"));
@@ -86,16 +90,16 @@ public class PatternDao extends ADao<ReportPattern, Long> {
 		IContextDao<ReportPattern> c = new ContextDao<ReportPattern>(em, ReportPattern.class, filter);
 	    
 		Predicate p = c.getBuilder().conjunction();
-	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get("active"), 1));
+	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(ReportPattern_.active), 1));
 	    
 	    if (!StringUtils.isBlank(filter.getName())) {
-	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get("name"), filter.getName()));
+	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(ReportPattern_.name), filter.getName()));
 	    }
 	    if (!StringUtils.isBlank(filter.getVersion())) {
-	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get("version"), filter.getVersion()));
+	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(ReportPattern_.version), filter.getVersion()));
 	    }
 	    if (!StringUtils.isBlank(filter.getFactory())) {
-	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get("factory"), filter.getFactory()));
+	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(ReportPattern_.factory), filter.getFactory()));
 	    }
 	    
 	    c.getCriteria().where(p);

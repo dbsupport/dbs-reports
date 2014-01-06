@@ -16,7 +16,7 @@ import pl.com.dbs.reports.access.domain.AccessCreation;
 import pl.com.dbs.reports.access.domain.AccessModification;
 
 /**
- * TODO
+ * Access service.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

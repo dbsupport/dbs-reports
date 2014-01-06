@@ -38,7 +38,7 @@ import pl.com.dbs.reports.support.db.domain.AEntity;
 
 
 /**
- * TODO
+ * Report entity.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -78,6 +78,9 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 	@OneToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="creator_id")
     private Profile creator;    
+	
+	@Column(name = "temporary")
+	private boolean temporary;	
     
 	@Lob
 	@Column(name = "content")
@@ -86,20 +89,23 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 
     public Report() {/* JPA */}
     
-    public Report(ReportPattern pattern, Profile profile, String name, ReportFormat format, byte[] content, Map<String, String> params) {
-    	this(pattern, profile, name, format, content);
-    	this.parameters = params;
+    public Report(ReportCreation context) {
+    	this.generationDate = new Date();
+    	Validate.notNull(context.getPattern(), "Pattern is no more!");
+    	this.pattern = context.getPattern();
+		Validate.notNull(context.getProfile(), "Profile is no more!");
+		this.creator = context.getProfile();
+		Validate.notEmpty(context.getName(), "Name is no more!");
+    	this.name = context.getName();
+    	this.content = context.getContent();
+    	this.format = context.getFormat().getFormat();
+    	this.parameters = context.getParams();
+    	this.temporary = context.getTemporary();
     }
     
-    public Report(ReportPattern pattern, Profile profile, String name, ReportFormat format, byte[] content) {    	
-    	this.generationDate = new Date();
-    	Validate.notNull(pattern, "Pattern is no more!");
-    	this.pattern = pattern;
-		Validate.notNull(profile, "Profile is no more!");
-		this.creator = profile;
-		Validate.notEmpty(name, "Name is no more!");
-    	this.name = name;
-    	this.content = content;
+    public Report archive() {
+    	this.temporary = false;
+    	return this;
     }
     
 	@Override

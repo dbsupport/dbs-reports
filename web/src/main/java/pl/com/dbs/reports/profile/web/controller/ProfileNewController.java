@@ -43,7 +43,7 @@ import pl.com.dbs.reports.support.web.alerts.Alerts;
 import pl.com.dbs.reports.support.web.file.FileMeta;
 
 /**
- * TODO
+ * Add new profile.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

@@ -3,12 +3,7 @@
  */
 package pl.com.dbs.reports.report.domain;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,7 +12,8 @@ import org.apache.log4j.Logger;
 import pl.com.dbs.reports.support.utils.separator.Separator;
 
 /**
- * TODO
+ * Block of input variables and pattern data.
+ * Need to be inflated mostly by some data.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -73,16 +69,16 @@ public class ReportBlockInflation {
 	 * Return SQL.
 	 * If necessary replace it's input parameters with those from provided params' map.
 	 */
-	String build(Map<String, String> params) {
+	String build(Map<String, String> params) throws ReportBlockInflationException {
 		String result = new String(sql);
 		
 		if (params.isEmpty()) {
-			if (!input.isEmpty()) throw new IllegalStateException("Inflation("+label+") requires input parameters!");
+			if (!input.isEmpty()) throw new ReportBlockInflationException("Inflation("+label+") requires input parameters!");
 		} else {
 			//..replace input parameters in SQL with provided parameters..
 			for (String key : input) {
 				String value = params.get(key);
-				if (value==null) throw new IllegalStateException("Inflation("+label+") requires input parameter:"+key+" but cant find one!");
+				if (value==null) throw new ReportBlockInflationException("Inflation("+label+") requires input parameter:"+key+" but cant find one!");
 				result = result.replaceAll("\\^\\$"+key+"\\^", value);
 			}
 		}
@@ -95,31 +91,31 @@ public class ReportBlockInflation {
 	 * Return results from ResultSet.
 	 * If ResultSet is not applicable to inflater throws IllegalStateException.
 	 */
-	LinkedList<Map<String, String>> build(final ResultSet rs) throws SQLException {
-		LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
-		
-		while (rs.next()) {
-			Map<String, String> params = new HashMap<String, String>();
-			ResultSetMetaData metaData = rs.getMetaData();
-			for (int i=1; i<=metaData.getColumnCount(); i++) {
-				String key = metaData.getColumnName(i);
-				String value = rs.getString(key);
-				params.put(key, value);
-			}
-			result.add(params);
-		}
-		
+//	LinkedList<ReportParameter> build(final ResultSet rs) throws SQLException {
+//		LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
+//		
 //		while (rs.next()) {
 //			Map<String, String> params = new HashMap<String, String>();
-//			for (String key : output) {
+//			ResultSetMetaData metaData = rs.getMetaData();
+//			for (int i=1; i<=metaData.getColumnCount(); i++) {
+//				String key = metaData.getColumnName(i);
 //				String value = rs.getString(key);
-//				if (value==null) throw new IllegalStateException("Inflation("+label+") requires output parameter:"+key+" but cant find one!");
 //				params.put(key, value);
 //			}
 //			result.add(params);
 //		}
-		return result;
-	}
+//		
+////		while (rs.next()) {
+////			Map<String, String> params = new HashMap<String, String>();
+////			for (String key : output) {
+////				String value = rs.getString(key);
+////				if (value==null) throw new IllegalStateException("Inflation("+label+") requires output parameter:"+key+" but cant find one!");
+////				params.put(key, value);
+////			}
+////			result.add(params);
+////		}
+//		return result;
+//	}
 	
 	@Override
 	public String toString() {

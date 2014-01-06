@@ -26,27 +26,30 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import pl.com.dbs.reports.api.report.Report;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.domain.ProfileException;
 import pl.com.dbs.reports.profile.domain.ProfilePhoto;
 import pl.com.dbs.reports.profile.service.ProfilePhotoService;
 import pl.com.dbs.reports.profile.service.ProfileService;
+import pl.com.dbs.reports.profile.web.form.ProfileForm;
 import pl.com.dbs.reports.profile.web.form.ProfileListForm;
 import pl.com.dbs.reports.profile.web.validator.ProfileListValidator;
-import pl.com.dbs.reports.report.dao.ReportFilter;
+import pl.com.dbs.reports.profile.web.validator.ProfileValidator;
 import pl.com.dbs.reports.report.service.ReportService;
+import pl.com.dbs.reports.report.web.controller.ReportArchivesController;
 import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 import pl.com.dbs.reports.support.web.file.FileMeta;
 
 /**
- * TODO
+ * Profiles actions..
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
 @Controller
-@SessionAttributes({ProfileListForm.KEY})
+@SessionAttributes({ProfileListForm.KEY, ProfileForm.KEY})
 @Scope("request")
 public class ProfileController {
 	private static final Logger logger = Logger.getLogger(ProfileController.class);
@@ -57,10 +60,16 @@ public class ProfileController {
 	@Autowired private ReportService reportService;
 	
 	@ModelAttribute(ProfileListForm.KEY)
-    public ProfileListForm createForm() {
+    public ProfileListForm createProfileListForm() {
 		ProfileListForm form = new ProfileListForm();
 		return form;
-    }		
+    }
+	
+	@ModelAttribute(ProfileForm.KEY)
+    public ProfileForm createProfileForm() {
+		ProfileForm form = new ProfileForm();
+		return form;
+    }	
 	
 	@RequestMapping(value="/profile/list", method = RequestMethod.GET)
     public String profiles(Model model, @ModelAttribute(ProfileListForm.KEY) final ProfileListForm form) {
@@ -69,25 +78,40 @@ public class ProfileController {
     }	
 	
 	@RequestMapping(value="/profile", method = RequestMethod.GET)
-    public String profile(Model model) {
-		Profile profile = profileService.find(SessionContext.getProfile().getId());
+    public String profile(Model model, @ModelAttribute(ProfileForm.KEY) final ProfileForm form) {
+		Profile profile = profileService.findById(SessionContext.getProfile().getId());
 		model.addAttribute("profile", profile);
-		ReportFilter filter = new ReportFilter();
-		filter.getPager().setPageSize(5);
-		model.addAttribute("reports", reportService.find(filter));		
+		model.addAttribute("sprofile", profile);
+		model.addAttribute("reports", reportService.findTemporary());
+		model.addAttribute("maxtemp", ReportService.MAX_TEMPORARY_REPORTS);
+		form.reset(profile);
 		return "profile/profile";
     }
 	
+	@RequestMapping(value= "/profile/note", method = RequestMethod.POST)
+    public String note(@Valid @ModelAttribute(ProfileForm.KEY) final ProfileForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+		if (!results.hasErrors()) {
+			try {
+				profileService.note(form.getId(), form.getNote());
+				alerts.addSuccess(ra, "profile.note.edited");
+			} catch (Exception e) {
+				alerts.addError(ra, "profile.note.not.edited", e.getMessage());
+			}
+		}
+		
+		return "redirect:/profile/"+form.getId();	
+	}	
+	
 	@RequestMapping(value="/profile/{id}", method = RequestMethod.GET)
-    public String profile(Model model, @PathVariable("id") Long id) {
-		Profile profile = profileService.find(id);
+    public String profile(Model model, @PathVariable("id") Long id, @ModelAttribute(ProfileForm.KEY) final ProfileForm form) {
+		Profile profile = profileService.findById(id);
 		model.addAttribute("profile", profile);
+		Profile sprofile = profileService.findById(SessionContext.getProfile().getId());
+		model.addAttribute("sprofile", sprofile);
 		
-		ReportFilter filter = new ReportFilter();
-		filter.getPager().setPageSize(5);
-		filter.putAccesses(profile);
-		model.addAttribute("reports", reportService.find(filter));
+		model.addAttribute("reports", null);
 		
+		form.reset(profile);
 		return "profile/profile";
     }	
 	
@@ -105,6 +129,42 @@ public class ProfileController {
 		return null; 
     }
 	
+	@RequestMapping(value="/profile/accept/{id}", method = RequestMethod.GET)
+    public String accept(Model model, @PathVariable("id") Long id, RedirectAttributes ra) {
+		if (id.equals(SessionContext.getProfile().getId())) {
+			alerts.addError(ra, "profile.accept.session.profile");
+			return "redirect:/profile/"+id;	
+		}
+		
+		try {
+			Profile profile = profileService.accept(id);
+			alerts.addSuccess(ra, "profile.accepted", profile.getName());
+		} catch (Exception e) {
+			alerts.addError(ra, "profile.delete.wrong.id");
+			return "redirect:/profile/list";	
+		}
+		
+		return "redirect:/profile/"+id;
+    }		
+	
+	@RequestMapping(value="/profile/unaccept/{id}", method = RequestMethod.GET)
+    public String unaccept(Model model, @PathVariable("id") Long id, RedirectAttributes ra) {
+		if (id.equals(SessionContext.getProfile().getId())) {
+			alerts.addError(ra, "profile.unaccept.session.profile");
+			return "redirect:/profile/"+id;	
+		}
+		
+		try {
+			Profile profile = profileService.unaccept(id);
+			alerts.addSuccess(ra, "profile.unaccepted", profile.getName());
+		} catch (Exception e) {
+			alerts.addError(ra, "profile.delete.wrong.id");
+			return "redirect:/profile/list";	
+		}
+		
+		return "redirect:/profile/"+id;
+    }	
+	
 	@RequestMapping(value= "/profile/list", method = RequestMethod.POST)
     public String profiles(@Valid @ModelAttribute(ProfileListForm.KEY) final ProfileListForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		return "redirect:/profile/list";
@@ -112,7 +172,7 @@ public class ProfileController {
 	
 	@RequestMapping(value="/profile/delete/{id}", method = RequestMethod.GET)
     public String delete(Model model, @PathVariable("id") Long id, HttpServletRequest request, RedirectAttributes ra) {
-		Profile profile = profileService.find(id);
+		Profile profile = profileService.findById(id);
 		if (profile==null) {
 			alerts.addError(ra, "profile.delete.wrong.id");
 			return "redirect:/profile/list";
@@ -130,7 +190,28 @@ public class ProfileController {
 			exception(e, request, ra);
 		}
 		return "redirect:/profile/list";
-    }	
+    }
+
+	/**
+	 * @see ReportArchivesController
+	 */
+	@RequestMapping(value="/profile/report/archives/delete/{id}", method = RequestMethod.GET)
+    public String delete(Model model, @PathVariable("id") Long id,   RedirectAttributes ra, HttpServletRequest request) {
+		if (id==null) {
+			alerts.addError(ra, "report.archive.no.report");
+			return "redirect:/profile";
+		}
+
+		try {
+			Report report = reportService.findNoMatterWhat(id);
+			reportService.delete(id);
+			alerts.addSuccess(ra, "report.archive.delete.success", report.getName());
+		} catch (Exception e) {
+			alerts.addError(ra, "report.archive.delete.error", e.getMessage());
+		}
+		
+		return "redirect:/profile";
+	}
 	
 	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {
 		if (e instanceof ProfileException) {
@@ -150,6 +231,7 @@ public class ProfileController {
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		if (binder.getTarget() instanceof ProfileListForm) binder.setValidator(new ProfileListValidator());
+		if (binder.getTarget() instanceof ProfileForm) binder.setValidator(new ProfileValidator());
 	}	
 	
 }

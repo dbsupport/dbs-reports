@@ -25,7 +25,7 @@
 		p:jpaProperties-ref="jpaProperties" />
 
 	<bean id="persistenceUnitManager" class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager"
-		p:persistenceXmlLocation="classpath*:META-INF/reports_persistence.xml"
+		p:persistenceXmlLocation="classpath*:META-INF/persistence.xml"
 		p:dataSources-ref="jpaDataSources" />
 
 	<util:map id="jpaDataSources">

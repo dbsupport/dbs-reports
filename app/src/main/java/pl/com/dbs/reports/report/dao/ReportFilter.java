@@ -11,11 +11,12 @@ import org.apache.commons.lang.Validate;
 import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.domain.Report;
+import pl.com.dbs.reports.report.domain.Report_;
 import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.db.dao.AFilter;
 
 /**
- * TODO
+ * Report filter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -31,9 +32,9 @@ public class ReportFilter extends AFilter<Report> {
 		Validate.notNull(profile, "Profile is no more!");
 		putAccesses(profile);
 		getPager().setPageSize(DEFAULT_PAGER_SIZE);
-		getSorter().add("generationDate", false);
-		getSorter().add("name", true);
-		getSorter().add("format", true);
+		getSorter().add(Report_.generationDate.getName(), false);
+		getSorter().add(Report_.name.getName(), true);
+		getSorter().add(Report_.format.getName(), true);
 	}
 	
 	public ReportFilter(long id) {

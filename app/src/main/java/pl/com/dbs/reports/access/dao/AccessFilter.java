@@ -4,10 +4,11 @@
 package pl.com.dbs.reports.access.dao;
 
 import pl.com.dbs.reports.access.domain.Access;
+import pl.com.dbs.reports.access.domain.Access_;
 import pl.com.dbs.reports.support.db.dao.AFilter;
 
 /**
- * TODO
+ * Access filter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -19,7 +20,7 @@ public class AccessFilter extends AFilter<Access> {
 	
 	public AccessFilter() {
 		getPager().setPageSize(DEFAULT_PAGER_SIZE);
-		getSorter().add("name", true);
+		getSorter().add(Access_.name.getName(), true);
 	}
 	
 	public String getName() {

@@ -29,7 +29,9 @@
                     	 	<div class="field-box">
                             	<label>Format:</label>
 	                            <div class="ui-select">
-		                            <form:select path="format" items="${reportGenerationForm.formats}"></form:select>
+		                            <form:select path="format">
+		                            	<form:options items="${reportGenerationForm.formats}" itemLabel="format.defaultExt" itemValue="ext"/>
+		                            </form:select>
 	                            </div>                            	
                         	</div>                        	
                         	

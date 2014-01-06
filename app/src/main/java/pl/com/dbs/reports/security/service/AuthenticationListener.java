@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
 /**
- * TODO
+ * Authentication events listener. 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -24,11 +24,10 @@ public class AuthenticationListener implements ApplicationListener<AbstractAuthe
 		UsernamePasswordAuthenticationToken source = (UsernamePasswordAuthenticationToken) event.getSource();
 		WebAuthenticationDetails details = (WebAuthenticationDetails)source.getDetails();
 		
-		if(event instanceof AbstractAuthenticationFailureEvent) {
+		if (event instanceof AbstractAuthenticationFailureEvent) {
 			String login = (String) source.getPrincipal();
 			log.info("AuthenticationFailure login: " + login + "\" ip: \"" + details.getRemoteAddress() + "\"");
-		}
-		else if(event instanceof AbstractAuthenticationEvent) {
+		} else if(event instanceof AbstractAuthenticationEvent) {
 			User user = (User) source.getPrincipal();
 			log.info("Authentication login: " + user.getUsername() + "\" ip: \"" + details.getRemoteAddress() + "\"");
 		}

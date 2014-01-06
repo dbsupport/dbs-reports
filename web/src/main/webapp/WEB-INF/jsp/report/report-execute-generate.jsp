@@ -23,12 +23,12 @@
                             
                     	 	<div class="field-box">
                             	<label>Format:</label>
-	                            	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportGenerationForm.format}"/>
+	                            	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportGenerationForm.format.format.defaultExt}"/>
                         	</div>                        	
 
                     	 	<div class="field-box">
                             	<label>Nazwa:</label>
-	                            	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportGenerationForm.name}"/>
+	                            	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportGenerationForm.fullname}"/>
                         	</div> 
                     		
                             <c:if test="${reportGenerationForm.fieldfull}">

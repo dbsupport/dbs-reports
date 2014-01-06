@@ -194,6 +194,6 @@ public class PatternContentFormValidator extends PatternValidator implements Err
 
 	@Override
 	public int getOrder() {
-		return 5000;
+		return 6;
 	}	
 }

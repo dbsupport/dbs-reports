@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="css/dbs/dbs-wizard.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-profile.css" type="text/css" media="screen" />
 </tiles:putAttribute>
+<tiles:putAttribute name="js" type="string">
+<script src="js/dbs/dbs-profile-new-summary.js"></script>
+</tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
 <form:form method="post" modelAttribute="profileEditForm" action="profile/edit/summary" class="" enctype="multipart/form-data">
@@ -27,10 +30,12 @@
         <label>Login</label>
         <input class="form-control inline-input" type="text" readonly="readonly" value="${profileEditForm.login}"/>
     </div>
+    <c:if test="${profileEditForm.global ne true}">
     <div class="field-box">
         <label>Imię/Nazwisko</label>
         <input class="form-control inline-input" type="text" readonly="readonly" value="${profileEditForm.firstName} ${profileEditForm.lastName}"/>
     </div>
+    </c:if>
     <div class="field-box">
         <label>Email</label>
         <input class="form-control inline-input" type="text" readonly="readonly" value="${profileEditForm.email}"/>
@@ -57,6 +62,18 @@
         </c:set>
        	<input class="form-control inline-input" type="text" readonly="readonly" value="${accesses}"/>
     </div>
+    
+	<spring:bind path="accepted">
+	<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
+    <div class="field-box ${classes}">
+    <label>Aktywny</label>
+    	<form:hidden path="accepted"/>
+		<div class="slider-frame primary">
+		    <span data-on-text="TAK" data-off-text="NIE" class="slider-button"></span>
+		</div>    
+        <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
+    </div>
+    </spring:bind>       
                     
 	<div class="wizard-actions">
 		<button type="button" class="btn-glow primary btn-prev" onclick="location.href='profile/edit/access'"><i class="icon-chevron-left"></i>&nbsp;Popraw</button><span>&nbsp;</span>

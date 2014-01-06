@@ -6,7 +6,7 @@ package pl.com.dbs.reports.support.db.domain;
 import java.io.Serializable;
 
 /**
- * TODO
+ * Enttity base interface.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

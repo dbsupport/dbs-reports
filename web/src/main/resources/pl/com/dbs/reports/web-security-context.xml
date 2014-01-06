@@ -31,7 +31,8 @@ xmlns="http://www.springframework.org/schema/beans"
 		<security:intercept-url pattern="/report/pattern/import/**" access="isFullyAuthenticated() and hasAnyRole('Admin,Management')" />
 		
 		<security:intercept-url pattern="/access/**" access="isFullyAuthenticated() and hasAnyRole('Admin,Management')" />
-
+		
+		<security:intercept-url pattern="/param/**" access="isFullyAuthenticated() and hasAnyRole('Admin')" />
 		
 		<security:intercept-url pattern="/**/*" access="isFullyAuthenticated() and hasAnyRole('Admin,Management,User')" />
 		<security:intercept-url pattern="/*" access="isFullyAuthenticated() and hasAnyRole('Admin,Management,User')" />
@@ -71,6 +72,7 @@ xmlns="http://www.springframework.org/schema/beans"
 			            <prop key="org.springframework.security.authentication.CredentialsExpiredException">/security/loginfailed?code=authenticate.password.change.required</prop>
 			            <prop key="org.springframework.security.authentication.AuthenticationException">/security/loginfailed?code=authenticate.not.authenticated</prop>
 			            <prop key="org.springframework.security.authentication.LockedException">/security/loginfailed?code=authenticate.account.locked</prop>
+			            <prop key="pl.com.dbs.reports.security.domain.AuthenticationConnectionException">/security/loginfailed?code=client.datasource.error</prop>
 			        </props>
 	  			 </property>
 	  		</bean>

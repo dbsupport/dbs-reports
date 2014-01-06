@@ -22,7 +22,7 @@ import pl.com.dbs.reports.api.report.pattern.PatternManifest;
 import pl.com.dbs.reports.report.domain.ReportNameTemplate;
 
 /**
- * TODO
+ * Report pattern manifest entity.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -45,6 +45,7 @@ public class ReportPatternManifest extends Manifest implements PatternManifest, 
 	public static final java.util.regex.Pattern MANIFEST_PATTERN = java.util.regex.Pattern.compile("^manifest(\\..+)*$",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	public static final java.util.regex.Pattern INFLATER_PATTERN = java.util.regex.Pattern.compile("^.+(\\.sql){1}$",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	public static final java.util.regex.Pattern EXTENSION_PATTERN = java.util.regex.Pattern.compile("^(.+)=(.+)$",  java.util.regex.Pattern.CASE_INSENSITIVE);
+	public static final java.util.regex.Pattern EXTENSION_ENGINE_PATTERN = java.util.regex.Pattern.compile("^(.*)\\|(.*)$",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	public static final java.util.regex.Pattern VARIABLE_PATTERN = java.util.regex.Pattern.compile("(\\$\\{.+?\\})+",  java.util.regex.Pattern.CASE_INSENSITIVE);	
 	
 	public static final String REPORT_NAME_TEMPLATE_DEFAULT = ReportNameTemplate.FILENAME.getVkey()+"-"+ReportNameTemplate.DATE_TIME.getVkey();

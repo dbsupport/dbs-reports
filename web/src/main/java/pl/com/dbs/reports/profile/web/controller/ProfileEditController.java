@@ -75,7 +75,7 @@ public class ProfileEditController {
 	
 	@RequestMapping(value="/profile/edit/{id}", method = RequestMethod.GET)
     public String init(Model model, @PathVariable("id") Long id, @ModelAttribute(ProfileEditForm.KEY) final ProfileEditForm form, RedirectAttributes ra) {
-		form.reset(profileService.find(id));
+		form.reset(profileService.findById(id));
 		if (!form.hasProfile()) {
 			alerts.addError(ra, "profile.edit.wrong.id");
 			return "redirect:/profile/list";
@@ -165,7 +165,7 @@ public class ProfileEditController {
 			
 			return "redirect:/profile/list";
 		}
-		return "redirect:/profile/edit/summary";
+		return "profile/profile-edit-summary";
 	}
 	
 	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {

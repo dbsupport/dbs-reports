@@ -15,7 +15,7 @@ import pl.com.dbs.reports.support.db.dao.ADao;
 import pl.com.dbs.reports.support.db.dao.ContextDao;
 
 /**
- * TODO
+ * Profile Authority CRUD
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

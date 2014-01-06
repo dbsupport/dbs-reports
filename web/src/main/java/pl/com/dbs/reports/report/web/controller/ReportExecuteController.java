@@ -16,6 +16,7 @@ import javax.xml.bind.JAXBException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,7 +43,7 @@ import pl.com.dbs.reports.support.web.form.DFormBuilder;
 
 
 /**
- * TODO
+ * Report generation.
  * 
  * http://www.beingjavaguys.com/2013/08/spring-mvc-file-upload-example.html
  * 
@@ -109,6 +110,10 @@ public class ReportExecuteController {
 		//..if it was no able to create form redirect and show error.. 
 		if (form==null) return "redirect:/report/pattern/list";
 		
+		if (reportService.exceededsTemporaryReports()) {
+			alerts.addWarning(request, "report.archive.maximum.exceeded", String.valueOf(reportService.findTemporary().size()));
+		}
+		
 		return "/report/report-execute-form";
     }
 	
@@ -130,6 +135,11 @@ public class ReportExecuteController {
 	@RequestMapping(value="/report/execute/generate", method = RequestMethod.GET)
     public String generate(Model model, @Valid @ModelAttribute(ReportExecuteForm.KEY) ReportExecuteForm form, 
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+		
+		if (reportService.exceededsTemporaryReports()) {
+			alerts.addWarning(request, "report.archive.maximum.exceeded", String.valueOf(reportService.findTemporary().size()));
+		}
+		
 		return "/report/report-execute-generate";
     }
 	
@@ -155,6 +165,9 @@ public class ReportExecuteController {
 		if (results.hasErrors()) {
 			
 		}
+		
+		model.addAttribute("maxtemp", ReportService.MAX_TEMPORARY_REPORTS);
+		model.addAttribute("reports", reportService.findTemporary());
 		return "/report/report-execute-summary";
     }
 	
@@ -205,29 +218,27 @@ public class ReportExecuteController {
 		return null;
     }
 	
-	@RequestMapping(value="/report/execute/summary/archive", method = RequestMethod.GET)
-    public String archive(Model model, @Valid @ModelAttribute(ReportExecuteForm.KEY) ReportExecuteForm form, 
-    		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
-
-		Report report = form.getReport();
-		if (report==null) {
-			alerts.addError(ra, "report.execute.no.report");
-			return "redirect:/report/execute/form";
-		}
-		
-		try {
-			reportService.archive(form.getReport());
-			alerts.addSuccess(ra, "report.execute.archive.file.success", report.getName());
-		} catch (Exception e) {
-			exception(e, form, ra, request);
-			return "redirect:/report/execute/summary";
-		}
-		
-		
-		return "redirect:/report/archives";
-	}
-	
-	
+//	@RequestMapping(value="/report/execute/summary/archive", method = RequestMethod.GET)
+//    public String archive(Model model, @Valid @ModelAttribute(ReportExecuteForm.KEY) ReportExecuteForm form, 
+//    		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+//
+//		Report report = form.getReport();
+//		if (report==null) {
+//			alerts.addError(ra, "report.execute.no.report");
+//			return "redirect:/report/execute/form";
+//		}
+//		
+//		try {
+//			reportService.archive(form.getReport().getId());
+//			alerts.addSuccess(ra, "report.execute.archive.file.success", report.getName());
+//		} catch (Exception e) {
+//			exception(e, form, ra, request);
+//			return "redirect:/report/execute/summary";
+//		}
+//		
+//		
+//		return "redirect:/report/archives";
+//	}
 	
 	private void exception(Exception e, ReportExecuteForm form, RedirectAttributes ra, HttpServletRequest request) {
 		if (e instanceof IOException) {
@@ -239,6 +250,9 @@ public class ReportExecuteController {
 		} else if (e instanceof ReportValidationException) {
 			alerts.addError(request, "report.execute.detailed.error", form.getName(), e.getMessage());
 			logger.error("report.execute.detailed.error:"+e.getStackTrace());
+		} else if (e instanceof DataAccessException) {
+			alerts.addError(request, "client.datasource.error.detailed", e.getMessage());
+			logger.error("client.datasource.error.detailed:"+e.getStackTrace());
 		} else {
 			alerts.addError(request, "report.execute.error", e.getMessage());
 			logger.error("report.execute.error:"+e.getMessage());

@@ -20,12 +20,14 @@ import org.springframework.stereotype.Repository;
 
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.domain.ProfileAddress;
+import pl.com.dbs.reports.profile.domain.ProfileAddress_;
+import pl.com.dbs.reports.profile.domain.Profile_;
 import pl.com.dbs.reports.support.db.dao.ADao;
 import pl.com.dbs.reports.support.db.dao.ContextDao;
 import pl.com.dbs.reports.support.db.dao.IContextDao;
 
 /**
- * TODO
+ * Profile CRUD.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -41,33 +43,84 @@ public class ProfileDao extends ADao<Profile, Long> {
 		return em;
 	}
 	
-	public Profile find(String login) {
-		Validate.notEmpty(login, "login is no more!");
+	@Override
+	public Profile find(Long id) {
+		Validate.notNull(id, "Id is no more!");
+		IContextDao<Profile> c = new ContextDao<Profile>(em, Profile.class);
+	    
+		Predicate p = c.getBuilder().conjunction();
+	    
+	    p = c.getBuilder().and(c.getBuilder().equal(c.getRoot().get(Profile_.active), 1));
+    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Profile_.id), id));
+	    
+	    c.getCriteria().where(p);
+	    List<Profile> profiles = executeQuery(c);
+	    if (profiles.size()>1) throw new IllegalStateException("Too many profiles with ID:"+id);
+	    
+	    return profiles.isEmpty()?null:profiles.get(0);
+	}
+	
+	public Profile findByIdNoMatterWhat(Long id) {
+		Validate.notNull(id, "Id is no more!");
+		return getEntityManager().find(clazz, id);
+	}	
+	
+	public Profile findByUuid(String uuid) {
+		Validate.notEmpty(uuid, "login is no more!");
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Profile> cq = cb.createQuery(Profile.class);
 	    final Root<Profile> q = cq.from(Profile.class);
 	    
-	    cq.where(cb.and(cb.equal(q.get("login"), login)));
+	    Predicate p = cb.conjunction();
+	    p = cb.and(p, cb.equal(q.get(Profile_.uuid), uuid));
+	    
+	    cq.where(p);
 		return executeSingleQuery(getEntityManager().createQuery(cq));
+	}	
+	
+	public List<Profile> find(ProfileFilter filter) {
+		Validate.notNull(filter, "Filter is no more!");
+		Validate.notEmpty(filter.getLogin(), "Login is no more!");
+		IContextDao<Profile> c = new ContextDao<Profile>(em, Profile.class, filter);
+	    
+		Predicate p = c.getBuilder().conjunction();
+	    
+	    p = c.getBuilder().and(c.getBuilder().equal(c.getRoot().get(Profile_.active), 1));
+
+	    if (filter.getAccepted()!=null) {
+	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Profile_.accepted), filter.getAccepted()?1:0));
+	    }
+	    if (!StringUtils.isBlank(filter.getLogin())) {
+	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Profile_.login), filter.getLogin()));
+	    }
+	    if (!StringUtils.isBlank(filter.getPasswd())) {
+	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Profile_.passwd), filter.getPasswd()));
+	    }
+	    
+	    c.getCriteria().where(p);
+	    return executeQuery(c);
 	}
 	
 	public List<Profile> find(final ProfilesFilter filter) {
 		IContextDao<Profile> c = new ContextDao<Profile>(em, Profile.class, filter);
 	    
 	    Predicate p = c.getBuilder().conjunction();
+	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Profile_.active), 1));
 	    
 	    if (!StringUtils.isBlank(filter.getName())) {
-	    	Predicate ex1 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("name")), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex2 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("login")), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex3 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("email")), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex4 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("phone")), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex1 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Profile_.firstname)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex2 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Profile_.lastname)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex3 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Profile_.description)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex4 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Profile_.login)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex5 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Profile_.email)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex6 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Profile_.phone)), "%"+filter.getName().toUpperCase()+"%");
 	    	
-	    	Join<Profile, ProfileAddress> a = c.getRoot().join("address", JoinType.LEFT);
-	    	Predicate ex5 = c.getBuilder().like(c.getBuilder().upper(a.<String>get("street")), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex6 = c.getBuilder().like(c.getBuilder().upper(a.<String>get("city")), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex7 = c.getBuilder().like(c.getBuilder().upper(a.<String>get("state")), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex8 = c.getBuilder().like(c.getBuilder().upper(a.<String>get("zipcode")), "%"+filter.getName().toUpperCase()+"%");
-	    	p = c.getBuilder().or(ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8);
+	    	Join<Profile, ProfileAddress> a = c.getRoot().join(Profile_.address, JoinType.LEFT);
+	    	Predicate ex10 = c.getBuilder().like(c.getBuilder().upper(a.<String>get(ProfileAddress_.street)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex11 = c.getBuilder().like(c.getBuilder().upper(a.<String>get(ProfileAddress_.city)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex12 = c.getBuilder().like(c.getBuilder().upper(a.<String>get(ProfileAddress_.state)), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex13 = c.getBuilder().like(c.getBuilder().upper(a.<String>get(ProfileAddress_.zipcode)), "%"+filter.getName().toUpperCase()+"%");
+	    	p = c.getBuilder().or(ex1, ex2, ex3, ex4, ex5, ex6, ex10, ex11, ex12, ex13);
 	    }
 	    
 	    c.getCriteria().where(p);

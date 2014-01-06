@@ -3,6 +3,7 @@
  */
 package pl.com.dbs.reports.report.pattern.web.form;
 
+import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.pattern.dao.PatternFilter;
 import pl.com.dbs.reports.support.web.form.AForm;
 
@@ -25,9 +26,9 @@ public class PatternListForm extends AForm {
 	
 	public PatternListForm() {}
 	
-	public void reset(String name) {
+	public void reset(Profile profile) {
 		filter = new PatternFilter();
-		filter.putName(name);
+		filter.putName(profile.getName());
 	}
 
 	public PatternFilter getFilter() {

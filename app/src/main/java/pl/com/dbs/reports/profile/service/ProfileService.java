@@ -4,6 +4,7 @@
 package pl.com.dbs.reports.profile.service;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
@@ -18,6 +19,8 @@ import pl.com.dbs.reports.authority.domain.Authority;
 import pl.com.dbs.reports.profile.dao.ProfileAddressDao;
 import pl.com.dbs.reports.profile.dao.ProfileAuthorityDao;
 import pl.com.dbs.reports.profile.dao.ProfileDao;
+import pl.com.dbs.reports.profile.dao.ProfileFilter;
+import pl.com.dbs.reports.profile.dao.ProfileNoteDao;
 import pl.com.dbs.reports.profile.dao.ProfilePhotoDao;
 import pl.com.dbs.reports.profile.dao.ProfilesFilter;
 import pl.com.dbs.reports.profile.domain.Profile;
@@ -25,10 +28,12 @@ import pl.com.dbs.reports.profile.domain.ProfileAddress;
 import pl.com.dbs.reports.profile.domain.ProfileCreation;
 import pl.com.dbs.reports.profile.domain.ProfileException;
 import pl.com.dbs.reports.profile.domain.ProfileModification;
+import pl.com.dbs.reports.profile.domain.ProfileNote;
 import pl.com.dbs.reports.profile.domain.ProfilePhoto;
+import pl.com.dbs.reports.security.domain.SessionContext;
 
 /**
- * TODO
+ * Profiles services.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -41,14 +46,27 @@ public class ProfileService {
 	@Autowired private AccessDao profileAccessDao;
 	@Autowired private ProfileAuthorityDao profileAuthorityDao;
 	@Autowired private ProfilePhotoDao profilePhotoDao;
+	@Autowired private ProfileNoteDao profileNoteDao;
 	
-	public Profile find(String login) {
-		return profileDao.find(login);
+	public List<Profile> findByLogin(String login) {
+		ProfileFilter filter = new ProfileFilter(login, null);
+		return profileDao.find(filter);
 	}
 	
-	public Profile find(Long id) {
+	public Profile findByLoginAccepted(String login) throws ProfileException {
+		ProfileFilter filter = new ProfileFilter(login, null).accepted();
+		List<Profile> profiles = profileDao.find(filter);
+		if (profiles.size()>1) throw new ProfileException("profile.too.many.profiles.with.same.login", Arrays.asList(String.valueOf(profiles.size()), login));
+		return profiles.isEmpty()?null:profiles.get(0);
+	}
+	
+	public Profile findById(Long id) {
 		return profileDao.find(id);
 	}	
+	
+	public Profile findByUuid(String uuid) {
+		return profileDao.findByUuid(uuid);
+	}		
 	
 	public List<Profile> find(ProfilesFilter filter) {
 		return profileDao.find(filter);
@@ -62,6 +80,7 @@ public class ProfileService {
 		logger.info("Adding new profile..");
 		
 		Profile profile = new Profile(form);
+			
 		if (form.getAddress()!=null) {
 			ProfileAddress address = new ProfileAddress(form.getAddress());
 			profileAddressDao.create(address);
@@ -144,6 +163,54 @@ public class ProfileService {
 		Profile profile = profileDao.find(id);
 		Validate.notNull(profile, "Profile is no more!");
 		
-		//profileDao.erase(profile);
+		profile.deactivate();
+	}
+	
+	@Transactional
+	public Profile accept(Long id) throws ProfileException {
+		logger.info("Accepting profile.."+id);
+		Validate.notNull(id, "Profile ID is no more!");
+		
+		Profile profile = profileDao.find(id);
+		Validate.notNull(profile, "Profile is no more!");
+		
+		//if (profile.isAccepted()) throw new ProfileException();
+		
+		profile.accept();
+		return profile;
+	}
+	
+	@Transactional
+	public Profile unaccept(Long id) throws ProfileException {
+		logger.info("Unaccepting profile.."+id);
+		Validate.notNull(id, "Profile ID is no more!");
+		
+		Profile profile = profileDao.find(id);
+		Validate.notNull(profile, "Profile is no more!");
+		
+		profile.unaccept();
+		return profile;
+	}	
+	
+	@Transactional
+	public Profile note(Long id, String content) throws ProfileException {
+		logger.info("Noting profile.."+id);
+		Validate.notNull(id, "Profile ID is no more!");
+		
+		Profile profile = profileDao.find(id);
+		Validate.notNull(profile, "Profile is no more!");
+		
+		Profile editor = profileDao.find(SessionContext.getProfile().getId());
+		
+		ProfileNote note = profile.getNote();
+		if (note==null) {
+			note = new ProfileNote(content, editor); 
+			profileNoteDao.create(note);
+			profile.addNote(note);
+		} else { 
+			note.modify(content, editor);
+		}
+		
+		return profile;
 	}
 }

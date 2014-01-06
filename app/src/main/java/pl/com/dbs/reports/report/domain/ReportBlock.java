@@ -16,7 +16,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 /**
- * TODO
+ * A block of paterrn data.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

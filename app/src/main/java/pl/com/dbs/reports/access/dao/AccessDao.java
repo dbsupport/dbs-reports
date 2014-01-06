@@ -13,12 +13,13 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import pl.com.dbs.reports.access.domain.Access;
+import pl.com.dbs.reports.access.domain.Access_;
 import pl.com.dbs.reports.support.db.dao.ADao;
 import pl.com.dbs.reports.support.db.dao.ContextDao;
 import pl.com.dbs.reports.support.db.dao.IContextDao;
 
 /**
- * TODO
+ * Access CRUD.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -40,7 +41,7 @@ public class AccessDao extends ADao<Access, Long> {
 	    Predicate p = c.getBuilder().conjunction();
 
 	    if (!StringUtils.isBlank(filter.getName())) {
-	    	p = c.getBuilder().and(p, c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("name")), "%"+filter.getName().toUpperCase()+"%"));
+	    	p = c.getBuilder().and(p, c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Access_.name)), "%"+filter.getName().toUpperCase()+"%"));
 	    }		
 	    
 	    c.getCriteria().where(p);

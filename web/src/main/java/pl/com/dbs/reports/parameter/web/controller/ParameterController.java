@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import pl.com.dbs.reports.api.support.db.ClientDataSource;
 import pl.com.dbs.reports.parameter.service.ParameterService;
 import pl.com.dbs.reports.parameter.web.form.ParameterEditForm;
+import pl.com.dbs.reports.profile.service.ProfileScheduler;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 
 
@@ -38,6 +41,8 @@ public class ParameterController {
 	
 	@Autowired private Alerts alerts;
 	@Autowired private ParameterService parameterService;
+	@Autowired private ProfileScheduler profileScheduler;
+	@Autowired @Qualifier(ClientDataSource.DATASOURCE) private ClientDataSource datasource;	
 
 	@ModelAttribute(ParameterEditForm.KEY)
     public ParameterEditForm createListForm() {
@@ -55,15 +60,33 @@ public class ParameterController {
     public String accesses(@Valid @ModelAttribute(ParameterEditForm.KEY) final ParameterEditForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		for (ParameterEditForm.Param param : form.getParams()) {
 			try {
-				if (parameterService.edit(param.getKey(), param.getValue())) 
-					alerts.addSuccess(ra, "access.edit.edited", param.getKey());
+				if (parameterService.edit(param.getKey(), param.getValue())) {
+					alerts.addSuccess(ra, "parameter.edit.edited", param.getKey());
+				}
 			} catch (Exception e) {
 				alerts.addError(ra, "parameter.edit.error", param.getKey(), e.getMessage());
 				logger.error("parameter.edit.error:"+e.getMessage());			
 			}
 		}
+		try {
+			datasource.reconnect(parameterService.getConnectionContext());
+			alerts.addSuccess(ra, "parameter.edit.connection.success");
+		} catch (Exception e) {
+			alerts.addWarning(ra, "parameter.edit.connection.error");
+		}		
 		return "redirect:/param/edit";
 	}
+	
+	@RequestMapping(value="/param/synchronize", method = RequestMethod.GET)
+    public String synchronize(Model model, RedirectAttributes ra) {
+		try {
+			profileScheduler.synchronize();
+			alerts.addSuccess(ra, "profile.synchronization");
+		} catch (Exception e) {
+			alerts.addError(ra, "profile.synchronization.error", e.getMessage());
+		}
+		return "redirect:/param/edit";
+    }
 	
 	
 	@InitBinder

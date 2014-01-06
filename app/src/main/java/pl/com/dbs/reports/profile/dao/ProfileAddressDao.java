@@ -12,7 +12,7 @@ import pl.com.dbs.reports.profile.domain.ProfileAddress;
 import pl.com.dbs.reports.support.db.dao.ADao;
 
 /**
- * TODO
+ * Profile address CRUD.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

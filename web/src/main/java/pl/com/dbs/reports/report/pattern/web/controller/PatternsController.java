@@ -3,9 +3,16 @@
  */
 package pl.com.dbs.reports.report.pattern.web.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -38,6 +45,7 @@ import pl.com.dbs.reports.support.web.alerts.Alerts;
 @SessionAttributes({PatternListForm.KEY})
 @Scope("request")
 public class PatternsController {
+	private static final Logger logger = Logger.getLogger(PatternsController.class);
 	@Autowired private Alerts alerts;
 	@Autowired private PatternService patternService;
 	
@@ -61,7 +69,7 @@ public class PatternsController {
 	
 	@RequestMapping(value="/report/pattern/list/current", method = RequestMethod.GET)
     public String mypatterns(Model model, @ModelAttribute(PatternListForm.KEY) final PatternListForm form, HttpServletRequest request) {
-		form.reset(SessionContext.getProfile().getName());
+		form.reset(SessionContext.getProfile());
 		return "redirect:/report/pattern/list";
     }
 	
@@ -94,7 +102,61 @@ public class PatternsController {
     public String details(Model model, @PathVariable("id") Long id, HttpServletRequest request) {
 		model.addAttribute("pattern", patternService.find(id));
 		return "report/pattern/pattern-details";
+    }
+	
+	@RequestMapping(value="/report/pattern/download/{id}", method = RequestMethod.GET)
+    public String download(Model model, @PathVariable("id") Long id,  RedirectAttributes ra, HttpServletRequest request, HttpServletResponse response) {
+		if (id==null) {
+			alerts.addError(ra, "report.pattern.no.pattern");
+			return "redirect:/report/pattern/list";
+		}
+
+		ReportPattern pattern = patternService.find(id);
+		if (pattern==null) {
+			alerts.addError(ra, "report.pattern.no.pattern");
+			return "redirect:/report/pattern/list";
+		}
+		
+		response.setContentType("application/octet-stream");
+		response.setHeader("Content-Disposition","attachment;filename="+pattern.getFilename());
+	 
+		ServletOutputStream out = null;
+		InputStream in = null;
+		try {
+			out = response.getOutputStream();
+			in = new ByteArrayInputStream(pattern.getContent());
+			byte[] outputByte = new byte[4096];
+			while(in.read(outputByte, 0, 4096) != -1) {
+				out.write(outputByte, 0, 4096);
+			}
+			in.close();
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			exception(e, request, ra);
+			return "redirect:/report/pattern/list";
+		} finally {
+			try {
+				out.close();
+				in.close();
+			} catch (IOException e) {
+				exception(e, request, ra);
+				return "redirect:/report/pattern/list";
+			}
+		}
+		
+		return null;
     }	
+	
+	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {
+		if (e instanceof IOException) {
+			alerts.addError(request, "report.pattern.download.error", e.getMessage());
+			logger.error("report.pattern.download.error:"+e.getMessage());
+		} else {
+			alerts.addError(request, "report.pattern.download.error", e.getMessage());
+			logger.error("report.pattern.download.error:"+e.getMessage());
+		}
+	}		
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {

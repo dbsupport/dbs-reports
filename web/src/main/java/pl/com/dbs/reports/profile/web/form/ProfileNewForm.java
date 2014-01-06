@@ -16,7 +16,7 @@ import pl.com.dbs.reports.support.web.file.FileMeta;
 import pl.com.dbs.reports.support.web.form.AForm;
 
 /**
- * TODO
+ * New profile form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -35,6 +35,8 @@ public class ProfileNewForm extends AForm implements ProfileCreation {
 	private String city;
 	private String state;
 	private String zipCode;
+	private boolean accepted = false;
+	protected boolean global = false;
 	
 	private List<Access> accesses = new ArrayList<Access>();
 	private List<Authority> authorities = new ArrayList<Authority>();
@@ -56,6 +58,7 @@ public class ProfileNewForm extends AForm implements ProfileCreation {
 		this.state = null;
 		this.zipCode = null;
 		this.photo = null;
+		this.accepted = false;
 		this.accesses = new ArrayList<Access>();
 		this.authorities = new ArrayList<Authority>();
 	}
@@ -129,6 +132,11 @@ public class ProfileNewForm extends AForm implements ProfileCreation {
 	public List<Access> getAccesses() {
 		return accesses;
 	}
+
+	@Override
+	public boolean isAccepted() {
+		return accepted;
+	}
 	
 	public String getStreet() {
 		return street;
@@ -201,4 +209,16 @@ public class ProfileNewForm extends AForm implements ProfileCreation {
 	public boolean isPhoto() {
 		return this.photo!=null;
 	}
+
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
+	}
+	
+	public boolean getAccepted() {
+		return accepted;
+	}
+
+	public boolean isGlobal() {
+		return global;
+	}	
 }

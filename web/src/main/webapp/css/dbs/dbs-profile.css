@@ -9,3 +9,6 @@ img.avatar {
   margin-top:32px;	
 }
 
+.user-profile .header span.area.inactive {
+	color:orange;
+}

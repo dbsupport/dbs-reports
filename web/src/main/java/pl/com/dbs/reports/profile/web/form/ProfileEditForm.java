@@ -10,7 +10,8 @@ import pl.com.dbs.reports.profile.domain.ProfileModification;
 import pl.com.dbs.reports.support.web.file.FileMeta;
 
 /**
- * TODO
+ * Editing profile form.
+ * Contains profile id.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -27,6 +28,7 @@ public class ProfileEditForm extends ProfileNewForm implements ProfileModificati
 		if (profile==null) return;
 		
 		id = profile.getId();
+		global = profile.isGlobal();
 		setAccesses(profile.getAccesses());
 		setAuthorities(profile.getAuthorities());
 		if (profile.hasAddress()) {
@@ -42,10 +44,13 @@ public class ProfileEditForm extends ProfileNewForm implements ProfileModificati
 									  profile.getPhoto().getContent())); 
 			} catch (IOException e) {}
 		}
-		setFirstName(profile.getName());
-		setLastName(profile.getName());
+		setFirstName(profile.getFirstName());
+		setLastName(profile.getLastName());
 		setLogin(profile.getLogin());
+		//setPasswd(profile.getPasswd());
 		setPhone(profile.getPhone());
+		setAccepted(profile.isAccepted());
+		
 	}
 	
 	@Override

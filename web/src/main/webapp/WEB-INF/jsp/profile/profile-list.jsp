@@ -29,7 +29,7 @@
                             <tr>
                                 <th class="col-md-3 sortable">
                                 <tiles:insertDefinition name="tiles-sorter">
-                                	<tiles:putAttribute name="name" type="string">name</tiles:putAttribute>
+                                	<tiles:putAttribute name="name" type="string">lastname</tiles:putAttribute>
                                 	<tiles:putAttribute name="label" type="string">Imię/Nazwisko</tiles:putAttribute>
             					</tiles:insertDefinition>                                  
                                 </th>
@@ -45,7 +45,7 @@
                                 	<tiles:putAttribute name="label" type="string">Email</tiles:putAttribute>
             					</tiles:insertDefinition>                                  
                                 </th>
-                                <th class="col-md-2 sortable"><span class="line"></span>
+                                <%-- th class="col-md-2 sortable"><span class="line"></span>
                                     Telefon
                                 </th>
                                 <th class="col-md-2"><span class="line"></span>
@@ -53,7 +53,7 @@
                                 </th>
                                 <th class="align-right">
                                     <span class="line"></span>&nbsp;
-                                </th>                                
+                                </th--%>                                
                             </tr>
                         </thead>
                         <tbody>
@@ -63,6 +63,10 @@
                         <tr <c:if test="${rstatus.first}">class="first"</c:if>>
                        
                              <td>
+                                <c:if test="${profile.accepted ne true}">
+			                    <div class="subtext">profil nieaktywny</div>
+			                    </c:if>
+                             
                              	<div class="">
                              	<c:if test="${!empty profile.photo}">
                                 <img src="profile/photo/${profile.photo.id}" class="img-circle avatar" />
@@ -70,7 +74,13 @@
                              	<c:if test="${empty profile.photo}">
                              	<img src="img/no-img-personal.png" class="img-circle avatar" />
                              	</c:if>
-                                <a href="profile/${profile.id}" class="name">${profile.name}</a>
+                             	<c:set var="nameclass">name<c:choose><c:when test="${profile.accepted ne true}"> inactive</c:when></c:choose></c:set>
+                             	<a href="profile/${profile.id}" class="${nameclass}">
+				                    <c:choose>
+				                    <c:when test="${profile.global}">${profile.description}</c:when>
+				                    <c:otherwise>${profile.name}</c:otherwise>
+				                    </c:choose>
+			                    </a>
                                 </div>
                                 
                                 <c:if test="${!empty profile.authoritiesAsString}">
@@ -84,6 +94,7 @@
 			                    <c:if test="${profile.global}">
 			                    <div class="subtext">Profil HR</div>
 			                    </c:if>
+			                    
                             </td>
                             <td>
                                ${profile.login}
@@ -91,7 +102,7 @@
                             <td>
                                  ${profile.email}
                             </td>
-                            <td>
+                            <%-- td>
                                 ${profile.phone}
                             </td>
                             <td>
@@ -101,7 +112,7 @@
                                 ${profile.address.city}<span>&nbsp;</span>
                                 ${profile.address.state}<span>&nbsp;</span>
                                 </c:if>
-                            </td>
+                            </td--%>
                             
                             
                             <td>

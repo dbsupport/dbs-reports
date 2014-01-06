@@ -15,7 +15,7 @@ import pl.com.dbs.reports.profile.domain.ProfileCreation.Address;
 import pl.com.dbs.reports.support.db.domain.IEntity;
 
 /**
- * TODO
+ * Profile address data.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

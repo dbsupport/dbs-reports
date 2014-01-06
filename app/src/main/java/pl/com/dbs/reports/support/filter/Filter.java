@@ -6,7 +6,7 @@ package pl.com.dbs.reports.support.filter;
 import org.apache.commons.lang.Validate;
 
 /**
- * TODO
+ * A filter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

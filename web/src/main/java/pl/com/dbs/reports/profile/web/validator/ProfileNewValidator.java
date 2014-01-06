@@ -14,7 +14,7 @@ import pl.com.dbs.reports.profile.service.ProfileService;
 import pl.com.dbs.reports.profile.web.form.ProfileNewForm;
 
 /**
- * TODO
+ * New profile validation.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -29,11 +29,11 @@ public class ProfileNewValidator implements Validator {
 	static final java.util.regex.Pattern STATE_PATTERN = java.util.regex.Pattern.compile("^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ0-9\\.\\- ]{0,64}$",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	static final java.util.regex.Pattern ZIP_PATTERN = java.util.regex.Pattern.compile("^[0-9-]{0,8}$",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	
-	static final int LOGIN_MIN = 3;
+	static final int LOGIN_MIN = 1;
 	static final int LOGIN_MAX = 64;
 	static final int PASSWD_MIN = 3;
 	static final int PASSWD_MAX = 32;
-	static final int NAME_MIN = 3;
+	static final int NAME_MIN = 1;
 	static final int NAME_MAX = 64;		
 	
 	private ProfileService profileService;
@@ -64,18 +64,39 @@ public class ProfileNewValidator implements Validator {
 			
 			if (errors.hasErrors()) return;
 			
+			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "errors.required");
+			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "errors.required");
+			
+			if (errors.hasErrors()) return;
+			
+			if (form.getFirstName().length()<NAME_MIN) errors.rejectValue("firstName", "errors.min.text", new Integer[]{NAME_MIN}, "errors.min.text");
+			if (form.getFirstName().length()>NAME_MAX) errors.rejectValue("firstName", "errors.max.text", new Integer[]{NAME_MAX}, "errors.max.text");
+	
+			Matcher mfn = NAME_PATTERN.matcher(form.getFirstName());
+			if (!mfn.matches()) errors.rejectValue("firstName", "errors.regexp");
+			
+			if (form.getLastName().length()<NAME_MIN) errors.rejectValue("lastName", "errors.min.text", new Integer[]{NAME_MIN}, "errors.min.text");
+			if (form.getLastName().length()>NAME_MAX) errors.rejectValue("lastName", "errors.max.text", new Integer[]{NAME_MAX}, "errors.max.text");
+	
+			Matcher mln = NAME_PATTERN.matcher(form.getLastName());
+			if (!mln.matches()) errors.rejectValue("lastName", "errors.regexp");			
+			
+			if (errors.hasErrors()) return;
+			
 			if (form.getLogin().length()<LOGIN_MIN) errors.rejectValue("login", "errors.min.text", new Integer[]{LOGIN_MIN}, "errors.min.text");
 			if (form.getLogin().length()>LOGIN_MAX) errors.rejectValue("login", "errors.max.text", new Integer[]{LOGIN_MAX}, "errors.max.text");
 			
 			Matcher ml = LOGIN_PATTERN.matcher(form.getLogin());
 			if (!ml.matches()) errors.rejectValue("login", "errors.regexp");
 			
-			if (form.getPasswd().length()<PASSWD_MIN) errors.rejectValue("passwd", "errors.min.text", new Integer[]{PASSWD_MIN}, "errors.min.text");
-			if (form.getPasswd().length()>PASSWD_MAX) errors.rejectValue("passwd", "errors.max.text", new Integer[]{PASSWD_MAX}, "errors.max.text");			
-
+			if (!form.isGlobal()) {
+				if (form.getPasswd().length()<PASSWD_MIN) errors.rejectValue("passwd", "errors.min.text", new Integer[]{PASSWD_MIN}, "errors.min.text");
+				if (form.getPasswd().length()>PASSWD_MAX) errors.rejectValue("passwd", "errors.max.text", new Integer[]{PASSWD_MAX}, "errors.max.text");			
+			}
+			
 			if (errors.hasErrors()) return;
 			
-			if (profileService.find(form.getLogin())!=null) {
+			if (!profileService.findByLogin(form.getLogin()).isEmpty()) {
 				errors.rejectValue("login", "profile.already.exists");
 			}
 		}
@@ -84,23 +105,6 @@ public class ProfileNewValidator implements Validator {
 	
 	void validateSyntax(Object target, Errors errors) {
 		ProfileNewForm form = (ProfileNewForm)target;
-		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "errors.required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "errors.required");
-		
-		if (errors.hasErrors()) return;
-		
-		if (form.getFirstName().length()<NAME_MIN) errors.rejectValue("firstName", "errors.min.text", new Integer[]{NAME_MIN}, "errors.min.text");
-		if (form.getFirstName().length()>NAME_MAX) errors.rejectValue("firstName", "errors.max.text", new Integer[]{NAME_MAX}, "errors.max.text");
-
-		Matcher mfn = NAME_PATTERN.matcher(form.getFirstName());
-		if (!mfn.matches()) errors.rejectValue("firstName", "errors.regexp");
-		
-		if (form.getLastName().length()<NAME_MIN) errors.rejectValue("lastName", "errors.min.text", new Integer[]{NAME_MIN}, "errors.min.text");
-		if (form.getLastName().length()>NAME_MAX) errors.rejectValue("lastName", "errors.max.text", new Integer[]{NAME_MAX}, "errors.max.text");
-
-		Matcher mln = NAME_PATTERN.matcher(form.getLastName());
-		if (!mln.matches()) errors.rejectValue("lastName", "errors.regexp");
 		
 		if (!StringUtils.isBlank(form.getEmail())) {
 			Matcher me = EMAIL_PATTERN.matcher(form.getEmail());

@@ -22,11 +22,12 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
 import pl.com.dbs.reports.api.report.ReportFormat;
+import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.api.report.pattern.PatternManifest;
 import pl.com.dbs.reports.profile.domain.Profile;
 
 /**
- * TODO
+ * Pattern builder.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -34,6 +35,7 @@ import pl.com.dbs.reports.profile.domain.Profile;
 final class PatternBuilder {
 	private static final Logger logger = Logger.getLogger(PatternBuilder.class);
 	
+	private String filename;
 	private byte[] content;	
 	private Profile profile;
 	private List<ReportPatternTransformate> transformates;
@@ -47,6 +49,7 @@ final class PatternBuilder {
 	
 	public PatternBuilder(final File file, Profile profile) throws IOException {
 		this(FileUtils.readFileToByteArray(file));
+		this.filename = file.getName();
 		this.profile = profile;
 	}
 	
@@ -75,16 +78,63 @@ final class PatternBuilder {
 		 */
 		for (ReportPatternTransformate t : transformates) t.setInflaters(inflaters);
 		
-		this.pattern = new ReportPattern(content,
-										profile,
-										manifestBuilder.getName(),
-										manifestBuilder.getVersion(),
-										manifestBuilder.getAuthor(),
-										manifestBuilder.getFactory(),
-										manifestBuilder.getManifest(),
-										manifestBuilder.getAccesses(),
-										transformates,
-										forms);
+		this.pattern = new ReportPattern(new ReportPatternCreation() {
+					@Override
+					public String getVersion() {
+						return manifestBuilder.getVersion();
+					}
+					
+					@Override
+					public List<ReportPatternTransformate> getTransformates() {
+						return transformates;
+					}
+					
+					@Override
+					public String getName() {
+						return manifestBuilder.getName();
+					}
+					
+					@Override
+					public PatternManifest getManifest() {
+						return manifestBuilder.getManifest();
+					}
+					
+					@Override
+					public List<ReportPatternForm> getForms() {
+						return forms;
+					}
+					
+					@Override
+					public String getFilename() {
+						return filename;
+					}
+					
+					@Override
+					public String getFactory() {
+						return manifestBuilder.getFactory();
+					}
+					
+					@Override
+					public Profile getCreator() {
+						return profile;
+					}
+					
+					@Override
+					public byte[] getContent() {
+						return content;
+					}
+					
+					@Override
+					public String getAuthor() {
+						return manifestBuilder.getAuthor();
+					}
+					
+					@Override
+					public List<String> getAccesses() {
+						return manifestBuilder.getAccesses();
+					}
+				});
+
 		this.pattern.addInits(inits);
 		return this;
 	}
@@ -122,9 +172,9 @@ final class PatternBuilder {
             if (entry.isDirectory()) { 
             	continue;
             } else if (isTransformate(entry.getName())) {
-            	ReportFormat type = resolveType(entry.getName());
-            	logger.info("Transformate found in file: "+entry.getName()+" as :"+(type!=null?type.getExt():"?"));
-           		transformates.add(new ReportPatternTransformate(readZipEntry(zip, entry), entry.getName(), type));
+            	PatternFormat format = resolveFormat(entry.getName());
+            	logger.info("Transformate found in file: "+entry.getName()+" as :"+format);
+           		transformates.add(new ReportPatternTransformate(readZipEntry(zip, entry), entry.getName(), format));
             }
         }
 	}		
@@ -230,7 +280,7 @@ final class PatternBuilder {
 				&&!isForm(filename);
 	}		
 	
-	private ReportFormat resolveType(final String name) throws IOException {
+	private PatternFormat resolveFormat(final String name) throws IOException {
 		PatternManifest manifest = manifestBuilder.getManifest();
 		Validate.notNull(manifest, "Manifest is no more!");
 		String exts = manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_EXTENSION_MAP);	
@@ -250,13 +300,29 @@ final class PatternBuilder {
 			    	 * Confirm if file exist with given filename...
 			    	 */
 			    	final String filename = StringUtils.trim(m.group(1));
-			    	final String ext = StringUtils.trim(m.group(2));
-			    	if (name.equalsIgnoreCase(filename)) return ReportFormat.of(ext);
+			    	final String engext = StringUtils.trim(m.group(2));
+			    	if (name.equalsIgnoreCase(filename)) {
+					    Matcher mext = ReportPatternManifest.EXTENSION_ENGINE_PATTERN.matcher(engext);
+					    mext.reset();
+					    while (mext.find()) {
+					    	/**
+					    	 * i.e. 
+					    	 * doc|rtf = format doc, extension rtf
+					    	 * |xml = format txt (default), extension xml
+					    	 * pdf| = format pdf, pdf (default ext of format)
+					    	 */
+					    	String eng = StringUtils.trim(mext.group(1));
+					    	String ext = StringUtils.trim(mext.group(2));
+					    	final ReportFormat format = StringUtils.isBlank(eng)?ReportFormat.TXT:ReportFormat.of(eng);
+					    	final String extension = StringUtils.isBlank(ext)?format.getDefaultExt():ext;
+					    	return new ReportPatternFormat(format, extension);
+					    }
+			    	}
 			    }
 			}
 		}
-		//..resolve from extension..
-		return ReportFormat.of(name);
+		//..default everything is a text..
+		return new ReportPatternFormat(ReportFormat.TXT);
 	}	
 	
 

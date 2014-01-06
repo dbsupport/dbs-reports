@@ -17,12 +17,10 @@
             <!-- header -->
             <div class="row header">
                 <div class="col-md-1">
-                   	<c:if test="${!empty pattern.creator.photo}">
-						<img src="profile/photo/${pattern.creator.photo.id}" class="img-circle avatar" />
-                   	</c:if>
-					<c:if test="${empty pattern.creator.photo}">
-                    	<img src="img/no-img-personal.png" class="img-circle avatar" />
-                    </c:if>
+                  	<c:choose>
+                  	<c:when test="${!empty pattern.creator.photo and pattern.creator.active eq true}"><img src="profile/photo/${pattern.creator.photo.id}" class="img-circle avatar" /></c:when>
+                  	<c:otherwise><img src="img/no-img-personal.png" class="img-circle avatar" /></c:otherwise>
+                  	</c:choose>
                 </div>
                 <div class="col-md-5">
                 	<h3 class="name">${pattern.name}</h3>

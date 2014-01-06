@@ -29,7 +29,7 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPatternInflater;
 import pl.com.dbs.reports.report.pattern.domain.ReportPatternTransformate;
 
 /**
- * TODO
+ * Report patterns services.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

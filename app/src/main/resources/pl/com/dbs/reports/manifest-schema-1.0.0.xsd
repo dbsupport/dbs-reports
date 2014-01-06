@@ -55,11 +55,16 @@ Wymineione SQL'e nie wchodzą w skład wykonywanych w raporcie.</xs:documentatio
 					</xs:element>
 					<xs:element name="Reports-Extension-Map" type="xs:string" minOccurs="0">
 						<xs:annotation>
-							<xs:documentation>Mapowania (;) plik wzorca do formatu wyjsciowego, np:
-plik.txt=rtf;transformata.xsl=pdf
+							<xs:documentation>Mapowania (;) plik wzorca do silnika generowania danego formatu oraz formatu wyjsciowego, np:
+plik.txt=doc|rtf;transformata.xsl=xsl|pdf
+czyli:
+plik.txt generuj traktujac go jako .doc, a w nazwie wynikowej podstaw .rtf
+transformata.xsl generuj traktujac go jako .xsl, a w nazwie wynikowej podstaw .pdf
+
+Domyslnie wszystkie formaty sa traktowane jako tekstowe.
 
 Domyslnie plik wynikowy odpowiada rozszerzeniu wzorca, czyli np:
-wzorzec.rtf=rtf</xs:documentation>
+wzorzec.rtf=txt|rtf</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="Reports-Name-Template" minOccurs="0">

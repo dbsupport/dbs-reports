@@ -34,6 +34,6 @@ public class PatternContentUniqueValidator extends PatternValidator {
 
 	@Override
 	public int getOrder() {
-		return 8000;
+		return 4;
 	}	
 }

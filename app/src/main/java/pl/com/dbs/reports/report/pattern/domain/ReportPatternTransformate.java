@@ -8,9 +8,8 @@ import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,7 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import pl.com.dbs.reports.api.report.ReportFormat;
+import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.api.report.pattern.PatternInflater;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.support.db.domain.IEntity;
@@ -30,7 +29,7 @@ import pl.com.dbs.reports.support.db.domain.IEntity;
 
 
 /**
- * TODO
+ * Report transformate.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -49,9 +48,8 @@ public class ReportPatternTransformate implements IEntity, PatternTransformate {
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "format")
-	@Enumerated(EnumType.STRING)
-	private ReportFormat format;
+    @Embedded
+    private ReportPatternFormat format;
 	
 	@Lob
 	@Column(name = "content")
@@ -67,13 +65,13 @@ public class ReportPatternTransformate implements IEntity, PatternTransformate {
 	
 	public ReportPatternTransformate() { /* JPA*/ }
 	
-	public ReportPatternTransformate(final byte[] content, final String name, final ReportFormat format) {
+	public ReportPatternTransformate(final byte[] content, final String name, final PatternFormat format) {
 //		Validate.notNull(content, "A content is no more!");
 //		Validate.isTrue(content.length>0, "A content is 0!");
 //		Validate.notEmpty(name, "A name is no more!");
 //		Validate.notNull(type, "A type is no more!");
 		this.name = name;
-		this.format = format;
+		this.format = (ReportPatternFormat)format;
 		this.content = content;
 		this.inflaters = new ArrayList<ReportPatternInflater>();
 	}
@@ -93,7 +91,7 @@ public class ReportPatternTransformate implements IEntity, PatternTransformate {
 	}
 
 	@Override
-	public ReportFormat getFormat() {
+	public PatternFormat getFormat() {
 		return format;
 	}
 

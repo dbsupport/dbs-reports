@@ -12,13 +12,13 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- * Pola techniczne dla kazdej encji.
+ * Entities technical data.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
 @Embeddable
-/*package*/ class Attributes {
+public class Attributes {
 	private static final Log logger = LogFactory.getLog(Attributes.class);
 	
 	private static final String UNDEFINED = "undefined";

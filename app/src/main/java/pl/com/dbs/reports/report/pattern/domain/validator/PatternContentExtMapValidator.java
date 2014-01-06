@@ -52,7 +52,7 @@ public class PatternContentExtMapValidator extends PatternValidator {
 			    	 * Confirm if file exist with given filename...
 			    	 */
 			    	final String file = StringUtils.trim(m.group(1));
-			    	final String ext = StringUtils.trim(m.group(2));
+			    	final String engext = StringUtils.trim(m.group(2));
 			    	PatternTransformate transformate = Iterables.find(transformates, new Predicate<PatternTransformate>() {
 			    		@Override
 			    		public boolean apply(PatternTransformate input) {
@@ -60,7 +60,21 @@ public class PatternContentExtMapValidator extends PatternValidator {
 			    		}
 			    	}, null);
 			    	if (transformate==null) throw new PatternValidationException("report.pattern.import.content.validation.error", Arrays.asList(new String[] {file}));
-			    	if (ReportFormat.of(ext)==null) throw new PatternValidationException("report.pattern.import.content.validation.error", Arrays.asList(new String[] {token}));
+			    	
+				    Matcher mext = ReportPatternManifest.EXTENSION_ENGINE_PATTERN.matcher(engext);
+				    mext.reset();
+				    while (mext.find()) {
+				    	/**
+				    	 * i.e. 
+				    	 * doc|rtf = format doc, extension rtf
+				    	 * |xml = format txt (default), extension xml
+				    	 * pdf| = format pdf, pdf (default ext of format)
+				    	 */
+				    	String eng = StringUtils.trim(mext.group(1));
+				    	final ReportFormat format = StringUtils.isBlank(eng)?ReportFormat.TXT:ReportFormat.of(eng);
+				    	if (format==null) throw new PatternValidationException("report.pattern.import.content.validation.error", Arrays.asList(new String[] {eng}));
+				    }			    	
+			    	
 			    }
 			}
 		}		
@@ -68,6 +82,6 @@ public class PatternContentExtMapValidator extends PatternValidator {
 
 	@Override
 	public int getOrder() {
-		return 7000;
+		return 7;
 	}	
 }

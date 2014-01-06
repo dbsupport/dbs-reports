@@ -70,7 +70,7 @@ public class ReportArchivesController {
 	
 	@RequestMapping(value="/report/archives/current", method = RequestMethod.GET)
     public String myarchives(Model model, @ModelAttribute(ReportArchivesForm.KEY) final ReportArchivesForm form) {
-		form.reset(SessionContext.getProfile().getName());
+		form.reset(SessionContext.getProfile());
 		return "redirect:/report/archives";
     }	
 	
@@ -93,7 +93,7 @@ public class ReportArchivesController {
 			return "redirect:/report/archives";
 		}
 
-		Report report = reportService.find(id);
+		Report report = reportService.findNoMatterWhat(id);
 		if (report==null) {
 			alerts.addError(ra, "report.archives.no.report");
 			return "redirect:/report/archives";
@@ -130,32 +130,46 @@ public class ReportArchivesController {
 		return null;
     }
 	
-	@RequestMapping(value="/report/archives/email/{id}", method = RequestMethod.GET)
-    public String email(Model model, @PathVariable("id") Long id,  @ModelAttribute(ReportArchivesForm.KEY) final ReportArchivesForm form,
-    		RedirectAttributes ra, HttpServletRequest request, HttpServletResponse response) {
-		if (id==null) {
-			alerts.addError(ra, "report.archives.no.report");
-			return "redirect:/report/archives";
+//	@RequestMapping(value="/report/archives/email/{id}", method = RequestMethod.GET)
+//    public String email(Model model, @PathVariable("id") Long id,  @ModelAttribute(ReportArchivesForm.KEY) final ReportArchivesForm form,
+//    		RedirectAttributes ra, HttpServletRequest request, HttpServletResponse response) {
+//		if (id==null) {
+//			alerts.addError(ra, "report.archives.no.report");
+//			return "redirect:/report/archives";
+//		}
+//
+//		Report report = reportService.find(id);
+//		if (report==null) {
+//			alerts.addError(ra, "report.archives.no.report");
+//			return "redirect:/report/archives";
+//		}
+//		return null;
+//	}
+	
+	@RequestMapping(value="/report/archives/archive/{id}", method = RequestMethod.GET)
+    public String archive(Model model, @PathVariable("id") Long id, HttpServletRequest request, RedirectAttributes ra) {
+		try {
+			Report report = reportService.archive(id);
+			alerts.addSuccess(ra, "report.archive.success", report.getName());
+		} catch (Exception e) {
+			alerts.addError(ra, "report.archive.error", e.getMessage());
+			logger.error("report.archive.error:"+e.getStackTrace());
+			return "redirect:/profile";
 		}
-
-		Report report = reportService.find(id);
-		if (report==null) {
-			alerts.addError(ra, "report.archives.no.report");
-			return "redirect:/report/archives";
-		}
-		return null;
-	}
+		
+		return "redirect:/report/archives";
+	}	
+	
 	
 	@RequestMapping(value="/report/archives/delete/{id}", method = RequestMethod.GET)
-    public String delete(Model model, @PathVariable("id") Long id,  @ModelAttribute(ReportArchivesForm.KEY) final ReportArchivesForm form,
-    		RedirectAttributes ra, HttpServletRequest request, HttpServletResponse response) {
+    public String delete(Model model, @PathVariable("id") Long id,  RedirectAttributes ra, HttpServletRequest request) {
 		if (id==null) {
 			alerts.addError(ra, "report.archive.no.report");
 			return "redirect:/report/archives";
 		}
 
 		try {
-			Report report = reportService.find(id);
+			Report report = reportService.findNoMatterWhat(id);
 			reportService.delete(id);
 			alerts.addSuccess(ra, "report.archive.delete.success", report.getName());
 		} catch (Exception e) {
@@ -171,8 +185,8 @@ public class ReportArchivesController {
 			alerts.addError(request, "report.archive.ioexception", e.getMessage());
 			logger.error("report.archive.ioexception:"+e.getMessage());
 		} else {
-			alerts.addError(request, "report.archive.error", e.getMessage());
-			logger.error("report.archive.error:"+e.getMessage());
+			alerts.addError(request, "report.archive.read.error", e.getMessage());
+			logger.error("report.archive.read.error:"+e.getMessage());
 		}
 	}	
 	

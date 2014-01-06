@@ -64,7 +64,7 @@
                         <!-- row -->
                         <tr class="first">
                             <td>
-                                <a href="report/pattern/details/${pattern.id}"><c:out value="${pattern.name}"/></a>
+                                <a href="report/pattern/download/${pattern.id}"><c:out value="${pattern.name}"/></a>
                             </td>
                             <td>
                                 <c:out value="${pattern.version}"/>
@@ -73,7 +73,17 @@
                             	<fmt:formatDate value="${pattern.uploadDate}" type="both" pattern="dd-MM-yyyy HH:mm:ss" />
                             </td>
                             <td>
-                                <c:out value="${pattern.creator.name}"/>
+                            	<c:choose>
+                            	<c:when test="${!empty pattern.creator.photo and pattern.creator.active eq true}"><img src="profile/photo/${pattern.creator.photo.id}" class="img-circle avatar" /></c:when>
+                            	<c:otherwise><img src="img/no-img-personal.png" class="img-circle avatar" /></c:otherwise>
+                            	</c:choose>
+                            	
+                            	<c:choose>
+                            	<c:when test="${pattern.creator.active eq true and pattern.creator.accepted eq true}"><a href="profile/${pattern.creator.id}" class="name"><c:choose><c:when test="${pattern.creator.global}">${pattern.creator.description}</c:when><c:otherwise>${pattern.creator.name}</c:otherwise></c:choose></a></c:when>
+                            	<c:when test="${pattern.creator.active eq true and pattern.creator.accepted eq false}"><a href="profile/${pattern.creator.id}" class="name inactive"><c:choose><c:when test="${pattern.creator.global}">${pattern.creator.description}</c:when><c:otherwise>${pattern.creator.name}</c:otherwise></c:choose></a></c:when>
+                            	<c:otherwise><a class="name deleted"><c:choose><c:when test="${pattern.creator.global}">${pattern.creator.description}</c:when><c:otherwise>${pattern.creator.name}</c:otherwise></c:choose></a></c:otherwise>
+                            	</c:choose>
+               
                             </td>                            
                             <td>
                             	${pattern.accessesAsString}

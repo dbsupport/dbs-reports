@@ -3,11 +3,8 @@
  */
 package pl.com.dbs.reports.report.pattern.web.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -33,6 +30,7 @@ import pl.com.dbs.reports.report.pattern.web.form.PatternListForm;
 import pl.com.dbs.reports.report.pattern.web.validator.PatternListValidator;
 import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
+import pl.com.dbs.reports.support.web.controller.DownloadController;
 
 
 /**
@@ -53,8 +51,8 @@ public class PatternsController {
     public PatternListForm createForm() {
 		PatternListForm form = new PatternListForm();
 		return form;
-    }		
-
+    }
+	
 	@RequestMapping(value="/report/pattern/list/init", method = RequestMethod.GET)
     public String initpatterns(Model model, @ModelAttribute(PatternListForm.KEY) final PatternListForm form, HttpServletRequest request) {
 		form.reset();
@@ -62,8 +60,9 @@ public class PatternsController {
     }	
 	
 	@RequestMapping(value="/report/pattern/list", method = RequestMethod.GET)
-    public String patterns(Model model, @ModelAttribute(PatternListForm.KEY) final PatternListForm form, HttpServletRequest request) {
+    public String patterns(Model model, @Valid @ModelAttribute(PatternListForm.KEY) final PatternListForm form, HttpServletRequest request) {
 		model.addAttribute("patterns", patternService.find(form.getFilter()));
+		model.addAttribute("current", SessionContext.getProfile().getId().equals(form.getFilter().getProfileId()));
 		return "report/pattern/pattern-list";
     }
 	
@@ -98,12 +97,6 @@ public class PatternsController {
 		return "redirect:/report/pattern/list";
     }
 	
-	@RequestMapping(value="/report/pattern/details/{id}", method = RequestMethod.GET)
-    public String details(Model model, @PathVariable("id") Long id, HttpServletRequest request) {
-		model.addAttribute("pattern", patternService.find(id));
-		return "report/pattern/pattern-details";
-    }
-	
 	@RequestMapping(value="/report/pattern/download/{id}", method = RequestMethod.GET)
     public String download(Model model, @PathVariable("id") Long id,  RedirectAttributes ra, HttpServletRequest request, HttpServletResponse response) {
 		if (id==null) {
@@ -117,32 +110,11 @@ public class PatternsController {
 			return "redirect:/report/pattern/list";
 		}
 		
-		response.setContentType("application/octet-stream");
-		response.setHeader("Content-Disposition","attachment;filename="+pattern.getFilename());
-	 
-		ServletOutputStream out = null;
-		InputStream in = null;
 		try {
-			out = response.getOutputStream();
-			in = new ByteArrayInputStream(pattern.getContent());
-			byte[] outputByte = new byte[4096];
-			while(in.read(outputByte, 0, 4096) != -1) {
-				out.write(outputByte, 0, 4096);
-			}
-			in.close();
-			out.flush();
-			out.close();
+			DownloadController.download(pattern.getContent(), pattern.getFilename(), request, response);
 		} catch (IOException e) {
 			exception(e, request, ra);
 			return "redirect:/report/pattern/list";
-		} finally {
-			try {
-				out.close();
-				in.close();
-			} catch (IOException e) {
-				exception(e, request, ra);
-				return "redirect:/report/pattern/list";
-			}
 		}
 		
 		return null;

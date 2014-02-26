@@ -24,7 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.com.dbs.reports.api.support.db.ClientDataSource;
 import pl.com.dbs.reports.parameter.service.ParameterService;
 import pl.com.dbs.reports.parameter.web.form.ParameterEditForm;
-import pl.com.dbs.reports.profile.service.ProfileScheduler;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 
 
@@ -41,7 +40,6 @@ public class ParameterController {
 	
 	@Autowired private Alerts alerts;
 	@Autowired private ParameterService parameterService;
-	@Autowired private ProfileScheduler profileScheduler;
 	@Autowired @Qualifier(ClientDataSource.DATASOURCE) private ClientDataSource datasource;	
 
 	@ModelAttribute(ParameterEditForm.KEY)
@@ -76,17 +74,6 @@ public class ParameterController {
 		}		
 		return "redirect:/param/edit";
 	}
-	
-	@RequestMapping(value="/param/synchronize", method = RequestMethod.GET)
-    public String synchronize(Model model, RedirectAttributes ra) {
-		try {
-			profileScheduler.synchronize();
-			alerts.addSuccess(ra, "profile.synchronization");
-		} catch (Exception e) {
-			alerts.addError(ra, "profile.synchronization.error", e.getMessage());
-		}
-		return "redirect:/param/edit";
-    }
 	
 	
 	@InitBinder

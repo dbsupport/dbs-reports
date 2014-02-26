@@ -28,8 +28,8 @@ public class PatternContentTransformatesValidator extends PatternValidator {
 		
 		for (PatternTransformate transformate1 : pattern.getTransformates()) {
 			for (PatternTransformate transformate2 : pattern.getTransformates()) {
-				if (transformate1.getFormat().getFormat().equals(transformate2.getFormat().getFormat()))
-					throw new PatternValidationException("report.pattern.import.transformates.same.format", Arrays.asList(new String[] {transformate1.getName(), transformate2.getName()}));
+				if (transformate1!=transformate2&&transformate1.getFormat().getPatternExtension().equalsIgnoreCase(transformate2.getFormat().getPatternExtension()))
+					throw new PatternValidationException("report.pattern.import.transformates.same.format", Arrays.asList(new String[] {transformate1.getFormat().getPatternExtension(), transformate1.getName(), transformate2.getName()}));
 			}
 		}
 				

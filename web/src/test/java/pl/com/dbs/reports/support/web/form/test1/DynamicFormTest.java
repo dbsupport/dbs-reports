@@ -14,7 +14,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import pl.com.dbs.reports.security.domain.SessionContext;
 
 /**
- * TODO
+ * Tests.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

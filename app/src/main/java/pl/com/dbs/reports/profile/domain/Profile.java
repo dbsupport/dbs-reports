@@ -43,6 +43,7 @@ import com.google.common.collect.Iterables;
 public class Profile extends AEntity {
 	private static final long serialVersionUID = 301060274149701349L;
 	public static final String PARAMETER_PROFILE = "IN_PROFILE";
+	public static final String PARAMETER_USER = "IN_USER";
 	
 	@Id
 	@Column(name = "id")
@@ -289,11 +290,11 @@ public class Profile extends AEntity {
 	/**
 	 * First HR authority from list (sic!)
 	 */
-	public ClientProfileAuthority getClientAuthority() {
+	private ClientProfileAuthority getClientAuthority() {
 		return hasClientAuthorities()?hrauthorities.get(0):null;
 	}
 	
-	public boolean hasClientAuthorities() {
+	private boolean hasClientAuthorities() {
 		return hrauthorities!=null&&!hrauthorities.isEmpty();
 	}	
 	
@@ -330,6 +331,15 @@ public class Profile extends AEntity {
 		for (ClientProfileAuthority authority : hrauthorities) sb.append(s).append(authority.getName()); 
 		return sb.toString();
 	}
+	
+	/**
+	 * If profile is global and has ClientAuthorities..
+	 * Otherwise empty string;
+	 */
+	public String getClientAuthorityMetaData() {
+		return isGlobal()&&hasClientAuthorities()?
+				getClientAuthority().getMetaData():"";
+	}
 
 	public String getEmail() {
 		return email;
@@ -353,8 +363,20 @@ public class Profile extends AEntity {
 		return note;
 	}
 	
+	public boolean isSomeNote() {
+		return this.note!=null&&!this.note.isBlank();
+	}
+	
 	public boolean isActive() {
 		return active;
 	}
+	
+	public boolean isSame(final Profile profile) {
+		return profile!=null&&this.id!=null&&profile.getId().equals(this.id);
+	}
+	
+	public boolean isSame(final Long id) {
+		return id!=null&&this.id!=null&&id.equals(this.id);
+	}	
 	
 }

@@ -21,9 +21,9 @@
 </tiles:putAttribute> 
 <tiles:putAttribute name="content" type="string">
 
-                  	<form:form method="post" modelAttribute="profileEditForm" action="profile/edit/personal" class="" enctype="multipart/form-data">
+                  	<form:form method="post" modelAttribute="profileEditForm" action="profile/edit/personal" class="dbs-form" enctype="multipart/form-data">
 						<input type="hidden" name="page" value="1"/>
-										
+						<input type="hidden" name="save" value="false">
 					    <div class="field-box">
 					        <label>Login</label>
 					        <input class="form-control inline-input" type="text" readonly="readonly" value="${profileEditForm.login}"/>
@@ -132,6 +132,7 @@
 	                    
 	                    <div class="wizard-actions">
 	                    	<button type="button" class="btn-glow" onclick="location.href='profile/edit'"><i class="icon-refresh"></i>&nbsp;Odśwież</button><span>&nbsp;</span>
+	                    	<button type="submit" class="btn-glow success btn-finish" style="display: inline-block;" data-last="Zapisz" onclick="this.form.save.value='true';">Zapisz profil!</button><span>&nbsp;</span>
 	                  		<button type="submit" class="btn-glow primary btn-next" data-last="Finish">Dalej&nbsp;&nbsp;<i class="icon-chevron-right"></i></button><span>&nbsp;</span>
 	                    </div>    		                    
 	                                            

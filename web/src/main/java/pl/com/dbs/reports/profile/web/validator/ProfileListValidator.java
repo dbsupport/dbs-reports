@@ -9,7 +9,7 @@ import org.springframework.validation.Validator;
 import pl.com.dbs.reports.profile.web.form.ProfileListForm;
 
 /**
- * TODO
+ * Profiles validation.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -32,7 +32,6 @@ public class ProfileListValidator implements Validator {
 		if (errors.hasErrors()) return;
 		
 		form.getFilter().putName(form.getName());
+		form.getFilter().putAccepted(form.getAccepted());
 	}
-	
-
 }

@@ -19,7 +19,7 @@
 <tiles:putAttribute name="content" type="string">
 
 
-<form:form method="post" modelAttribute="profileNewForm" action="profile/new/summary" class="" enctype="multipart/form-data">
+<form:form method="post" modelAttribute="profileNewForm" action="profile/new/summary" class="dbs-form" enctype="multipart/form-data">
 	<input type="hidden" name="page" value="3">
 	<c:if test="${profileNewForm.photo}">
 		<div class="field-box">

@@ -10,7 +10,7 @@ import org.springframework.validation.Validator;
 import pl.com.dbs.reports.report.pattern.web.form.PatternImportForm;
 
 /**
- * TODO
+ * Report pattern validator.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

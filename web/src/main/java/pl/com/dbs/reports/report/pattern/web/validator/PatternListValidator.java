@@ -12,7 +12,7 @@ import org.springframework.validation.Validator;
 import pl.com.dbs.reports.report.pattern.web.form.PatternListForm;
 
 /**
- * TODO
+ * Patterns listing validator.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

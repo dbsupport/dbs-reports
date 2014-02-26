@@ -19,9 +19,16 @@ import pl.com.dbs.reports.api.profile.ClientProfileAuthority;
 import pl.com.dbs.reports.api.profile.ClientProfileService;
 import pl.com.dbs.reports.authority.dao.AuthorityDao;
 import pl.com.dbs.reports.authority.domain.Authority;
+import pl.com.dbs.reports.parameter.service.ParameterService;
+import pl.com.dbs.reports.profile.domain.ClientProfilesFilter;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.domain.ProfileException;
 import pl.com.dbs.reports.profile.domain.ProfileGlobalCreation;
+import pl.com.dbs.reports.support.encoding.EncodingContext;
+import pl.com.dbs.reports.support.encoding.EncodingService;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 /**
  * Tasks to synchronize profiles between CLIENT db and local db.
@@ -35,17 +42,33 @@ public class ProfileScheduler {
 	@Autowired(required=false) private ClientProfileService clientProfileService;
 	@Autowired private ProfileService profileService;
 	@Autowired private AuthorityDao authorityDao;
+	@Autowired private ParameterService parameterService;
+	@Autowired private EncodingService encodingService;
+	
+	/**
+	 * Temp. For tests.
+	 */
+	public List<ClientProfile> findClientProfiles(ClientProfilesFilter filter) {
+		parameterService.edit("client.db.encoding", filter.getInEncoding());
+		parameterService.edit("local.db.encoding", filter.getOutEncoding());
+		
+		try {
+			return encode(clientProfileService.find(filter));
+		} catch (Exception e) {
+			logger.error("Error reading profile.", e);
+			return new ArrayList<ClientProfile>();
+		}
+	}
 	
 	@Scheduled(cron="0 0 7 * * ?")
-	//@Scheduled(cron="0 0/1 * * * ?")
 	public void synchronize() {
 		if (clientProfileService==null) return;
 		logger.debug("Profiles synchronization..");
 		
-		ClientProfileFilterDefault filter = new ClientProfileFilterDefault(5);
+		ClientProfileFilterDefault filter = new ClientProfileFilterDefault(50);
 		List<ClientProfile> profiles;
 		do {
-			profiles = clientProfileService.find(filter);
+			profiles = encode(clientProfileService.find(filter));
 			logger.debug("Found "+profiles.size()+" profiles!");
 			
 			for (ClientProfile clientprofile : profiles) {
@@ -55,13 +78,52 @@ public class ProfileScheduler {
 		} while (profiles!=null&&!profiles.isEmpty());
 	}
 	
+	private List<ClientProfile> encode(List<ClientProfile> profiles) {
+		final EncodingContext context = encodingService.getEncodingContext();
+		return Lists.transform(profiles, new Function<ClientProfile, ClientProfile>() {
+			@Override
+			public ClientProfile apply(final ClientProfile input) {
+				return new ClientProfile() {
+					@Override
+					public String getId() {
+						return input.getId();
+					}
+					@Override
+					public String getFirstName() {
+						return encodingService.encode(input.getFirstName(), context);
+					}
+					@Override
+					public String getLastName() {
+						return encodingService.encode(input.getLastName(), context);
+					}
+					@Override
+					public String getDescription() {
+						return encodingService.encode(input.getDescription(), context);
+					}
+					@Override
+					public String getLogin() {
+						return input.getLogin();
+					}
+					@Override
+					public String getProfile() {
+						return input.getProfile();
+					}
+					@Override
+					public List<ClientProfileAuthority> getAuthorities() {
+						return input.getAuthorities();
+					}
+				};
+			}});		
+		
+	}
+	
 	private void synchronize(final ClientProfile clientprofile) {
 		logger.debug("Synchronizing: "+clientprofile.getLogin());
 		
 		Profile profile = profileService.findByUuid(clientprofile.getId());
 		if (profile!=null&&profile.isActive()) {
 			//..update description..
-			modify(profile, clientprofile);
+			profileService.modify(profile.getId(), clientprofile);
 			return;
 		}
 
@@ -70,10 +132,8 @@ public class ProfileScheduler {
 			create(clientprofile);
 		}
 	}
-	private void modify(Profile profile, final ClientProfile clientprofile) {
-		logger.info("Profile "+clientprofile.getLogin()+" FOUND locally and is active. Updating description..");
-		profile.modify(clientprofile.getDescription());
-	}
+	
+
 		
 	private void create(final ClientProfile clientprofile) {
 		logger.info("Profile "+clientprofile.getLogin()+" NOT found locally. Creating one..");

@@ -49,7 +49,7 @@ import pl.com.dbs.reports.security.domain.SessionContext;
 import com.google.common.io.Files;
 
 /**
- * TODO
+ * Tests.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

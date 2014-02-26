@@ -31,6 +31,7 @@
 
     <!-- open sans font -->
     <!-- link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'-->
+    <link rel="stylesheet" href="css/dbs/fonts.google.css" type="text/css" media="screen" />
 
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -40,13 +41,13 @@
     <!-- navbar -->
     <header class="navbar navbar-inverse" role="banner">
         <div class="navbar-header">
-            <a class="navbar-brand" href=""><img src="img/logo.png"></a>
+            <a class="navbar-brand" href="profile"><img src="img/dbs/logo.png"></a>
         </div>
     </header>
     <!-- end navbar -->
     
 	<!-- main container .wide-content is used for this layout without sidebar :)  -->
-    <div class="content wide-content">
+    <div class="content wide-content"  id="main-container">
 		<tiles:insertAttribute name="content"/>
     </div>
     <!-- end main container -->    

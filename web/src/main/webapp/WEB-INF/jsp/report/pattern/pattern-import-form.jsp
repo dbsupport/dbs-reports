@@ -19,7 +19,7 @@
 </tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
-                    	<form:form method="post" modelAttribute="reportGenerationForm" action="report/pattern/import/form" class="">
+                    	<form:form method="post" modelAttribute="reportGenerationForm" action="report/pattern/import/form" class="dbs-form">
 	                    	<input type="hidden" name="page" value="2">
                     	
                             <c:if test="${reportGenerationForm.fieldfull}">
@@ -29,6 +29,7 @@
                             	<tiles:putAttribute name="label" type="string">${field.label}</tiles:putAttribute>
                             	<tiles:putAttribute name="value" type="string">${field.value}</tiles:putAttribute>
                             	<tiles:putAttribute name="format" type="string">${field.format}</tiles:putAttribute>
+                            	<tiles:putAttribute name="tooltip" type="string">${field.tooltip}</tiles:putAttribute>
                             	<c:set var="validators" value="${field.validators}" scope="request"/>
                             	</tiles:insertDefinition>
                             </c:forEach>

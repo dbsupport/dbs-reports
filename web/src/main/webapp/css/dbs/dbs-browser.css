@@ -29,10 +29,12 @@
 
 
 .users-list .table a.name.inactive {
-	color: inactivecaption;
+	color: graytext;
+	font-style: italic; 
 }
 
 .users-list .table a.name.deleted {
-	color: inactivecaption;
+	color: graytext;
+	font-style: italic;
 	text-decoration: line-through;
 }

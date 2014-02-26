@@ -14,6 +14,8 @@ import pl.com.dbs.reports.profile.dao.ProfilesFilter;
 public class ProfileListForm {
 	public static final String KEY = "profileListForm";
 	private String name;
+	private boolean accepted = true;
+	
 	private ProfilesFilter filter = new ProfilesFilter();
 	
 	public ProfileListForm() {}
@@ -28,6 +30,14 @@ public class ProfileListForm {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public boolean getAccepted() {
+		return accepted;
+	}
+
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
 	}
 	
 }

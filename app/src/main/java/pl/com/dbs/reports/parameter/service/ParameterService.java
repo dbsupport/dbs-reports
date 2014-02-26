@@ -14,6 +14,7 @@ import pl.com.dbs.reports.api.support.db.ConnectionContext;
 import pl.com.dbs.reports.parameter.dao.ParameterDao;
 import pl.com.dbs.reports.parameter.dao.ParameterFilter;
 import pl.com.dbs.reports.parameter.domain.Parameter;
+import pl.com.dbs.reports.support.encoding.EncodingContext;
 
 /**
  * Simple parameters.
@@ -30,6 +31,8 @@ public class ParameterService {
 	private static final String DB_SCHEMA = "client.db.schema";
 	private static final String DB_USER = "client.db.user";
 	private static final String DB_PASSWD = "client.db.passwd";
+	private static final String DB_IENCODING = "client.db.encoding";
+	private static final String DB_OENCODING = "local.db.encoding";
 
 	/** 
 	 * ! w obecnej wersji nie wymagane !
@@ -70,6 +73,25 @@ public class ParameterService {
 		boolean result = !parameter.isSame(value);
 		parameter.changeValue(value);
 		return result;
+	}
+	
+	public EncodingContext getEncodingContext() {
+		final Parameter in = parameterDao.find(DB_IENCODING);
+		final Parameter out = parameterDao.find(DB_OENCODING);
+		
+		return new EncodingContext() {
+
+			@Override
+			public String getInEncoding() {
+				return in.toString();
+			}
+
+			@Override
+			public String getOutEncoding() {
+				return out.toString();
+			}
+			
+		};
 	}
 	
 	/**
@@ -144,31 +166,26 @@ public class ParameterService {
 //
 //			@Override
 //			public String getHost() {
-//				// TODO Auto-generated method stub
 //				return null;
 //			}
 //
 //			@Override
 //			public int getPort() {
-//				// TODO Auto-generated method stub
 //				return 0;
 //			}
 //
 //			@Override
 //			public String getUser() {
-//				// TODO Auto-generated method stub
 //				return null;
 //			}
 //
 //			@Override
 //			public String getPassword() {
-//				// TODO Auto-generated method stub
 //				return null;
 //			}
 //
 //			@Override
 //			public Properties getJavaMailProperties() {
-//				// TODO Auto-generated method stub
 //				return null;
 //			}
 //			

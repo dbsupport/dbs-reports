@@ -19,21 +19,23 @@
 </tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
-                    	<form:form method="post" modelAttribute="reportGenerationForm" action="report/execute/form" class="">
+                    	<form:form method="post" modelAttribute="reportGenerationForm" action="report/execute/form" class="dbs-form">
                     		<input type="hidden" name="page" value="1">
                             <div class="field-box">
                             	<label>Definicja:</label>
                             	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportGenerationForm.pattern.name} ${reportGenerationForm.pattern.version}"/>
                             </div>
                             
+                            <spring:bind path="extension">
                     	 	<div class="field-box">
                             	<label>Format:</label>
 	                            <div class="ui-select">
-		                            <form:select path="format">
-		                            	<form:options items="${reportGenerationForm.formats}" itemLabel="format.defaultExt" itemValue="ext"/>
+		                            <form:select path="extension">
+		                            	<form:options items="${reportGenerationForm.formats}" itemLabel="patternExtension" itemValue="patternExtension" />
 		                            </form:select>
 	                            </div>                            	
-                        	</div>                        	
+                        	</div>
+                        	</spring:bind>                        	
                         	
                     		<spring:bind path="name">
                     		<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
@@ -51,6 +53,7 @@
                             	<tiles:putAttribute name="label" type="string">${field.label}</tiles:putAttribute>
                             	<tiles:putAttribute name="value" type="string">${field.value}</tiles:putAttribute>
                             	<tiles:putAttribute name="format" type="string">${field.format}</tiles:putAttribute>
+                            	<tiles:putAttribute name="tooltip" type="string">${field.tooltip}</tiles:putAttribute>
                             	</tiles:insertDefinition>
                             </c:forEach>
                             </c:if> 

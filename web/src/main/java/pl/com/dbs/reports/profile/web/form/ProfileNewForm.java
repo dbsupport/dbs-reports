@@ -38,8 +38,8 @@ public class ProfileNewForm extends AForm implements ProfileCreation {
 	private boolean accepted = false;
 	protected boolean global = false;
 	
-	private List<Access> accesses = new ArrayList<Access>();
-	private List<Authority> authorities = new ArrayList<Authority>();
+	protected List<Access> accesses = new ArrayList<Access>();
+	protected List<Authority> authorities = new ArrayList<Authority>();
 	
 	private FileMeta  photo;
 	

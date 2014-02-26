@@ -3,7 +3,7 @@
 
 <tiles:insertDefinition name="tiles-browser" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-report-pattern-list</tiles:putAttribute>
-<tiles:putAttribute name="title" type="string">Lista dostępnych definicji raportów</tiles:putAttribute>
+<tiles:putAttribute name="title" type="string">Lista <c:if test="${current}"> <span class="yours">Twoich</span> </c:if>definicji raportów</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/user-list.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-browser.css" type="text/css" media="screen" />
@@ -13,12 +13,14 @@
 </tiles:putAttribute> 
 
 <tiles:putAttribute name="form" type="string">
-                <form:form method="post" modelAttribute="patternListForm" action="report/pattern/list" class="">
+                <form:form method="post" modelAttribute="patternListForm" action="report/pattern/list" class="dbs-form">
                		<form:input path="name" cssClass="col-md-5 search" placeholder="Wyszukaj..." onblur="this.form.submit();"/>
                 </form:form>
 
                 <div class="col-md-5 pull-right">
+                	<sec:authorize access="hasAnyRole('Admin')">
                     <a href="report/pattern/import" class="btn-flat success pull-right"><span>&#43;</span>ZAIMPORTUJ DEFINICJĘ RAPORTU</a>
+                    </sec:authorize>
 				</div>                
 </tiles:putAttribute>
 
@@ -64,7 +66,7 @@
                         <!-- row -->
                         <tr class="first">
                             <td>
-                                <a href="report/pattern/download/${pattern.id}"><c:out value="${pattern.name}"/></a>
+                                <a href="report/pattern/details/${pattern.id}"><c:out value="${pattern.name}"/></a>
                             </td>
                             <td>
                                 <c:out value="${pattern.version}"/>
@@ -91,8 +93,8 @@
                             <td class="align-right">
 	                            <ul class="actions">
 	                                <li><a href="report/execute/${pattern.id}"><i class="table-settings" title="Generowanie raportu"></i></a></li>
-	                                <li><a href="report/pattern/details/${pattern.id}"><i class="table-edit" title="Szczegóły definicji"></i></a></li>
-	                                <li class="last"><a href="#" class="pattern-delete" data-url="report/pattern/delete/${pattern.id}"><i class="table-delete" title="Usunięcie definicji"></i></a></li>
+	                                <sec:authorize access="hasAnyRole('Admin')"><li><a href="report/pattern/download/${pattern.id}"><i class="table-edit" title="Pobierz definicję"></i></a></li></sec:authorize>
+	                                <sec:authorize access="hasAnyRole('Admin')"><li class="last"><a href="#" class="pattern-delete" data-url="report/pattern/delete/${pattern.id}"><i class="table-delete" title="Usunięcie definicji"></i></a></li></sec:authorize>
 	                            </ul>
                             </td>                            
                         </tr>

@@ -9,7 +9,7 @@ import org.springframework.validation.Validator;
 import pl.com.dbs.reports.access.web.form.AccessListForm;
 
 /**
- * TODO
+ * Access listing validatior.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

@@ -9,7 +9,7 @@ import pl.com.dbs.reports.support.web.form.AForm;
 
 
 /**
- * TODO
+ * Access add new form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

@@ -23,7 +23,6 @@
                 	<li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-profile-current')}">active</c:if>" href="profile">Twój profil</a></li>
                 	<sec:authorize access="hasAnyRole('Admin,Management')">
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-list')}">active</c:if>" href="profile/list">Lista profili</a></li>
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-new')}">active</c:if>" href="profile/new">Nowy profil</a></li>
                     </sec:authorize>
                 </ul>
             </li>
@@ -42,12 +41,8 @@
                     <i class="icon-chevron-down"></i>
                 </a>
                 <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-report')}">active</c:if>">
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-pattern-list')}">active</c:if>" href="report/pattern/list/init">Definicje</a></li>
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-archives')}">active</c:if>" href="report/archives/init">Archiwum</a></li>
-                    <li>&nbsp;</li>
-                    <sec:authorize access="hasAnyRole('Admin,Management')">
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-pattern-import')}">active</c:if>" href="report/pattern/import">Import definicji</a></li>
-                    </sec:authorize>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-pattern')}">active</c:if>" href="report/pattern/list/init">Definicje</a></li>
+                    <li><a class="<c:if test="${fn:endsWith(id, 'dbs-page-report-archives')}">active</c:if>" href="report/archives/init">Archiwum</a></li>
                 </ul>
             </li>
             </sec:authorize>
@@ -66,9 +61,10 @@
                 </a>
                 <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-access') or fn:startsWith(id, 'dbs-page-parameter')}">active</c:if>">
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-access-list')}">active</c:if>" href="access/list">Uprawnienia raportowe</a></li>
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-access-new')}">active</c:if>" href="access/new">Nowe uprawnienie raportowe</a></li>
                 	<li>&nbsp;</li>
+                	<sec:authorize access="hasAnyRole('Admin')">
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-parameter-edit')}">active</c:if>" href="param/edit">Parametry bazy danych</a></li>
+                    </sec:authorize>
                 </ul>
             </li>            
             </sec:authorize>

@@ -24,15 +24,17 @@
     <!-- global styles -->
     <link rel="stylesheet" type="text/css" href="css/compiled/layout.css">
     <link rel="stylesheet" type="text/css" href="css/compiled/elements.css">
+    <link rel="stylesheet" type="text/css" href="css/compiled/ui-elements.css">
     <link rel="stylesheet" type="text/css" href="css/compiled/icons.css">
     <link rel="stylesheet" href="css/dbs/dbs-alerts.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/dbs/dbs-common.css" type="text/css" media="screen" />
 
     <!-- this page specific styles -->
     <tiles:insertAttribute name="css"/>
     
     <!-- open sans font -->
     <!-- link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'-->
-	<!-- link rel="stylesheet" href="css/dbs/fonts.google.css" type="text/css" media="screen" /-->
+	<link rel="stylesheet" href="css/dbs/fonts.google.css" type="text/css" media="screen" />
 
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -45,9 +47,10 @@
     
     <%@ include file="/WEB-INF/jsp/tiles/default/sidebar.jsp" %>
     
+     <%@ include file="/WEB-INF/jsp/tiles/default/loading.jsp" %>
     
     <!-- main container -->
-    <div class="content">
+    <div class="content" id="main-container">
 	 	
         <!-- settings changer -->
         <div class="skins-nav">
@@ -109,6 +112,7 @@
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/theme.js"></script>
+    <script src="js/dbs/dbs-common.js"></script>
 	<tiles:insertAttribute name="js"/>
 </body>
 </html>

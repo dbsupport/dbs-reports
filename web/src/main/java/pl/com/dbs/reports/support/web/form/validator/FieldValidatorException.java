@@ -10,7 +10,7 @@ import java.util.List;
 import pl.com.dbs.reports.support.web.form.field.AField;
 
 /**
- * TODO
+ * Field error data.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

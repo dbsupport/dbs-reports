@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pl.com.dbs.reports.access.dao.AccessDao;
 import pl.com.dbs.reports.access.domain.Access;
+import pl.com.dbs.reports.api.profile.ClientProfile;
 import pl.com.dbs.reports.authority.domain.Authority;
 import pl.com.dbs.reports.profile.dao.ProfileAddressDao;
 import pl.com.dbs.reports.profile.dao.ProfileAuthorityDao;
@@ -47,6 +48,11 @@ public class ProfileService {
 	@Autowired private ProfileAuthorityDao profileAuthorityDao;
 	@Autowired private ProfilePhotoDao profilePhotoDao;
 	@Autowired private ProfileNoteDao profileNoteDao;
+	
+	
+	public Profile findCurrent() {
+		return profileDao.find(SessionContext.getProfile().getId());
+	}
 	
 	public List<Profile> findByLogin(String login) {
 		ProfileFilter filter = new ProfileFilter(login, null);
@@ -213,4 +219,17 @@ public class ProfileService {
 		
 		return profile;
 	}
+	
+	@Transactional
+	public Profile modify(Long id, final ClientProfile clientprofile) {
+		logger.info("Modyfying profile.."+id);
+		Validate.notNull(id, "Profile ID is no more!");
+		
+		Profile profile = profileDao.find(id);
+		Validate.notNull(profile, "Profile is no more!");
+		
+		logger.info("Profile "+clientprofile.getLogin()+" FOUND locally and is active. Updating description..");
+		profile.modify(clientprofile.getDescription());
+		return profile;
+	}	
 }

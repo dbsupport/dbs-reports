@@ -12,7 +12,7 @@
 
 <tiles:putAttribute name="content" type="string">
 
-                    	<form:form method="post" modelAttribute="accessEditForm" action="access/edit" class="">
+                    	<form:form method="post" modelAttribute="accessEditForm" action="access/edit" class="dbs-form">
 
 	                    	<spring:bind path="name">
 	                    	<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>

@@ -1,5 +1,6 @@
 package pl.com.dbs.reports.support.db.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,7 +19,9 @@ import org.apache.commons.logging.LogFactory;
  * @coptyright (c) 2013
  */
 @Embeddable
-public class Attributes {
+public class Attributes implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private static final Log logger = LogFactory.getLog(Attributes.class);
 	
 	private static final String UNDEFINED = "undefined";

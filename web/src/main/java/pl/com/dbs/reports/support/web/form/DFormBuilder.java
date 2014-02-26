@@ -28,7 +28,8 @@ import pl.com.dbs.reports.support.web.form.validator.FieldValidatorRequired;
 import com.google.common.collect.Sets;
 
 /**
- * TODO
+ * Dynamic form builder.
+ * Reads *.xml (based on form-schema.xsd) to construct form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

@@ -1,0 +1,75 @@
+/**
+ * (c) dbs-reports
+ */
+
+#main-loading {
+	top:0;
+	left:0;
+	position:fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 999999;
+    display: none;	
+}
+
+#main-loading img {
+    margin-left: 16px;
+}
+#main-loading .col-md-xx {
+    position: absolute;
+    top: 45%;
+    left: 45%;
+    z-index: 999999;
+}
+
+#main-loading .info-label {
+    color: #3a87ad;
+    font-size: small;
+    font-style: italic;
+    font-weight: normal;
+}
+
+#main-loading .pop-dialog {
+    position: fixed;
+    width: 210px;
+}
+
+#main-loading .pop-dialog .menu {
+    width: 200px;
+    margin: 5px -10px 0px -10px;
+}
+
+#main-loading .pop-dialog .body {
+	padding:24px;
+}
+	
+#main-loading .main-loading-bgk {
+    width:100%;
+    height:100%;
+    opacity:    0.4; 
+    background-color: #fff;
+}
+
+
+img.smallavatar {
+  float: left;
+  margin: 4px;
+  max-width: 55px;
+}
+
+.users-list .table a.name.inactive {
+	color: graytext;
+	font-style: italic; 
+}
+
+.users-list .table a.name.deleted {
+	color: graytext;
+	font-style: italic;
+	text-decoration: line-through;
+}
+
+span.yours {
+	text-decoration: underline;
+}
+
+

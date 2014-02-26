@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import pl.com.dbs.reports.profile.domain.Profile;
 
 /**
- * TODO
+ * Extra custom data for Spring user.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

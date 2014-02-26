@@ -12,7 +12,7 @@
 
 <tiles:putAttribute name="content" type="string">
 
-                    	<form:form method="post" modelAttribute="paramEditForm" action="param/edit" class="">
+                    	<form:form method="post" modelAttribute="paramEditForm" action="param/edit" class="dbs-form">
 
 							<c:forEach items="${paramEditForm.params}" var="param" varStatus="rstatus"> 
 		                    	<spring:bind path="params[${rstatus.index}]">
@@ -34,7 +34,6 @@
 	                        
                             <div class="wizard-actions">
                             	<button type="submit" class="btn-glow success btn-finish" style="display: inline-block;">Zapisz i testuj!</button><span>&nbsp;</span>
-                            	<button type="button" class="btn-glow primary" onclick="location.href='param/synchronize'"><i class="icon-refresh"></i>&nbsp;Synchronizuj profile</button><span>&nbsp;</span>
                             </div>
                         </form:form>
         

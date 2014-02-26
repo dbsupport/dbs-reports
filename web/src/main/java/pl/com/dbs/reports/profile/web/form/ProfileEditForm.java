@@ -4,9 +4,15 @@
 package pl.com.dbs.reports.profile.web.form;
 
 import java.io.IOException;
+import java.util.List;
 
+import org.hibernate.validator.internal.util.privilegedactions.SetAccessibility;
+
+import pl.com.dbs.reports.access.domain.Access;
+import pl.com.dbs.reports.authority.domain.Authority;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.domain.ProfileModification;
+import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.web.file.FileMeta;
 
 /**
@@ -19,6 +25,7 @@ import pl.com.dbs.reports.support.web.file.FileMeta;
 public class ProfileEditForm extends ProfileNewForm implements ProfileModification {
 	public static final String KEY = "profileEditForm";
 	private Long id;
+	private boolean save;
 	
 	public ProfileEditForm() {
 		super();
@@ -29,8 +36,8 @@ public class ProfileEditForm extends ProfileNewForm implements ProfileModificati
 		
 		id = profile.getId();
 		global = profile.isGlobal();
-		setAccesses(profile.getAccesses());
-		setAuthorities(profile.getAuthorities());
+		super.setAccesses(profile.getAccesses());
+		super.setAuthorities(profile.getAuthorities());
 		if (profile.hasAddress()) {
 			setCity(profile.getAddress().getCity());
 			setState(profile.getAddress().getState());
@@ -60,6 +67,26 @@ public class ProfileEditForm extends ProfileNewForm implements ProfileModificati
 	
 	public boolean hasProfile() {
 		return id!=null;
+	}
+	
+	@Override
+	public void setAccesses(List<Access> accesses) {
+		if (SessionContext.hasAnyRole(SessionContext.ROLE_ADMIN)) 
+			this.accesses = accesses;
+	}
+
+	@Override
+	public void setAuthorities(List<Authority> authorities) {
+		if (SessionContext.hasAnyRole(SessionContext.ROLE_ADMIN))
+			this.authorities = authorities;
+	}
+
+	public boolean saveNow() {
+		return save;
+	}
+
+	public void setSave(boolean save) {
+		this.save = save;
 	}
 
 }

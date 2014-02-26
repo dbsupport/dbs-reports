@@ -11,7 +11,7 @@ import pl.com.dbs.reports.support.db.domain.IEntity;
 import pl.com.dbs.reports.support.filter.Filter;
 
 /**
- * TODO
+ * Context DAO manipulation interface.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

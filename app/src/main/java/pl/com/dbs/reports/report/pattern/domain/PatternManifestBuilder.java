@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.jar.Attributes;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
@@ -23,7 +23,7 @@ import pl.com.dbs.reports.api.report.pattern.PatternManifest;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
 
 /**
- * TODO
+ * Manifest builder. Extracts manifest file from zip file.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -103,12 +103,12 @@ final class PatternManifestBuilder {
 	 */
 	private void resolveManifest() throws IOException {
 		Validate.notNull(content, "Content is no more!");
-		ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(content));
+		ZipArchiveInputStream zip = new ZipArchiveInputStream(new ByteArrayInputStream(content), "UTF-8", true);
 		Validate.notNull(zip, "A zip file is no more!");
 		
 		logger.info("Resolving manifest file..");
 		
-		ZipEntry entry = null;
+		ArchiveEntry entry = null;
 		while ((entry = zip.getNextEntry()) != null) {
             if (entry.isDirectory()) { 
             	continue;

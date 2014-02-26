@@ -20,7 +20,7 @@
 
 <tiles:putAttribute name="content" type="string">
 
-<form:form method="post" modelAttribute="profileNewForm" action="profile/new/access" class="" enctype="multipart/form-data">
+<form:form method="post" modelAttribute="profileNewForm" action="profile/new/access" class="dbs-form" enctype="multipart/form-data">
 	<input type="hidden" name="page" value="2"/>
 	
 	<spring:bind path="authorities">

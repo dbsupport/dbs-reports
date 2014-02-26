@@ -13,7 +13,7 @@ import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.access.web.form.AccessEditForm;
 
 /**
- * TODO
+ * Access edition validatior.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

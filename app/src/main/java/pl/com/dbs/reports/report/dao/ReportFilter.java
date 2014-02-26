@@ -25,6 +25,7 @@ public class ReportFilter extends AFilter<Report> {
 	private static final int DEFAULT_PAGER_SIZE = 10;
 	private Long id;
 	private String name;
+	private Long profileId;
 	private List<String> accesses = new ArrayList<String>();
 	
 	public ReportFilter() {
@@ -50,6 +51,10 @@ public class ReportFilter extends AFilter<Report> {
 		this.id = id;
 	}	
 	
+	public void putProfileId(Long id) {
+		this.profileId = id;
+	}		
+	
 	public List<String> getAccesses() {
 		return accesses;
 	}
@@ -66,5 +71,9 @@ public class ReportFilter extends AFilter<Report> {
 		this.accesses = new ArrayList<String>();
 		for (Access access : profile.getAccesses())
 			this.accesses.add(access.getName());
+	}
+
+	public Long getProfileId() {
+		return profileId;
 	}
 }

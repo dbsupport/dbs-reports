@@ -21,7 +21,8 @@ import pl.com.dbs.reports.support.web.form.field.AField;
 
 
 /**
- * TODO
+ * Abstract dynamic form.
+ * @see form-schema-x.x.x.xsd
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

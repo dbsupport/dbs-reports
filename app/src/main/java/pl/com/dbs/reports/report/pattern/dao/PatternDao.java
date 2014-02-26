@@ -75,8 +75,12 @@ public class PatternDao extends ADao<ReportPattern, Long> {
 //	    	p = c.getBuilder().and(p, c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("factory")), "%"+filter.getFactory().toUpperCase()+"%"));
 //	    }
 	    if (filter.getId()!=null) {
-	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get("id"), filter.getId()));
+	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(ReportPattern_.id), filter.getId()));
 	    }
+	    if (filter.getProfileId()!=null) {
+	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(ReportPattern_.creator).get(Profile_.id), filter.getProfileId()));
+	    }
+	    	    
 	    
 	    c.getCriteria().where(p);
 	    

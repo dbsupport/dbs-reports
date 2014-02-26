@@ -13,7 +13,7 @@
 </tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
-                    	<form:form method="post" modelAttribute="reportGenerationForm" action="report/execute/generate" class="">
+                    	<form:form method="post" modelAttribute="reportGenerationForm" action="report/execute/generate" class="dbs-form">
                     		<input type="hidden" name="page" value="2">
                     		
                             <div class="field-box">
@@ -23,7 +23,7 @@
                             
                     	 	<div class="field-box">
                             	<label>Format:</label>
-	                            	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportGenerationForm.format.format.defaultExt}"/>
+	                            	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportGenerationForm.format.patternExtension}"/>
                         	</div>                        	
 
                     	 	<div class="field-box">
@@ -38,6 +38,7 @@
                             	<tiles:putAttribute name="label" type="string">${field.label}</tiles:putAttribute>
                             	<tiles:putAttribute name="value" type="string">${field.value}</tiles:putAttribute>
                             	<tiles:putAttribute name="format" type="string">${field.format}</tiles:putAttribute>
+                            	<tiles:putAttribute name="tooltip" type="string">${field.tooltip}</tiles:putAttribute>
                             	<tiles:putAttribute name="inputclass" type="string">form-control inline-input</tiles:putAttribute>
                             	<tiles:putAttribute name="attributes" type="string">readonly="readonly"</tiles:putAttribute>
                             	</tiles:insertDefinition>

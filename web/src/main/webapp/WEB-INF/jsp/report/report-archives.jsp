@@ -3,7 +3,7 @@
 
 <tiles:insertDefinition name="tiles-browser" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-report-archives</tiles:putAttribute>
-<tiles:putAttribute name="title" type="string">Lista raportów archiwalnych</tiles:putAttribute>
+<tiles:putAttribute name="title" type="string">Lista <c:if test="${current}"> <span class="yours">Twoich</span> </c:if>raportów archiwalnych</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/user-list.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-browser.css" type="text/css" media="screen" />
@@ -12,12 +12,11 @@
 <script src="js/dbs/dbs-report-archives.js"></script>
 </tiles:putAttribute> 
 <tiles:putAttribute name="form" type="string">
-                <form:form method="post" modelAttribute="reportArchivesForm" action="report/archives" class="">
+                <form:form method="post" modelAttribute="reportArchivesForm" action="report/archives" class="dbs-form">
                		<form:input path="name" cssClass="col-md-5 search" placeholder="Wyszukaj..." onblur="this.form.submit();"/>
                 </form:form>
                 
                 <div class="col-md-5 pull-right">
-                    <a href="report/pattern/import" class="btn-flat success pull-right"><span>&#43;</span>ZAIMPORTUJ NOWA DEFINICJĘ</a>
 				</div>
 </tiles:putAttribute>
 
@@ -80,7 +79,9 @@
                             </td>
                             <td class="align-right">
 	                            <ul class="actions">
-	                                <li class="last"><a href="#" class="report-delete" data-url="report/archives/delete/${report.id}"><i class="table-delete" title="Usuń raport"></i></a></li>
+	                            <sec:authorize access="hasAnyRole('Admin,Management')">
+	                            <li class="last"><a href="#" class="report-delete" data-url="report/archives/delete/${report.id}"><i class="table-delete" title="Usuń raport"></i></a></li>
+	                            </sec:authorize>
 	                            </ul>
                             </td>                             
                         </tr>

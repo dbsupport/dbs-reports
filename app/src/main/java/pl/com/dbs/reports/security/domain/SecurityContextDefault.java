@@ -3,7 +3,7 @@ package pl.com.dbs.reports.security.domain;
 import pl.com.dbs.reports.api.security.SecurityContext;
 
 /**
- * TODO
+ * Default security context implementation.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

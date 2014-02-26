@@ -15,7 +15,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 /**
- * TODO
+ * Tests.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

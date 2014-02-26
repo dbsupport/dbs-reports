@@ -9,7 +9,7 @@ import pl.com.dbs.reports.support.web.form.AForm;
 
 
 /**
- * TODO
+ * Report patterns form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -26,17 +26,20 @@ public class PatternListForm extends AForm {
 	
 	public PatternListForm() {}
 	
-	public void reset(Profile profile) {
+	@Override
+	public void reset() {
+		super.reset();
 		filter = new PatternFilter();
-		filter.putName(profile.getName());
+	}
+	
+	public void reset(Profile profile) {
+		super.reset();
+		filter = new PatternFilter();
+		filter.putProfileId(profile.getId());
 	}
 
 	public PatternFilter getFilter() {
 		return filter;
-	}
-
-	public void setFilter(PatternFilter filter) {
-		this.filter = filter;
 	}
 
 	public void setName(String name) {

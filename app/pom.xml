@@ -58,7 +58,11 @@
 		<dependency>
 		    <groupId>javax.mail</groupId>
 		    <artifactId>mail</artifactId>
-	    </dependency>		
+	    </dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+		    <artifactId>commons-compress</artifactId>
+		</dependency>	    		
 		
 		<!-- Eclipselink -->
 		<dependency>

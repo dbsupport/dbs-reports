@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -22,6 +23,7 @@ import com.google.common.collect.Iterables;
  * @coptyright (c) 2013
  */
 public class ReportBlock {
+	private static final Logger logger = Logger.getLogger(ReportBlock.class);
 	/**
 	 * Parent block
 	 */
@@ -85,7 +87,7 @@ public class ReportBlock {
 		
 		String result = new String(content);
 		for (Entry<String, String> param: params.entrySet()) {
-			result = result.replaceAll("\\^\\$"+param.getKey()+"\\^", param.getValue());
+			result = result.replaceAll("\\^\\$"+param.getKey()+"\\^", !StringUtils.isBlank(param.getValue())?param.getValue():"");
 		}
 		return result;
 	}
@@ -160,7 +162,7 @@ public class ReportBlock {
 	private void print(int level) {
 		String l = "";
 		for (int i=0; i<level; i++) l += "-";
-		System.out.println(l+" "+this);
+		logger.debug(l+" "+this);
 		for (ReportBlock block : getBlocks()) block.print(level+1);
 	}
 	

@@ -13,7 +13,7 @@ import pl.com.dbs.reports.support.web.form.AForm;
 
 
 /**
- * TODO
+ * Parameters edition form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

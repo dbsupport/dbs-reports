@@ -3,13 +3,9 @@
  */
 package pl.com.dbs.reports.report.web.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.xml.bind.JAXBException;
 
@@ -36,8 +32,9 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.report.pattern.domain.ReportPatternForm;
 import pl.com.dbs.reports.report.pattern.service.PatternService;
 import pl.com.dbs.reports.report.service.ReportService;
-import pl.com.dbs.reports.report.web.form.ReportExecuteForm;
-import pl.com.dbs.reports.report.web.validator.ReportExecuteValidator;
+import pl.com.dbs.reports.report.web.form.ReportGenerationForm;
+import pl.com.dbs.reports.report.web.validator.ReportGenerationValidator;
+import pl.com.dbs.reports.support.utils.exception.Exceptions;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 import pl.com.dbs.reports.support.web.form.DFormBuilder;
 
@@ -54,17 +51,17 @@ import pl.com.dbs.reports.support.web.form.DFormBuilder;
  * @coptyright (c) 2013
  */
 @Controller
-@SessionAttributes({ReportExecuteForm.KEY})
+@SessionAttributes({ReportGenerationForm.KEY})
 @Scope("request")
-public class ReportExecuteController {
-	private static final Logger logger = Logger.getLogger(ReportExecuteController.class);
+public class ReportGenerationController {
+	private static final Logger logger = Logger.getLogger(ReportGenerationController.class);
 	@Autowired private Alerts alerts;
 	@Autowired private PatternService patternService;
 	@Autowired private ReportService reportService;
 	
-	@ModelAttribute(ReportExecuteForm.KEY)
-    public ReportExecuteForm createForm(Model model, HttpServletRequest request, RedirectAttributes ra) {
-		ReportExecuteForm result = null;
+	@ModelAttribute(ReportGenerationForm.KEY)
+    public ReportGenerationForm createForm(Model model, HttpServletRequest request, RedirectAttributes ra) {
+		ReportGenerationForm result = null;
 		
 		Integer id = request.getSession().getAttribute("id")!=null?(Integer)request.getSession().getAttribute("id"):null;
 		if (id==null) return result;
@@ -75,7 +72,7 @@ public class ReportExecuteController {
 		ReportPatternForm form = pattern.getForm();
 		if (form!=null) {
 			try {
-				DFormBuilder<ReportExecuteForm> builder = new DFormBuilder<ReportExecuteForm>(form.getContent(), ReportExecuteForm.class);
+				DFormBuilder<ReportGenerationForm> builder = new DFormBuilder<ReportGenerationForm>(form.getContent(), ReportGenerationForm.class);
 				
 				result = builder.build().getForm();
 				result.reset(pattern);
@@ -86,7 +83,7 @@ public class ReportExecuteController {
 				logger.error("report.execute.jaxbexception:"+((JAXBException)e).getLinkedException().getMessage());
 			}
 		} else 
-			result = new ReportExecuteForm();
+			result = new ReportGenerationForm();
 		
 		return result; 
     }		
@@ -105,7 +102,7 @@ public class ReportExecuteController {
     }
 	
 	@RequestMapping(value="/report/execute/form", method = RequestMethod.GET)
-    public String form(Model model, @ModelAttribute(ReportExecuteForm.KEY) ReportExecuteForm form, 
+    public String form(Model model, @ModelAttribute(ReportGenerationForm.KEY) ReportGenerationForm form, 
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		//..if it was no able to create form redirect and show error.. 
 		if (form==null) return "redirect:/report/pattern/list";
@@ -119,7 +116,7 @@ public class ReportExecuteController {
 	
 	
 	@RequestMapping(value= "/report/execute/form", method = RequestMethod.POST)
-    public String read(@Valid @ModelAttribute(ReportExecuteForm.KEY) final ReportExecuteForm form, 
+    public String read(@Valid @ModelAttribute(ReportGenerationForm.KEY) final ReportGenerationForm form, 
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		if (!results.hasErrors()) {
 			try {
@@ -133,7 +130,7 @@ public class ReportExecuteController {
 	}
 	
 	@RequestMapping(value="/report/execute/generate", method = RequestMethod.GET)
-    public String generate(Model model, @Valid @ModelAttribute(ReportExecuteForm.KEY) ReportExecuteForm form, 
+    public String generate(Model model, @Valid @ModelAttribute(ReportGenerationForm.KEY) ReportGenerationForm form, 
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		
 		if (reportService.exceededsTemporaryReports()) {
@@ -144,7 +141,7 @@ public class ReportExecuteController {
     }
 	
 	@RequestMapping(value= "/report/execute/generate", method = RequestMethod.POST)
-    public String generate(@Valid @ModelAttribute(ReportExecuteForm.KEY) final ReportExecuteForm form, 
+    public String generate(@Valid @ModelAttribute(ReportGenerationForm.KEY) final ReportGenerationForm form, 
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		if (!results.hasErrors()) {
 			try {
@@ -160,7 +157,7 @@ public class ReportExecuteController {
 	}	
 	
 	@RequestMapping(value="/report/execute/summary", method = RequestMethod.GET)
-    public String summary(Model model, @Valid @ModelAttribute(ReportExecuteForm.KEY) ReportExecuteForm form, 
+    public String summary(Model model, @Valid @ModelAttribute(ReportGenerationForm.KEY) ReportGenerationForm form, 
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		if (results.hasErrors()) {
 			
@@ -172,51 +169,10 @@ public class ReportExecuteController {
     }
 	
 	@RequestMapping(value= "/report/execute/summary", method = RequestMethod.POST)
-    public String summary(@Valid @ModelAttribute(ReportExecuteForm.KEY) final ReportExecuteForm form, 
+    public String summary(@Valid @ModelAttribute(ReportGenerationForm.KEY) final ReportGenerationForm form, 
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		return "redirect:/report/execute/form";
 	}		
-	
-	@RequestMapping(value="/report/execute/summary/display", method = RequestMethod.GET)
-    public String display(Model model, @Valid @ModelAttribute(ReportExecuteForm.KEY) ReportExecuteForm form, 
-    		BindingResult results, RedirectAttributes ra, HttpServletRequest request, HttpServletResponse response) {
-
-		Report report = form.getReport();
-		if (report==null) {
-			alerts.addError(ra, "report.execute.no.report");
-			return "redirect:/report/execute/form";
-		}
-		
-		response.setContentType("application/octet-stream");
-		response.setHeader("Content-Disposition","attachment;filename="+report.getName());
-	 
-		ServletOutputStream out = null;
-		InputStream in = null;
-		try {
-			out = response.getOutputStream();
-			in = new ByteArrayInputStream(report.getContent());
-			byte[] outputByte = new byte[4096];
-			while(in.read(outputByte, 0, 4096) != -1) {
-				out.write(outputByte, 0, 4096);
-			}
-			in.close();
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			exception(e, form, ra, request);
-			return "redirect:/report/execute/summary";
-		} finally {
-			try {
-				out.close();
-				in.close();
-			} catch (IOException e) {
-				exception(e, form, ra, request);
-				return "redirect:/report/execute/summary";
-			}
-		}
-		
-		return null;
-    }
 	
 //	@RequestMapping(value="/report/execute/summary/archive", method = RequestMethod.GET)
 //    public String archive(Model model, @Valid @ModelAttribute(ReportExecuteForm.KEY) ReportExecuteForm form, 
@@ -240,28 +196,46 @@ public class ReportExecuteController {
 //		return "redirect:/report/archives";
 //	}
 	
-	private void exception(Exception e, ReportExecuteForm form, RedirectAttributes ra, HttpServletRequest request) {
+	@RequestMapping(value="/report/execute/archive/delete/{id}", method = RequestMethod.GET)
+    public String delete(Model model, @PathVariable("id") Long id,  RedirectAttributes ra, HttpServletRequest request) {
+		if (id==null) {
+			alerts.addError(ra, "report.archive.no.report");
+			return "redirect:/report/execute/summary";
+		}
+
+		try {
+			Report report = reportService.findNoMatterWhat(id);
+			reportService.delete(id);
+			alerts.addSuccess(ra, "report.archive.delete.success", report.getName());
+		} catch (Exception e) {
+			alerts.addError(ra, "report.archive.delete.error", e.getMessage());
+		}
+		
+		return "redirect:/report/execute/summary";
+	}		
+	
+	private void exception(Exception e, ReportGenerationForm form, RedirectAttributes ra, HttpServletRequest request) {
 		if (e instanceof IOException) {
 			alerts.addError(request, "report.execute.ioexception", e.getMessage());
-			logger.error("report.execute.ioexception:"+e.getMessage());
+			logger.error("report.execute.ioexception:"+Exceptions.stack(e));
 		} else if (e instanceof JAXBException) {
 			alerts.addError(request, "report.execute.jaxbexception", ((JAXBException)e).getLinkedException().getMessage());
-			logger.error("report.execute.jaxbexception:"+e.getStackTrace());
+			logger.error("report.execute.jaxbexception:"+Exceptions.stack(e));
 		} else if (e instanceof ReportValidationException) {
 			alerts.addError(request, "report.execute.detailed.error", form.getName(), e.getMessage());
-			logger.error("report.execute.detailed.error:"+e.getStackTrace());
+			logger.error("report.execute.detailed.error:"+Exceptions.stack(e));
 		} else if (e instanceof DataAccessException) {
 			alerts.addError(request, "client.datasource.error.detailed", e.getMessage());
-			logger.error("client.datasource.error.detailed:"+e.getStackTrace());
+			logger.error("client.datasource.error.detailed:"+Exceptions.stack(e));
 		} else {
-			alerts.addError(request, "report.execute.error", e.getMessage());
-			logger.error("report.execute.error:"+e.getMessage());
+			alerts.addError(request, "report.execute.detailed.error", form.getName(), Exceptions.stack(e));
+			logger.error("report.execute.detailed.error:"+Exceptions.stack(e));
 		}
 	}
 	
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
-		if (binder.getTarget() instanceof ReportExecuteForm) binder.setValidator(new ReportExecuteValidator());
+		if (binder.getTarget() instanceof ReportGenerationForm) binder.setValidator(new ReportGenerationValidator());
 	}
 }

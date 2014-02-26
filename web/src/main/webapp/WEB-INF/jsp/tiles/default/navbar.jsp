@@ -4,62 +4,19 @@
     <!-- navbar -->
     <header class="navbar navbar-inverse" role="banner">
         <div class="navbar-header">
-            <button class="navbar-toggle" type="button" data-toggle="collapse" id="menu-toggler">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href=""><img src="img/logo.png"></a>
+            <a class="navbar-brand" href="profile"><img src="img/dbs/logo.png"></a>
         </div>
         <ul class="nav navbar-nav pull-right hidden-xs">
             <li class="hidden-xs hidden-sm">
-                <input class="search" type="text" />
+                <input class="search" type="text" placeholder="Wyszukaj definicję..." onchange="location.href='report/pattern/list?name='+this.value"/>
             </li>
+            
+            
+ 			<c:if test="${currentprofile.someNote}">            
+            
             <li class="notification-dropdown hidden-xs hidden-sm">
                 <a href="#" class="trigger">
                     <i class="icon-warning-sign"></i>
-                    <span class="count">8</span>
-                </a>
-                <div class="pop-dialog">
-                    <div class="pointer right">
-                        <div class="arrow"></div>
-                        <div class="arrow_border"></div>
-                    </div>
-                    <div class="body">
-                        <a href="#" class="close-icon"><i class="icon-remove-sign"></i></a>
-                        <div class="notifications">
-                            <h3>You have 6 new notifications</h3>
-                            <a href="#" class="item">
-                                <i class="icon-signin"></i> New user registration
-                                <span class="time"><i class="icon-time"></i> 13 min.</span>
-                            </a>
-                            <a href="#" class="item">
-                                <i class="icon-signin"></i> New user registration
-                                <span class="time"><i class="icon-time"></i> 18 min.</span>
-                            </a>
-                            <a href="#" class="item">
-                                <i class="icon-envelope-alt"></i> New message from Alejandra
-                                <span class="time"><i class="icon-time"></i> 28 min.</span>
-                            </a>
-                            <a href="#" class="item">
-                                <i class="icon-signin"></i> New user registration
-                                <span class="time"><i class="icon-time"></i> 49 min.</span>
-                            </a>
-                            <a href="#" class="item">
-                                <i class="icon-download-alt"></i> New order placed
-                                <span class="time"><i class="icon-time"></i> 1 day.</span>
-                            </a>
-                            <div class="footer">
-                                <a href="#" class="logout">View all notifications</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li class="notification-dropdown hidden-xs hidden-sm">
-                <a href="#" class="trigger">
-                    <i class="icon-envelope"></i>
                 </a>
                 <div class="pop-dialog">
                     <div class="pointer right">
@@ -69,37 +26,30 @@
                     <div class="body">
                         <a href="#" class="close-icon"><i class="icon-remove-sign"></i></a>
                         <div class="messages">
-                            <a href="#" class="item">
-                                <img src="img/contact-img.png" class="display" />
-                                <div class="name">Alejandra Galván</div>
-                                <div class="msg">
-                                    There are many variations of available, but the majority have suffered alterations.
-                                </div>
-                                <span class="time"><i class="icon-time"></i> 13 min.</span>
-                            </a>
-                            <a href="#" class="item">
-                                <img src="img/contact-img2.png" class="display" />
-                                <div class="name">Alejandra Galván</div>
-                                <div class="msg">
-                                    There are many variations of available, have suffered alterations.
-                                </div>
-                                <span class="time"><i class="icon-time"></i> 26 min.</span>
-                            </a>
-                            <a href="#" class="item last">
-                                <img src="img/contact-img.png" class="display" />
-                                <div class="name">Alejandra Galván</div>
-                                <div class="msg">
-                                    There are many variations of available, but the majority have suffered alterations.
-                                </div>
-                                <span class="time"><i class="icon-time"></i> 48 min.</span>
+                            <a href="profile" class="item">
+			                	<c:choose>
+			                    <c:when test="${!empty currentprofile.note.editor.photo}"><img src="profile/photo/${currentprofile.note.editor.photo.id}" class="img-circle smallavatar" /></c:when>
+			                    <c:otherwise><img src="img/no-img-personal.png" class="img-circle smallavatar" /></c:otherwise>
+			                    </c:choose>                            
+                                <div class="name">
+                                <c:choose>
+			                    <c:when test="${currentprofile.note.editor.global}">${currentprofile.note.editor.description}</c:when>
+			                    <c:otherwise>${currentprofile.note.editor.name}</c:otherwise>
+			                    </c:choose>
+			                    </div>
+                                <div class="msg"><c:out value="${fn:substring(currentprofile.note.content, 0, 80)}" escapeXml="true"/></div>
+                                <span class="time"><i class="icon-time"></i> <fmt:formatDate value="${currentprofile.note.editDate}" type="both" pattern="dd-MM-yyyy HH:mm:ss" /></span>
                             </a>
                             <div class="footer">
-                                <a href="#" class="logout">View all messages</a>
+                                <a href="profile" class="logout">&nbsp;</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </li>
+            
+            </c:if>
+            
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle hidden-xs hidden-sm" data-toggle="dropdown">
                     Twoje konto
@@ -107,14 +57,12 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="profile">Twój profil</a></li>
-                    <li><a href="report/archives/current">Twoje raporty</a></li>
+                    <li><a href="report/archives/current">Twoje archiwum</a></li>
+                    <li><a href="report/archives/temporary">Twoje raporty</a></li>
+                    <sec:authorize access="hasAnyRole('Admin')">
                     <li><a href="report/pattern/list/current">Twoje definicje</a></li>
+                    </sec:authorize>
                 </ul>
-            </li>
-            <li class="settings hidden-xs hidden-sm">
-                <a href="personal-info.html" role="button">
-                    <i class="icon-cog"></i>
-                </a>
             </li>
             <li class="settings hidden-xs hidden-sm">
                 <a href="security/logout" role="button">

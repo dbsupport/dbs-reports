@@ -9,7 +9,7 @@ import pl.com.dbs.reports.support.web.form.AForm;
 
 
 /**
- * TODO
+ * Report archives form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -35,7 +35,7 @@ public class ReportArchivesForm extends AForm {
 	public void reset(Profile profile) {
 		super.reset();
 		this.filter = new ReportFilter();
-		this.filter.putName(profile.getName());
+		this.filter.putProfileId(profile.getId());
 	}
 
 	
@@ -53,5 +53,5 @@ public class ReportArchivesForm extends AForm {
 
 	public void setName(String name) {
 		this.name = name;
-	}	
+	}
 }

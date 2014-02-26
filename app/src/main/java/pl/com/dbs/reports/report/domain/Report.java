@@ -29,7 +29,7 @@ import javax.persistence.TemporalType;
 
 import org.apache.commons.lang.Validate;
 
-import pl.com.dbs.reports.api.report.ReportFormat;
+import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
@@ -63,7 +63,7 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 	
 	@Column(name = "format")
 	@Enumerated(EnumType.STRING)
-	private ReportFormat format;	
+	private ReportType format;	
 	
     @ElementCollection
     @MapKeyColumn(name="name")
@@ -98,7 +98,7 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 		Validate.notEmpty(context.getName(), "Name is no more!");
     	this.name = context.getName();
     	this.content = context.getContent();
-    	this.format = context.getFormat().getFormat();
+    	this.format = context.getFormat().getReportType();
     	this.parameters = context.getParams();
     	this.temporary = context.getTemporary();
     }
@@ -139,7 +139,7 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 	}
 
 	@Override
-	public ReportFormat getFormat() {
+	public ReportType getFormat() {
 		return format;
 	}
 	

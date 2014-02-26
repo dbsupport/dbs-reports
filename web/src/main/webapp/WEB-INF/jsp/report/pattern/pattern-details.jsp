@@ -5,10 +5,16 @@
 <tiles:putAttribute name="id" type="string">dbs-page-report-pattern-details</tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">definicja raportu</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
+<link rel="stylesheet" href="css/compiled/form-wizard.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/lib/bootstrap.datepicker.css" type="text/css" >
+<link rel="stylesheet" href="css/dbs/dbs-wizard.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-profile.css" type="text/css" media="screen" />
 </tiles:putAttribute>
 <tiles:putAttribute name="js" type="string">
+<script src="js/bootstrap.datepicker.js"></script>
+<script src="js/locales/bootstrap-datepicker.pl.js"></script>
+<script src="js/dbs/dbs-datepicker.js"></script>
 <script src="js/dbs/dbs-pattern-details.js"></script>
 </tiles:putAttribute> 
 <tiles:putAttribute name="content" type="string">
@@ -30,51 +36,69 @@
                 </div>
                 
                 <div class="col-md-5 pull-right">
+                	<sec:authorize access="hasAnyRole('Admin')">
+                	<a href="report/pattern/download/${pattern.id}" class="btn-flat success pull-right delete-user"><i class="icon-download-alt"></i>Pobierz</a>
+                	</sec:authorize>
                 	<a href="report/execute/${pattern.id}" class="btn-flat success pull-right delete-user"><span>&#43;</span>GENERUJ RAPORT</a>
+                	<sec:authorize access="hasAnyRole('Admin')">
 	                <a href="#" data-url="report/pattern/delete/${pattern.id}" class="btn-flat icon pull-right delete-user pattern-delete" data-toggle="tooltip" title="Skasuj definicję" data-placement="top"><i class="icon-trash"></i></a>
-	                <a href="report/archives/${pattern.id}" class="btn-flat icon large pull-right edit">Pokaż raporty</a>             
+	                </sec:authorize>
+	                <a href="report/archives/${pattern.id}" class="btn-flat icon large pull-right edit">Raporty tej definicji</a>
                 </div>
             </div>
 
             <div class="row profile">
-
                 <div class="col-md-9 bio">
                     <div class="profile-box">
-                        <div class="col-md-12 section">
-                            <h6>Szczegóły</h6>
-                            <p>Formaty: ${pattern.formatsAsString}</p>
-                            <p>Data importu: <fmt:formatDate value="${pattern.uploadDate}"/></p>
-                            <p>Zaimportował: ${pattern.creator.name}</p>
-                            <c:if test="${!empty pattern.form}"><p>Formularz: ${pattern.form.name}</p></c:if>
-                            
+                        <div class="section">
+                        	<div class="area">Plik: ${pattern.filename}</div>
+                            <div class="area">Formaty: ${pattern.formatsAsString}</div>
+                            <div class="area">Data importu: <fmt:formatDate value="${pattern.uploadDate}"/></div>
+                            <div class="area">Zaimportował: <c:choose><c:when test="${pattern.creator.global}">${pattern.creator.description}</c:when><c:otherwise>${pattern.creator.name}</c:otherwise></c:choose></div>
                         </div>
 					</div>
+					
+					<c:if test="${!empty pattern.form}">
 					<div class="profile-box">
-						<div class="col-md-12 section">
+                            <div class="row form-wrapper section">
+                            <form:form method="post" modelAttribute="reportGenerationForm" action="report/pattern/details/${pattern.id}" class="dbs-form">
+	                    	
+	                            <c:if test="${reportGenerationForm.fieldfull}">
+	                            <c:forEach var="field" items="${reportGenerationForm.fields}" varStatus="fstatus">
+									<tiles:insertDefinition name="${field.tile}">
+									<tiles:putAttribute name="name" type="string">fields[${fstatus.index}]</tiles:putAttribute>
+	                            	<tiles:putAttribute name="label" type="string">${field.label}</tiles:putAttribute>
+	                            	<tiles:putAttribute name="value" type="string">${field.value}</tiles:putAttribute>
+	                            	<tiles:putAttribute name="format" type="string">${field.format}</tiles:putAttribute>
+	                            	<tiles:putAttribute name="tooltip" type="string">${field.tooltip}</tiles:putAttribute>
+	                            	<c:set var="validators" value="${field.validators}" scope="request"/>
+	                            	</tiles:insertDefinition>
+	                            </c:forEach>
+	                            </c:if>                    		
+	                    		
+	                            <div class="wizard-actions">
+			                        <button type="submit" class="btn-glow success btn-finish" style="display: inline-block;">Sprawdź formularz</button>
+	                            </div>
+                        	</form:form>
+                            </div>
+					</div>
+					</c:if>
+					
+					<div class="profile-box">
+						<div class="section">
                         	<h6>Manifest</h6>
-                            <div class="col-md-12">
+                            <div class="">
                                 <textarea class="form-control" rows="8" readonly="readonly"><c:out value="${pattern.manifest.text}"/></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- side address column -->
+
                 <div class="col-md-3 col-xs-12 address pull-right">
-                    <h6>Adres</h6>
-                    <!-- iframe width="300" height="133" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com.mx/?ie=UTF8&amp;t=m&amp;ll=19.715081,-155.071421&amp;spn=0.010746,0.025749&amp;z=14&amp;output=embed"></iframe-->
+                    <h6>&nbsp;</h6>
                     <ul>
-                        <li>2301 East Lamar Blvd. Suite 140. </li>
-                        <li>City, Arlington. United States,</li>
-                        <li>Zip Code, TX 76006.</li>
-                        <li class="ico-li">
-                            <i class="ico-phone"></i>
-                            1817 274 2933
-                        </li>
-                         <li class="ico-li">
-                            <i class="ico-mail"></i>
-                            <a href="#">alejandra@detail.com</a>
-                        </li>
+                        <li>&nbsp;</li>
                     </ul>
                 </div>
             </div>

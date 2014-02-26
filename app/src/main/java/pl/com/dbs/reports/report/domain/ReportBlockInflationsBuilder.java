@@ -19,8 +19,8 @@ import org.apache.log4j.Logger;
  */
 final class ReportBlockInflationsBuilder {
 	private static final Logger logger = Logger.getLogger(ReportBlockInflationsBuilder.class);
-	private static final java.util.regex.Pattern INFLATER_PATTERN = java.util.regex.Pattern.compile("((\\w+):\\B([\\w\\d\\s\\(\\)\\^\\$_,'/\\.=\\-\\<\\>\\%\\*]+);\\B)+",  java.util.regex.Pattern.CASE_INSENSITIVE);
-	
+	//private static final java.util.regex.Pattern INFLATER_PATTERN = java.util.regex.Pattern.compile("((\\w+):\\B([\\w\\d\\s\\(\\)\\^\\$_,'/\\.\\@=\\-\\<\\>\\%\\*\\+\\|]+);\\B)+",  java.util.regex.Pattern.CASE_INSENSITIVE);
+	private static final java.util.regex.Pattern INFLATER_PATTERN = java.util.regex.Pattern.compile("(\\w+):\\s*(SELECT\\s+.+?FROM\\s+.+?);",  java.util.regex.Pattern.CASE_INSENSITIVE|java.util.regex.Pattern.DOTALL);
 	private static final java.util.regex.Pattern IN_VARIABLE_PATTERN = java.util.regex.Pattern.compile("\\^\\$([\\w\\d_]+)\\^",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	
 //	private static final java.util.regex.Pattern OUT_VARIABLES_PATTERN = java.util.regex.Pattern.compile("INTO\\s+([\\w\\d_,\\s]+)\\bFROM",  java.util.regex.Pattern.CASE_INSENSITIVE);
@@ -62,8 +62,8 @@ final class ReportBlockInflationsBuilder {
 		logger.info("Resolving inflations..");
 		Matcher inflations = INFLATER_PATTERN.matcher(content);
 	    while (inflations.find()) {
-	    	String label = StringUtils.trim(inflations.group(2));
-	    	String sql = StringUtils.trim(inflations.group(3));
+	    	String label = StringUtils.trim(inflations.group(1));
+	    	String sql = StringUtils.trim(inflations.group(2));
 	    	ReportBlockInflation inflation = new ReportBlockInflation(label, sql);
 	    	logger.info("Inflation found: "+inflation);
 	    	this.inflations.add(inflation);

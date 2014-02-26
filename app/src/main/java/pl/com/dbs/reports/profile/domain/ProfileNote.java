@@ -3,6 +3,8 @@
  */
 package pl.com.dbs.reports.profile.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +15,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Version;
+
+import org.apache.commons.lang.StringUtils;
 
 import pl.com.dbs.reports.support.db.domain.IEntity;
 
@@ -43,16 +50,22 @@ public class ProfileNote implements IEntity {
 	//@Column(name = "editor_id")
 	//private long editorId;
 	
+	@Column(name = "edit_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date editDate;
+	
 	public ProfileNote() {/*JPA*/}
 	
 	public ProfileNote(String content, Profile editor) {
 		this.content = content;
 		this.editor = editor;
+		this.editDate = new Date();
 	}
 	
 	public ProfileNote modify(String content, Profile editor) {
 		this.content = content;
 		this.editor = editor;
+		this.editDate = new Date();
 		return this;
 	}
 
@@ -66,6 +79,14 @@ public class ProfileNote implements IEntity {
 
 	public Profile getEditor() {
 		return editor;
+	}
+
+	public Date getEditDate() {
+		return editDate;
+	}
+	
+	public boolean isBlank() {
+		return StringUtils.isBlank(content);
 	}
 	
 }

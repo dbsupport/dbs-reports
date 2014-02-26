@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/jsp/tiles/common/taglib.jsp" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html class="login-bg">
 <head>
@@ -20,7 +21,9 @@
     <!-- global styles -->
     <link rel="stylesheet" type="text/css" href="css/compiled/layout.css">
     <link rel="stylesheet" type="text/css" href="css/compiled/elements.css">
+    <link rel="stylesheet" type="text/css" href="css/compiled/ui-elements.css">
     <link rel="stylesheet" type="text/css" href="css/compiled/icons.css">
+    <link rel="stylesheet" href="css/dbs/dbs-common.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="css/dbs/dbs-alerts.css" type="text/css" media="screen" />
 
     <!-- libraries -->
@@ -31,7 +34,8 @@
 
     <!-- open sans font -->
     <!-- link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'-->
-
+    <link rel="stylesheet" href="css/dbs/fonts.google.css" type="text/css" media="screen" />
+    
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -39,19 +43,22 @@
 <body id="<tiles:getAsString name="id"/>">
     <div class="header">
         <a href="">
-            <img src="img/logo.png" class="logo" />
+            <img src="img/dbs/logo.png" class="logo" />
         </a>
     </div>
+    
+    <%@ include file="/WEB-INF/jsp/tiles/default/loading.jsp" %>
 
     <!-- main container -->
-    
+    <div id="main-container">
     <%@ include file="/WEB-INF/jsp/tiles/security/alerts.jsp" %>
     
     <tiles:insertAttribute name="content"/>
-    
+    </div>
 	<!-- scripts -->
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/dbs/dbs-common.js"></script>
     <!-- script src="js/theme.js"></script-->    
 
 </body>

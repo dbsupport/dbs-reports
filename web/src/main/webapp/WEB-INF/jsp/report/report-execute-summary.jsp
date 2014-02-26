@@ -11,10 +11,13 @@
 <link rel="stylesheet" href="css/compiled/form-wizard.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-wizard.css" type="text/css" media="screen" />
 </tiles:putAttribute>
+<tiles:putAttribute name="js" type="string">
+<script src="js/dbs/dbs-report-execute-summary.js"></script>
+</tiles:putAttribute> 
 <tiles:putAttribute name="content" type="string">
 
 						<c:if test="${!empty reports}">
-                        <h3>Niezarchiwizowane raporty (${fn:length(reports)}/${maxtemp})</h3>
+                        <h3><span class="yours">Twoje</span> niezarchiwizowane raporty (${fn:length(reports)}/${maxtemp})</h3>
 			            <div class="row">
 			                <div class="col-md-11">
 			                    <table class="table table-hover">
@@ -53,7 +56,7 @@
 			                            <td class="align-right">
 				                            <ul class="actions">
 				                                <li class="last"><a href="report/archives/archive/${report.id}"><i class="tool" title="Przenieś do archiwum"></i>&nbsp;</a></li>
-				                                <li class="last"><a href="report/archives/delete/${report.id}"><i class="table-delete" title="Usuń"></i>&nbsp;</a></li>
+				                                <li class="last"><a href="#" class="report-delete" data-url="report/archives/temporary/delete/${report.id}?site=/report/execute/summary"><i class="table-delete" title="Usuń"></i>&nbsp;</a></li>
 				                            </ul>
 			                            </td>			                            
 			                        </tr>
@@ -65,7 +68,7 @@
 			            </c:if>
 			            
 			            
-						<form:form method="post" modelAttribute="reportGenerationForm" action="report/execute/summary" class="">
+						<form:form method="post" modelAttribute="reportGenerationForm" action="report/execute/summary" class="dbs-form">
                     		<input type="hidden" name="page" value="3">
                     		
 	                        <div class="wizard-actions">

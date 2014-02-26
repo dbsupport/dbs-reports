@@ -6,7 +6,7 @@ package pl.com.dbs.reports.access.web.form;
 import pl.com.dbs.reports.access.dao.AccessFilter;
 
 /**
- * TODO
+ * Access list form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

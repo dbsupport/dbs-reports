@@ -7,28 +7,28 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import pl.com.dbs.reports.report.web.form.ReportExecuteForm;
+import pl.com.dbs.reports.report.web.form.ReportGenerationForm;
 
 /**
- * TODO
+ * Dynamic report form validator.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class ReportExecuteValidator implements Validator {
-	public ReportExecuteValidator() {}
+public class ReportGenerationValidator implements Validator {
+	public ReportGenerationValidator() {}
 	
 	/* (non-Javadoc)
 	 * @see org.springframework.validation.Validator#supports(java.lang.Class)
 	 */
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return ReportExecuteForm.class.equals(clazz);
+		return ReportGenerationForm.class.equals(clazz);
 	}
 	
 	@Override
 	public void validate(Object target, Errors errors) {
-		ReportExecuteForm form = (ReportExecuteForm)target;
+		ReportGenerationForm form = (ReportGenerationForm)target;
 		
 		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pattern", "report.execute.no.pattern");

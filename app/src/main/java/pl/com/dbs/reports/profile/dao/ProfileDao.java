@@ -122,6 +122,7 @@ public class ProfileDao extends ADao<Profile, Long> {
 	    	Predicate ex13 = c.getBuilder().like(c.getBuilder().upper(a.<String>get(ProfileAddress_.zipcode)), "%"+filter.getName().toUpperCase()+"%");
 	    	p = c.getBuilder().or(ex1, ex2, ex3, ex4, ex5, ex6, ex10, ex11, ex12, ex13);
 	    }
+    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Profile_.accepted), filter.isAccepted()?1:0));
 	    
 	    c.getCriteria().where(p);
 	    

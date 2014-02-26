@@ -46,11 +46,12 @@ final class ReportBuilder {
 		this.profile = profile;
 	}
 	
-	ReportBuilder addParam(String key, String value) {
+	ReportBuilder addParam(String key, final String value) {
 		if (StringUtils.isBlank(key)) return this;
 		key = key.toUpperCase().trim();
 		//..if param already exists - replace it..
-		if (params.containsKey(key)) params.remove(key) ;
+		if (params.containsKey(key)) params.remove(key);
+		//if (encodingContext!=null) params.put(key, encodingService.encode(value, encodingContext)); else 
 		params.put(key, value);
 		return this;
 	}
@@ -65,8 +66,14 @@ final class ReportBuilder {
 		return this;
 	}
 	
+//	ReportBuilder encoding(EncodingService encodingService) {
+//		this.encodingService = encodingService;
+//		this.encodingContext = encodingService!=null?this.encodingService.getEncodingContext():null;
+//		return this;
+//	}
+	
 	ReportBuilder build() {
-		final String fullname = name+"."+format.getExt();
+		final String fullname = name+"."+format.getReportExtension();
 		
 		this.report = new Report(new ReportCreation() {
 			@Override

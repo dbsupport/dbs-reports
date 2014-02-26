@@ -13,7 +13,7 @@
 </tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
-                    	<form:form method="post" modelAttribute="patternImportForm" action="report/pattern/import/summary" class="">
+                    	<form:form method="post" modelAttribute="patternImportForm" action="report/pattern/import/summary" class="dbs-form">
                     		<input type="hidden" name="page" value="2"/>
                     		
                     	 	<div class="field-box">

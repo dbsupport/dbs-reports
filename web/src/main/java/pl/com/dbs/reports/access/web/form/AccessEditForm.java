@@ -9,7 +9,7 @@ import pl.com.dbs.reports.access.domain.AccessModification;
 
 
 /**
- * TODO
+ * Access edit form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

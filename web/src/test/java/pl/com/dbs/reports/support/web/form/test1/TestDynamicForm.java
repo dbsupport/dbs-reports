@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import pl.com.dbs.reports.support.web.form.DForm;
 
 /**
- * TODO
+ * Tests.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

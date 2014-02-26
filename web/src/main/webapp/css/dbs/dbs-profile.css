@@ -10,5 +10,6 @@ img.avatar {
 }
 
 .user-profile .header span.area.inactive {
-	color:orange;
+	color: graytext;
+	font-style: italic; 
 }

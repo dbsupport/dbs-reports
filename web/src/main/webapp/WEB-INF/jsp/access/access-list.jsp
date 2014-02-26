@@ -13,12 +13,14 @@
 </tiles:putAttribute>
 
 <tiles:putAttribute name="form" type="string">
-                <form:form method="post" modelAttribute="accessListForm" action="access/list" class="">
+                <form:form method="post" modelAttribute="accessListForm" action="access/list" class="dbs-form">
                		<form:input path="name" cssClass="col-md-5 search" placeholder="Wyszukaj..." onblur="this.form.submit();"/>
                 </form:form>
                 
                 <div class="col-md-5 pull-right">
+                	<sec:authorize access="hasAnyRole('Admin,Management')">
                     <a href="access/new" class="btn-flat success pull-right"><span>&#43;</span>DODAJ NOWE UPRAWNIENIE</a>
+                    </sec:authorize>
 				</div>
 </tiles:putAttribute>
 
@@ -60,8 +62,8 @@
                             </td>
                             <td>
                                     <ul class="actions">
-                                        <li><a href="access/edit/${access.id}"><i class="table-edit" title="Edycja uprawnienia"></i></a></li>
-                                        <li class="last"><a href="#" class="access-delete" data-url="access/delete/${access.id}"><i class="table-delete" title="Usunięcie uprawnienia"></i></a></li>
+                                    	<sec:authorize access="hasAnyRole('Admin')"><li><a href="access/edit/${access.id}"><i class="table-edit" title="Edycja uprawnienia"></i></a></li></sec:authorize>
+                                        <sec:authorize access="hasAnyRole('Admin')"><li class="last"><a href="#" class="access-delete" data-url="access/delete/${access.id}"><i class="table-delete" title="Usunięcie uprawnienia"></i></a></li></sec:authorize>
                                     </ul>
                              </td>                            
                         </tr>

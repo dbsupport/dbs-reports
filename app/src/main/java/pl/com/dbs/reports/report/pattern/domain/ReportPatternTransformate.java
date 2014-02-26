@@ -15,9 +15,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -56,8 +57,13 @@ public class ReportPatternTransformate implements IEntity, PatternTransformate {
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] content;
 	
-	@OneToMany(mappedBy="transformate", orphanRemoval=true)
-	private List<ReportPatternInflater> inflaters;
+	//@OneToMany(mappedBy="transformate", orphanRemoval=true)
+	@ManyToMany(fetch=FetchType.EAGER)
+	  @JoinTable(
+	      name="tre_pattern_trainf",
+	      joinColumns={@JoinColumn(name="transformate_id", referencedColumnName="id")},
+	      inverseJoinColumns={@JoinColumn(name="inflater_id", referencedColumnName="id")})	
+	private List<ReportPatternInflater> inflaters = new ArrayList<ReportPatternInflater>();
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="pattern_id")
@@ -80,9 +86,8 @@ public class ReportPatternTransformate implements IEntity, PatternTransformate {
 		this.pattern = pattern;
 	}
 	
-	public void setInflaters(List<ReportPatternInflater> inflaters) {
-		this.inflaters = inflaters;
-		for (ReportPatternInflater i : inflaters) i.setTransformate(this);
+	public void addInflater(ReportPatternInflater inflater) {
+		this.inflaters.add(inflater);
 	}
 
 	@Override

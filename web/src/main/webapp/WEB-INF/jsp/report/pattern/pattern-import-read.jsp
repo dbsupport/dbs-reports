@@ -13,7 +13,7 @@
 </tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
-                    	<form:form method="post" modelAttribute="patternImportForm" action="report/pattern/import/read" class="" enctype="multipart/form-data">
+                    	<form:form method="post" modelAttribute="patternImportForm" action="report/pattern/import/read" class="dbs-form" enctype="multipart/form-data">
                     		<input type="hidden" name="page" value="1"/>
                     		
                     		<spring:bind path="file">

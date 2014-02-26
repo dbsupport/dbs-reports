@@ -31,8 +31,8 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPatternForm;
 import pl.com.dbs.reports.report.pattern.service.PatternService;
 import pl.com.dbs.reports.report.pattern.web.form.PatternImportForm;
 import pl.com.dbs.reports.report.pattern.web.validator.PatternImportValidator;
-import pl.com.dbs.reports.report.web.form.ReportExecuteForm;
-import pl.com.dbs.reports.report.web.validator.ReportExecuteValidator;
+import pl.com.dbs.reports.report.web.form.ReportGenerationForm;
+import pl.com.dbs.reports.report.web.validator.ReportGenerationValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 import pl.com.dbs.reports.support.web.file.FileMeta;
 import pl.com.dbs.reports.support.web.form.DFormBuilder;
@@ -63,14 +63,14 @@ public class PatternImportController {
 		return new PatternImportForm();
     }
 	
-	@ModelAttribute(ReportExecuteForm.KEY)
-    public ReportExecuteForm createForm(@ModelAttribute(PatternImportForm.KEY) final PatternImportForm form, HttpServletRequest request, RedirectAttributes ra) {
+	@ModelAttribute(ReportGenerationForm.KEY)
+    public ReportGenerationForm createForm(@ModelAttribute(PatternImportForm.KEY) final PatternImportForm form, HttpServletRequest request, RedirectAttributes ra) {
 		//..build test form only for form mapping..
 		if (form.getPattern()!=null&&form.getPattern().getForm()!=null) {//&&request.getServletPath().contains("/report/pattern/import/form")) {
 			try {
 				ReportPatternForm rpf = form.getPattern().getForm();
-				DFormBuilder<ReportExecuteForm> builder = new DFormBuilder<ReportExecuteForm>(rpf.getContent(), ReportExecuteForm.class);
-				ReportExecuteForm tform = builder.build().getForm();
+				DFormBuilder<ReportGenerationForm> builder = new DFormBuilder<ReportGenerationForm>(rpf.getContent(), ReportGenerationForm.class);
+				ReportGenerationForm tform = builder.build().getForm();
 				tform.reset(form.getPattern());
 				return tform;
 			} catch (Exception e) {
@@ -98,7 +98,7 @@ public class PatternImportController {
     }		
 
 	@RequestMapping(value="/report/pattern/import/form", method = RequestMethod.GET)
-    public String form(Model model, @ModelAttribute(ReportExecuteForm.KEY) final ReportExecuteForm form, HttpServletRequest request, RedirectAttributes ra) {
+    public String form(Model model, @ModelAttribute(ReportGenerationForm.KEY) final ReportGenerationForm form, HttpServletRequest request, RedirectAttributes ra) {
 		return "report/pattern/pattern-import-form";
     }
 	
@@ -139,9 +139,13 @@ public class PatternImportController {
 	}
 
 	@RequestMapping(value= "/report/pattern/import/form", method = RequestMethod.POST)
-    public String form(@Valid @ModelAttribute(ReportExecuteForm.KEY) final ReportExecuteForm form, 
+    public String form(@Valid @ModelAttribute(ReportGenerationForm.KEY) final ReportGenerationForm form, 
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
-		return "report/pattern/pattern-import-form";
+		if (results.hasErrors())
+			return "report/pattern/pattern-import-form";
+		
+		alerts.addSuccess(ra, "report.pattern.import.form.valid");
+		return "redirect:/report/pattern/import/form";
 	}
 	
 
@@ -175,6 +179,6 @@ public class PatternImportController {
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		if (binder.getTarget() instanceof PatternImportForm) binder.setValidator(new PatternImportValidator());
-		if (binder.getTarget() instanceof ReportExecuteForm) binder.setValidator(new ReportExecuteValidator());
+		if (binder.getTarget() instanceof ReportGenerationForm) binder.setValidator(new ReportGenerationValidator());
 	}
 }

@@ -7,18 +7,30 @@
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/user-list.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-browser.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/dbs/dbs-profile-list.css" type="text/css" media="screen" />
 </tiles:putAttribute>
 <tiles:putAttribute name="js" type="string">
 <script src="js/dbs/dbs-profile-list.js"></script>
 </tiles:putAttribute>
 
 <tiles:putAttribute name="form" type="string">
-                <form:form method="post" modelAttribute="profileListForm" action="profile/list" class="">
+                <form:form method="post" modelAttribute="profileListForm" action="profile/list" class="dbs-form">
                		<form:input path="name" cssClass="col-md-5 search" placeholder="Wyszukaj..." onblur="this.form.submit();"/>
+					<spring:bind path="accepted">
+				    <div class="field-box">
+				    	<form:hidden path="accepted"/>
+						<div class="slider-frame primary long">
+						    <span data-on-text="aktywne" data-off-text="nieaktywne" class="slider-button"></span>
+						</div>    
+				    </div>
+				    </spring:bind>                 		
                 </form:form>
                 
                 <div class="col-md-5 pull-right">
+                	<sec:authorize access="hasAnyRole('Admin')">
+                    <a class="btn-flat icon large pull-right" href="profiles/synchronize" onclick="$.OnSubmit();" data-toggle="tooltip" title="Synchronizuj profile"><i class="icon-refresh"></i></a>
                     <a href="profile/new" class="btn-flat success pull-right"><span>&#43;</span>DODAJ NOWY PROFIL</a>
+                    </sec:authorize>
 				</div>
 </tiles:putAttribute>
 
@@ -30,7 +42,7 @@
                                 <th class="col-md-3 sortable">
                                 <tiles:insertDefinition name="tiles-sorter">
                                 	<tiles:putAttribute name="name" type="string">lastname</tiles:putAttribute>
-                                	<tiles:putAttribute name="label" type="string">Imię/Nazwisko</tiles:putAttribute>
+                                	<tiles:putAttribute name="label" type="string">Użytkownik</tiles:putAttribute>
             					</tiles:insertDefinition>                                  
                                 </th>
                                 <th class="col-md-2 sortable"><span class="line"></span>
@@ -63,10 +75,6 @@
                         <tr <c:if test="${rstatus.first}">class="first"</c:if>>
                        
                              <td>
-                                <c:if test="${profile.accepted ne true}">
-			                    <div class="subtext">profil nieaktywny</div>
-			                    </c:if>
-                             
                              	<div class="">
                              	<c:if test="${!empty profile.photo}">
                                 <img src="profile/photo/${profile.photo.id}" class="img-circle avatar" />
@@ -97,7 +105,7 @@
 			                    
                             </td>
                             <td>
-                               ${profile.login}
+                               ${profile.login} <c:if test="${profile.accepted ne true}"><span class="inactive">(profil nieaktywny)</span></c:if>
                             </td>                             
                             <td>
                                  ${profile.email}
@@ -117,8 +125,8 @@
                             
                             <td>
                                     <ul class="actions">
-                                        <li><a href="profile/edit/${profile.id}"><i class="table-edit" title="Edycja profilu"></i></a></li>
-                                        <li class="last"><a href="#" class="profile-delete" data-url="profile/delete/${profile.id}"><i class="table-delete" title="Usunięcie profilu"></i></a></li>
+                                        <sec:authorize access="hasAnyRole('Admin,Management')"><li><a href="profile/edit/${profile.id}"><i class="table-edit" title="Edycja profilu"></i></a></li></sec:authorize>
+                                        <sec:authorize access="hasAnyRole('Admin')"><li class="last"><a href="#" class="profile-delete" data-url="profile/delete/${profile.id}"><i class="table-delete" title="Usunięcie profilu"></i></a></li></sec:authorize>
                                     </ul>
                              </td>                            
                         </tr>

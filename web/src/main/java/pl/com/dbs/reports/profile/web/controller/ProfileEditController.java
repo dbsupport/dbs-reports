@@ -34,9 +34,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pl.com.dbs.reports.access.service.AccessService;
+import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.domain.ProfileException;
 import pl.com.dbs.reports.profile.service.ProfileAuthorityService;
 import pl.com.dbs.reports.profile.service.ProfileService;
+import pl.com.dbs.reports.profile.web.ProfileSession;
 import pl.com.dbs.reports.profile.web.form.ProfileEditForm;
 import pl.com.dbs.reports.profile.web.validator.ProfileEditValidator;
 import pl.com.dbs.reports.security.domain.SessionContext;
@@ -91,6 +93,9 @@ public class ProfileEditController {
 
 	@RequestMapping(value="/profile/edit/access", method = RequestMethod.GET)
     public String access(Model model, @ModelAttribute(ProfileEditForm.KEY) final ProfileEditForm form) {
+		if (!SessionContext.hasAnyRole(SessionContext.ROLE_ADMIN)) {
+			return "redirect:/profile/edit/summary";	
+		}
 		model.addAttribute("accesses", accessService.find());
 		model.addAttribute("authorities", profileAuthorityService.find());
 		return "profile/profile-edit-access";
@@ -135,6 +140,7 @@ public class ProfileEditController {
 	@RequestMapping(value= "/profile/edit/personal", method = RequestMethod.POST)
     public String personal(@Valid @ModelAttribute(ProfileEditForm.KEY) final ProfileEditForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		if (!results.hasErrors()) {
+			if (form.saveNow()) return save(form, request, ra);
 			return "redirect:/profile/edit/access";
 		}
 		return "profile/profile-edit-personal";
@@ -142,7 +148,11 @@ public class ProfileEditController {
 	
 	@RequestMapping(value= "/profile/edit/access", method = RequestMethod.POST)
     public String access(@Valid @ModelAttribute(ProfileEditForm.KEY) final ProfileEditForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+		if (!SessionContext.hasAnyRole(SessionContext.ROLE_ADMIN)) {
+			return "redirect:/profile/edit/summary";
+		}
 		if (!results.hasErrors()) {
+			if (form.saveNow()) return save(form, request, ra);
 			return "redirect:/profile/edit/summary";
 		}
 		return "profile/profile-edit-access";
@@ -151,21 +161,23 @@ public class ProfileEditController {
 	@RequestMapping(value= "/profile/edit/summary", method = RequestMethod.POST)
     public String summary(@Valid @ModelAttribute(ProfileEditForm.KEY) final ProfileEditForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		if (!results.hasErrors()) {
-			try {
-				profileService.edit(form);
-			} catch (Exception e) {
-				exception(e, request, ra);
-				return "redirect:/profile/edit/summary";
-			}
-			
-			alerts.addSuccess(ra, "profile.edit.edited", form.getLogin());
-			//..current session profile. Should be logged out..
-			if (SessionContext.getProfile().getId().equals(form.getId())) 
-				alerts.addWarning(ra, "profile.edit.edited.current");
-			
-			return "redirect:/profile/list";
+			return save(form, request, ra);
 		}
 		return "profile/profile-edit-summary";
+	}
+	
+	private String save(final ProfileEditForm form, HttpServletRequest request, RedirectAttributes ra) {
+		try {
+			profileService.edit(form);
+		} catch (Exception e) {
+			exception(e, request, ra);
+			return "redirect:/profile/edit/summary";
+		}		
+		
+		Profile profile = profileService.findById(form.getId());
+		alerts.addSuccess(ra, "profile.edit.edited", form.getLogin());
+		ProfileSession.update(profile, request);		
+		return "redirect:/profile/"+form.getId();
 	}
 	
 	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {

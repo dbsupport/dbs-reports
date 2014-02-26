@@ -17,7 +17,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import pl.com.dbs.reports.support.db.domain.AEntity;
 
 /**
- * TODO
+ * Access entity.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

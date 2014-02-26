@@ -12,9 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -25,7 +23,7 @@ import pl.com.dbs.reports.support.db.domain.IEntity;
 
 
 /**
- * TODO
+ * Its content infates transformates blocks.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -49,11 +47,6 @@ public class ReportPatternInflater implements IEntity, PatternInflater {
 	@Basic(fetch = FetchType.LAZY)	
 	private byte[] content;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="transformate_id")
-	private ReportPatternTransformate transformate;		
-	
-	
 	public ReportPatternInflater() { /*JPA*/ }
 	
 	public ReportPatternInflater (final byte[] content, final String name) throws IOException {
@@ -64,10 +57,6 @@ public class ReportPatternInflater implements IEntity, PatternInflater {
 		this.content = content;
 	}
 	
-	public void setTransformate(ReportPatternTransformate transformate) {
-		this.transformate = transformate;
-	}
-
 	@Override
 	public String getName() {
 		return name;

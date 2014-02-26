@@ -2,7 +2,7 @@
 <%@ page session="false" contentType="text/html; charset=UTF-8" %>
 
 <tiles:insertDefinition name="tiles-default" flush="true">
-<tiles:putAttribute name="id" type="string">dbs-page-profile-profile<c:if test="${profile.id eq sprofile.id}">-current</c:if></tiles:putAttribute>
+<tiles:putAttribute name="id" type="string">dbs-page-profile-profile<c:if test="${current}">-current</c:if></tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">profil użytkownika</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" />
@@ -19,12 +19,10 @@
             <div class="row header">
                 <div class="col-md-12">
                 	<div class="">
-                   	<c:if test="${!empty profile.photo}">
-						<img src="profile/photo/${profile.photo.id}" class="img-circle avatar" />
-                   	</c:if>
-					<c:if test="${empty profile.photo}">
-                    	<img src="img/no-img-personal.png" class="img-circle avatar" />
-                    </c:if>
+                	<c:choose>
+                    <c:when test="${!empty profile.photo}"><img src="profile/photo/${profile.photo.id}" class="img-circle avatar" /></c:when>
+                    <c:otherwise><img src="img/no-img-personal.png" class="img-circle avatar" /></c:otherwise>
+                    </c:choose>
                     </div>
                     <div class="col-md-5">
                     
@@ -37,13 +35,8 @@
                     
                     <br/>
                     <span class="area">
-                    <c:out value="${profile.login}"/>
+                    <c:out value="${profile.login}"/> <c:if test="${profile.accepted ne true}"><span class="area inactive">(profil nieaktywny)</span></c:if>
                     </span>                    
-                    
-                    <c:if test="${profile.accepted ne true}">
-                    <br/>
-                    <span class="area inactive">profil nieaktywny</span>
-                    </c:if>                
                     
                     <c:if test="${!empty profile.authoritiesAsString}">
                     <br/>
@@ -72,14 +65,16 @@
                 
                 <div class="col-md-5 pull-right">
                 	<sec:authorize access="hasAnyRole('Admin,Management')">
-                	<c:if test="${profile.id ne sprofile.id}">
+                	<c:if test="${!current}">
 	                	<c:if test="${profile.accepted ne true}">
 	                	<a class="btn-flat icon pull-right accept" href="profile/accept/${profile.id}" data-toggle="tooltip" title="Aktywuj profil" data-placement="top"><i class="icon-asterisk"></i></a>
 	                	</c:if>
 	                	<c:if test="${profile.accepted eq true}">
 	                	<a class="btn-flat icon pull-right unaccept" href="profile/unaccept/${profile.id}" data-toggle="tooltip" title="Dezaktywuj profil" data-placement="top"><i class="icon-ban-circle"></i></a>
 	                	</c:if>
+	                	<sec:authorize access="hasAnyRole('Admin')">
 	                	<a class="btn-flat icon pull-right delete-user" href="profile/delete/${profile.id}" data-toggle="tooltip" title="Usuń profil" data-placement="top"><i class="icon-trash"></i></a>
+	                	</sec:authorize>
                 	</c:if>
                 	
 	                <a class="btn-flat icon large pull-right edit" href="profile/edit/${profile.id}" data-toggle="tooltip" title="Edytuj profil">Edytuj ten profil</a>
@@ -98,12 +93,12 @@
                             <h6>Krótka notatka do profilu</h6>
                             <p>
                             <c:choose>
-                            <c:when test="${not empty profile.note}">Notatkę napisał: ${profile.note.editor.name}</c:when>
+                            <c:when test="${profile.someNote}">${profile.note.editor.name} &nbsp;<span class="time"><i class="icon-time"></i> <fmt:formatDate value="${profile.note.editDate}" type="both" pattern="dd-MM-yyyy HH:mm:ss" /></span></c:when>
                             <c:otherwise>Dodaj krótką notatkę by o czymś nie zapomnieć.</c:otherwise>
                             </c:choose>
                             </p>
                             
-                            <form:form method="post" modelAttribute="profileForm" action="profile/note" class="">
+                            <form:form method="post" modelAttribute="profileForm" action="profile/note" class="dbs-form">
 	                    	<spring:bind path="note">
 	                    	<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
                             <div class="field-box ${classes}">
@@ -113,14 +108,17 @@
                             </spring:bind>                            
                             
                             <div class="col-md-12 submit-box pull-right">
-                                <input type="submit" class="btn-glow primary" value="Dodaj notatkę">
+                            <c:choose>
+                            <c:when test="${profile.someNote}"><input type="submit" class="btn-glow primary" value="Zapisz"></c:when>
+                            <c:otherwise><input type="submit" class="btn-glow primary" value="Dodaj notatkę"></c:otherwise>
+                            </c:choose>
                             </div>
                             </form:form>
                             
                         </div>                    
 
 						<c:if test="${!empty reports}">
-                        <h3>Niezarchiwizowane raporty (${fn:length(reports)}/${maxtemp})</h3>
+                        <h3>Twoje niezarchiwizowane raporty (${fn:length(reports)}/${maxtemp})</h3>
 			            <div class="row">
 			                <div class="col-md-11">
 			                    <table class="table table-hover">
@@ -158,8 +156,8 @@
 			                            </td>
 			                            <td class="align-right">
 				                            <ul class="actions">
-				                                <li class="last"><a href="report/archives/archive/${report.id}"><i class="tool" title="Przenieś do archiwum"></i>&nbsp;</a></li>
-				                                <li class="last"><a href="#" class="report-delete" data-url="profile/report/archives/delete/${report.id}"><i class="table-delete" title="Usuń"></i>&nbsp;</a></li>
+				                                <li><a href="report/archives/archive/${report.id}"><i class="tool" title="Przenieś do archiwum"></i>&nbsp;</a></li>
+				                                <li class="last"><a href="#" class="report-delete" data-url="report/archives/temporary/delete/${report.id}?site=profile"><i class="table-delete" title="Usuń"></i>&nbsp;</a></li>
 				                            </ul>
 			                            </td>			                            
 			                        </tr>
@@ -176,21 +174,16 @@
 
                 <!-- side address column -->
                 <div class="col-md-3 col-xs-12 address pull-right">
+                	<c:if test="${not empty profile.address}">
                     <h6>Adres</h6>
-                    <!-- iframe width="300" height="133" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com.mx/?ie=UTF8&amp;t=m&amp;ll=19.715081,-155.071421&amp;spn=0.010746,0.025749&amp;z=14&amp;output=embed"></iframe-->
                     <ul>
-                        <li>2301 East Lamar Blvd. Suite 140. </li>
-                        <li>City, Arlington. United States,</li>
-                        <li>Zip Code, TX 76006.</li>
-                        <li class="ico-li">
-                            <i class="ico-phone"></i>
-                            1817 274 2933
-                        </li>
-                         <li class="ico-li">
-                            <i class="ico-mail"></i>
-                            <a href="#">alejandra@detail.com</a>
-                        </li>
+                    	<c:if test="${not empty profile.address.street}"><li>${profile.address.street}</li></c:if>
+                        <c:if test="${not empty profile.address.city or not empty profile.address.state}"><li>${profile.address.city} ${profile.address.state}</li></c:if>
+                        <c:if test="${not empty profile.address.zipcode}"><li>Kod pocztowy: ${profile.address.zipcode}</li></c:if>
+						<c:if test="${not empty profile.phone}"><li class="ico-li"><i class="ico-phone"></i>${profile.phone}</li></c:if>
+                        <c:if test="${not empty profile.email}"><li class="ico-li"><i class="ico-mail"></i><a href="mailto:${profile.email}">${profile.email}</a></li></c:if>
                     </ul>
+                    </c:if>
                 </div>
             </div>
         </div>

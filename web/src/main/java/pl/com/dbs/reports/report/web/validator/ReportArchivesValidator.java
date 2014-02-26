@@ -9,7 +9,7 @@ import org.springframework.validation.Validator;
 import pl.com.dbs.reports.report.web.form.ReportArchivesForm;
 
 /**
- * TODO
+ * Archives listing validator.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

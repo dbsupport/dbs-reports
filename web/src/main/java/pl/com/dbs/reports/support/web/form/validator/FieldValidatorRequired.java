@@ -15,7 +15,7 @@ import pl.com.dbs.reports.support.web.form.field.AField;
 
 
 /**
- * TODO
+ * Requirement validator.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

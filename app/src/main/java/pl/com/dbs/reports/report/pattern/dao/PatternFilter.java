@@ -30,6 +30,7 @@ public class PatternFilter extends AFilter<ReportPattern> {
 	private Date uploadDate;
 	private String author;
 	private String creator;
+	private Long profileId;
 	
 	private String factory;
 	private List<String> accesses = new ArrayList<String>();
@@ -81,6 +82,9 @@ public class PatternFilter extends AFilter<ReportPattern> {
 		this.creator = creator;
 	}
 	
+	public void putProfileId(Long id) {
+		this.profileId = id;
+	}
 	
 	
 	public List<String> getAccesses() {
@@ -116,5 +120,9 @@ public class PatternFilter extends AFilter<ReportPattern> {
 
 	public String getCreator() {
 		return creator;
+	}
+
+	public Long getProfileId() {
+		return profileId;
 	}
 }

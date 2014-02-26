@@ -31,7 +31,9 @@ import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.domain.ProfileException;
 import pl.com.dbs.reports.profile.domain.ProfilePhoto;
 import pl.com.dbs.reports.profile.service.ProfilePhotoService;
+import pl.com.dbs.reports.profile.service.ProfileScheduler;
 import pl.com.dbs.reports.profile.service.ProfileService;
+import pl.com.dbs.reports.profile.web.ProfileSession;
 import pl.com.dbs.reports.profile.web.form.ProfileForm;
 import pl.com.dbs.reports.profile.web.form.ProfileListForm;
 import pl.com.dbs.reports.profile.web.validator.ProfileListValidator;
@@ -58,6 +60,8 @@ public class ProfileController {
 	@Autowired private ProfileService profileService;
 	@Autowired private ProfilePhotoService profilePhotoService;
 	@Autowired private ReportService reportService;
+	@Autowired private ProfileScheduler profileScheduler;
+
 	
 	@ModelAttribute(ProfileListForm.KEY)
     public ProfileListForm createProfileListForm() {
@@ -81,7 +85,7 @@ public class ProfileController {
     public String profile(Model model, @ModelAttribute(ProfileForm.KEY) final ProfileForm form) {
 		Profile profile = profileService.findById(SessionContext.getProfile().getId());
 		model.addAttribute("profile", profile);
-		model.addAttribute("sprofile", profile);
+		model.addAttribute("current", true);
 		model.addAttribute("reports", reportService.findTemporary());
 		model.addAttribute("maxtemp", ReportService.MAX_TEMPORARY_REPORTS);
 		form.reset(profile);
@@ -92,23 +96,22 @@ public class ProfileController {
     public String note(@Valid @ModelAttribute(ProfileForm.KEY) final ProfileForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		if (!results.hasErrors()) {
 			try {
-				profileService.note(form.getId(), form.getNote());
+				Profile profile = profileService.note(form.getId(), form.getNote());
+				ProfileSession.update(profile, request);
 				alerts.addSuccess(ra, "profile.note.edited");
 			} catch (Exception e) {
 				alerts.addError(ra, "profile.note.not.edited", e.getMessage());
 			}
 		}
 		
-		return "redirect:/profile/"+form.getId();	
+		return SessionContext.getProfile().isSame(form.getId())?"redirect:/profile":("redirect:/profile/"+form.getId());	
 	}	
 	
 	@RequestMapping(value="/profile/{id}", method = RequestMethod.GET)
     public String profile(Model model, @PathVariable("id") Long id, @ModelAttribute(ProfileForm.KEY) final ProfileForm form) {
 		Profile profile = profileService.findById(id);
 		model.addAttribute("profile", profile);
-		Profile sprofile = profileService.findById(SessionContext.getProfile().getId());
-		model.addAttribute("sprofile", sprofile);
-		
+		model.addAttribute("current", SessionContext.getProfile().isSame(profile));
 		model.addAttribute("reports", null);
 		
 		form.reset(profile);
@@ -212,6 +215,18 @@ public class ProfileController {
 		
 		return "redirect:/profile";
 	}
+	
+	
+	@RequestMapping(value="/profiles/synchronize", method = RequestMethod.GET)
+    public String synchronize(Model model, RedirectAttributes ra) {
+		try {
+			profileScheduler.synchronize();
+			alerts.addSuccess(ra, "profile.synchronization");
+		} catch (Exception e) {
+			alerts.addError(ra, "profile.synchronization.error", e.getMessage());
+		}
+		return "redirect:/profile/list";
+    }
 	
 	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {
 		if (e instanceof ProfileException) {

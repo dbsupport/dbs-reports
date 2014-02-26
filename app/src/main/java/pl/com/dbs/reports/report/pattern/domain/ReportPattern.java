@@ -43,8 +43,11 @@ import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.db.domain.AEntity;
 import pl.com.dbs.reports.support.utils.separator.Separator;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Ordering;
 
 /**
  * Encja z wzocem raportu.
@@ -99,6 +102,7 @@ public class ReportPattern extends AEntity implements Pattern {
     private List<String> accesses = new ArrayList<String>();
 	
 	@OneToMany(mappedBy="pattern", orphanRemoval=true)
+	//@OrderBy("name")  
     private List<ReportPatternTransformate> transformates = new ArrayList<ReportPatternTransformate>();
 	
 	@OneToMany(mappedBy="pattern", orphanRemoval=true)
@@ -249,14 +253,30 @@ public class ReportPattern extends AEntity implements Pattern {
 		Set<PatternFormat> result = new HashSet<PatternFormat>();
 		for (ReportPatternTransformate transformate : transformates) 
 			result.add(transformate.getFormat());
-		return new ArrayList<PatternFormat>(result);		
+
+		Ordering<PatternFormat> ordering = Ordering.natural().onResultOf(new Function<PatternFormat, String>() {
+		    public String apply(PatternFormat format) {
+		        return format.getPatternExtension();
+		    }
+		});
+		
+		return ImmutableSortedSet.orderedBy(ordering).addAll(result).build().asList();
 	}
 	
 	public String getFormatsAsString() {
 		StringBuffer sb = new StringBuffer();
 		Separator s = new Separator(",");
-		for (PatternFormat format : getFormats()) sb.append(s).append(format.getFormat().getDefaultExt());
+		for (PatternFormat format : getFormats()) sb.append(s).append(format.getPatternExtension());
 		return sb.toString();		
+	}
+	
+	/**
+	 * Find transformate for given pattern..
+	 */
+	public PatternTransformate getTransformate(PatternFormat format) {
+		for (PatternTransformate transformate : getTransformates())		
+			if (transformate.getFormat().equals(format)) return transformate;
+		return null;
 	}
 
 	public void addInits(Map<String, byte[]> inits) {

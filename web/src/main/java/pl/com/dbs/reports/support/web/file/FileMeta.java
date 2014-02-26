@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.common.io.Files;
 
 /**
- * TODO
+ * File upload class.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

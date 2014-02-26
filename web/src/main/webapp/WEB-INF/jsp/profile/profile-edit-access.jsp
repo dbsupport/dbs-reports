@@ -19,9 +19,10 @@
 </tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
-<form:form method="post" modelAttribute="profileEditForm" action="profile/edit/access" class="" enctype="multipart/form-data">
+<form:form method="post" modelAttribute="profileEditForm" action="profile/edit/access" class="dbs-form" enctype="multipart/form-data">
 	<input type="hidden" name="page" value="2"/>
-
+	<input type="hidden" name="save" value="false">
+	
 	<spring:bind path="authorities">
     <c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>    	
    	<div class="field-box ${classes}">
@@ -46,6 +47,7 @@
    
    	<div class="wizard-actions">
    		<button type="button" class="btn-glow primary btn-prev" onclick="location.href='profile/edit/personal'"><i class="icon-chevron-left"></i>&nbsp;Powrót</button><span>&nbsp;</span>
+   		<button type="submit" class="btn-glow success btn-finish" style="display: inline-block;" data-last="Zapisz" onclick="this.form.save.value='true';">Zapisz profil!</button><span>&nbsp;</span>
 		<button type="submit" class="btn-glow primary btn-next" data-last="Dalej">Dalej&nbsp;&nbsp;<i class="icon-chevron-right"></i></button><span>&nbsp;</span>
   	</div>
 </form:form>

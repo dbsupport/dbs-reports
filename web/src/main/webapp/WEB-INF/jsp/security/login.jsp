@@ -9,10 +9,18 @@
     <div class="login-wrapper">
         <div class="box">
             <div class="content-wrap">
-				<form action="security/check" method="post" class="form-horizontal">
+				<form action="security/check" method="post" class="form-horizontal dbs-form">
                 <h6>witamy w serwisie</h6>
+                <c:choose>
+                <c:when test="${env eq 'dev' or env eq 'tes'}">
                 <input name="username" class="form-control" type="text" placeholder="Login" value="adam"/>
                 <input name="password" class="form-control" type="password" placeholder="Hasło" value="adam"/>
+                </c:when>
+                <c:otherwise>
+                <input name="username" class="form-control" type="text" placeholder="Login" value=""/>
+                <input name="password" class="form-control" type="password" placeholder="Hasło" value=""/>
+                </c:otherwise>
+                </c:choose>
 				<div class="controls">
 	          		<button type="submit" name="login" class="btn-glow primary login">Zaloguj się</button>
                 </div>                

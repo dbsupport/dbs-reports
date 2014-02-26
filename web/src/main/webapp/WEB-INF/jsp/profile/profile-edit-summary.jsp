@@ -17,7 +17,7 @@
 </tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
-<form:form method="post" modelAttribute="profileEditForm" action="profile/edit/summary" class="" enctype="multipart/form-data">
+<form:form method="post" modelAttribute="profileEditForm" action="profile/edit/summary" class="dbs-form" enctype="multipart/form-data">
 	<input type="hidden" name="page" value="3">
 	<c:if test="${profileEditForm.photo}">
 		<div class="field-box">
@@ -76,7 +76,12 @@
     </spring:bind>       
                     
 	<div class="wizard-actions">
+		<sec:authorize access="hasAnyRole('Admin')">
 		<button type="button" class="btn-glow primary btn-prev" onclick="location.href='profile/edit/access'"><i class="icon-chevron-left"></i>&nbsp;Popraw</button><span>&nbsp;</span>
+		</sec:authorize>
+		<sec:authorize access="!hasAnyRole('Admin')">
+		<button type="button" class="btn-glow primary btn-prev" onclick="location.href='profile/edit/personal'"><i class="icon-chevron-left"></i>&nbsp;Popraw</button><span>&nbsp;</span>
+		</sec:authorize>
 		<button type="submit" class="btn-glow success btn-finish" style="display: inline-block;" data-last="Zapisz">Zapisz profil!</button><span>&nbsp;</span>                            
 	</div>
 			

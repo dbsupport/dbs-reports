@@ -46,13 +46,15 @@ public class ReportDao extends ADao<Report, Long> {
 		return em;
 	}
 
+	/**
+	 * Counts ALL pattern reports.
+	 */
 	public long countByPattern(ReportPattern pattern) {
 		final CriteriaBuilder cb = em.getCriteriaBuilder();
 		final CriteriaQuery<Report> cq = cb.createQuery(Report.class);
 	    final Root<Report> q = cq.from(Report.class);
 	    
 	    Predicate p = cb.equal(q.get(Report_.pattern).get(ReportPattern_.id), pattern.getId());
-	    p = cb.and(p, cb.equal(q.get(Report_.temporary), 0));
 	    cq.where(p);
 		
 		return count(cq);
@@ -108,7 +110,7 @@ public class ReportDao extends ADao<Report, Long> {
 	    }
 	    if (!StringUtils.isBlank(filter.getName())) {
 	    	Predicate ex1 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Report_.name)), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex2 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Report_.format.toString())), "%"+filter.getName().toUpperCase()+"%");
+	    	Predicate ex2 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Report_.format.getName())), "%"+filter.getName().toUpperCase()+"%");
 	    	
 	    	Join<Report, Profile> a1 = c.getRoot().join(Report_.creator, JoinType.LEFT);
 	    	Predicate ex3 = c.getBuilder().like(c.getBuilder().upper(a1.<String>get(Profile_.firstname)), "%"+filter.getName().toUpperCase()+"%");
@@ -124,6 +126,9 @@ public class ReportDao extends ADao<Report, Long> {
 	    }	    
 	    if (filter.getId()!=null) {
 	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Report_.id), filter.getId()));
+	    }
+	    if (filter.getProfileId()!=null) {
+	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Report_.creator).get(Profile_.id), filter.getProfileId()));
 	    }
 	    
 	    c.getCriteria().where(p);

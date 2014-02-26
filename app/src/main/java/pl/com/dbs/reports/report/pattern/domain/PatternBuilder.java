@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
-import pl.com.dbs.reports.api.report.ReportFormat;
+import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.api.report.pattern.PatternManifest;
 import pl.com.dbs.reports.profile.domain.Profile;
@@ -74,9 +74,11 @@ final class PatternBuilder {
 		resolveInitFiles();
 		
 		/**
-		 * FIXME: assigment of inflaters..
+		 * assigment of inflaters..
 		 */
-		for (ReportPatternTransformate t : transformates) t.setInflaters(inflaters);
+		for (ReportPatternTransformate transformate : transformates)
+			for (ReportPatternInflater inflater : inflaters)
+				transformate.addInflater(inflater);
 		
 		this.pattern = new ReportPattern(new ReportPatternCreation() {
 					@Override
@@ -146,35 +148,36 @@ final class PatternBuilder {
 	
 	private void resolveInflaters() throws IOException {
 		Validate.notNull(content, "Content is no more!");
-		ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(content));
+		ZipArchiveInputStream zip = new ZipArchiveInputStream(new ByteArrayInputStream(content), "UTF-8", true);
 		Validate.notNull(zip, "A zip file is no more!");
 		
 		logger.info("Resolving inflaters..");
-		ZipEntry entry = null;
+		ArchiveEntry entry = null;
 		while ((entry = zip.getNextEntry()) != null) {
             if (entry.isDirectory()) { 
             	continue;
             } else if (isInflater(entry.getName())) {
             	logger.info("Inflater found in file: "+entry.getName());
-           		inflaters.add(new ReportPatternInflater(readZipEntry(zip, entry), entry.getName()));
+           		inflaters.add(new ReportPatternInflater(readArchiveEntry(zip, entry), entry.getName()));
             }
         }				
 	}
 	
 	private void resolveTransformates() throws IOException {
 		Validate.notNull(content, "Content is no more!");
-		ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(content));
+		ZipArchiveInputStream zip = new ZipArchiveInputStream(new ByteArrayInputStream(content), "UTF-8", true);
+		//ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(content));
 		Validate.notNull(zip, "A zip file is no more!");
 
 		logger.info("Resolving transformates..");
-		ZipEntry entry = null;
+		ArchiveEntry entry = null;
 		while ((entry = zip.getNextEntry()) != null) {
             if (entry.isDirectory()) { 
             	continue;
             } else if (isTransformate(entry.getName())) {
             	PatternFormat format = resolveFormat(entry.getName());
             	logger.info("Transformate found in file: "+entry.getName()+" as :"+format);
-           		transformates.add(new ReportPatternTransformate(readZipEntry(zip, entry), entry.getName(), format));
+           		transformates.add(new ReportPatternTransformate(readArchiveEntry(zip, entry), entry.getName(), format));
             }
         }
 	}		
@@ -184,17 +187,17 @@ final class PatternBuilder {
 	 */
 	private void resolveForms() throws IOException {
 		Validate.notNull(content, "Content is no more!");
-		ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(content));
+		ZipArchiveInputStream zip = new ZipArchiveInputStream(new ByteArrayInputStream(content), "UTF-8", true);
 		Validate.notNull(zip, "A zip file is no more!");
 
 		logger.info("Resolving forms..");
-		ZipEntry entry = null;
+		ArchiveEntry entry = null;
 		while ((entry = zip.getNextEntry()) != null) {
             if (entry.isDirectory()) { 
             	continue;
             } else if (isForm(entry.getName())) {
             	logger.info("Form found in file: "+entry.getName());
-           		forms.add(new ReportPatternForm(readZipEntry(zip, entry), entry.getName()));
+           		forms.add(new ReportPatternForm(readArchiveEntry(zip, entry), entry.getName()));
             }
         }
 	}
@@ -204,17 +207,17 @@ final class PatternBuilder {
 	 */
 	private void resolveInitFiles() throws IOException {
 		Validate.notNull(content, "Content is no more!");
-		ZipInputStream zip = new ZipInputStream(new ByteArrayInputStream(content));
+		ZipArchiveInputStream zip = new ZipArchiveInputStream(new ByteArrayInputStream(content), "UTF-8", true);
 		Validate.notNull(zip, "A zip file is no more!");
 
 		logger.info("Resolving init files..");
-		ZipEntry entry = null;
+		ArchiveEntry entry = null;
 		while ((entry = zip.getNextEntry()) != null) {
             if (entry.isDirectory()) { 
             	continue;
             } else if (isInitFile(entry.getName())) {
             	logger.info("Init file found in file: "+entry.getName());
-            	this.inits.put(entry.getName(), readZipEntry(zip, entry));
+            	this.inits.put(entry.getName(), readArchiveEntry(zip, entry));
             }
         }
 	}		
@@ -223,6 +226,8 @@ final class PatternBuilder {
 	 * Is this init sql file?
 	 */
 	private boolean isInitFile(String filename) {
+		if (!isRootDirectory(filename)) return false;
+		
 		PatternManifest manifest = manifestBuilder.getManifest();
 		Validate.notNull(manifest, "Manifest is no more!");
 		String sqls = manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_INIT_SQL);		
@@ -241,13 +246,15 @@ final class PatternBuilder {
 	 * Is this inflater file?
 	 */
 	private boolean isInflater(String filename) {
-		return ReportPatternManifest.INFLATER_PATTERN.matcher(filename).find()&&!isInitFile(filename);
+		return isRootDirectory(filename)&&ReportPatternManifest.INFLATER_PATTERN.matcher(filename).find()&&!isInitFile(filename);
 	}
 	
 	/**
 	 * Is this form file?
 	 */
 	private boolean isForm(String filename) {
+		if (!isRootDirectory(filename)) return false;
+		
 		PatternManifest manifest = manifestBuilder.getManifest();
 		Validate.notNull(manifest, "Manifest is no more!");
 		
@@ -274,11 +281,22 @@ final class PatternBuilder {
 	 * Transformate can be anything..
 	 */
 	private boolean isTransformate(String filename) {
-		return !isManifestFile(filename)
+		return     isRootDirectory(filename) 
+				&&!isManifestFile(filename)
 				&&!isInitFile(filename)
 				&&!isInflater(filename)
 				&&!isForm(filename);
-	}		
+	}
+
+	/**
+	 * File name containf path separator "/" ?
+	 */
+	private boolean isRootDirectory(String filename) {
+		File f = new File(filename);
+		return f.getParent()==null;
+//		String path = filename.replace("/", File.separator);
+//		return !path.contains(File.separator)&&path.st;
+	}
 	
 	private PatternFormat resolveFormat(final String name) throws IOException {
 		PatternManifest manifest = manifestBuilder.getManifest();
@@ -313,36 +331,44 @@ final class PatternBuilder {
 					    	 */
 					    	String eng = StringUtils.trim(mext.group(1));
 					    	String ext = StringUtils.trim(mext.group(2));
-					    	final ReportFormat format = StringUtils.isBlank(eng)?ReportFormat.TXT:ReportFormat.of(eng);
+					    	final ReportType format = StringUtils.isBlank(eng)?ReportType.TXT:ReportType.of(eng);
 					    	final String extension = StringUtils.isBlank(ext)?format.getDefaultExt():ext;
-					    	return new ReportPatternFormat(format, extension);
+					    	return new ReportPatternFormat(filename, format, extension);
 					    }
 			    	}
 			    }
 			}
 		}
 		//..default everything is a text..
-		return new ReportPatternFormat(ReportFormat.TXT);
+		return new ReportPatternFormat(name);
 	}	
 	
 
-	/**
-	 * Read entry part of zip.
-	 */
-	private byte[] readZipEntry(final ZipInputStream zip, final ZipEntry entry) throws IOException {
+//	/**
+//	 * Read entry part of zip.
+//	 */
+//	private byte[] readZipEntry(final ZipInputStream zip, final ZipEntry entry) throws IOException {
+//		ByteArrayOutputStream output = new ByteArrayOutputStream();
+//		byte[] buffer = new byte[1024];
+//		int bytes;
+//
+//		while ((bytes = zip.read(buffer)) != -1) 
+//	        output.write(buffer, 0, bytes);
+//	    
+//	    output.close();
+//	    return output.toByteArray();
+//	}
+	
+	private byte[] readArchiveEntry(final ZipArchiveInputStream zip, final ArchiveEntry entry) throws IOException {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
 		int bytes;
-//		long count = 0;
-//		long size = entry.getSize();
-//	    while (-1 != (bytes = zip.read(buffer)) && count < size) {
-//	        output.write(buffer, 0, bytes);
-//	        count += bytes;
-//	    }		
+		
 		while ((bytes = zip.read(buffer)) != -1) 
 	        output.write(buffer, 0, bytes);
 	    
 	    output.close();
 	    return output.toByteArray();
-	}
+	}	
+	
 }

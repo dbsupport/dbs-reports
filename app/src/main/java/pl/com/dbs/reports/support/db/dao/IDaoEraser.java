@@ -8,7 +8,7 @@ import java.util.Collection;
 import pl.com.dbs.reports.support.db.domain.IEntity;
 
 /**
- * TODO
+ * DAP interface of ereasing.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013

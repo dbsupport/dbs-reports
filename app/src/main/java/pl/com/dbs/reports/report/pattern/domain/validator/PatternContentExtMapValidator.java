@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
-import pl.com.dbs.reports.api.report.ReportFormat;
+import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
@@ -71,8 +71,8 @@ public class PatternContentExtMapValidator extends PatternValidator {
 				    	 * pdf| = format pdf, pdf (default ext of format)
 				    	 */
 				    	String eng = StringUtils.trim(mext.group(1));
-				    	final ReportFormat format = StringUtils.isBlank(eng)?ReportFormat.TXT:ReportFormat.of(eng);
-				    	if (format==null) throw new PatternValidationException("report.pattern.import.content.validation.error", Arrays.asList(new String[] {eng}));
+				    	final ReportType type = StringUtils.isBlank(eng)?ReportType.TXT:ReportType.of(eng);
+				    	if (type==null) throw new PatternValidationException("report.pattern.import.content.validation.error", Arrays.asList(new String[] {eng}));
 				    }			    	
 			    	
 			    }

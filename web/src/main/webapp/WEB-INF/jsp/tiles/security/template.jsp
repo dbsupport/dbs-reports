@@ -43,7 +43,7 @@
 <body id="<tiles:getAsString name="id"/>">
     <div class="header">
         <a href="">
-            <img src="img/dbs/logo.png" class="logo" />
+            <img src="img/dbs/logo.png" class="logo" alt="<spring:message code="project.version"/>" title="<spring:message code="project.version"/>"/>
         </a>
     </div>
     

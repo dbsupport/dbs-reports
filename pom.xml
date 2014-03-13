@@ -446,7 +446,7 @@
 			</activation>
 			<properties>
 				<envir>dev</envir>
-				<dbs.reports.client.version>auchan-1.0.0-SNAPSHOT</dbs.reports.client.version>
+				<dbs.reports.client.version>auchan-1.1.0-SNAPSHOT</dbs.reports.client.version>
 			</properties>
 		</profile>
 		<profile>

@@ -4,8 +4,10 @@
 package pl.com.dbs.reports.activedirectory.web.validator;
 
 import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import pl.com.dbs.reports.activedirectory.web.form.ActionDirectoryListAction;
 import pl.com.dbs.reports.activedirectory.web.form.ActiveDirectoryListForm;
 
 /**
@@ -29,6 +31,15 @@ public class ActiveDirectoryValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		ActiveDirectoryListForm form = (ActiveDirectoryListForm)target;
 
+		if (errors.hasErrors()) return;
+		
+		if (ActionDirectoryListAction.INSERT.equals(form.getAction())) {
+			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "date", "errors.required");
+			if (!form.anyIDselected()) {
+				errors.reject("activedirectory.no.id.selected");
+			}
+		}
+		
 		if (errors.hasErrors()) return;
 		
 		form.getFilter().putValue(form.getValue());

@@ -25,6 +25,7 @@ import pl.com.dbs.reports.api.report.ReportValidationException;
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.api.support.db.SqlExecutor;
+import pl.com.dbs.reports.api.support.db.SqlExecutorContext;
 import pl.com.dbs.reports.profile.dao.ProfileDao;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
@@ -41,12 +42,12 @@ import pl.com.dbs.reports.support.encoding.EncodingService;
 public class ReportFactoryDefault implements ReportFactory {
 	private static final Logger logger = Logger.getLogger(ReportFactoryDefault.class);
 	private ProfileDao profileDao;
-	private SqlExecutor executor;
+	private SqlExecutor<Map<String, String>> executor;
 	@Autowired private EncodingService encodingService;	
 
 	
 	@Autowired
-	public ReportFactoryDefault(ProfileDao profileDao, SqlExecutor executor) {
+	public ReportFactoryDefault(ProfileDao profileDao, SqlExecutor<Map<String, String>> executor) {
 		this.profileDao = profileDao;
 		this.executor = executor;
 	}
@@ -116,19 +117,21 @@ public class ReportFactoryDefault implements ReportFactory {
 			try {
 				//..run inflater.. query db.. and convert to list of result parameters..
 				params = 
-					(List<Map<String, String>>)executor.execute(inflation.build(context.getBuilder().getParams()), new RowMapper<Map<String, String>>() {
-						@Override
-						public Map<String, String> mapRow(ResultSet rs, int rowNum) throws SQLException {
-							Map<String, String> params = new HashMap<String, String>();
-							ResultSetMetaData metaData = rs.getMetaData();
-							for (int i=1; i<=metaData.getColumnCount(); i++) {
-								final String key = metaData.getColumnName(i);
-								final String value = encodingService.encode(rs.getString(key), context.getEncodingContext());
-								params.put(key, value);
-							}						
-							return params;
-						}
-					});				
+					(List<Map<String, String>>)executor.execute(new SqlExecutorContext<Map<String, String>>(
+						inflation.build(context.getBuilder().getParams()))
+							.mapping(new RowMapper<Map<String, String>>() {
+							@Override
+							public Map<String, String> mapRow(ResultSet rs, int rowNum) throws SQLException {
+								Map<String, String> params = new HashMap<String, String>();
+								ResultSetMetaData metaData = rs.getMetaData();
+								for (int i=1; i<=metaData.getColumnCount(); i++) {
+									final String key = metaData.getColumnName(i);
+									final String value = encodingService.encode(rs.getString(key), context.getEncodingContext());
+									params.put(key, value);
+								}						
+								return params;
+							}
+					}));				
 			} catch (ReportBlockInflationException e) {
 				throw new ReportValidationException(e, "report.execute.detailed.error");
 			}

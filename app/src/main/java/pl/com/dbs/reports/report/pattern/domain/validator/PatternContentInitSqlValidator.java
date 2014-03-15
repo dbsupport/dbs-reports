@@ -4,6 +4,7 @@
 package pl.com.dbs.reports.report.pattern.domain.validator;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
@@ -28,7 +29,7 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
  */
 @Service
 public class PatternContentInitSqlValidator extends PatternValidator {
-	@Autowired private SqlExecutor executor;
+	@Autowired private SqlExecutor<Map<String, String>> executor;
 
 	@Override
 	public void validate(Pattern pattern) throws PatternValidationException {
@@ -49,7 +50,7 @@ public class PatternContentInitSqlValidator extends PatternValidator {
 				 * Try execute safetly...
 				 */
 				try {
-					executor.execute(new String(content));
+					executor.execute(new String(content), null);
 				} catch (Exception e) {
 					throw new PatternValidationException(e, "report.pattern.import.content.validation.detailed.error", Arrays.asList(new String[] {token, e.getMessage()}));
 				}

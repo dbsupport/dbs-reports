@@ -3,6 +3,9 @@
  */
 package pl.com.dbs.reports.activedirectory.dao;
 
+import pl.com.dbs.reports.api.activedirectory.ClientActiveDirectoryProfileFilter;
+import pl.com.dbs.reports.api.support.db.ClientQueryPager;
+import pl.com.dbs.reports.api.support.db.ClientQuerySorter;
 import pl.com.dbs.reports.support.filter.Filter;
 
 /**
@@ -19,10 +22,20 @@ public class ActiveDirectoryFilter extends Filter {
 	public ActiveDirectoryFilter() {
 		getPager().setPageSize(DEFAULT_PAGER_SIZE);
 		getSorter().add("number", true);
-		getSorter().add("firstname", true);
-		getSorter().add("lastname", true);
-		getSorter().add("location", true);
-		getSorter().add("dismissal", true);
+	}
+	
+	public ClientActiveDirectoryProfileFilter convert() {
+		return (ClientActiveDirectoryProfileFilter)new ClientActiveDirectoryProfileFilter(value)
+			.setPager(new ClientQueryPager(getPager().getPageSize())
+							.setDataSize(getPager().getDataSize())
+							.setPage(getPager().getPage()))
+			.setSorter(new ClientQuerySorter(getSorter().getFieldsAsMap()));
+	}
+	
+	public ActiveDirectoryFilter update(ClientActiveDirectoryProfileFilter filter) {
+		getPager().setDataSize(filter.getPager().getDataSize());
+		getPager().setPage(filter.getPager().getPage());
+		return this;
 	}
 
 	public String getValue() {

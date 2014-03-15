@@ -72,4 +72,6 @@ span.yours {
 	text-decoration: underline;
 }
 
-
+.pager-ctrl {
+	margin-top: 0px;
+}

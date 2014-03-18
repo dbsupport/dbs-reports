@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -85,12 +87,27 @@ public class ReportBlock {
 		if (content==null) return null;
 		if (params.isEmpty()) return content;
 		
-		String result = new String(content);
+		StringBuffer result = new StringBuffer(content);
 		for (Entry<String, String> param: params.entrySet()) {
-			result = result.replaceAll("\\^\\$"+param.getKey()+"\\^", !StringUtils.isBlank(param.getValue())?param.getValue():"");
+			result = replace(result, param.getKey(), !StringUtils.isBlank(param.getValue())?param.getValue():"");
+//			String value = !StringUtils.isBlank(param.getValue())?param.getValue():"";
+//			Matcher m = Pattern.compile("\\^\\$"+param.getKey()+"\\^", Pattern.CASE_INSENSITIVE).matcher(result);
+//			while (m.find()) {
+//				result.replace(m.start(), m.end(), value);
+//			}					
+			//result = result.replaceAll("\\^\\$"+param.getKey()+"\\^", !StringUtils.isBlank(param.getValue())?param.getValue():"");
 		}
-		return result;
+		return result.toString();
 	}
+	
+	private StringBuffer replace(StringBuffer sb, String key, String value) {
+		Matcher m = Pattern.compile("\\^\\$"+key+"\\^", Pattern.CASE_INSENSITIVE).matcher(sb);
+		if (m.find()) {
+			//String buf = result.substring(m.start(), m.end()).toUpperCase();
+			return replace(sb.replace(m.start(), m.end(), value), key, value);
+		}					
+		return sb;
+	}	
 
 	String getLabel() {
 		return label;

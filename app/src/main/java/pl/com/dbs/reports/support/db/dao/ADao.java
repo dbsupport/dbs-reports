@@ -207,7 +207,7 @@ public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,ID
 	/**
 	 * Return FIRST or none.
 	 */
-	protected T executeQuerySingle(IContextDao context) {
+	protected T executeQuerySingle(@SuppressWarnings("rawtypes") IContextDao context) {
 		List<T> result = executeQuery(context);
     	return result.isEmpty()?null:result.get(0);
 	}		

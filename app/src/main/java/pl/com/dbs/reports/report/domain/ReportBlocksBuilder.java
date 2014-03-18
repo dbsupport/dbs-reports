@@ -3,6 +3,12 @@
  */
 package pl.com.dbs.reports.report.domain;
 
+import java.util.LinkedList;
+
+import pl.com.dbs.reports.report.domain.inflation.rules.ReportBlockRule;
+import pl.com.dbs.reports.report.domain.inflation.rules.ReportBlockReplaceRule;
+import pl.com.dbs.reports.report.domain.inflation.rules.ReportBlockSwitchRule;
+
 
 
 
@@ -15,10 +21,13 @@ package pl.com.dbs.reports.report.domain;
  */
 public abstract class ReportBlocksBuilder {
 	protected byte[] content;
+	protected LinkedList<ReportBlockRule> rules = new LinkedList<ReportBlockRule>();
 	protected ReportBlock block;
 	
 	ReportBlocksBuilder(byte[] content) {
 		this.content = content;
+		rules.add(new ReportBlockSwitchRule());
+		rules.add(new ReportBlockReplaceRule());
 	}
 	
 	abstract ReportBlocksBuilder build();

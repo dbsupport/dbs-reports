@@ -70,6 +70,27 @@ public class ActiveDirectoryProfile {
 		this.unitCode = profile.getUnitCode();
 		this.unitName = profile.getUnitName();
 	}
+	
+	public ActiveDirectoryProfile encodeFirstName(String value) {
+		this.firstName = value;
+		return this;
+	}
+	
+	public ActiveDirectoryProfile encodeLastName(String value) {
+		this.lastName = value;
+		return this;
+	}
+	
+	public ActiveDirectoryProfile encodeLocationName(String value) {
+		this.locationName = value;
+		return this;
+	}	
+
+	public ActiveDirectoryProfile encodeUnitName(String value) {
+		this.unitName = value;
+		return this;
+	}	
+	
 
 	public String getNumber() {
 		return number;

@@ -1,0 +1,13 @@
+[BLOCK(INIT) SWITCH(^$V_1^)
+CASE() NuLL(V_1)!
+CASE(0)
+CASE(1)Jeden(V_1)!
+CASE($)Domyślne(V_1): ^$V_DEFAULT^. 
+ENDSWITCH BLOCK] 
+SWITCH(^$V_2^)
+CASE() NuLL(V_2)!
+CASE(0)
+CASE(2)Jeden(V_2)!
+CASE($)Domyślne(V_2): ^$V_DEFAULT^. 
+ENDSWITCH
+ BLOCK]

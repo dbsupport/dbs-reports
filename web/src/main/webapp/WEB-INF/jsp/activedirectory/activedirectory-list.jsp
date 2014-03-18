@@ -5,6 +5,8 @@
 <tiles:putAttribute name="id" type="string">dbs-page-activedirectory-list</tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">Lista profili Active Directory</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
+<link rel="stylesheet" href="css/compiled/form-wizard.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/dbs/dbs-activedirectory-list.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/lib/bootstrap.datepicker.css" type="text/css" >
 </tiles:putAttribute>
 <tiles:putAttribute name="js" type="string">
@@ -18,14 +20,27 @@
 
 <tiles:putAttribute name="form" type="string">
                 <form:form method="post" modelAttribute="activeDirectoryListForm" action="activedirectory/list" class="dbs-form">
-               		<form:input path="value" placeholder="Wyszukaj..." onblur="this.form.submit();"/>
+                    <input type="hidden" name="action" value=""/>
+                    <form:input path="value" placeholder="Wyszukaj..." onblur="this.form.submit();"/>
                 </form:form>
 </tiles:putAttribute>
 
-<tiles:putAttribute name="content" type="string">
+<tiles:putAttribute name="custom-alerts" type="string">
+<spring:hasBindErrors name="activeDirectoryListForm">
+    <c:forEach items="${errors.globalErrors}" var="error">
+                <div class="alert alert-danger">
+                    <i class="icon-remove-sign"></i>
+                    <spring:message code="${error.code}" text="${error.defaultMessage}" htmlEscape="false"/>
+                </div>    
+    </c:forEach>
+</spring:hasBindErrors>    
+</tiles:putAttribute>
 
+<tiles:putAttribute name="content" type="string">
+<div class="form-wrapper">
     <form:form method="post" modelAttribute="activeDirectoryListForm" action="activedirectory/list" class="dbs-form">
         <input type="hidden" name="action" value=""/>
+        
                     <table cellpadding="0" cellspacing="0" border="0" class="dataTable" id="">
                         <thead>
                             <tr>
@@ -176,14 +191,14 @@
 					<label>
                     <button type="submit" class="btn-glow success btn-finish" data-last="Finish" onclick="this.form.action.value='INSERT'">Wstaw datę&nbsp;&nbsp;</button><span>&nbsp;</span>
                     </label>
-					    <div class="col-md-2">
-					    <form:input path="date" class="form-control input-datepicker" data-date-format="dd-mm-yyyy" placeholder="Podaj datę"/>
+					    <div class="col-md-1">
+					    <form:input path="date" class="form-control input-datepicker" data-date-format="yyyy-mm-dd" placeholder="Podaj datę"/>
 					    <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
 					    </div>
 					</div>
 					</spring:bind>                    
     </form:form>
-                        
+</div>                        
         
 </tiles:putAttribute>
 </tiles:insertDefinition>        

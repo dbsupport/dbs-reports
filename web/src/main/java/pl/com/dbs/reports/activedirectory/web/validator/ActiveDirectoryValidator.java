@@ -35,6 +35,7 @@ public class ActiveDirectoryValidator implements Validator {
 		
 		if (ActionDirectoryListAction.INSERT.equals(form.getAction())) {
 			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "date", "errors.required");
+			if (errors.hasErrors()) return;
 			if (!form.anyIDselected()) {
 				errors.reject("activedirectory.no.id.selected");
 			}
@@ -42,6 +43,8 @@ public class ActiveDirectoryValidator implements Validator {
 		
 		if (errors.hasErrors()) return;
 		
-		form.getFilter().putValue(form.getValue());
+		if (!ActionDirectoryListAction.INSERT.equals(form.getAction())) {
+			form.getFilter().putValue(form.getValue());
+		}
 	}
 }

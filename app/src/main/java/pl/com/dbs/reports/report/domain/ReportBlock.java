@@ -11,7 +11,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
+
+import pl.com.dbs.reports.report.domain.inflation.rules.ReportBlockRule;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -44,6 +47,12 @@ public class ReportBlock {
 	 * Nested blocks.
 	 */
 	private LinkedList<ReportBlock> blocks = new LinkedList<ReportBlock>();
+
+	/**
+	 * Rules to process content.
+	 */
+	private LinkedList<ReportBlockRule> rules = new LinkedList<ReportBlockRule>();
+
 	
 	/**
 	 * Totally empty block (root).
@@ -64,6 +73,12 @@ public class ReportBlock {
 	ReportBlock(ReportBlock parent, String label, String content) {
 		this(parent, content);
 		this.label = label;
+	}
+	
+	ReportBlock addRules(LinkedList<ReportBlockRule> rules) {
+		Validate.notNull(rules, "Rules cant be null");
+		this.rules = rules;
+		return this;
 	}
 
 
@@ -87,7 +102,8 @@ public class ReportBlock {
 		
 		String result = new String(content);
 		for (Entry<String, String> param: params.entrySet()) {
-			result = result.replaceAll("\\^\\$"+param.getKey()+"\\^", !StringUtils.isBlank(param.getValue())?param.getValue():"");
+			for (ReportBlockRule rule : rules)
+				result = rule.apply(result, param.getKey(), param.getValue());
 		}
 		return result;
 	}

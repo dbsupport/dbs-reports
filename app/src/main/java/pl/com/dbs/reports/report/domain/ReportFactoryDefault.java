@@ -102,7 +102,6 @@ public class ReportFactoryDefault implements ReportFactory {
 		return builder.build().getReport();
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void inflate(final ReportBlock root, final ReportInflationContext context) throws ReportValidationException, DataAccessException { 
 		if (root.hasContent()) {
 			//..no more block inside.. generate content..
@@ -117,7 +116,7 @@ public class ReportFactoryDefault implements ReportFactory {
 			try {
 				//..run inflater.. query db.. and convert to list of result parameters..
 				params = 
-					(List<Map<String, String>>)executor.execute(new SqlExecutorContext<Map<String, String>>(
+					(List<Map<String, String>>)executor.query(new SqlExecutorContext<Map<String, String>>(
 						inflation.build(context.getBuilder().getParams()))
 							.mapping(new RowMapper<Map<String, String>>() {
 							@Override

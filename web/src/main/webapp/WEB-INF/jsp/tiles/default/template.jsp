@@ -61,8 +61,8 @@
                 <span class="icon"></span><span class="text">Ciemny</span>
             </a>
         </div>
-        
-        <%@ include file="/WEB-INF/jsp/tiles/default/alerts.jsp" %>
+
+	 	<%@ include file="/WEB-INF/jsp/tiles/default/alerts.jsp" %>
 	 	
     	<tiles:insertAttribute name="content"/>
     </div>

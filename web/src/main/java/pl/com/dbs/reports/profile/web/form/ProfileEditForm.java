@@ -6,8 +6,6 @@ package pl.com.dbs.reports.profile.web.form;
 import java.io.IOException;
 import java.util.List;
 
-import org.hibernate.validator.internal.util.privilegedactions.SetAccessibility;
-
 import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.authority.domain.Authority;
 import pl.com.dbs.reports.profile.domain.Profile;

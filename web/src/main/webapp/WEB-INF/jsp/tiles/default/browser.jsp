@@ -63,7 +63,6 @@
         
         <%@ include file="/WEB-INF/jsp/tiles/default/alerts.jsp" %>
 
-
         <div id="pad-wrapper" class="users-list">
             <div class="row header">
                 <h3><tiles:getAsString name="title"/></h3>

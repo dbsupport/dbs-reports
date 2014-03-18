@@ -50,7 +50,7 @@ public class PatternContentInitSqlValidator extends PatternValidator {
 				 * Try execute safetly...
 				 */
 				try {
-					executor.execute(new String(content), null);
+					executor.query(new String(content), null);
 				} catch (Exception e) {
 					throw new PatternValidationException(e, "report.pattern.import.content.validation.detailed.error", Arrays.asList(new String[] {token, e.getMessage()}));
 				}

@@ -28,7 +28,7 @@ final class ReportTextBlocksBuilder extends ReportBlocksBuilder {
 	}
 	
 	ReportTextBlocksBuilder build() {
-		ReportBlock root = new ReportBlock();
+		ReportBlock root = new ReportBlock().addRules(rules);
 		this.block = root;
 		parse(new String(content));
         this.block = root;
@@ -44,7 +44,7 @@ final class ReportTextBlocksBuilder extends ReportBlocksBuilder {
 		
 		if (data.isSimple()) {
 			//..add to current block..
-			ReportBlock block = new ReportBlock(this.block, data.getText());
+			ReportBlock block = new ReportBlock(this.block, data.getText()).addRules(rules);
 			//resolve invariables..
 			resolveInput(data.getText());
 			//..put to parent..
@@ -54,7 +54,7 @@ final class ReportTextBlocksBuilder extends ReportBlocksBuilder {
 			String label = data.getBlockLabel();
 			rest = data.getBlockContent();
 			
-			ReportBlock block = new ReportBlock(this.block, label, null);
+			ReportBlock block = new ReportBlock(this.block, label, null).addRules(rules);
 			this.block.addBlock(block);
 			this.block = block;
 		} else if (data.isBlockEnd()) {

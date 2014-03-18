@@ -65,7 +65,6 @@
         
         <%@ include file="/WEB-INF/jsp/tiles/default/alerts.jsp" %>
 
-
         <div id="pad-wrapper" class="datatables-page">
             <div class="row header">
                 <h3><tiles:getAsString name="title"/></h3>

@@ -6,9 +6,7 @@ package pl.com.dbs.reports.activedirectory.web.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pl.com.dbs.reports.activedirectory.service.ActiveDirectoryService;
+import pl.com.dbs.reports.activedirectory.web.form.ActionDirectoryListAction;
 import pl.com.dbs.reports.activedirectory.web.form.ActiveDirectoryListForm;
 import pl.com.dbs.reports.activedirectory.web.validator.ActiveDirectoryValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
@@ -36,9 +35,7 @@ import pl.com.dbs.reports.support.web.alerts.Alerts;
 @SessionAttributes({ActiveDirectoryListForm.KEY})
 @Scope("request")
 public class ActiveDirectoryController {
-	private static final Logger logger = Logger.getLogger(ActiveDirectoryController.class);
 	@Autowired private Alerts alerts;
-	@Autowired private MessageSource messageSource;
 	@Autowired private ActiveDirectoryService adService;
 
 	
@@ -61,7 +58,23 @@ public class ActiveDirectoryController {
     }	
 	
 	@RequestMapping(value= "/activedirectory/list", method = RequestMethod.POST)
-    public String profiles(@Valid @ModelAttribute(ActiveDirectoryListForm.KEY) final ActiveDirectoryListForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+    public String profiles(Model model, @Valid @ModelAttribute(ActiveDirectoryListForm.KEY) final ActiveDirectoryListForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+		if (results.hasErrors()) {
+			model.addAttribute("profiles", adService.find(form.getFilter()));
+			return "activedirectory/activedirectory-list";
+		}
+		
+		if (ActionDirectoryListAction.INSERT.equals(form.getAction())) {
+			try {
+				adService.update(form.getId(), form.getDate());
+				alerts.addSuccess(ra, 
+						form.getId().size()==1?"activedirectory.profile.updated":"activedirectory.profiles.updated",
+						form.getDateFormated(),
+						String.valueOf(form.getId().size()));
+			} catch (Exception e) {
+				alerts.addError(ra, "activedirectory.profiles.not.updated", e.getMessage());
+			}
+		}
 		return "redirect:/activedirectory/list";
 	}
 	

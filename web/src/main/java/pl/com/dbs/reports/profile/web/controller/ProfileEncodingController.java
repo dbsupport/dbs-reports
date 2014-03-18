@@ -9,7 +9,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -39,7 +38,6 @@ import pl.com.dbs.reports.profile.web.view.ClientProfileEncoding;
 @SessionAttributes({ProfileEncodingForm.KEY})
 @Scope("request")
 public class ProfileEncodingController {
-	private static final Logger logger = Logger.getLogger(ProfileEncodingController.class);
 	@Autowired private ProfileScheduler profileScheduler;
 
 	

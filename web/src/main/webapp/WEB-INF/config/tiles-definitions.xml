@@ -9,6 +9,7 @@
         <put-attribute name="title" type="string" value=""/>
         <put-attribute name="css" type="string" value=""/>
         <put-attribute name="js" type="string" value=""/>
+        <put-attribute name="custom-alerts" type="string" value=""/>
         <put-attribute name="content" type="string" value=""/>
     </definition>
 

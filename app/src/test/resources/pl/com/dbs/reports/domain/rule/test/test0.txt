@@ -1,0 +1,5 @@
+[SWITCH(^$V_0^)#CASE()empty#CASE(0)zero
+zero#CASE(1)one by one
+#CASE(2)two
+two two#CASE(3) three #CASE(_123_- !@#$%^&*)strange!
+#case($)default suitcase and switcher switch]

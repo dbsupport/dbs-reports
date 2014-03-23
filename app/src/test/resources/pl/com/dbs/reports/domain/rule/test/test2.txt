@@ -1,0 +1,3 @@
+Kto postepuje godniej: ten, kto biernie [SwITcH(^$V_0^)
+#CASE()...#CASE(0)^$I_0^#CASE(1)^$I_1^#CASE(2)^$I_2^#CASE(3)^$I_3^#CASE($)^$I_DEFAULT^
+SWITch]

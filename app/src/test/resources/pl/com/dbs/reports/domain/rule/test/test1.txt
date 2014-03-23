@@ -1,0 +1,52 @@
+To be, or not to be: that is the question:
+Whether 'tis nobler in the mind to suffer
+http://web.pertus.com.pl/~mysza/hamlet/a3s1.html
+
+[BLOCK(INIT)
+Stanisław Barańczak
+Byc albo nie byc - oto jest pytanie! 
+[SWITCH(^$V_0^)
+#CASE() Kto postępuje godniej: ten, kto biernie ...#CASE(0) Kto postępuje godniej: ten, kto biernie ^$I_0^#CASE(1) Kto postępuje godniej: ten, kto biernie ^$I_1^#CASE(2) Kto postępuje godniej: ten, kto biernie ^$I_2^#CASE(3) Kto postępuje godniej: ten, kto biernie ^$I_3^#CASE($) Kto postępuje godniej: ten, kto biernie ^$I_DEFAULT^
+SWITCH] 
+
+Wojciech Bogusławski
+Być albo nie być? Otóż jest pytanie... 
+[SWITCH(^$V_1^)
+#CASE() Jestże szlachetniejszym dla duszy ... 
+#CASE(0) Jestże szlachetniejszym dla duszy ^$I_0^#CASE(1) Jestże szlachetniejszym dla duszy ^$I_1^
+#CASE(2) Jestże szlachetniejszym 
+dla duszy ^$I_2^
+#CASE(3) Jestże szlachetniejszym dla duszy ^$I_3^
+#CASE($) Jestże szlachetniejszym dla duszy ^$I_DEFAULT^. 
+SWITCH]
+BLOCK]
+
+Józef Paszkowski
+Być albo nie być, to wielkie pytanie. 
+[SWITCH(^$V_2^)
+#CASE() CASE to nie jest przeciez ... 
+#CASE(0) Jestli w istocie szlachetniejszą rzeczą ^$I_0^
+#CASE(1) Jestli w istocie szlachetniejszą rzeczą ^$I_1^
+#CASE(2) Jestli w istocie szlachetniejszą rzeczą ^$I_2^
+#CASE(3) Jestli w istocie szlachetniejszą rzeczą ^$I_3^
+#CASE($) Jestli w istocie szlachetniejszą rzeczą ^$I_DEFAULT^. 
+SWITCH]
+
+Jerzy S. Sito
+Być - albo nie być oto jest pytanie.
+[SWITCH(^$V_3^)
+#CASE() Czy dla umysłu godniej jest znosić ... 
+#CASE(0) Czy dla umysłu godniej jest znosić ^$I_0^
+#CASE(1) Czy dla umysłu godniej jest znosić ^$I_1^
+#CASE(2) Czy dla umysłu godniej jest znosić ^$I_2^
+#CASE(3) Czy dla umysłu godniej jest znosić ^$I_3^
+#CASE($) Czy dla umysłu godniej jest znosić ^$I_DEFAULT^. 
+SWITCH]
+
+
+
+I_0=^$I_0^
+I_1=^$I_1^
+I_2=^$I_2^
+I_3=^$I_3^
+I_DEFAULT=^$I_DEFAULT^

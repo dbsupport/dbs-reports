@@ -217,7 +217,7 @@
                             </resource>
                         </webResources>
                         <warSourceExcludes>html/**</warSourceExcludes>
-                        <warName>${project.artifactId}-${envir}-${dbs.reports.client.version}-${project.version}</warName>
+                        <warName>${project.artifactId}-${project.version}-${dbs.reports.client.version}</warName>
                     </configuration>
                 </plugin>
             </plugins>

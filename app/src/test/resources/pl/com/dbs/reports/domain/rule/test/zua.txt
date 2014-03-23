@@ -1,0 +1,19 @@
+[BLOCK(INIT)BLOCK]<?xml version="1.0" encoding="windows-1250"?>
+<KEDU wersja_schematu="1" xmlns="http://www.zus.pl/2013/KEDU_4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.zus.pl/2013/KEDU_4 kedu_4.xsd">
+<naglowek.KEDU><program><producent>DataBaseSupport</producent><symbol>DBS-reports</symbol><wersja>101001</wersja></program><data_utworzenia_KEDU>^$INDATWYP^</data_utworzenia_KEDU><status_kontroli>0</status_kontroli></naglowek.KEDU>
+[BLOCK(PRAC)<ZUSZUA id_dokumentu="^$VROW^"  status_kontroli="0"  status_weryfikacji="P" >
+<identyfikacja.PL><id_PL_ZUS>10</id_PL_ZUS><id_PL_ZUS_status>I</id_PL_ZUS_status></identyfikacja.PL><identyfikacja.UB><id_UB_ZUS>148</id_UB_ZUS><id_UB_ZUS_status>I</id_UB_ZUS_status></identyfikacja.UB><I>[BLOCK(ZGL)<p1>true</p1>BLOCK][BLOCK(KOR)<p1>false</p1><p2>^$VKOR^</p2>BLOCK]</I>
+<II><p1>^$VNIP^</p1><p2>^$VREG^</p2><p6>^$VNAZ^</p6></II>
+<III><p1>^$VPES^</p1><p3>^$VTYP^</p3><p4>^$VDOK^</p4><p5>^$VNAZW^</p5><p6>^$VIMIE^</p6><p7>^$VDATUR^</p7></III>
+<IV>[BLOCK(IMIE2)<p1>^$VIMIE2^</p1>BLOCK][BLOCK(NAZW2)<p2>^$VNAZW2^</p2>BLOCK]<p3>[BLOCK(OBYW)BLOCK]^$VOBYW^</p3><p4>^$VPLEC^</p4></IV>
+<V><p1><p1>^$VTYT1^</p1><p2>^$VTYT2^</p2><p3>^$VTYT3^</p3></p1></V>
+<VI><p1>^$VZUSDEB^</p1><p2>true</p2><p3>true</p3><p4>true</p4><p5>true</p5></VI>
+<VII><p1>^$VZUSDEB^</p1><p2>^$VKASA^</p2></VII>
+[BLOCK(ADRES_STALY)<XI>[BLOCK(KOD)<p1>^$VKOD^</p1>BLOCK]<p2>^$VMIEJSC^</p2><p3>[BLOCK(GMINA)BLOCK]^$VGMINA2^</p3><p4>^$VULICA^</p4><p5>^$VNRDOMU^</p5><p6>^$VNRMIESZ^</p6>[BLOCK(ZAGR)<p8>^$VKODKRAJU^^$VKODZAGR^</p8>BLOCK]</XI>
+BLOCK]
+[BLOCK(ADRES_ZAM)<XII>[BLOCK(KOD)<p1>^$VKOD^</p1>BLOCK]<p2>^$VMIEJSC^</p2><p3>[BLOCK(GMINA)BLOCK]^$VGMINA2^</p3><p4>^$VULICA^</p4><p5>^$VNRDOMU^</p5><p6>^$VNRMIESZ^</p6>[BLOCK(ZAGR)<p8>^$VKODKRAJU^^$VKODZAGR^</p8>BLOCK]</XII>
+BLOCK]
+[BLOCK(ADRES_KORESP)<XIII>[BLOCK(KOD)<p1>^$VKOD^</p1>BLOCK]<p2>^$VMIEJSC^</p2><p3>^$VULICA^</p3><p4>^$VNRDOMU^</p4><p5>^$VNRMIESZ^</p5><p6></p6>[BLOCK(ZAGR)<p8>^$VKODKRAJU^^$VKODZAGR^</p8>BLOCK]</XIII>
+BLOCK]<XIV><p1>^$INDATWYP^</p1></XIV>
+</ZUSZUA>
+BLOCK]</KEDU>

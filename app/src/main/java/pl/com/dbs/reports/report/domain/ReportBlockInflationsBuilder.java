@@ -41,7 +41,7 @@ final class ReportBlockInflationsBuilder {
 	private List<ReportBlockInflation> inflations = new ArrayList<ReportBlockInflation>();
 	
 	ReportBlockInflationsBuilder(byte[] content) {
-		this.content = new String(content).toUpperCase();
+		this.content = new String(content);
 	}
 	
 	ReportBlockInflationsBuilder build() {

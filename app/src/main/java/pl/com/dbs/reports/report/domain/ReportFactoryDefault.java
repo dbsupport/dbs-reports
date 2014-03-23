@@ -105,7 +105,11 @@ public class ReportFactoryDefault implements ReportFactory {
 	private void inflate(final ReportBlock root, final ReportInflationContext context) throws ReportValidationException, DataAccessException { 
 		if (root.hasContent()) {
 			//..no more block inside.. generate content..
-			context.getBuilder().addContent(root.build(context.getBuilder().getParams()));
+			try {
+				context.getBuilder().addContent(root.build(context.getBuilder().getParams()));
+			} catch (ReportBlockException e) {
+				throw new ReportValidationException(e, "report.execute.detailed.error");
+			}
 			return;
 		}
 		//..result of inflations..

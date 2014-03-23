@@ -7,14 +7,13 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
-import pl.com.dbs.reports.report.domain.inflation.rules.ReportBlockRule;
+import pl.com.dbs.reports.report.domain.rules.ReportBlockRule;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -94,18 +93,16 @@ public class ReportBlock {
 	 * Only for inflateable blocks!
 	 * Can produce no data if content is empty.
 	 */
-	String build(final Map<String, String> params) {
+	String build(final Map<String, String> params) throws ReportBlockException {
 		if (params.isEmpty()&&isInflateable()) throw new IllegalStateException("Block ("+label+") requires input parameters but you try to build it without any!");
 		
 		if (content==null) return null;
 		if (params.isEmpty()) return content;
 		
-		String result = new String(content);
-		for (Entry<String, String> param: params.entrySet()) {
-			for (ReportBlockRule rule : rules)
-				result = rule.apply(result, param.getKey(), param.getValue());
-		}
-		return result;
+		StringBuffer result = new StringBuffer(content);
+		for (ReportBlockRule rule : rules) result = rule.apply(result, params);
+
+		return result.toString();
 	}
 
 	String getLabel() {

@@ -6,6 +6,8 @@ package pl.com.dbs.reports.report.domain;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -70,7 +72,8 @@ public class ReportBlockInflation {
 	 * If necessary replace it's input parameters with those from provided params' map.
 	 */
 	String build(Map<String, String> params) throws ReportBlockInflationException {
-		String result = new String(sql);
+		//String result = new String(sql);
+		StringBuffer result = new StringBuffer(sql);
 		
 		if (params.isEmpty()) {
 			if (!input.isEmpty()) throw new ReportBlockInflationException("Inflation("+label+") requires input parameters!");
@@ -78,13 +81,22 @@ public class ReportBlockInflation {
 			//..replace input parameters in SQL with provided parameters..
 			for (String key : input) {
 				String value = params.get(key);
-				if (value==null) throw new ReportBlockInflationException("Inflation("+label+") requires input parameter:"+key+" but cant find one!");
-				result = result.replaceAll("\\^\\$"+key+"\\^", value);
+				if (value==null) throw new ReportBlockInflationException("Inflation("+label+") requires value for parameter: "+key+" but cant find one!");
+				result = replace(result, key, value);
 			}
 		}
 		
 		logger.debug("SQL builded "+label+":"+result);
-		return result;
+		return result.toString();
+	}
+	
+	private StringBuffer replace(StringBuffer sb, String key, String value) {
+		Matcher m = Pattern.compile("\\^\\$"+key+"\\^", Pattern.CASE_INSENSITIVE).matcher(sb);
+		if (m.find()) {
+			//String buf = result.substring(m.start(), m.end()).toUpperCase();
+			return replace(sb.replace(m.start(), m.end(), value), key, value);
+		}					
+		return sb;
 	}
 	
 	/**

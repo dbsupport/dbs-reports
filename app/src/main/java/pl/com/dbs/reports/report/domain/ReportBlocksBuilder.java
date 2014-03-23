@@ -5,9 +5,9 @@ package pl.com.dbs.reports.report.domain;
 
 import java.util.LinkedList;
 
-import pl.com.dbs.reports.report.domain.inflation.rules.ReportBlockRule;
-import pl.com.dbs.reports.report.domain.inflation.rules.ReportBlockReplaceRule;
-import pl.com.dbs.reports.report.domain.inflation.rules.ReportBlockSwitchRule;
+import pl.com.dbs.reports.report.domain.rules.ReportBlockReplaceRule;
+import pl.com.dbs.reports.report.domain.rules.ReportBlockRule;
+import pl.com.dbs.reports.report.domain.rules.ReportBlockSwitchRule;
 
 
 

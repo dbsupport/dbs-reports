@@ -1,9 +1,13 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain.inflation.rules;
+package pl.com.dbs.reports.report.domain.rules;
+
+import java.util.Map;
 
 import org.springframework.core.Ordered;
+
+import pl.com.dbs.reports.report.domain.ReportBlockException;
 
 /**
  * Rule to apply while inflating a block.
@@ -12,5 +16,5 @@ import org.springframework.core.Ordered;
  * @coptyright (c) 2014
  */
 public interface ReportBlockRule extends Ordered {
-	String apply(final String content, final String key, final String value);
+	StringBuffer apply(final StringBuffer content, final Map<String, String> params) throws ReportBlockException;
 }

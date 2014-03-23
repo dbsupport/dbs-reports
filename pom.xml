@@ -465,6 +465,7 @@
 			<id>pro</id>
 			<properties>
 				<envir>pro</envir>
+				<dbs.reports.client.version>auchan-1.1.0</dbs.reports.client.version>
 			</properties>
 		</profile>
 	</profiles>

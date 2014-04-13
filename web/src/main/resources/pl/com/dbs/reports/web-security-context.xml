@@ -21,6 +21,8 @@ xmlns="http://www.springframework.org/schema/beans"
 		<security:intercept-url pattern="/security/loginfailed" access="permitAll" />
 		<security:intercept-url pattern="/security/noaccess" access="permitAll" />
 		
+		<security:intercept-url pattern="/ping" access="permitAll" />
+		
 		<security:intercept-url pattern="/access/list" access="isFullyAuthenticated() and hasAnyRole('Admin,Management')" />
 		<security:intercept-url pattern="/access/**" access="isFullyAuthenticated() and hasAnyRole('Admin')" />
 		

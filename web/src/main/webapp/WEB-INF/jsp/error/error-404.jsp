@@ -1,6 +1,5 @@
 <%@ include file="/WEB-INF/jsp/tiles/common/taglib.jsp" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
-<c:set var="env" scope="page"><spring:message code="project.environment"/></c:set>
 
 <tiles:insertDefinition name="tiles-error" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-error-404</tiles:putAttribute>

@@ -67,17 +67,18 @@
     </definition>    
     
     <definition name="tiles-field">
-    	<put-attribute name="name" type="string" value=""/>
+    	<!-- put-attribute name="name" type="string" value=""/>
     	<put-attribute name="label" type="string" value=""/>
     	<put-attribute name="value" type="string" value=""/>
     	<put-attribute name="tooltip" type="string" value=""/>
-    	<put-attribute name="format" type="string" value=""/>
+    	<put-attribute name="format" type="string" value=""/-->
     	
         <put-attribute name="class" type="string" value="field-box"/>
         <put-attribute name="errorclass" type="string" value="error"/>
         <put-attribute name="inputclass" type="string" value="form-control"/>
         <put-attribute name="contentclass" type="string" value="col-md-12"/>
         <put-attribute name="attributes" type="string" value=""/>
+    	<put-attribute name="validators" type="string" value="false"/>
     </definition>    
     
     <definition name="tiles-field-text" template="/WEB-INF/jsp/tiles/default/field-text.jsp" extends="tiles-field">
@@ -85,6 +86,11 @@
     
     <definition name="tiles-field-date" template="/WEB-INF/jsp/tiles/default/field-date.jsp" extends="tiles-field">
     </definition>
+    
+    <definition name="tiles-field-select" template="/WEB-INF/jsp/tiles/default/field-select.jsp" extends="tiles-field">
+        <put-attribute name="contentclass" type="string" value="ui-select"/>
+        <put-attribute name="inputclass" type="string" value=""/>    
+    </definition>    
     
     
 </tiles-definitions>

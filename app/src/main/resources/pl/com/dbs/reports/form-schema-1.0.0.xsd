@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (http://www.altova.com) by ﻿Death Song (Death Song) -->
 <!--
 xmlns="http://www.dbs.com.pl/reports/1.0/form" 
 targetNamespace="http://www.dbs.com.pl/reports/1.0/form" 
@@ -40,6 +41,7 @@ Renderer tries to group them on view too.</xs:documentation>
 Order counts.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="option" type="field-option" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required">
 			<xs:annotation>
@@ -68,9 +70,18 @@ Order counts.</xs:documentation>
 		</xs:attribute>
 		<xs:attribute name="format" type="xs:string">
 			<xs:annotation>
-				<xs:documentation>Format of input (only if rendering tag can provide, otherwise will be ignored)</xs:documentation>
+				<xs:documentation>Format of input (only if rendering tag can provide, otherwise will be ignored)
+
+http://www.malot.fr/bootstrap-datetimepicker/</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="field-option">
+		<xs:annotation>
+			<xs:documentation>Enable field value</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="value" type="xs:string" use="required"/>
+		<xs:attribute name="label" type="xs:string"/>
 	</xs:complexType>
 	<xs:simpleType name="field-type">
 		<xs:annotation>
@@ -80,6 +91,7 @@ Order counts.</xs:documentation>
 			<xs:enumeration value="text"/>
 			<xs:enumeration value="number"/>
 			<xs:enumeration value="date"/>
+			<xs:enumeration value="select"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:annotation/>

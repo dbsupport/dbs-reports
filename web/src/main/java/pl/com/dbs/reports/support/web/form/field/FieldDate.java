@@ -4,11 +4,14 @@
 package pl.com.dbs.reports.support.web.form.field;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.regex.Pattern;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorValue;
 import org.joda.time.format.DateTimeFormat;
 
@@ -24,6 +27,9 @@ import org.joda.time.format.DateTimeFormat;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("date")
 public class FieldDate  extends AField<Date> {
+	private static final Pattern TIME_PATTERN = Pattern.compile("hh|HH|HH24|hh24", Pattern.CASE_INSENSITIVE);
+	private static final String CURRENT_DATE_VALUE = "getdate";
+	
 	public FieldDate() {
 		super();
 	}
@@ -35,6 +41,15 @@ public class FieldDate  extends AField<Date> {
 		} catch (Exception e) {}
 		return null;
 	}
+
+	@Override
+	public void init(LinkedList<AField<?>> fields) {
+		if (CURRENT_DATE_VALUE.equalsIgnoreCase(getValue())) {
+			setValue(DateFormatUtils.format(new Date(), resolveFormat()));
+		}
+		super.init(fields);
+	}
+	
 	
 	@Override
 	public String getTile() {
@@ -44,14 +59,25 @@ public class FieldDate  extends AField<Date> {
 	@Override
 	public String getFormat() {
 		return StringUtils.isBlank(format)?"yyyy-mm-dd":format;
-	}	
+	}
+	
+	public boolean isWithTime() {
+		//FIXME:
+		return TIME_PATTERN.matcher(getFormat()).find();
+	}
 	
 	private String resolveFormat() {
 		/**
-		 * FIXME: 
+		 * http://www.malot.fr/bootstrap-datetimepicker/
+		 * 
 		 * bootstrap mm = format MM
+		 * bootstrap ii = format mm
 		 */
-		return getFormat().replaceFirst("mm", "MM");		
+		String format = getFormat(); 
+		format = format.replaceFirst("mm", "MM");
+		format = format.replaceFirst("ii", "mm");
+		
+		return format;
 	}
 	
 }

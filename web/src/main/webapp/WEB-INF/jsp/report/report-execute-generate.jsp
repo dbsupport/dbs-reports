@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="css/compiled/form-wizard.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-wizard.css" type="text/css" media="screen" />
 </tiles:putAttribute>
+
 <tiles:putAttribute name="content" type="string">
 
                     	<form:form method="post" modelAttribute="reportGenerationForm" action="report/execute/generate" class="dbs-form">
@@ -34,11 +35,8 @@
                             <c:if test="${reportGenerationForm.fieldfull}">
                             <c:forEach var="field" items="${reportGenerationForm.fields}" varStatus="fstatus">
 								<tiles:insertDefinition name="${field.tile}">
-								<tiles:putAttribute name="name" type="string">fields[${fstatus.index}]</tiles:putAttribute>
-                            	<tiles:putAttribute name="label" type="string">${field.label}</tiles:putAttribute>
-                            	<tiles:putAttribute name="value" type="string">${field.value}</tiles:putAttribute>
-                            	<tiles:putAttribute name="format" type="string">${field.format}</tiles:putAttribute>
-                            	<tiles:putAttribute name="tooltip" type="string">${field.tooltip}</tiles:putAttribute>
+                                <c:set var="field" value="${field}" scope="request" />
+                                <c:set var="fieldname" value="fields[${fstatus.index}]" scope="request" />
                             	<tiles:putAttribute name="inputclass" type="string">form-control inline-input</tiles:putAttribute>
                             	<tiles:putAttribute name="attributes" type="string">readonly="readonly"</tiles:putAttribute>
                             	</tiles:insertDefinition>

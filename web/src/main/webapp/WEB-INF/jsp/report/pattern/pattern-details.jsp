@@ -6,14 +6,17 @@
 <tiles:putAttribute name="title" type="string">definicja raportu</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/form-wizard.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="css/lib/bootstrap.datepicker.css" type="text/css" >
+<link rel="stylesheet" href="css/bootstrap/bootstrap.datepicker.css" type="text/css" >
+<link rel="stylesheet" href="css/bootstrap/bootstrap-datetimepicker.min.css" type="text/css" >
 <link rel="stylesheet" href="css/dbs/dbs-wizard.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-profile.css" type="text/css" media="screen" />
 </tiles:putAttribute>
 <tiles:putAttribute name="js" type="string">
 <script src="js/bootstrap.datepicker.js"></script>
+<script src="js/bootstrap-datetimepicker.min.js"></script>
 <script src="js/locales/bootstrap-datepicker.pl.js"></script>
+<script src="js/locales/bootstrap-datetimepicker.pl.js"></script>
 <script src="js/dbs/dbs-datepicker.js"></script>
 <script src="js/dbs/dbs-pattern-details.js"></script>
 </tiles:putAttribute> 
@@ -66,12 +69,8 @@
 	                            <c:if test="${reportGenerationForm.fieldfull}">
 	                            <c:forEach var="field" items="${reportGenerationForm.fields}" varStatus="fstatus">
 									<tiles:insertDefinition name="${field.tile}">
-									<tiles:putAttribute name="name" type="string">fields[${fstatus.index}]</tiles:putAttribute>
-	                            	<tiles:putAttribute name="label" type="string">${field.label}</tiles:putAttribute>
-	                            	<tiles:putAttribute name="value" type="string">${field.value}</tiles:putAttribute>
-	                            	<tiles:putAttribute name="format" type="string">${field.format}</tiles:putAttribute>
-	                            	<tiles:putAttribute name="tooltip" type="string">${field.tooltip}</tiles:putAttribute>
-	                            	<c:set var="validators" value="${field.validators}" scope="request"/>
+                                    <c:set var="field" value="${field}" scope="request" />
+                                    <c:set var="fieldname" value="fields[${fstatus.index}]" scope="request" />
 	                            	</tiles:insertDefinition>
 	                            </c:forEach>
 	                            </c:if>                    		

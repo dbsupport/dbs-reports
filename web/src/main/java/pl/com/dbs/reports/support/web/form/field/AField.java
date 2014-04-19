@@ -16,6 +16,7 @@ import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorNode;
 import org.springframework.validation.Errors;
 
 import pl.com.dbs.reports.support.utils.separator.Separator;
+import pl.com.dbs.reports.support.web.form.option.FieldOption;
 import pl.com.dbs.reports.support.web.form.validator.AFieldValidator;
 import pl.com.dbs.reports.support.web.form.validator.FieldValidatorException;
 
@@ -45,6 +46,8 @@ public abstract class AField<T> {
 	protected String format;
 	@XmlElement(name="validator", namespace = "http://www.dbs.com.pl/reports/1.0/form")
 	private LinkedList<AFieldValidator<T>> validators;
+	@XmlElement(name="option", namespace = "http://www.dbs.com.pl/reports/1.0/form")
+	private LinkedList<FieldOption> options;
 	
 	public AField() {}
 
@@ -104,6 +107,10 @@ public abstract class AField<T> {
 		return validators;
 	}
 
+	public LinkedList<FieldOption> getOptions() {
+		return options;
+	}
+
 	/**
 	 * Run all validators assigned to this field.
 	 */
@@ -144,6 +151,11 @@ public abstract class AField<T> {
 		if (!StringUtils.isBlank(value)) sb.append(";value:"+getValue());
 		if (!StringUtils.isBlank(tooltip)) sb.append(";tooltip:"+getTooltip());
 		if (!StringUtils.isBlank(format)) sb.append(";format:"+format);
+		if (hasOptions()) {
+			sb.append(";options:");
+			Separator s = new Separator(",");
+			for (FieldOption option: options) sb.append(s).append("[").append(option).append("]");
+		}
 		if (isValidated()) {
 			sb.append(";validators:");
 			Separator s = new Separator(",");
@@ -157,6 +169,11 @@ public abstract class AField<T> {
 	 */
 	private boolean isValidated() {
 		return this.validators!=null&&!this.validators.isEmpty();
-	}	
+	}
+	
+	private boolean hasOptions() {
+		return this.options!=null&&!this.options.isEmpty();
+	}
+	
 	
 }

@@ -18,7 +18,9 @@ import javax.xml.bind.Unmarshaller;
 
 import pl.com.dbs.reports.support.web.form.field.FieldDate;
 import pl.com.dbs.reports.support.web.form.field.FieldNumber;
+import pl.com.dbs.reports.support.web.form.field.FieldSelect;
 import pl.com.dbs.reports.support.web.form.field.FieldText;
+import pl.com.dbs.reports.support.web.form.option.FieldOption;
 import pl.com.dbs.reports.support.web.form.validator.FieldValidatorAfter;
 import pl.com.dbs.reports.support.web.form.validator.FieldValidatorBefore;
 import pl.com.dbs.reports.support.web.form.validator.FieldValidatorMax;
@@ -93,6 +95,9 @@ public class DFormBuilder<T extends DForm> {
 				FieldText.class, 
 				FieldDate.class,
 				FieldNumber.class,
+				FieldSelect.class,
+				
+				FieldOption.class,
 				
 				FieldValidatorRequired.class,
 				FieldValidatorMin.class,

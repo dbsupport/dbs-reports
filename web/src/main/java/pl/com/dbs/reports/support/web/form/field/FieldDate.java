@@ -44,7 +44,7 @@ public class FieldDate  extends AField<Date> {
 
 	@Override
 	public void init(LinkedList<AField<?>> fields) {
-		if (NOW_PATTERN.matcher(getValue()).find()) {
+		if (!StringUtils.isBlank(getValue())&&NOW_PATTERN.matcher(getValue()).find()) {
 			setValue(DateFormatUtils.format(new Date(), resolveFormat()));
 		}
 		super.init(fields);

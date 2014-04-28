@@ -6,6 +6,7 @@ package pl.com.dbs.reports.security.web.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,11 +29,13 @@ import pl.com.dbs.reports.support.web.alerts.Alerts;
  */
 @Controller
 public class SecurityController {
+	private static final Logger logger = Logger.getLogger(SecurityController.class);
 	@Autowired private Alerts alerts;
 	@Autowired private ProfileService profileService;
 	
 	@RequestMapping(value="/security/login", method = RequestMethod.GET)
     public String login(RedirectAttributes ra) {
+		logger.debug("OS:"+System.getProperty("os.name").toLowerCase());
 		return "security/login";
     }
 	

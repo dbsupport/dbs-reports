@@ -41,6 +41,9 @@ public class EncodingService {
 		return encode(value, context);
 	}	
 	
+	/**
+	 * Db query for encoding parameters.
+	 */
 	public EncodingContext getEncodingContext() {
 		return parameterService.getEncodingContext();
 	}

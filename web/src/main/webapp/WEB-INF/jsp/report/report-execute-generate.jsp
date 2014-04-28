@@ -24,7 +24,7 @@
                             
                     	 	<div class="field-box">
                             	<label>Format:</label>
-	                            	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportGenerationForm.format.patternExtension}"/>
+	                            	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportGenerationForm.format.reportExtension}"/>
                         	</div>                        	
 
                     	 	<div class="field-box">

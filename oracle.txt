@@ -1,0 +1,14 @@
+Apex: http://127.0.0.1/apex/apex_admin (nie dziala :/)
+
+Odblokowanie HR/zmiana hasla:
+- uruchom SQL Plus
+- alter user hr account unlock;
+- alter user hr identified by NEW_PASSWORD;
+
+Reset hasla do apex:
+- uruchom SQL Plus
+- @C:\oraclexe\app\oracle\product\11.2.0\server\apex\apxxepwd NEW_PASSWORD;
+
+
+http://oraclepitstop.wordpress.com/2008/04/16/installing-configuring-apex-application-express-htmldb-with-10gr2-on-windows-xp/
+http://blog.mclaughlinsoftware.com/2011/09/14/reset-11g-xe-apex-password/

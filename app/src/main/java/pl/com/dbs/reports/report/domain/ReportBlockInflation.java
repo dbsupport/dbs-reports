@@ -63,7 +63,7 @@ public class ReportBlockInflation {
 	/**
 	 * Is this inflater applicable for that block?
 	 */
-	boolean isApplicable(ReportBlock block) {
+	boolean isApplicable(ReportTextBlock block) {
 		return this.label.equalsIgnoreCase(block.getLabel());
 	}
 

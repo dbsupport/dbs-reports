@@ -35,7 +35,7 @@
                             	<label>Format:</label>
 	                            <div class="ui-select">
 		                            <form:select path="extension">
-		                            	<form:options items="${reportGenerationForm.formats}" itemLabel="patternExtension" itemValue="patternExtension" />
+		                            	<form:options items="${reportGenerationForm.formats}" itemLabel="reportExtension" itemValue="reportExtension" />
 		                            </form:select>
 	                            </div>                            	
                         	</div>

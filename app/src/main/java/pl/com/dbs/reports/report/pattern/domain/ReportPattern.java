@@ -256,7 +256,7 @@ public class ReportPattern extends AEntity implements Pattern {
 
 		Ordering<PatternFormat> ordering = Ordering.natural().onResultOf(new Function<PatternFormat, String>() {
 		    public String apply(PatternFormat format) {
-		        return format.getPatternExtension();
+		        return format.getReportExtension();
 		    }
 		});
 		
@@ -266,7 +266,8 @@ public class ReportPattern extends AEntity implements Pattern {
 	public String getFormatsAsString() {
 		StringBuffer sb = new StringBuffer();
 		Separator s = new Separator(",");
-		for (PatternFormat format : getFormats()) sb.append(s).append(format.getPatternExtension());
+		for (PatternFormat format : getFormats()) 
+			sb.append(s).append(format.getReportExtension());
 		return sb.toString();		
 	}
 	

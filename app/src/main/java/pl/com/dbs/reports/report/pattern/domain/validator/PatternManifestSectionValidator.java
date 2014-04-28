@@ -4,7 +4,8 @@
 package pl.com.dbs.reports.report.pattern.domain.validator;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Service;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternManifest;
@@ -19,8 +20,9 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-@Service
-public class PatternManifestSectionValidator extends PatternValidator {
+@Order(1)
+@Component
+public class PatternManifestSectionValidator implements PatternValidator {
 	private static final java.util.regex.Pattern NAME_PATTERN = java.util.regex.Pattern.compile("^[\\w\\.\\- ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	private static final java.util.regex.Pattern VERSION_PATTERN = java.util.regex.Pattern.compile("^[\\w\\.\\-]+$",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	private static final java.util.regex.Pattern AUTHOR_PATTERN = java.util.regex.Pattern.compile("^[\\w\\.\\-]+$",  java.util.regex.Pattern.CASE_INSENSITIVE);
@@ -44,11 +46,6 @@ public class PatternManifestSectionValidator extends PatternValidator {
 			throw new PatternValidationException("report.pattern.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_PATTERN_AUTHOR);
 		if (!StringUtils.isBlank(manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_PATTERN_FACTORY))&&!FACTORY_PATTERN.matcher(manifest.getPatternAttribute(ReportPatternManifest.ATTRIBUTE_PATTERN_FACTORY)).find())
 			throw new PatternValidationException("report.pattern.import.manifest.field.validation.error", ReportPatternManifest.ATTRIBUTE_PATTERN_FACTORY);
-	}
-
-	@Override
-	public int getOrder() {
-		return 1;
 	}
 	
 }

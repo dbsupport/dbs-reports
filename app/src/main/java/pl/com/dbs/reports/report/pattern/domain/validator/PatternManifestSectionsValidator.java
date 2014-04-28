@@ -7,7 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.jar.Attributes;
 
-import org.springframework.stereotype.Service;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
@@ -21,8 +22,9 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-@Service
-public class PatternManifestSectionsValidator extends PatternValidator {
+@Order(0)
+@Component
+public class PatternManifestSectionsValidator implements PatternValidator {
 	private static final List<String> SECTIONS = Arrays.asList( ReportPatternManifest.ATTRIBUTE_PATTERN_NAME,
 																ReportPatternManifest.ATTRIBUTE_PATTERN_VERSION,
 																ReportPatternManifest.ATTRIBUTE_PATTERN_FACTORY,
@@ -43,8 +45,4 @@ public class PatternManifestSectionsValidator extends PatternValidator {
 		}
 	}
 
-	@Override
-	public int getOrder() {
-		return LOWEST_PRECEDENCE;
-	}	
 }

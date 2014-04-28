@@ -3,11 +3,6 @@
  */
 package pl.com.dbs.reports.report.domain;
 
-import java.util.LinkedList;
-
-import pl.com.dbs.reports.report.domain.rules.ReportBlockReplaceRule;
-import pl.com.dbs.reports.report.domain.rules.ReportBlockRule;
-import pl.com.dbs.reports.report.domain.rules.ReportBlockSwitchRule;
 
 
 
@@ -21,18 +16,31 @@ import pl.com.dbs.reports.report.domain.rules.ReportBlockSwitchRule;
  */
 public abstract class ReportBlocksBuilder {
 	protected byte[] content;
-	protected LinkedList<ReportBlockRule> rules = new LinkedList<ReportBlockRule>();
-	protected ReportBlock block;
+	protected ReportTextBlock root;
 	
 	ReportBlocksBuilder(byte[] content) {
 		this.content = content;
-		rules.add(new ReportBlockSwitchRule());
-		rules.add(new ReportBlockReplaceRule());
 	}
 	
-	abstract ReportBlocksBuilder build();
+	/**
+	 * Deconstructs content into blocks tree.
+	 */
+	abstract ReportBlocksBuilder deconstruct();
 	
-	ReportBlock getBlock() {
-		return block;
+	/**
+	 * Construct blocks into content. 
+	 * Merge blocks (from three structure) back into content. 
+	 */
+	abstract ReportBlocksBuilder construct();
+	
+	/**
+	 * Content. Either before as well as after construction.
+	 */
+	public byte[] getContent() {
+		return content;
+	}
+
+	public ReportTextBlock getRootBlock() {
+		return root;
 	}
 }

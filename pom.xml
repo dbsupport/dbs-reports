@@ -50,11 +50,18 @@
 		<org.mockito.version>1.9.5</org.mockito.version>
 		<junit.version>4.8.1</junit.version>
 		<org.powermock.version>1.5.1</org.powermock.version>
+		<itext.version>2.1.7</itext.version>
+		<dbs.reports.api.version>1.2.0-SNAPSHOT</dbs.reports.api.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+            <dependency>
+                <groupId>pl.com.dbs</groupId>
+                <artifactId>dbs-reports-api</artifactId>
+                <version>${dbs.reports.api.version}</version>
+            </dependency>		
 			<dependency>
 				<groupId>pl.com.dbs</groupId>
 				<artifactId>dbs-reports-client-app</artifactId>
@@ -128,7 +135,16 @@
 				<artifactId>joda-time</artifactId>
 				<version>${joda.time.version}</version>
 			</dependency>
-			
+            <dependency>
+                <groupId>com.lowagie</groupId>
+                <artifactId>itext</artifactId>
+                <version>${itext.version}</version>
+            </dependency>
+			<dependency>
+			    <groupId>com.lowagie</groupId>
+			    <artifactId>itext-rtf</artifactId>
+			    <version>${itext.version}</version>
+			</dependency>
 			             		
 			<!-- Spring Security -->
 			<dependency>
@@ -314,6 +330,9 @@
 				<artifactId>jackson-core-asl</artifactId>
 				<version>${json.version}</version>
 			</dependency>
+			
+
+            			
 			
 			<!-- Tests -->
 			<dependency>

@@ -9,7 +9,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Service;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
 import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
@@ -28,8 +29,9 @@ import com.google.common.collect.Iterables;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-@Service
-public class PatternContentExtMapValidator extends PatternValidator {
+@Order(7)
+@Component
+public class PatternContentExtMapValidator implements PatternValidator {
 
 	@Override
 	public void validate(Pattern pattern) throws PatternValidationException {
@@ -80,8 +82,4 @@ public class PatternContentExtMapValidator extends PatternValidator {
 		}		
 	}
 
-	@Override
-	public int getOrder() {
-		return 7;
-	}	
 }

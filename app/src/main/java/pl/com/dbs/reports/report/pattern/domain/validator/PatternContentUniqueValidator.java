@@ -6,7 +6,8 @@ package pl.com.dbs.reports.report.pattern.domain.validator;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
@@ -21,8 +22,9 @@ import pl.com.dbs.reports.report.pattern.dao.PatternFilter;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-@Service
-public class PatternContentUniqueValidator extends PatternValidator {
+@Order(4)
+@Component
+public class PatternContentUniqueValidator implements PatternValidator {
 	@Autowired private PatternDao patternDao;
 	
 	@Override
@@ -32,8 +34,4 @@ public class PatternContentUniqueValidator extends PatternValidator {
 			throw new PatternValidationException("report.pattern.import.manifest.not.unique", Arrays.asList(new String[] {pattern.getName(), pattern.getVersion()}));
 	}
 
-	@Override
-	public int getOrder() {
-		return 4;
-	}	
 }

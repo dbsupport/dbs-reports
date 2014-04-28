@@ -52,7 +52,7 @@ public class ReportBlockReplaceRuleTest {
 	@Test
 	public void shouldnt_have_tags() throws IOException, ReportBlockInflationException, ReportBlockException {
 		StringBuffer sb = new StringBuffer();
-		ReportBlock root = build("pl/com/dbs/reports/domain/rule/test/test3.txt");
+		ReportTextBlock root = build("pl/com/dbs/reports/domain/rule/test/test3.txt");
 		
 		params.put("V_0", V_0);
 		params.put("V_1", V_1);
@@ -68,7 +68,7 @@ public class ReportBlockReplaceRuleTest {
 	@Test
 	public void check_production_pattern() throws IOException, ReportBlockInflationException, ReportBlockException {
 		StringBuffer sb = new StringBuffer();
-		ReportBlock root = build("pl/com/dbs/reports/domain/rule/test/zua.txt");
+		ReportTextBlock root = build("pl/com/dbs/reports/domain/rule/test/zua.txt");
 		
 		params.put("INDATWYP", "INDATWYP");
 		params.put("VROW", "VROW");
@@ -112,21 +112,21 @@ public class ReportBlockReplaceRuleTest {
 	
 	
 	
-	private ReportBlock build(String filename) throws IOException {
+	private ReportTextBlock build(String filename) throws IOException {
 		File file = read(filename);
 		final byte[] content = readFile(file);
 		ReportTextBlocksBuilder bbuilder = new ReportTextBlocksBuilder(content);
-		return bbuilder.build().getBlock();		
+		return bbuilder.deconstruct().getRootBlock();		
 	}
 	
-	private void inflate(StringBuffer sb, ReportBlock root, Map<String, String> params) throws ReportBlockException {
+	private void inflate(StringBuffer sb, ReportTextBlock root, Map<String, String> params) throws ReportBlockException {
 		if (root.hasContent()) {
 			//..no more block inside.. generate content..
 			sb.append(root.build(params));
 			return;
 		}		
 		//..go deeper and inflate children..
-		for (final ReportBlock block : root.getBlocks()) {
+		for (final ReportTextBlock block : root.getBlocks()) {
 			inflate(sb, block, params);
 		}
 	}

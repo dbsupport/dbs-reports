@@ -7,7 +7,8 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Service;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
@@ -22,8 +23,10 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-@Service
-public class PatternManifestNameTemplateValidator extends PatternValidator {
+
+@Order(2)
+@Component
+public class PatternManifestNameTemplateValidator implements PatternValidator {
 	
 	
 	@Override
@@ -41,10 +44,6 @@ public class PatternManifestNameTemplateValidator extends PatternValidator {
 	    		throw new PatternValidationException("report.pattern.import.manifest.field.validation.detailed.error", Arrays.asList(new String[] {ReportPatternManifest.ATTRIBUTE_NAME_TEMPLATE, variable}));
 	    }
 	}
-
-	@Override
-	public int getOrder() {
-		return 2;
-	}		
+	
 	
 }

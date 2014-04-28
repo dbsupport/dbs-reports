@@ -11,7 +11,6 @@ import static org.mockito.Mockito.when;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -26,27 +25,22 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.util.FileCopyUtils;
 
 import pl.com.dbs.reports.api.report.ReportValidationException;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternFactory;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
 import pl.com.dbs.reports.api.report.pattern.PatternValidator;
-import pl.com.dbs.reports.api.support.db.SqlExecutor;
 import pl.com.dbs.reports.profile.dao.ProfileDao;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.pattern.domain.PatternFactoryDefault;
 import pl.com.dbs.reports.report.pattern.domain.PatternProduceContextDefault;
 import pl.com.dbs.reports.report.pattern.domain.validator.PatternContentFormValidator;
 import pl.com.dbs.reports.security.domain.SessionContext;
-
-import com.google.common.io.Files;
 
 /**
  * Tests.
@@ -60,10 +54,6 @@ public class PatternFactoryDefaultTest {
 	private ProfileDao profileDao;
 	private PatternFactory pfactory;
 	private Profile profile; 
-	
-	@Mock
-	private SqlExecutor executor;
-	
 	
 	@Before
 	public void doBeforeEachTestCase() {
@@ -81,7 +71,6 @@ public class PatternFactoryDefaultTest {
 	@After  
     public void tearDown() {  
 		pfactory = null;
-		executor = null;  
     } 	
 	
 	@Test
@@ -164,16 +153,16 @@ public class PatternFactoryDefaultTest {
 	    return output.toByteArray();
 	}	
 	
-	private File bytesToFile(String name, File dir, byte[] content) throws IOException {
-		File tmpFile = new File(dir, name);
-		tmpFile.deleteOnExit();
-		FileCopyUtils.copy(content, new FileOutputStream(tmpFile));
-		return tmpFile;
-	}
-	
-    private File bytesToFile(String name, byte[] content) throws IOException {
-    	File dir = Files.createTempDir();
-    	return bytesToFile(name, dir, content);
-    } 		
+//	private File bytesToFile(String name, File dir, byte[] content) throws IOException {
+//		File tmpFile = new File(dir, name);
+//		tmpFile.deleteOnExit();
+//		FileCopyUtils.copy(content, new FileOutputStream(tmpFile));
+//		return tmpFile;
+//	}
+//	
+//    private File bytesToFile(String name, byte[] content) throws IOException {
+//    	File dir = Files.createTempDir();
+//    	return bytesToFile(name, dir, content);
+//    } 		
 	
 }

@@ -16,7 +16,8 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Service;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -44,8 +45,9 @@ import com.google.common.io.Resources;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-@Service
-public class PatternContentFormValidator extends PatternValidator implements ErrorHandler {
+@Order(6)
+@Component
+public class PatternContentFormValidator implements PatternValidator, ErrorHandler {
 	private static final Logger logger = Logger.getLogger(PatternContentFormValidator.class);
 	private static final String SCHEMA = "/pl/com/dbs/reports/form-schema-1.0.0.xsd";
 	
@@ -190,10 +192,4 @@ public class PatternContentFormValidator extends PatternValidator implements Err
 	public void fatalError(SAXParseException e) throws SAXParseException {
 		throw e;
 	}
-		
-
-	@Override
-	public int getOrder() {
-		return 6;
-	}	
 }

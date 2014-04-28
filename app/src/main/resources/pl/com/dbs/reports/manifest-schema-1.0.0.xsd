@@ -64,7 +64,9 @@ transformata.xsl generuj traktujac go jako .xsl, a w nazwie wynikowej podstaw .p
 Domyslnie wszystkie formaty sa traktowane jako tekstowe.
 
 Domyslnie plik wynikowy odpowiada rozszerzeniu wzorca, czyli np:
-wzorzec.rtf=txt|rtf</xs:documentation>
+wzorzec.rtf=txt|rtf
+Plik wzorca Może nie miec rozszerzenia - wtedy jest traktowany jako txt.
+PS. Nie może być więcej niż 1 wzor o danych rozszerzeniu czylii np: plik1=|pdf;plik2=|pdf nie uda się zaimpoertowac.</xs:documentation>
 						</xs:annotation>
 					</xs:element>
 					<xs:element name="Reports-Name-Template" minOccurs="0">

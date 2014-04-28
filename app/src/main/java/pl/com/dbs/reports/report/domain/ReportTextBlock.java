@@ -10,10 +10,11 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 
+import pl.com.dbs.reports.report.domain.rules.ReportBlockReplaceRule;
 import pl.com.dbs.reports.report.domain.rules.ReportBlockRule;
+import pl.com.dbs.reports.report.domain.rules.ReportBlockSwitchRule;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -24,12 +25,12 @@ import com.google.common.collect.Iterables;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class ReportBlock {
-	private static final Logger logger = Logger.getLogger(ReportBlock.class);
+public class ReportTextBlock {
+	private static final Logger logger = Logger.getLogger(ReportTextBlock.class);
 	/**
 	 * Parent block
 	 */
-	private ReportBlock parent;
+	private ReportTextBlock parent;
 	/**
 	 * If this is named block contains label, otherwise null.
 	 */
@@ -39,29 +40,38 @@ public class ReportBlock {
 	 */
 	private String content;
 	/**
+	 * Is content builded already?
+	 */
+	private boolean processed;
+	
+	/**
 	 * Block is expected to be inflated with data named like those.
 	 */
 	private Set<String> parameters = new HashSet<String>();
 	/**
 	 * Nested blocks.
 	 */
-	private LinkedList<ReportBlock> blocks = new LinkedList<ReportBlock>();
+	private LinkedList<ReportTextBlock> blocks = new LinkedList<ReportTextBlock>();
 
 	/**
 	 * Rules to process content.
 	 */
-	private LinkedList<ReportBlockRule> rules = new LinkedList<ReportBlockRule>();
+	private static LinkedList<ReportBlockRule> rules = new LinkedList<ReportBlockRule>();
+	static {
+		rules.add(new ReportBlockSwitchRule());
+		rules.add(new ReportBlockReplaceRule());
+	}
 
 	
 	/**
 	 * Totally empty block (root).
 	 */
-	ReportBlock() {}
+	ReportTextBlock() {}
 	
 	/**
 	 * Simple (not-named) block.
 	 */
-	ReportBlock(ReportBlock parent, String content) {
+	ReportTextBlock(ReportTextBlock parent, String content) {
 		this.parent = parent;
 		this.content = content;
 	}
@@ -69,16 +79,16 @@ public class ReportBlock {
 	/**
 	 * Named block.
 	 */
-	ReportBlock(ReportBlock parent, String label, String content) {
+	ReportTextBlock(ReportTextBlock parent, String label, String content) {
 		this(parent, content);
 		this.label = label;
 	}
 	
-	ReportBlock addRules(LinkedList<ReportBlockRule> rules) {
-		Validate.notNull(rules, "Rules cant be null");
-		this.rules = rules;
-		return this;
-	}
+//	ReportTextBlock addRules(LinkedList<ReportBlockRule> rules) {
+//		Validate.notNull(rules, "Rules cant be null");
+//		this.rules = rules;
+//		return this;
+//	}
 
 
 	/**
@@ -89,39 +99,49 @@ public class ReportBlock {
 	}
 
 	/**
-	 * Produce block data inflating with params.
+	 * Replaces parameter variables with values (given in params).
+	 * Applies rules (replacing strategy).
 	 * Only for inflateable blocks!
 	 * Can produce no data if content is empty.
 	 */
-	String build(final Map<String, String> params) throws ReportBlockException {
+	ReportTextBlock build(final Map<String, String> params) throws ReportBlockException {
+		if (processed) return this;
 		if (params.isEmpty()&&isInflateable()) throw new IllegalStateException("Block ("+label+") requires input parameters but you try to build it without any!");
 		
-		if (content==null) return null;
-		if (params.isEmpty()) return content;
+		if (content==null||params.isEmpty()) {
+			processed = true;
+			return this;
+		}
 		
 		StringBuffer result = new StringBuffer(content);
 		for (ReportBlockRule rule : rules) result = rule.apply(result, params);
 
-		return result.toString();
+		content = result.toString();
+		processed = true;
+		return this;
 	}
 
 	String getLabel() {
 		return label;
 	}
 	
-	ReportBlock getParent() {
+	ReportTextBlock getParent() {
 		return parent;
 	}
 
-	LinkedList<ReportBlock> getBlocks() {
+	LinkedList<ReportTextBlock> getBlocks() {
 		return blocks;
 	}
 	
 	boolean hasContent() {
 		return !StringUtils.isBlank(content);
 	}
+	
+	String getContent() {
+		return content;
+	}
 
-	void addBlock(ReportBlock block) {
+	void addBlock(ReportTextBlock block) {
 		this.blocks.add(block);
 	}
 	
@@ -140,7 +160,7 @@ public class ReportBlock {
 	ReportBlockInflation findInflater(final List<ReportBlockInflation> inflaters) {
 		if (!isLabeled()) return null;
 		
-		final ReportBlock block = this;
+		final ReportTextBlock block = this;
 		ReportBlockInflation inflater = Iterables.find(inflaters, new Predicate<ReportBlockInflation>() {
 				@Override
 				public boolean apply(ReportBlockInflation input) {
@@ -176,7 +196,7 @@ public class ReportBlock {
 		String l = "";
 		for (int i=0; i<level; i++) l += "-";
 		logger.debug(l+" "+this);
-		for (ReportBlock block : getBlocks()) block.print(level+1);
+		for (ReportTextBlock block : getBlocks()) block.print(level+1);
 	}
 	
 	

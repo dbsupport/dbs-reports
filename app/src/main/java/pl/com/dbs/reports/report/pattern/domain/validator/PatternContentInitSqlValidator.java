@@ -9,7 +9,8 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
@@ -27,8 +28,9 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-@Service
-public class PatternContentInitSqlValidator extends PatternValidator {
+@Order(5)
+@Component
+public class PatternContentInitSqlValidator implements PatternValidator {
 	@Autowired private SqlExecutor<Map<String, String>> executor;
 
 	@Override
@@ -57,9 +59,4 @@ public class PatternContentInitSqlValidator extends PatternValidator {
 			}
 		}		
 	}
-
-	@Override
-	public int getOrder() {
-		return 5;
-	}	
 }

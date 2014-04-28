@@ -9,12 +9,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 /**
- * Report block builder for text formats.
+ * Report blocks builder for text formats.
+ * 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-final class ReportTextBlocksBuilder extends ReportBlocksBuilder {
+class ReportTextBlocksBuilder extends ReportBlocksBuilder {
 	private static final Logger logger = Logger.getLogger(ReportTextBlocksBuilder.class);
 	private static final String BLOCK_START_PATTERN = "[BLOCK";
 	private static final String BLOCK_END_PATTERN = "BLOCK]";
@@ -22,20 +23,48 @@ final class ReportTextBlocksBuilder extends ReportBlocksBuilder {
 	private static final java.util.regex.Pattern BLOCK_CONTENT_PATTERN = java.util.regex.Pattern.compile("\\[BLOCK\\([\\w\\d_]+\\)([\\s\\S]*)",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	private static final java.util.regex.Pattern BLOCK_REST_PATTERN = java.util.regex.Pattern.compile("^BLOCK\\]([\\s\\S]*)",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	private static final java.util.regex.Pattern IN_VARIABLE_PATTERN = java.util.regex.Pattern.compile("\\^\\$([\\w\\d_]+)\\^",  java.util.regex.Pattern.CASE_INSENSITIVE);
-
-	ReportTextBlocksBuilder(byte[] content) {
+	
+	ReportTextBlocksBuilder(final byte[] content) {
 		super(content);
 	}
 	
-	ReportTextBlocksBuilder build() {
-		ReportBlock root = new ReportBlock().addRules(rules);
-		this.block = root;
+	@Override
+	public ReportTextBlocksBuilder deconstruct() {
+		ReportTextBlock root = new ReportTextBlock();
+		this.root = root;
 		parse(new String(content));
-        this.block = root;
-        return this;
+		this.root = root;
+		return this;
+	}
+
+	@Override
+	public ReportTextBlocksBuilder construct() {
+		StringBuffer sb = new StringBuffer();
+		merge(root, sb);
+		this.content = sb.toString().getBytes();
+		return this;
 	}
 	
+	public String getContentAsString() {
+		return new String(content);
+	}
+
+	/**
+	 * Iterates through blocks and adds their content into buffer.
+	 */
+	private void merge(final ReportTextBlock block, final StringBuffer sb) {
+		if (block.hasContent()) {
+			sb.append(block.getContent());
+		}
+		for (final ReportTextBlock child : block.getBlocks()) {
+			merge(child, sb);
+		}
+	}
 	
+	/**
+	 * Breakes content into blocks.
+	 * All in memory - sic!
+	 */
 	private String parse(String content) {
 		if (StringUtils.isBlank(content)) return null;
 		
@@ -44,22 +73,22 @@ final class ReportTextBlocksBuilder extends ReportBlocksBuilder {
 		
 		if (data.isSimple()) {
 			//..add to current block..
-			ReportBlock block = new ReportBlock(this.block, data.getText()).addRules(rules);
+			ReportTextBlock block = new ReportTextBlock(this.root, data.getText());//.addRules(rules);
 			//resolve invariables..
 			resolveInput(data.getText());
 			//..put to parent..
-			this.block.addBlock(block);
+			this.root.addBlock(block);
 			rest = data.getContent();
 		} else if (data.isBlockStart()) {
 			String label = data.getBlockLabel();
 			rest = data.getBlockContent();
 			
-			ReportBlock block = new ReportBlock(this.block, label, null).addRules(rules);
-			this.block.addBlock(block);
-			this.block = block;
+			ReportTextBlock block = new ReportTextBlock(this.root, label, null);//.addRules(rules);
+			this.root.addBlock(block);
+			this.root = block;
 		} else if (data.isBlockEnd()) {
 			rest = data.getBlockRest();
-			this.block = this.block.getParent();
+			this.root = this.root.getParent();
 		} else {
 			throw new IllegalStateException("Unknown TextBlock build phase!");
 		}
@@ -73,7 +102,7 @@ final class ReportTextBlocksBuilder extends ReportBlocksBuilder {
 	    while (variables.find()) {
 	    	String variable = StringUtils.trim(variables.group(1));
 	    	logger.info("Input variable found: "+variable);
-	    	block.addParameter(variable);
+	    	root.addParameter(variable);
 	    }
 	}
 	

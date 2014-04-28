@@ -50,7 +50,7 @@ public class ReportGenerationForm extends DForm implements ReportGeneration {
 
 	public void setExtension(String value) {
 		for (PatternFormat format : getFormats()) {
-			if (format.getPatternExtension().equalsIgnoreCase(value)) {
+			if (format.getReportExtension().equalsIgnoreCase(value)) {
 				this.format = format;
 				return;
 			}
@@ -59,7 +59,7 @@ public class ReportGenerationForm extends DForm implements ReportGeneration {
 	}
 	
 	public String getExtension() {
-		return this.format!=null?format.getPatternExtension():"";
+		return this.format!=null?format.getReportExtension():"";
 	}
 
 	public void addReport(Report report) {

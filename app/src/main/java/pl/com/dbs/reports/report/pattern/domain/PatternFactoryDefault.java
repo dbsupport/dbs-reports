@@ -57,9 +57,9 @@ public final class PatternFactoryDefault implements PatternFactory {
 		try {
 			PatternBuilder builder = new PatternBuilder(file, profileDao.find(SessionContext.getProfile().getId()));
 			builder.build();
-			
+			int order = 0;
 			for (PatternValidator validator : validators) {
-				logger.info("["+validator.getOrder()+"]"+" validating: "+ validator.getClass());
+				logger.info("["+order+++"]"+" validating: "+ validator.getClass());
 				validator.validate(builder.getPattern());
 			}
 			return builder.getPattern();

@@ -8,7 +8,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Service;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
 import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
@@ -24,8 +25,9 @@ import pl.com.dbs.reports.security.domain.SessionContext;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-@Service
-public class PatternManifestAccessValidator extends PatternValidator {
+@Order(3)
+@Component
+public class PatternManifestAccessValidator implements PatternValidator {
 
 	
 	@Override
@@ -42,9 +44,4 @@ public class PatternManifestAccessValidator extends PatternValidator {
 		}
 	}
 
-	@Override
-	public int getOrder() {
-		return 3;
-	}
-	
 }

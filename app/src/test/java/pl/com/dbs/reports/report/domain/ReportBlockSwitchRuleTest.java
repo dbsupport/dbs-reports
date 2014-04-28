@@ -42,10 +42,13 @@ public class ReportBlockSwitchRuleTest {
 	static final String I_3 = "I_3";
 	static final String SENTENCE = "Kto postepuje godniej: ten, kto biernie ";
 	static final String EOF = System.getProperty("line.separator");
+	private ReportTextBlockInflater inflater;
 	
 	
 	@Before
 	public void doBeforeEachTestCase() {
+		inflater = new ReportTextBlockInflater();
+		
 		params = new HashMap<String, String>();
 		
 		params.put(I_DEFAULT, "The slings and arrows of outrageous fortune");
@@ -60,167 +63,197 @@ public class ReportBlockSwitchRuleTest {
     }
 
 	@Test
-	public void should_split() throws IOException, ReportBlockInflationException, ReportBlockException {
-		
-		StringBuffer sb = new StringBuffer();
-		ReportBlock root = build("pl/com/dbs/reports/domain/rule/test/test0.txt");
+	public void should_split_1() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test0.txt");
 		
 		params.put("V_0", "");
-		inflate(sb, root, params);
-		System.out.print(sb);
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		System.out.print(builder.getContentAsString());
 		
-		assertTrue(sb.toString().equals("empty"));
-		
-		sb = new StringBuffer();
-		params.put("V_0", "0");
-		inflate(sb, root, params);
-		System.out.print(sb);
-	
-		assertTrue(sb.toString().equals("zero"+EOF+"zero"));		
-
-		sb = new StringBuffer();
-		params.put("V_0", "1");
-		inflate(sb, root, params);
-		System.out.print(sb);
-	
-		assertTrue(sb.toString().equals("one by one"+EOF));		
-		
-
-		sb = new StringBuffer();
-		params.put("V_0", "2");
-		inflate(sb, root, params);
-		System.out.print(sb);
-	
-		assertTrue(sb.toString().equals("two"+EOF+"two two"));		
-		
-		sb = new StringBuffer();
-		params.put("V_0", "3");
-		inflate(sb, root, params);
-		System.out.print(sb);
-	
-		assertTrue(sb.toString().equals(" three "));	
-		
-		
-		sb = new StringBuffer();
-		params.put("V_0", "_123_- !@#$%^&*");
-		inflate(sb, root, params);
-		System.out.print(sb);
-	
-		assertTrue(sb.toString().equals("strange!"+EOF));		
-		
-		
-		sb = new StringBuffer();
-		params.put("V_0", "4");
-		inflate(sb, root, params);
-		System.out.print(sb);
-	
-		assertTrue(sb.toString().equals("default suitcase and switcher "));			
+		assertTrue(builder.getContentAsString().equals("empty"));
 	}
 	
 	@Test
-	public void shouldnt_have_any_tags() throws IOException, ReportBlockInflationException, ReportBlockException {
-		StringBuffer sb = new StringBuffer();
-		ReportBlock root = build("pl/com/dbs/reports/domain/rule/test/test1.txt");
+	public void should_split_2() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test0.txt");
+		
+		params.put("V_0", "0");
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		System.out.print(builder.getContentAsString());
+	
+		assertTrue(builder.getContentAsString().equals("zero"+EOF+"zero"));
+	}
+
+	@Test
+	public void should_split_3() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test0.txt");
+		params.put("V_0", "1");
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		System.out.print(builder.getContentAsString());
+	
+		assertTrue(builder.getContentAsString().equals("one by one"+EOF));
+	}
+	
+	@Test
+	public void should_split_4() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test0.txt");
+		params.put("V_0", "2");
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		System.out.print(builder.getContentAsString());
+	
+		assertTrue(builder.getContentAsString().equals("two"+EOF+"two two"));
+	}
+	
+	@Test
+	public void should_split_5() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test0.txt");
+		params.put("V_0", "3");
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		System.out.print(builder.getContentAsString());
+	
+		assertTrue(builder.getContentAsString().equals(" three "));
+	}
+	
+	@Test
+	public void should_split_6() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test0.txt");
+		params.put("V_0", "_123_- !@#$%^&*");
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		System.out.print(builder.getContentAsString());
+	
+		assertTrue(builder.getContentAsString().equals("strange!"+EOF));		
+	}
+	
+	@Test
+	public void should_split_7() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test0.txt");
+		params.put("V_0", "4");
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		System.out.print(builder.getContentAsString());
+	
+		assertTrue(builder.getContentAsString().equals("default suitcase and switcher "));			
+	}
+	
+	@Test
+	public void shouldnt_have_any_tags() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test1.txt");
 		
 		params.put("V_0", "");
 		params.put("V_1", "");
 		params.put("V_2", "");
 		params.put("V_3", "");
 		
-		inflate(sb, root, params);
-		
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		String sb = builder.getContentAsString();
 		System.out.print(sb);
 		
-		assertTrue(!sb.toString().contains("SWITCH"));
-		assertTrue(!sb.toString().contains("^$V_0^"));
-		assertTrue(!sb.toString().contains("^$V_1^"));
-		assertTrue(!sb.toString().contains("^$V_2^"));
-		assertTrue(!sb.toString().contains("^$V_3^"));
-		assertTrue(!sb.toString().contains("^$I_0^"));
-		assertTrue(!sb.toString().contains("^$I_1^"));
-		assertTrue(!sb.toString().contains("^$I_2^"));
-		assertTrue(!sb.toString().contains("^$I_3^"));
-		assertTrue(!sb.toString().contains("^$I_DEFAULT^"));
+		assertTrue(!sb.contains("SWITCH"));
+		assertTrue(!sb.contains("^$V_0^"));
+		assertTrue(!sb.contains("^$V_1^"));
+		assertTrue(!sb.contains("^$V_2^"));
+		assertTrue(!sb.contains("^$V_3^"));
+		assertTrue(!sb.contains("^$I_0^"));
+		assertTrue(!sb.contains("^$I_1^"));
+		assertTrue(!sb.contains("^$I_2^"));
+		assertTrue(!sb.contains("^$I_3^"));
+		assertTrue(!sb.contains("^$I_DEFAULT^"));
 	}
 	
 	@Test
-	public void should_be_null_variant() throws IOException, ReportBlockInflationException, ReportBlockException {
-		StringBuffer sb = new StringBuffer();
-		ReportBlock root = build("pl/com/dbs/reports/domain/rule/test/test2.txt");
+	public void should_be_null_variant() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test2.txt");
 		
 		params.put("V_0", "");
 		
-		inflate(sb, root, params);
-		
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		String sb = builder.getContentAsString();
 		System.out.print(sb);
 		
-		assertTrue(sb.toString().equals(SENTENCE+"..."));
+		assertTrue(sb.equals(SENTENCE+"..."));
 	}
 	
 	@Test
-	public void should_be_default_variant() throws IOException, ReportBlockInflationException, ReportBlockException {
-		StringBuffer sb = new StringBuffer();
-		ReportBlock root = build("pl/com/dbs/reports/domain/rule/test/test2.txt");		
+	public void should_be_default_variant() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test2.txt");	
 		
 		params.put("V_0", "nonabove");
 		
-		inflate(sb, root, params);
-		
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		String sb = builder.getContentAsString();
 		System.out.print(sb);
 		
-		assertTrue(sb.toString().equals(SENTENCE+params.get(I_DEFAULT)+EOF));
+		assertTrue(sb.equals(SENTENCE+params.get(I_DEFAULT)+EOF));
 	}	
 	
 	@Test
-	public void should_be_a_variant() throws IOException, ReportBlockInflationException, ReportBlockException {
-		StringBuffer sb = new StringBuffer();
-		ReportBlock root = build("pl/com/dbs/reports/domain/rule/test/test2.txt");
+	public void should_be_a_variant_1() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test2.txt");	
 		
 		params.put("V_0", "0");
-		inflate(sb, root, params);
-		System.out.println(sb);
-		assertTrue(sb.toString().equals(SENTENCE+params.get(I_0)));
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		String sb = builder.getContentAsString();
+		System.out.print(sb);
+		assertTrue(sb.equals(SENTENCE+params.get(I_0)));
+	}
 		
+	@Test
+	public void should_be_a_variant_2() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test2.txt");	
 		
-		
-		sb = new StringBuffer(); 
 		params.put("V_0", "1");
-		inflate(sb, root, params);
-		System.out.println(sb);
-		assertTrue(sb.toString().equals(SENTENCE+params.get(I_1)));		
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		String sb = builder.getContentAsString();
+		System.out.print(sb);
+		assertTrue(sb.equals(SENTENCE+params.get(I_1)));
+	}
 		
+	@Test
+	public void should_be_a_variant_3() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test2.txt");	
 		
-		sb = new StringBuffer(); 
 		params.put("V_0", "2");
-		inflate(sb, root, params);
-		System.out.println(sb);
-		assertTrue(sb.toString().equals(SENTENCE+params.get(I_2)));
-		
-		sb = new StringBuffer(); 
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		String sb = builder.getContentAsString();
+		System.out.print(sb);
+		assertTrue(sb.equals(SENTENCE+params.get(I_2)));
+	}
+
+	@Test
+	public void should_be_a_variant_4() throws IOException, ReportBlockException {
+		ReportTextBlocksBuilder builder = build("pl/com/dbs/reports/domain/rule/test/test2.txt");	
 		params.put("V_0", "3");
-		inflate(sb, root, params);
-		System.out.println(sb);
-		assertTrue(sb.toString().equals(SENTENCE+params.get(I_3)));			
+		inflater.inflate(builder.getRootBlock(), params);
+		builder.construct();
+		String sb = builder.getContentAsString();
+		System.out.print(sb);
+		assertTrue(sb.equals(SENTENCE+params.get(I_3)));			
 		
 	}	
 	
-	private ReportBlock build(String filename) throws IOException {
+	
+	
+	
+	
+	
+	
+	private ReportTextBlocksBuilder build(String filename) throws IOException {
 		File file = read(filename);
 		final byte[] content = readFile(file);
 		ReportTextBlocksBuilder bbuilder = new ReportTextBlocksBuilder(content);
-		return bbuilder.build().getBlock();		
-	}
-	
-	private void inflate(StringBuffer sb, ReportBlock root, Map<String, String> params) throws ReportBlockException {
-		if (root.hasContent()) {
-			//..no more block inside.. generate content..
-			sb.append(root.build(params));
-			return;
-		}		
-		//..go deeper and inflate children..
-		for (final ReportBlock block : root.getBlocks()) {
-			inflate(sb, block, params);
-		}
+		return bbuilder.deconstruct();		
 	}
 	
 	private File read(String src) {

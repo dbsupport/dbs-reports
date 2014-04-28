@@ -28,7 +28,7 @@ import org.joda.time.format.DateTimeFormat;
 @XmlDiscriminatorValue("date")
 public class FieldDate  extends AField<Date> {
 	private static final Pattern TIME_PATTERN = Pattern.compile("hh|HH|HH24|hh24", Pattern.CASE_INSENSITIVE);
-	private static final String CURRENT_DATE_VALUE = "getdate";
+	private static final Pattern NOW_PATTERN = Pattern.compile("now|teraz", Pattern.CASE_INSENSITIVE);
 	
 	public FieldDate() {
 		super();
@@ -44,7 +44,7 @@ public class FieldDate  extends AField<Date> {
 
 	@Override
 	public void init(LinkedList<AField<?>> fields) {
-		if (CURRENT_DATE_VALUE.equalsIgnoreCase(getValue())) {
+		if (NOW_PATTERN.matcher(getValue()).find()) {
 			setValue(DateFormatUtils.format(new Date(), resolveFormat()));
 		}
 		super.init(fields);
@@ -62,7 +62,6 @@ public class FieldDate  extends AField<Date> {
 	}
 	
 	public boolean isWithTime() {
-		//FIXME:
 		return TIME_PATTERN.matcher(getFormat()).find();
 	}
 	

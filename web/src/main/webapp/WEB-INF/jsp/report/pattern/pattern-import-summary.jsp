@@ -50,7 +50,7 @@
 		                        <c:if test="${patternImportForm.form}">
 		                        <button type="button" class="btn-glow btn-next" onclick="location.href='report/pattern/import/form'">Sprawdź formatkę</button><span>&nbsp;</span>
 		                        </c:if>
-		                        <button type="submit" class="btn-glow success btn-finish" style="display: inline-block;">Zapisz szablon!</button><span>&nbsp;</span>                            
+		                        <button type="submit" class="btn-glow success btn-finish" style="display: inline-block;">Zapisz definicję!</button><span>&nbsp;</span>                            
                             </div>
                         </form:form>
         

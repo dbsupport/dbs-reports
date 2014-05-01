@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain;
+package pl.com.dbs.reports.report.domain.builders;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -20,6 +20,8 @@ import org.springframework.stereotype.Component;
 
 import pl.com.dbs.reports.api.support.db.SqlExecutor;
 import pl.com.dbs.reports.api.support.db.SqlExecutorContext;
+import pl.com.dbs.reports.report.domain.ReportBlockException;
+import pl.com.dbs.reports.report.domain.ReportBlockInflationException;
 import pl.com.dbs.reports.support.encoding.EncodingContext;
 import pl.com.dbs.reports.support.encoding.EncodingService;
 
@@ -33,7 +35,7 @@ import pl.com.dbs.reports.support.encoding.EncodingService;
  * @coptyright (c) 2014
  */
 @Component
-public class ReportTextBlockQueryInflater {
+public class ReportTextBlockInflaterQuery implements ReportTextBlockInflater {
 	/**
 	 * Inflation executing endpoint.
 	 */
@@ -43,10 +45,16 @@ public class ReportTextBlockQueryInflater {
 	/**
 	 * Iterates through blocks and chenges its content inflating them from sql-inflations.
 	 */
-	public void inflate(final ReportTextBlock root, final Map<String, String> parameters, final List<ReportBlockInflation> inflations) throws ReportBlockException, ReportBlockInflationException, DataAccessException {
+	@Override
+	public void inflate(final ReportTextBlock root, final Map<String, String> parameters, final StringBuilder content) throws ReportBlockException {
 		EncodingContext encodingContext = encodingService.getEncodingContext();
 		for (ReportTextBlock block : root.getBlocks()) {
-			inflateBlock(block, parameters, inflations, encodingContext);
+			try {
+				inflateBlock(block, parameters, encodingContext, content);
+			} catch (ReportBlockInflationException e) {
+				throw new ReportBlockException(e);
+			}
+			
 		}
 	}
 	
@@ -55,19 +63,35 @@ public class ReportTextBlockQueryInflater {
 	 * Executes inflation - producing parameters which are used to build (replace) block's variables.
 	 *  
 	 */
-	private void inflateBlock(final ReportTextBlock block, final Map<String, String> parameters, final List<ReportBlockInflation> inflations, final EncodingContext encodingContext) throws ReportBlockException, ReportBlockInflationException, DataAccessException { 
+	private void inflateBlock(final ReportTextBlock block, final Map<String, String> parameters, final EncodingContext encodingContext, final StringBuilder sb) throws ReportBlockException, ReportBlockInflationException, DataAccessException { 
 		if (block.hasContent()) {
 			//..no more block inside.. generate content..
-			block.build(parameters);
+			block.build(parameters, sb);
 			return;
 		}
 		//..result of inflations..
-		List<Map<String, String>> params = new LinkedList<Map<String, String>>();
+		final List<Map<String, String>> result = query(block, parameters, encodingContext);
+		
+		//..repeat block generation as many times as received data on list..
+		for (Map<String, String> row : result) {
+			//..remember parameters (put on stack latest values)..
+			for (Entry<String, String> value : row.entrySet()) addParam(parameters, value.getKey(), value.getValue());
+			//..go deeper and inflate children..
+			for (final ReportTextBlock child : block.getBlocks()) {
+				inflateBlock(child, parameters, encodingContext, sb);
+			}
+		}
+	}
+	
+	private List<Map<String, String>> query(final ReportTextBlock block, final Map<String, String> parameters, final EncodingContext encodingContext) throws ReportBlockInflationException, DataAccessException {
+		//..result of inflations..
+		List<Map<String, String>> result = new LinkedList<Map<String, String>>();
 		//..inflate if has inflation..
-		ReportBlockInflation inflation = block.findInflater(inflations);
+		ReportBlockInflation inflation = block.getInflation();
+		
 		if (inflation!=null) {
 			//..run inflater.. query db.. and convert to list of result parameters..
-			params = 
+			result = 
 				(List<Map<String, String>>)executor.query(new SqlExecutorContext<Map<String, String>>(
 					inflation.build(parameters))
 						.mapping(new RowMapper<Map<String, String>>() {
@@ -83,17 +107,10 @@ public class ReportTextBlockQueryInflater {
 							return params;
 						}
 				}));				
-		}
-		
-		//..repeat block generation as many times as received data on list..
-		for (Map<String, String> param : params) {
-			//..remember parameters (put on stack latest values)..
-			for (Entry<String, String> p : param.entrySet()) addParam(parameters, p.getKey(), p.getValue());
-			//..go deeper and inflate children..
-			for (final ReportTextBlock child : block.getBlocks()) {
-				inflateBlock(child, parameters, inflations, encodingContext);
-			}
-		}
+		} else if (block.isInflateable()) 
+			throw new IllegalStateException("Block("+block.getLabel()+") requires inflation but cant find one!");
+
+		return result;
 	}
 	
 	private void addParam(final Map<String, String> parameters, String key, final String value) {

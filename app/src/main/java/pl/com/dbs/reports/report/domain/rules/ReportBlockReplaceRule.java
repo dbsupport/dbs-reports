@@ -27,15 +27,15 @@ public class ReportBlockReplaceRule implements ReportBlockRule {
 	}
 
 	@Override
-	public StringBuffer apply(final StringBuffer content, final Map<String, String> params) throws ReportBlockException {
-		StringBuffer result = new StringBuffer(content);
+	public StringBuilder apply(final StringBuilder content, final Map<String, String> params) throws ReportBlockException {
+		StringBuilder result = new StringBuilder(content);
 		for (Map.Entry<String, String> param : params.entrySet()) {
 			result = apply(result, param.getKey(), !StringUtils.isBlank(param.getValue())?param.getValue():"", 0);
 		}
 		return result;
 	}
 	
-	private StringBuffer apply(final StringBuffer content, final String key, final String value, int valve) throws ReportBlockException {
+	private StringBuilder apply(final StringBuilder content, final String key, final String value, int valve) throws ReportBlockException {
 		if (valve++ > VALVE) throw new ReportBlockException("Too many iteration! "+valve+">"+VALVE);
 		
 		Matcher m = Pattern.compile("\\^\\$"+key+"\\^", Pattern.CASE_INSENSITIVE).matcher(content);

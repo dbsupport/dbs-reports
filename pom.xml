@@ -51,6 +51,7 @@
 		<junit.version>4.8.1</junit.version>
 		<org.powermock.version>1.5.1</org.powermock.version>
 		<itext.version>2.1.7</itext.version>
+		<itext.rtf.version>2.1.7.1</itext.rtf.version><!-- spatchowana wersja wlasna, patrz http://itext-general.2136553.n4.nabble.com/importRtfDocument-Unknown-Source-td2151636.html -->
 		<dbs.reports.api.version>1.2.0-SNAPSHOT</dbs.reports.api.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -143,7 +144,7 @@
 			<dependency>
 			    <groupId>com.lowagie</groupId>
 			    <artifactId>itext-rtf</artifactId>
-			    <version>${itext.version}</version>
+			    <version>${itext.rtf.version}</version>
 			</dependency>
 			             		
 			<!-- Spring Security -->

@@ -1,13 +1,17 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain;
+package pl.com.dbs.reports.report.domain.builders;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+
+import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
+import pl.com.dbs.reports.report.domain.ReportBlockException;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -21,16 +25,16 @@ import com.lowagie.text.rtf.parser.RtfParser;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2014
  */
-final class ReportRtfPdfBlocksBuilder extends ReportTextBlocksBuilder {
+public final class ReportRtfPdfBlocksBuilder extends ReportTextBlocksBuilder {
 	private static final Logger logger = Logger.getLogger(ReportRtfPdfBlocksBuilder.class);
 	
-	ReportRtfPdfBlocksBuilder(final byte[] content) {
-		super(content);
+	public ReportRtfPdfBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflaterQuery inflater, final Map<String, String> params) {
+		super(transformate, inflater, params);
 	}
 	
 	@Override
-	public ReportRtfPdfBlocksBuilder construct() {
-		super.construct();
+	public ReportTextBlocksBuilder build() throws ReportBlockException {
+		super.build();
 		convert();
         return this;
 	}

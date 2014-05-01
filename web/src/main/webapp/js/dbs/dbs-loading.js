@@ -6,14 +6,15 @@ $(function () {
 	    (function worker() {
 	    	  $.ajax({
 	    	    url: 'ping', 
-	    	    timeout: 5000,
+	    	    timeout: 50000,
 	    	    success: function(data) {
 	    	      //console.log('success');
 	    	      setTimeout(worker, 60000);
 	    	    },
 	    	    error: function(data) {
-	    	    	//console.log('fail');
-	    	    	$(location).attr('href', 'security/noaccess');
+	    	    	//console.log('fail: '+data);
+	    	    	//$(location).attr('href', 'security/noaccess');
+	    	    	//window.location.href='/reports/security/noaccess';
 	    	    },
 	    	    complete: function() {
 	    	    }

@@ -1,23 +1,20 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain;
+package pl.com.dbs.reports.report.domain.builders;
 
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import pl.com.dbs.reports.report.domain.ReportBlockException;
 import pl.com.dbs.reports.report.domain.rules.ReportBlockReplaceRule;
 import pl.com.dbs.reports.report.domain.rules.ReportBlockRule;
 import pl.com.dbs.reports.report.domain.rules.ReportBlockSwitchRule;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 /**
  * A block of paterrn data.
@@ -40,10 +37,9 @@ public class ReportTextBlock {
 	 */
 	private String content;
 	/**
-	 * Is content builded already?
+	 * Assigned inflation (sql file).
 	 */
-	private boolean processed;
-	
+	private ReportBlockInflation inflation;
 	/**
 	 * Block is expected to be inflated with data named like those.
 	 */
@@ -71,25 +67,28 @@ public class ReportTextBlock {
 	/**
 	 * Simple (not-named) block.
 	 */
-	ReportTextBlock(ReportTextBlock parent, String content) {
+	ReportTextBlock(ReportTextBlock parent) {
 		this.parent = parent;
-		this.content = content;
 	}
 
 	/**
 	 * Named block.
 	 */
-	ReportTextBlock(ReportTextBlock parent, String label, String content) {
-		this(parent, content);
+	ReportTextBlock(ReportTextBlock parent, String label) {//, ReportBlockInflation inflation) {
+		this(parent);
 		this.label = label;
 	}
 	
-//	ReportTextBlock addRules(LinkedList<ReportBlockRule> rules) {
-//		Validate.notNull(rules, "Rules cant be null");
-//		this.rules = rules;
-//		return this;
-//	}
-
+	ReportTextBlock addContent(String content) {
+		this.content = content;
+		return this;
+	}
+	
+	ReportTextBlock addInflation(ReportBlockInflation inflation) {
+		this.inflation = inflation;
+		return this;
+	}
+	
 
 	/**
 	 * Requires to be inflated with some data?
@@ -104,20 +103,16 @@ public class ReportTextBlock {
 	 * Only for inflateable blocks!
 	 * Can produce no data if content is empty.
 	 */
-	ReportTextBlock build(final Map<String, String> params) throws ReportBlockException {
-		if (processed) return this;
+	ReportTextBlock build(final Map<String, String> params, final StringBuilder sb) throws ReportBlockException {
 		if (params.isEmpty()&&isInflateable()) throw new IllegalStateException("Block ("+label+") requires input parameters but you try to build it without any!");
 		
-		if (content==null||params.isEmpty()) {
-			processed = true;
-			return this;
-		}
+		if (content==null) return this;
+		if (params.isEmpty()) return this;
 		
-		StringBuffer result = new StringBuffer(content);
+		StringBuilder result = new StringBuilder(content);
 		for (ReportBlockRule rule : rules) result = rule.apply(result, params);
 
-		content = result.toString();
-		processed = true;
+		sb.append(result);
 		return this;
 	}
 
@@ -141,38 +136,24 @@ public class ReportTextBlock {
 		return content;
 	}
 
-	void addBlock(ReportTextBlock block) {
+	public ReportBlockInflation getInflation() {
+		return inflation;
+	}
+
+	ReportTextBlock addBlock(ReportTextBlock block) {
 		this.blocks.add(block);
+		return this;
 	}
 	
 	/**
 	 * Add required param name.
 	 */
-	void addParameter(String param) {
+	ReportTextBlock addParameter(String param) {
 		if (!parameters.contains(param))
 			this.parameters.add(param);
+		return this;
 	}
 
-	/**
-	 * Select inflater connected with that block (by label).
-	 * If block is not inflatable returns null.
-	 */
-	ReportBlockInflation findInflater(final List<ReportBlockInflation> inflaters) {
-		if (!isLabeled()) return null;
-		
-		final ReportTextBlock block = this;
-		ReportBlockInflation inflater = Iterables.find(inflaters, new Predicate<ReportBlockInflation>() {
-				@Override
-				public boolean apply(ReportBlockInflation input) {
-					return input.isApplicable(block);
-				}
-			}, null);
-		
-		if (inflater==null&&!parameters.isEmpty()) throw new IllegalStateException("Block("+label+") requires inflater but cant find one!");
-		return inflater;
-	}
-	
-	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -188,8 +169,9 @@ public class ReportTextBlock {
 	/**
 	 * Print structure.
 	 */
-	void print() {
+	ReportTextBlock print() {
 		print(0);
+		return this;
 	}
 	
 	private void print(int level) {
@@ -198,13 +180,5 @@ public class ReportTextBlock {
 		logger.debug(l+" "+this);
 		for (ReportTextBlock block : getBlocks()) block.print(level+1);
 	}
-	
-	
-	/**
-	 * Is this block labeled?
-	 */
-	private boolean isLabeled() {
-		return !StringUtils.isBlank(label);
-	}	
 	
 }

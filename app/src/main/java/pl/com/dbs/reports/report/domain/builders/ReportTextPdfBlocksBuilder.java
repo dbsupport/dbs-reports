@@ -1,14 +1,18 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain;
+package pl.com.dbs.reports.report.domain.builders;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+
+import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
+import pl.com.dbs.reports.report.domain.ReportBlockException;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.PageSize;
@@ -21,16 +25,16 @@ import com.lowagie.text.pdf.PdfWriter;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-final class ReportTextPdfBlocksBuilder extends ReportTextBlocksBuilder {
+public final class ReportTextPdfBlocksBuilder extends ReportTextBlocksBuilder {
 	private static final Logger logger = Logger.getLogger(ReportTextPdfBlocksBuilder.class);
 	
-	ReportTextPdfBlocksBuilder(final byte[] content) {
-		super(content);
+	public ReportTextPdfBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflaterQuery inflater, final Map<String, String> params) {
+		super(transformate, inflater, params);
 	}
 	
 	@Override
-	public ReportTextBlocksBuilder construct() {
-		super.construct();
+	public ReportTextBlocksBuilder build() throws ReportBlockException {
+		super.build();
 		convert();
 		return this;
 	}

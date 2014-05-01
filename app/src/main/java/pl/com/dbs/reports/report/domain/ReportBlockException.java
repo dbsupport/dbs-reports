@@ -12,6 +12,10 @@ package pl.com.dbs.reports.report.domain;
 public class ReportBlockException extends Exception {
 	private static final long serialVersionUID = 800627217419254753L;
 
+	public ReportBlockException(Exception e) {
+		super(e);
+	}
+	
 	public ReportBlockException(String msg) {
 		super(msg);
 	}

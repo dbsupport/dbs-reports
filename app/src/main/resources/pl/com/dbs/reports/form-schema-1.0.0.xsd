@@ -80,8 +80,11 @@ http://www.malot.fr/bootstrap-datetimepicker/</xs:documentation>
 		<xs:annotation>
 			<xs:documentation>Enable field value</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="value" type="xs:string" use="required"/>
-		<xs:attribute name="label" type="xs:string"/>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="value" type="xs:string"/>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<xs:simpleType name="field-type">
 		<xs:annotation>

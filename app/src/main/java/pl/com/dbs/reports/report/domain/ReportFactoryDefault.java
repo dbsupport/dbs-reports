@@ -3,9 +3,6 @@
  */
 package pl.com.dbs.reports.report.domain;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
@@ -21,14 +18,16 @@ import pl.com.dbs.reports.api.report.ReportFactory;
 import pl.com.dbs.reports.api.report.ReportProduceContext;
 import pl.com.dbs.reports.api.report.ReportValidationException;
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
-import pl.com.dbs.reports.api.report.pattern.PatternInflater;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.profile.dao.ProfileDao;
 import pl.com.dbs.reports.profile.domain.Profile;
+import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuilder;
+import pl.com.dbs.reports.report.domain.builders.ReportRtfPdfBlocksBuilder;
+import pl.com.dbs.reports.report.domain.builders.ReportTextBlockInflaterQuery;
+import pl.com.dbs.reports.report.domain.builders.ReportTextBlocksBuilder;
+import pl.com.dbs.reports.report.domain.builders.ReportTextPdfBlocksBuilder;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.security.domain.SessionContext;
-
-import com.google.common.collect.Maps;
 
 /**
  * Default report generation factory for reports.
@@ -43,7 +42,7 @@ import com.google.common.collect.Maps;
 public class ReportFactoryDefault implements ReportFactory {
 	private static final Logger logger = Logger.getLogger(ReportFactoryDefault.class);
 	private ProfileDao profileDao;
-	@Autowired private ReportTextBlockQueryInflater inflater;
+	@Autowired private ReportTextBlockInflaterQuery inflater;
 	
 	@Autowired
 	public ReportFactoryDefault(ProfileDao profileDao) {
@@ -76,21 +75,16 @@ public class ReportFactoryDefault implements ReportFactory {
 		for (Map.Entry<String, String> entry : params.entrySet()) logger.debug(entry.getKey()+":"+entry.getValue());
 		
 		//..resolve builder for blocks..
-		ReportBlocksBuilder blocksbuilder = resolveBlocksBuilder(transformate);
+		ReportBlocksBuilder blocksbuilder = resolveBlocksBuilder(transformate, params);
 		Validate.notNull(blocksbuilder, "Blocks builder is no more!");
-		blocksbuilder.deconstruct();
+		//blocksbuilder.getRootBlock().print();
 		
 		//.inflate blocks tree..
 		try {
-			inflater.inflate(blocksbuilder.getRootBlock(), resolveParameters(params), resolveInflations(transformate));
+			blocksbuilder.build();
 		} catch (ReportBlockException e) {
-			throw new ReportValidationException(e, "report.execute.detailed.error");
-		} catch (ReportBlockInflationException e) {
-			throw new ReportValidationException(e, "report.execute.detailed.error");
+			throw new ReportValidationException(e);
 		}
-		
-		//..construct blocks tree back..
-		blocksbuilder.construct();
 		
 		//..report builder..
 		Profile profile = profileDao.find(SessionContext.getProfile().getId());
@@ -101,18 +95,27 @@ public class ReportFactoryDefault implements ReportFactory {
 	}
 	
 	
-	private ReportBlocksBuilder resolveBlocksBuilder(final PatternTransformate transformate) {
-		ReportBlocksBuilder builder = null;
+	private ReportBlocksBuilder resolveBlocksBuilder(final PatternTransformate transformate, final Map<String, String> params) {
+		ReportBlocksBuilder blocksbuilder = null;
 		if (isReportExtension(transformate, "pdf")) {
 			if (isPatternExtension(transformate, "rtf")) {
-				builder = new ReportRtfPdfBlocksBuilder(transformate.getContent());
+				blocksbuilder = new ReportRtfPdfBlocksBuilder(transformate, inflater, params);
 			} else { 
-				builder = new ReportTextPdfBlocksBuilder(transformate.getContent());
+				blocksbuilder = new ReportTextPdfBlocksBuilder(transformate, inflater, params);
 			}
 		} else {
-			builder = new ReportTextBlocksBuilder(transformate.getContent());
-		}	
-		return builder;
+			blocksbuilder = new ReportTextBlocksBuilder(transformate, inflater, params);
+		}
+		
+		if (blocksbuilder!=null) {
+			//Profile profile = profileDao.find(SessionContext.getProfile().getId());
+			//..add profile login..
+			blocksbuilder.addParameter(Profile.PARAMETER_USER, SessionContext.getProfile().getLogin())
+			//..add profile parameter (HR authorities)..
+			.addParameter(Profile.PARAMETER_PROFILE, SessionContext.getProfile().getClientAuthorityMetaData());
+		}
+
+		return blocksbuilder;
 	}
 	
 	private boolean isReportExtension(final PatternTransformate transformate, String ext) {
@@ -132,27 +135,4 @@ public class ReportFactoryDefault implements ReportFactory {
 	    m.reset();
 	    return m.find();
 	}		
-	
-	private Map<String, String> resolveParameters(final Map<String, String> params) {
-		//..copy of params..
-		Map<String, String> parameters = Maps.newHashMap(params==null?new HashMap<String, String>():params);
-		
-		//Profile profile = profileDao.find(SessionContext.getProfile().getId());
-		//..add profile login..
-		parameters.put(Profile.PARAMETER_USER, SessionContext.getProfile().getLogin());//profile.getLogin());
-		//..add profile parameter (HR authorities)..
-		parameters.put(Profile.PARAMETER_PROFILE, SessionContext.getProfile().getClientAuthorityMetaData());
-		return parameters;
-	}
-	
-	/**
-	 * Iterate thorough all .sql files and obtain all inflaters from them..
-	 */
-	private List<ReportBlockInflation> resolveInflations(final PatternTransformate transformate) {
-		List<ReportBlockInflation> inflations = new ArrayList<ReportBlockInflation>();
-		for (PatternInflater inflater : transformate.getInflaters()) {
-			inflations.addAll(new ReportBlockInflationsBuilder(inflater.getContent()).build().getInflations());
-		}
-		return inflations;
-	}	
 }

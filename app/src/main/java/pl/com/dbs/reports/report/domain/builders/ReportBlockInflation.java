@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain;
+package pl.com.dbs.reports.report.domain.builders;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import pl.com.dbs.reports.report.domain.ReportBlockInflationException;
 import pl.com.dbs.reports.support.utils.separator.Separator;
 
 /**
@@ -63,8 +64,8 @@ public class ReportBlockInflation {
 	/**
 	 * Is this inflater applicable for that block?
 	 */
-	boolean isApplicable(ReportTextBlock block) {
-		return this.label.equalsIgnoreCase(block.getLabel());
+	public boolean isApplicable(String label) {
+		return this.label.equalsIgnoreCase(label);
 	}
 
 	/**

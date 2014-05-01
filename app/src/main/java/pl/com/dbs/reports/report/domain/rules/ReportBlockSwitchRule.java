@@ -31,10 +31,10 @@ public class ReportBlockSwitchRule implements ReportBlockRule {
 	}
 
 	@Override
-	public StringBuffer apply(final StringBuffer content, final Map<String, String> params) throws ReportBlockException {
+	public StringBuilder apply(final StringBuilder content, final Map<String, String> params) throws ReportBlockException {
 		ReportBlockRuleSwitch aswitch = null;
 		int valve = 0;
-		StringBuffer buffer = new StringBuffer(content);
+		StringBuilder buffer = new StringBuilder(content);
 		while ((aswitch = resolveSwitch(buffer))!=null) {
 			if (++valve > VALVE) throw new ReportBlockException("Too many iteration! "+valve+">"+VALVE);
 			buffer = buffer.replace(aswitch.start, aswitch.end, aswitch.resolve(params));
@@ -46,7 +46,7 @@ public class ReportBlockSwitchRule implements ReportBlockRule {
 	/**
 	 * Searches till finds first occurance.
 	 */
-	private ReportBlockRuleSwitch resolveSwitch(final StringBuffer content) {
+	private ReportBlockRuleSwitch resolveSwitch(final StringBuilder content) {
 		Matcher switchMatcher = SWITCH_PATTERN.matcher(content);
 		while (switchMatcher.find()) {
 			String switchOption = switchMatcher.group(1);

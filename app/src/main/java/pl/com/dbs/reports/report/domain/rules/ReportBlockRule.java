@@ -16,5 +16,5 @@ import pl.com.dbs.reports.report.domain.ReportBlockException;
  * @coptyright (c) 2014
  */
 public interface ReportBlockRule extends Ordered {
-	StringBuffer apply(final StringBuffer content, final Map<String, String> params) throws ReportBlockException;
+	StringBuilder apply(final StringBuilder content, final Map<String, String> params) throws ReportBlockException;
 }

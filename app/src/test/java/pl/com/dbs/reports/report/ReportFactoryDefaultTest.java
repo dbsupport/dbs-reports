@@ -4,6 +4,7 @@
 package pl.com.dbs.reports.report;
 
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -12,10 +13,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.Collections;
+
+import javax.swing.text.BadLocationException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
@@ -23,14 +30,24 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.util.FileCopyUtils;
 
+import pl.com.dbs.reports.api.report.ReportType;
+import pl.com.dbs.reports.api.report.ReportValidationException;
 import pl.com.dbs.reports.api.report.pattern.PatternFactory;
+import pl.com.dbs.reports.api.report.pattern.PatternFormat;
+import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
 import pl.com.dbs.reports.api.report.pattern.PatternValidator;
 import pl.com.dbs.reports.api.support.db.SqlExecutor;
 import pl.com.dbs.reports.profile.dao.ProfileDao;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.domain.ReportFactoryDefault;
+import pl.com.dbs.reports.report.domain.ReportProduceContextDefault;
 import pl.com.dbs.reports.report.pattern.domain.PatternFactoryDefault;
+import pl.com.dbs.reports.report.pattern.domain.PatternProduceContextDefault;
+import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.security.domain.SessionContext;
+
+import com.google.common.collect.ImmutableMap;
+import com.sun.mail.iap.ConnectionException;
 
 /**
  * Raport generation tests.
@@ -103,7 +120,6 @@ public class ReportFactoryDefaultTest {
 //		when(rs1.getString("PV_DATA")).thenReturn("2013/11/09");
 //		when(rs1.getString("UNUSED")).thenReturn("COMPLETELY UNUSEFULL");
 //		when(executor.execute(contains("PV_DATA FROM DUAL"))).thenReturn(rs1);		
-//		
 //	}	
 	
 //	@Test

@@ -177,6 +177,7 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 			rest = data.getBlockContent();
 			
 			ReportTextBlock block = new ReportTextBlock(this.root, label);
+			resolveInflation(block);
 			this.root.addBlock(block);
 			this.root = block;
 		} else if (data.isBlockEnd()) {
@@ -193,14 +194,14 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	 * Select inflater connected with root block (by label).
 	 * If block is not inflatable (has no label) do nothing.
 	 */
-	private void resolverInflation() {
-		if (StringUtils.isBlank(root.getLabel())) return;
+	private void resolveInflation(final ReportTextBlock block) {
+		if (StringUtils.isBlank(block.getLabel())) return;
 		
-		root.addInflation(
+		block.addInflation(
 			Iterables.find(inflations, new Predicate<ReportBlockInflation>() {
 					@Override
 					public boolean apply(ReportBlockInflation input) {
-						return input.isApplicable(root.getLabel());
+						return input.isApplicable(block.getLabel());
 					}
 			}, null));
 	}	
@@ -213,7 +214,6 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	    	logger.debug("Input variable found: "+variable);
 	    	root.addParameter(variable);
 	    }
-	    resolverInflation();
 	}
 	
 	private class Content {

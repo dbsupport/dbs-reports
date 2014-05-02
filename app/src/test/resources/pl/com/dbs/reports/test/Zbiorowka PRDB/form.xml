@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<form stop="false" xsi:schemaLocation="http://www.dbs.com.pl/reports/1.0/form file:///C:/workspace/dbs-reports/app/src/main/resources/pl/com/dbs/reports/form-schema-1.0.0.xsd" xmlns="http://www.dbs.com.pl/reports/1.0/form" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<fields>
+		<field type="text" name="IN_FIRMA" label="Firma" tooltip="AUCHAN: bez POL107 i POL201; POL107, POL201" value="AUCHAN">
+			<validator type="required" stop="true"></validator>
+			<validator type="min">1</validator>
+			<validator type="max">6</validator>
+		</field>
+		<field type="text" name="IN_LOK" label="Lokalizacja" tooltip="POLxxx lub %" value="%">
+			<validator type="max">6</validator>
+		</field>
+		<field type="text" name="IN_CENPLA" label="Centrum płacowe" tooltip="xxx lub %" value="%">
+			<validator type="max">3</validator>
+		</field>
+		<field type="text" name="IN_TOP" label="Z topami" tooltip="TAK lub NIE" value="TAK">
+			<validator type="min">3</validator>
+			<validator type="max">3</validator>
+		</field>		
+		<field type="date" name="IN_DATA" label="Lista płac" tooltip="RRRRMM" format="yyyymm">
+			<validator type="required" stop="true"></validator>
+		</field>
+	</fields>
+</form>

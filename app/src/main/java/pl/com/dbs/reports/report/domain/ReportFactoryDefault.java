@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,7 @@ import pl.com.dbs.reports.profile.dao.ProfileDao;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuilder;
 import pl.com.dbs.reports.report.domain.builders.ReportRtfPdfBlocksBuilder;
-import pl.com.dbs.reports.report.domain.builders.ReportTextBlockInflaterQuery;
+import pl.com.dbs.reports.report.domain.builders.ReportTextBlockInflater;
 import pl.com.dbs.reports.report.domain.builders.ReportTextBlocksBuilder;
 import pl.com.dbs.reports.report.domain.builders.ReportTextPdfBlocksBuilder;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
@@ -42,12 +43,15 @@ import pl.com.dbs.reports.security.domain.SessionContext;
 public class ReportFactoryDefault implements ReportFactory {
 	private static final Logger logger = Logger.getLogger(ReportFactoryDefault.class);
 	private ProfileDao profileDao;
-	@Autowired private ReportTextBlockInflaterQuery inflater;
+	private ReportTextBlockInflater inflater;
 	
 	@Autowired
-	public ReportFactoryDefault(ProfileDao profileDao) {
+	public ReportFactoryDefault(ProfileDao profileDao, @Qualifier("report.block.inflater.query") ReportTextBlockInflater inflater) {
 		this.profileDao = profileDao;
+		this.inflater = inflater;
 	}
+	
+	
 	
 	/* (non-Javadoc)
 	 * @see pl.com.dbs.reports.api.report.ReportFactory#getName()
@@ -77,7 +81,6 @@ public class ReportFactoryDefault implements ReportFactory {
 		//..resolve builder for blocks..
 		ReportBlocksBuilder blocksbuilder = resolveBlocksBuilder(transformate, params);
 		Validate.notNull(blocksbuilder, "Blocks builder is no more!");
-		//blocksbuilder.getRootBlock().print();
 		
 		//.inflate blocks tree..
 		try {

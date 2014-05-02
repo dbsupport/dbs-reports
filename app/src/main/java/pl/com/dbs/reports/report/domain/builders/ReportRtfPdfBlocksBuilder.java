@@ -28,7 +28,7 @@ import com.lowagie.text.rtf.parser.RtfParser;
 public final class ReportRtfPdfBlocksBuilder extends ReportTextBlocksBuilder {
 	private static final Logger logger = Logger.getLogger(ReportRtfPdfBlocksBuilder.class);
 	
-	public ReportRtfPdfBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflaterQuery inflater, final Map<String, String> params) {
+	public ReportRtfPdfBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflater inflater, final Map<String, String> params) {
 		super(transformate, inflater, params);
 	}
 	

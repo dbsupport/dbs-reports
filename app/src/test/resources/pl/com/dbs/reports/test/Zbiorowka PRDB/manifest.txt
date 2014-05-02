@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Created-By: 1.2 (Sun Microsystems Inc.)
+Comment: Generacja zbiorowek
+
+Name: Database-Support-Reports
+Reports-Pattern-Name: Zbiorowka PRDB
+Reports-Pattern-Version: 0.0.1
+Reports-Pattern-Author: DBS
+Reports-Accesses: Place
+Reports-Extension-Map: ZbiorowkaPRDB.txt=txt|txt;ZbiorowkaPRDB.htm=txt|htm;ZbiorowkaPRDB.rtf=txt|rtf;
+Reports-Init-Sql: init.sql
+Reports-Name-Template: ZbiorowkaPRDB-${date-time}
+Reports-Form-Filename: form.xml

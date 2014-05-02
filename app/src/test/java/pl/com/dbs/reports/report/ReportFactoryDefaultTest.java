@@ -3,8 +3,8 @@
  */
 package pl.com.dbs.reports.report;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Map;
 
 import javax.swing.text.BadLocationException;
 
@@ -37,14 +38,19 @@ import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
 import pl.com.dbs.reports.api.report.pattern.PatternValidator;
 import pl.com.dbs.reports.api.support.db.SqlExecutor;
+import pl.com.dbs.reports.api.support.db.SqlExecutorContext;
 import pl.com.dbs.reports.profile.dao.ProfileDao;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.domain.ReportFactoryDefault;
 import pl.com.dbs.reports.report.domain.ReportProduceContextDefault;
+import pl.com.dbs.reports.report.domain.builders.ReportTextBlockInflaterDefault;
+import pl.com.dbs.reports.report.domain.builders.ReportTextBlockInflaterQuery;
 import pl.com.dbs.reports.report.pattern.domain.PatternFactoryDefault;
 import pl.com.dbs.reports.report.pattern.domain.PatternProduceContextDefault;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.security.domain.SessionContext;
+import pl.com.dbs.reports.support.encoding.EncodingContext;
+import pl.com.dbs.reports.support.encoding.EncodingService;
 
 import com.google.common.collect.ImmutableMap;
 import com.sun.mail.iap.ConnectionException;
@@ -62,7 +68,11 @@ public class ReportFactoryDefaultTest {
 	private ReportFactoryDefault rfactory;
 	private PatternFactory pfactory;
 	private Profile profile; 
-	private SqlExecutor executor;
+	private ReportTextBlockInflaterQuery queryInflater;
+	private ReportTextBlockInflaterDefault defaultInflater;
+	private SqlExecutor<Map<String, String>> executor;
+	private EncodingService encodingService;
+	private EncodingContext encodingContext;
 	
 	
 	@Before
@@ -74,11 +84,20 @@ public class ReportFactoryDefaultTest {
 		when(profile.getUuid()).thenReturn("1");
 		
 		executor = mock(SqlExecutor.class);
+		encodingContext = mock(EncodingContext.class);
+		when(encodingContext.getInEncoding()).thenReturn("UTF-8");
+		when(encodingContext.getOutEncoding()).thenReturn("UTF-8");
+		encodingService = mock(EncodingService.class);
+		when(encodingService.getEncodingContext()).thenReturn(encodingContext);
+		queryInflater = new ReportTextBlockInflaterQuery(executor, encodingService);
+		
+		defaultInflater = new ReportTextBlockInflaterDefault();
 		
 		PowerMockito.mockStatic(SessionContext.class);
 	    PowerMockito.when(SessionContext.getProfile()).thenReturn(profile);		
 		
-		rfactory = new ReportFactoryDefault(profileDao);//, executor);
+		//rfactory = new ReportFactoryDefault(profileDao, queryInflater);
+		
 		pfactory = new PatternFactoryDefault(profileDao, rfactory, Collections.<PatternValidator>emptyList());
 		
 		when(profileDao.find(anyLong())).thenReturn(profile);
@@ -94,7 +113,7 @@ public class ReportFactoryDefaultTest {
 
 //	@Test
 //	public void niewazna_wielkosc_liter() throws PatternValidationException, ReportValidationException, ConnectionException, SQLException, ClassNotFoundException, IOException, BadLocationException {
-//		File file = read("pl/com/dbs/reports//test1/test1.zip");
+//		File file = read("pl/com/dbs/reports/test1/test1.zip");
 //		PatternProduceContextDefault pcontext = mock(PatternProduceContextDefault.class);
 //		when(pcontext.getFile()).thenReturn(file);
 //		ReportPattern pattern = (ReportPattern)pfactory.produce(pcontext);
@@ -219,7 +238,77 @@ public class ReportFactoryDefaultTest {
 //		Report report = rfactory.produce(rcontext);
 //		
 //		assertTrue(report!=null);
-//	}		
+//	}
+	
+	@Test
+	public void zbiorowka_prdb_txt() throws PatternValidationException, ReportValidationException, ConnectionException, SQLException, ClassNotFoundException, IOException, BadLocationException {
+		File file = read("pl/com/dbs/reports/test/Zbiorowka PRDB/Zbiorowka PRDB.zip");
+		PatternProduceContextDefault pcontext = mock(PatternProduceContextDefault.class);
+		when(pcontext.getFile()).thenReturn(file);
+		ReportPattern pattern = (ReportPattern)pfactory.produce(pcontext);
+		
+		
+		ReportProduceContextDefault rcontext = mock(ReportProduceContextDefault.class);
+		when(rcontext.getParameters()).thenReturn(ImmutableMap.<String, String>of("IN_FIRMA", "AUCHAN", "IN_LOK", "%", "IN_CENPLA", "%", "IN_TOP", "TAK", "IN_DATA", "201404"));
+		PatternFormat format = mock(PatternFormat.class);
+		when(format.getPatternExtension()).thenReturn("txt");
+		when(format.getReportExtension()).thenReturn("txt");
+		when(format.getReportType()).thenReturn(ReportType.TXT);
+		when(rcontext.getFormat()).thenReturn(format);
+		when(rcontext.getName()).thenReturn("test");
+		when(rcontext.getPattern()).thenReturn(pattern);
+		
+		rfactory = new ReportFactoryDefault(profileDao, queryInflater);
+		
+		
+		
+		//INIT:
+		ResultSet rs1 = mock(ResultSet.class);
+		ResultSetMetaData rs1md = mock(ResultSetMetaData.class);
+		when(rs1md.getColumnCount()).thenReturn(2);
+		when(rs1md.getColumnName(1)).thenReturn("PV_DATA");
+		when(rs1md.getColumnName(2)).thenReturn("UNUSED");
+		when(rs1.getMetaData()).thenReturn(rs1md);
+		
+		SqlExecutorContext context1 = mock(SqlExecutorContext.class);
+		when(context1.getSql()).thenReturn("INIT");
+		//when(executor.query(any(SqlExecutorContext.class).).
+//		
+//		when(rs1.next()).thenReturn(true).thenReturn(false);
+//		when(rs1.getString("PV_DATA")).thenReturn("2013/11/09");
+//		when(rs1.getString("UNUSED")).thenReturn("COMPLETELY UNUSEFULL");
+//		when(executor.execute(contains("PV_DATA FROM DUAL"))).thenReturn(rs1);
+//		
+//		ResultSet rs2 = mock(ResultSet.class);
+//		ResultSetMetaData rs2md = mock(ResultSetMetaData.class);
+//		when(rs2md.getColumnCount()).thenReturn(3);
+//		when(rs2md.getColumnName(1)).thenReturn("ZA00_NUDOSS");
+//		when(rs2md.getColumnName(2)).thenReturn("NAZWISKO");
+//		when(rs2md.getColumnName(2)).thenReturn("IMIE");
+//		when(rs2.getMetaData()).thenReturn(rs2md);
+//		
+//		when(rs2.getString("ZA00_NUDOSS")).thenReturn("1");
+//		when(rs2.getString("NAZWISKO")).thenReturn("Adam");
+//		when(rs2.getString("IMIE")).thenReturn("Składam");
+//		when(rs2.next()).thenReturn(true).thenReturn(true).thenReturn(false);
+//		when(executor.execute(contains("FROM ZA00"))).thenReturn(rs2);
+//		
+//		Report report = rfactory.produce(rcontext);
+//		
+////		System.out.println(new String(report.getContent()));
+////		
+////		RTFEditorKit parser = new RTFEditorKit();
+////		Document document = parser.createDefaultDocument();
+////       	parser.read(new ByteArrayInputStream(report.getContent()), document, 0);
+////       	System.out.println(document.getText(0, document.getLength()));
+////		
+//		assertTrue(report.getName().equals("test.rtf"));
+//		
+//		bytesToFile(report.getName(),  
+//				new File("C:\\workspace\\dbs-reports-assets\\tests"),
+//				report.getContent());
+	}	
+	
 	
 	private File read(String src) {
 		File file = null;

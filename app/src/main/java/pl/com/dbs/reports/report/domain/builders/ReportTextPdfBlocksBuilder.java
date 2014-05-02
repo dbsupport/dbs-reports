@@ -28,7 +28,7 @@ import com.lowagie.text.pdf.PdfWriter;
 public final class ReportTextPdfBlocksBuilder extends ReportTextBlocksBuilder {
 	private static final Logger logger = Logger.getLogger(ReportTextPdfBlocksBuilder.class);
 	
-	public ReportTextPdfBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflaterQuery inflater, final Map<String, String> params) {
+	public ReportTextPdfBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflater inflater, final Map<String, String> params) {
 		super(transformate, inflater, params);
 	}
 	

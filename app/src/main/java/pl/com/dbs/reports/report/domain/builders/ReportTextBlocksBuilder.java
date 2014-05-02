@@ -97,13 +97,13 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	 * -- sql: SELECT INTO OUT_VARIABLE1, OUT_VARIABLE2 FROM TABLE WHERE ID=^$IN_VARIABLE1^ AND DATE<^$IN_VARIABLE2^;
 	 */
 	private void resolveInflations(String content) {
-		logger.info("Resolving inflations..");
+		logger.debug("Resolving inflations..");
 		Matcher inflations = INFLATER_PATTERN.matcher(content);
 	    while (inflations.find()) {
 	    	String label = StringUtils.trim(inflations.group(1));
 	    	String sql = StringUtils.trim(inflations.group(2));
 	    	ReportBlockInflation inflation = new ReportBlockInflation(label, sql);
-	    	logger.info("Inflation found: "+inflation);
+	    	logger.debug("Inflation found: "+inflation);
 	    	this.inflations.add(inflation);
 	    }
 	}	
@@ -115,11 +115,11 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	 */
 	private void resolveInput() {
 		for (ReportBlockInflation inflater : this.inflations) {
-			logger.info("Resolving input variables of "+inflater.getLabel());
+			logger.debug("Resolving input variables of "+inflater.getLabel());
 			Matcher variables = IN_VARIABLE_PATTERN.matcher(inflater.getSql());
 		    while (variables.find()) {
 		    	String variable = StringUtils.trim(variables.group(1));
-		    	logger.info("Input variable found: "+variable);
+		    	logger.debug("Input variable found: "+variable);
 		    	inflater.addInput(variable);
 		    }
 		}
@@ -147,6 +147,7 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 		this.root = root;
 		parse(new String(content));
 		this.root = root;
+		this.root.print();
 	}
 	
 	String getContentAsString() {
@@ -205,11 +206,11 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	}	
 	
 	private void resolveInput(String content) {
-		logger.info("Resolving input variables..");
+		logger.debug("Resolving input variables..");
 		Matcher variables = IN_VARIABLE_PATTERN.matcher(content);
 	    while (variables.find()) {
 	    	String variable = StringUtils.trim(variables.group(1));
-	    	logger.info("Input variable found: "+variable);
+	    	logger.debug("Input variable found: "+variable);
 	    	root.addParameter(variable);
 	    }
 	    resolverInflation();

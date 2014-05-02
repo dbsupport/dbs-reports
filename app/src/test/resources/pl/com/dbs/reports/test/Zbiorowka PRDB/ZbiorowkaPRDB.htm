@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
+[BLOCK(INIT)BLOCK]
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=windows-1250">
+  <title>ZBIORÓWKA LIST PŁAC ^$INGENDAT^</title>
+</head>
+<body bgcolor="#FFFFFF">
+
+<table width="945" border="1" cellspacing="0" cellpadding="0" style="margin-left:10pt;font-family: Arial; font-size: 9pt" bgcolor="green">
+ <TR><TD><b>ZBIORÓWKA LIST PŁAC</b></TD><TD><b>^$INGENDAT^</b></TD></TR>
+ <TR><TD><b>Lista płac:</b></TD><TD><b>^$INDATA^</b></TD></TR>
+ <TR><TD><b>Centrum przydziału:</b></TD><TD><b>^$INCENPLA^</b></TD></TR>
+ <TR><TD><b>Lokalizacja:</b></TD><TD><b>^$INLOK^</b></TD></TR>
+</TABLE>
+<table width="945" border="1" cellspacing="0" cellpadding="0" style="margin-left:10pt;font-family: Arial; font-size: 9pt" bgcolor="silver">
+<TR align="center"><TD><b>Kod</b></TD><TD><b>Tytuł</b></TD><TD><b>Wartość</b></TD></TR>
+[BLOCK(CNT)[BLOCK(PITEM)[BLOCK(PSUM)BLOCK]BLOCK] 
+  [BLOCK(WIERSZ) <TR><TD align="center"> ^$VCNTNAME^ </TD><TD align="center"> ^$VCNTLAB^ </TD><TD align="right"> </TD></TR>
+  BLOCK]
+BLOCK]
+</TABLE>
+</BODY>
+</HTML>

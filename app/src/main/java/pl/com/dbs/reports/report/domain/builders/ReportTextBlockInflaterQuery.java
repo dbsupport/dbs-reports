@@ -34,13 +34,19 @@ import pl.com.dbs.reports.support.encoding.EncodingService;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2014
  */
-@Component
+@Component("report.block.inflater.query")
 public class ReportTextBlockInflaterQuery implements ReportTextBlockInflater {
 	/**
 	 * Inflation executing endpoint.
 	 */
-	@Autowired private SqlExecutor<Map<String, String>> executor;
-	@Autowired protected EncodingService encodingService;
+	private SqlExecutor<Map<String, String>> executor;
+	private EncodingService encodingService;
+	
+	@Autowired
+	public ReportTextBlockInflaterQuery(SqlExecutor<Map<String, String>> executor, EncodingService encodingService) {
+		this.executor = executor;
+		this.encodingService = encodingService;
+	}
 	
 	/**
 	 * Iterates through blocks and chenges its content inflating them from sql-inflations.

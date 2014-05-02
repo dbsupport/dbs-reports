@@ -18,7 +18,7 @@ import pl.com.dbs.reports.report.domain.ReportBlockException;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2014
  */
-@Component
+@Component("report.block.inflater.default")
 public class ReportTextBlockInflaterDefault implements ReportTextBlockInflater {
 	/**
 	 * Iterates through blocks and chenges its content inflating them from sql-inflations.

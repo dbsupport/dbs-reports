@@ -15,6 +15,7 @@ import pl.com.dbs.reports.report.domain.ReportBlockException;
 import pl.com.dbs.reports.report.domain.rules.ReportBlockReplaceRule;
 import pl.com.dbs.reports.report.domain.rules.ReportBlockRule;
 import pl.com.dbs.reports.report.domain.rules.ReportBlockSwitchRule;
+import pl.com.dbs.reports.support.utils.separator.Separator;
 
 /**
  * A block of paterrn data.
@@ -74,7 +75,7 @@ public class ReportTextBlock {
 	/**
 	 * Named block.
 	 */
-	ReportTextBlock(ReportTextBlock parent, String label) {//, ReportBlockInflation inflation) {
+	ReportTextBlock(ReportTextBlock parent, String label) {
 		this(parent);
 		this.label = label;
 	}
@@ -156,12 +157,24 @@ public class ReportTextBlock {
 
 	@Override
 	public String toString() {
+		Separator separator = new Separator(";");
 		StringBuilder sb = new StringBuilder();
 		if (!StringUtils.isBlank(label)) 
 			sb.append("label:").append(getLabel());
 		if (!StringUtils.isEmpty(content)) {
 			int max = 25;
-			sb.append("content:").append(content.substring(0, content.length()>max?max:content.length())).append("...");
+			sb.append(separator).append("content:").append(content.substring(0, content.length()>max?max:content.length())).append("...");
+		}
+		if (parameters!=null&&!parameters.isEmpty()) {
+			sb.append(separator).append("parameters:[");
+			Separator s = new Separator(", ");
+			for (String parameter : parameters) {
+				sb.append(s).append(parameter);
+			}
+			sb.append("]");
+		}
+		if (inflation!=null) {
+			sb.append(separator).append("inflation:["+inflation+"]");
 		}
 		return sb.toString();
 	}

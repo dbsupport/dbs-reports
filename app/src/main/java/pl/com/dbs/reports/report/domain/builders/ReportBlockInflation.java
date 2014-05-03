@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import pl.com.dbs.reports.report.domain.ReportBlockInflationException;
@@ -30,7 +31,7 @@ public class ReportBlockInflation {
 	 * Inflater expects parameters named like those..
 	 * i.e: INPUT_PARAMETER
 	 */
-	private Set<String> input = new HashSet<String>();
+	protected Set<String> input = new HashSet<String>();
 	/**
 	 * Inflater produces data named like those..
 	 */
@@ -132,14 +133,17 @@ public class ReportBlockInflation {
 	
 	@Override
 	public String toString() {
+		Separator separator = new Separator(";");
 		StringBuilder sb = new StringBuilder("label:").append(label);
-		sb.append(";input:");
-		Separator s = new Separator(",");
-		for (String variable : input) sb.append(s).append(variable);
-//		sb.append(";output:");
-//		for (String variable : output) sb.append(s).append(variable);
-		int max=1000;
-		sb.append(";sql:").append(sql.length()>max?(sql.substring(0, max)+".."):sql);
+		if (input!=null&&!input.isEmpty()) {
+			sb.append(separator).append("input:");
+			Separator s = new Separator(",");
+			for (String variable : input) sb.append(s).append(variable);
+		}
+		if (!StringUtils.isBlank(sql)) {
+			int max=1000;
+			sb.append(separator).append("sql:").append(sql.length()>max?(sql.substring(0, max)+".."):sql);
+		}
 		return sb.toString();
 	}
 }

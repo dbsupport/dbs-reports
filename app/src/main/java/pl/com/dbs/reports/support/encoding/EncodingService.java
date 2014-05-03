@@ -36,6 +36,16 @@ public class EncodingService {
 		return value;
 	}
 	
+	public String decode(String value, EncodingContext context) {
+		try {
+			return (!StringUtils.isBlank(value)&&!StringUtils.isBlank(context.getInEncoding()))?
+					new String(value.getBytes(), Charset.forName(context.getInEncoding())):value;
+		} catch (Exception e) {
+			logger.error("Error decoding: "+value, e);
+		}
+		return value;
+	}	
+	
 	public String encode(String value) {
 		EncodingContext context = getEncodingContext();
 		return encode(value, context);

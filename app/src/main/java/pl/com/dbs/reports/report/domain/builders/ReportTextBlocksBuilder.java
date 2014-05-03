@@ -42,11 +42,15 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	private List<ReportBlockInflation> inflations;
 	private Map<String, String> parameters;		
 	
-	public ReportTextBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflater inflater, final Map<String, String> params) {
+	public ReportTextBlocksBuilder(final PatternTransformate transformate) {
 		content = transformate.getContent();
 		parameters = new HashMap<String, String>();
 		resolveInflations(transformate);
 		resolveInput();
+	}
+	
+	public ReportTextBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflater inflater, final Map<String, String> params) {
+		this(transformate);
 		this.inflater = inflater;
 		addParameters(params);
 	}

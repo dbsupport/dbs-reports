@@ -44,7 +44,7 @@ public class ReportTextBlock {
 	/**
 	 * Block is expected to be inflated with data named like those.
 	 */
-	private Set<String> parameters = new HashSet<String>();
+	Set<String> parameters = new HashSet<String>();
 	/**
 	 * Nested blocks.
 	 */
@@ -160,7 +160,7 @@ public class ReportTextBlock {
 		Separator separator = new Separator(";");
 		StringBuilder sb = new StringBuilder();
 		if (!StringUtils.isBlank(label)) 
-			sb.append("label:").append(getLabel());
+			sb.append(separator).append("label:").append(getLabel());
 		if (!StringUtils.isEmpty(content)) {
 			int max = 25;
 			sb.append(separator).append("content:").append(content.substring(0, content.length()>max?max:content.length())).append("...");

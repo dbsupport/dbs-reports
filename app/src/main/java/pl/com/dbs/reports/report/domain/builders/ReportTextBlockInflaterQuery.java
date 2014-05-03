@@ -99,7 +99,7 @@ public class ReportTextBlockInflaterQuery implements ReportTextBlockInflater {
 			//..run inflater.. query db.. and convert to list of result parameters..
 			result = 
 				(List<Map<String, String>>)executor.query(new SqlExecutorContext<Map<String, String>>(
-					inflation.build(parameters))
+						encodingService.decode(inflation.build(parameters), encodingContext))
 						.mapping(new RowMapper<Map<String, String>>() {
 						@Override
 						public Map<String, String> mapRow(ResultSet rs, int rowNum) throws SQLException {

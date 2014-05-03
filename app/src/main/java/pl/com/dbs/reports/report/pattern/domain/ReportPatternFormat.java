@@ -75,4 +75,36 @@ public class ReportPatternFormat implements PatternFormat {
 		return StringUtils.isBlank(ext)?null:ext;		
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		ReportPatternFormat format = (ReportPatternFormat) obj;
+		
+		boolean pext = false;
+		if (StringUtils.isBlank(this.patternExtension)&&StringUtils.isBlank(format.getPatternExtension())) pext = true;
+		if (!StringUtils.isBlank(this.patternExtension)&&this.patternExtension.equalsIgnoreCase(format.getPatternExtension())) pext = true;
+		
+		boolean rext = false;
+		if (StringUtils.isBlank(this.reportExtension)&&StringUtils.isBlank(format.getReportExtension())) rext = true;
+		if (!StringUtils.isBlank(this.reportExtension)&&this.reportExtension.equalsIgnoreCase(format.getReportExtension())) rext = true;
+		
+		boolean type = false;
+		if (this.type==null&&format.getReportType()==null) type = true;
+		if (this.type!=null&&this.type.equals(format.getReportType())) type = true;
+		
+		return pext&&rext&&type;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((reportExtension == null) ? 0 : reportExtension.hashCode());
+		result = prime * result + ((patternExtension == null) ? 0 : patternExtension.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+	
 }

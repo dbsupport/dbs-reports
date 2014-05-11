@@ -48,7 +48,7 @@ public class PatternDao extends ADao<ReportPattern, Long> {
 		IContextDao<ReportPattern> c = new ContextDao<ReportPattern>(em, ReportPattern.class, filter);
 	    
 		Predicate p = c.getBuilder().conjunction();
-	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(ReportPattern_.active), 1));
+	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(ReportPattern_.active), true));
 	    
 	    if (!filter.getAccesses().isEmpty()) {
 	    	p = c.getBuilder().and(p, c.getRoot().get(ReportPattern_.accesses).in(filter.getAccesses()));
@@ -66,7 +66,7 @@ public class PatternDao extends ADao<ReportPattern, Long> {
 	    	Predicate ex6 = c.getBuilder().like(c.getBuilder().upper(a.<String>get(Profile_.lastname)), "%"+filter.getName().toUpperCase()+"%");
 	    	Predicate ex7 = c.getBuilder().like(c.getBuilder().upper(a.<String>get(Profile_.description)), "%"+filter.getName().toUpperCase()+"%");
 	    	Predicate ex8 = c.getBuilder().like(c.getBuilder().upper(a.<String>get(Profile_.login)), "%"+filter.getName().toUpperCase()+"%");
-	    	p = c.getBuilder().or(ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8);	    	
+	    	p = c.getBuilder().and(p, c.getBuilder().or(ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8));	    	
 	    }
 //	    if (!StringUtils.isBlank(filter.getVersion())) {
 //	    	p = c.getBuilder().and(p, c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get("version")), "%"+filter.getVersion().toUpperCase()+"%"));

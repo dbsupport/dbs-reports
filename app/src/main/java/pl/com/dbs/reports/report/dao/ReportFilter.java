@@ -11,6 +11,8 @@ import org.apache.commons.lang.Validate;
 import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.domain.Report;
+import pl.com.dbs.reports.report.domain.Report.ReportStatus;
+import pl.com.dbs.reports.report.domain.ReportPhase.ReportPhaseStatus;
 import pl.com.dbs.reports.report.domain.Report_;
 import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.db.dao.AFilter;
@@ -27,33 +29,74 @@ public class ReportFilter extends AFilter<Report> {
 	private String name;
 	private Long profileId;
 	private List<String> accesses = new ArrayList<String>();
+	private List<ReportPhaseStatus> phases = new ArrayList<ReportPhaseStatus>();
+	private List<ReportStatus> statuses = new ArrayList<ReportStatus>();
 	
 	public ReportFilter() {
 		Profile profile = SessionContext.getProfile();
 		Validate.notNull(profile, "Profile is no more!");
-		putAccesses(profile);
+		this.accesses = new ArrayList<String>();
+		for (Access access : profile.getAccesses())
+			this.accesses.add(access.getName());
+		
 		getPager().setPageSize(DEFAULT_PAGER_SIZE);
 		getSorter().add(Report_.generationDate.getName(), false);
 		getSorter().add(Report_.name.getName(), true);
 		getSorter().add(Report_.format.getName(), true);
 	}
 	
-	public ReportFilter(long id) {
-		this();
-		this.id = id;
+	public ReportFilter unarchived() {
+		this.phases = new ArrayList<ReportPhaseStatus>();
+		this.phases.add(ReportPhaseStatus.READY);
+		this.phases.add(ReportPhaseStatus.TRANSIENT);
+		return this;
+	}
+
+	public ReportFilter archived() {
+		this.phases = new ArrayList<ReportPhaseStatus>();
+		this.phases.add(ReportPhaseStatus.PERSIST);
+		return this;
 	}
 	
-	public void putName(String name) {
+	public ReportFilter fine() {
+		this.statuses = new ArrayList<ReportStatus>();
+		this.statuses.add(ReportStatus.OK);
+		return this;
+	}
+	
+	public ReportFilter failed() {
+		this.statuses = new ArrayList<ReportStatus>();
+		this.statuses.add(ReportStatus.FAILED);
+		return this;
+	}
+	
+	public ReportFilter withName(String name) {
 		this.name = name;
+		return this;
 	}
 	
-	public void putId(Long id) {
+	public ReportFilter onlyFor(long id) {
 		this.id = id;
-	}	
+		return this;
+	}
 	
-	public void putProfileId(Long id) {
-		this.profileId = id;
-	}		
+	public ReportFilter onlyFor(Profile profile) {
+		this.profileId = profile.getId();
+		return this;
+	}
+	
+	
+	public ReportFilter inStatuses(List<ReportStatus> statuses) {
+		this.statuses = statuses;
+		return this;
+	}
+	
+	public ReportFilter inPhases(List<ReportPhaseStatus> phases) {
+		this.phases = phases;
+		return this;
+	}
+	
+	
 	
 	public List<String> getAccesses() {
 		return accesses;
@@ -67,13 +110,15 @@ public class ReportFilter extends AFilter<Report> {
 		return name;
 	}
 
-	public void putAccesses(Profile profile) {
-		this.accesses = new ArrayList<String>();
-		for (Access access : profile.getAccesses())
-			this.accesses.add(access.getName());
-	}
-
 	public Long getProfileId() {
 		return profileId;
+	}
+
+	public List<ReportPhaseStatus> getPhases() {
+		return phases;
+	}
+
+	public List<ReportStatus> getStatuses() {
+		return statuses;
 	}
 }

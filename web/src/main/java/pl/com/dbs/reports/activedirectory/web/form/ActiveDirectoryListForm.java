@@ -26,7 +26,7 @@ public class ActiveDirectoryListForm {
 	private String value;
 	@DateTimeFormat(pattern = DATE_FORMAT)
 	private Date date;
-	private ActionDirectoryListAction action;
+	private Action action;
 	
 	private ActiveDirectoryFilter filter = new ActiveDirectoryFilter();
 	
@@ -76,11 +76,16 @@ public class ActiveDirectoryListForm {
 		this.date = date;
 	}
 
-	public ActionDirectoryListAction getAction() {
+	public Action getAction() {
 		return action;
 	}
 
-	public void setAction(ActionDirectoryListAction action) {
+	public void setAction(Action action) {
 		this.action = action;
 	}
+	
+	public enum Action {
+		INSERT();
+	}
 }
+

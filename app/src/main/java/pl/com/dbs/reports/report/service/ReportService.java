@@ -3,27 +3,30 @@
  */
 package pl.com.dbs.reports.report.service;
 
-import java.util.Iterator;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.Validate;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import pl.com.dbs.reports.api.report.ReportFactory;
-import pl.com.dbs.reports.api.report.ReportValidationException;
-import pl.com.dbs.reports.api.report.pattern.PatternFactoryNotFoundException;
+import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.profile.dao.ProfileDao;
+import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.dao.ReportDao;
 import pl.com.dbs.reports.report.dao.ReportFilter;
+import pl.com.dbs.reports.report.dao.ReportOrderDao;
 import pl.com.dbs.reports.report.domain.Report;
-import pl.com.dbs.reports.report.domain.ReportGeneration;
+import pl.com.dbs.reports.report.domain.ReportGenerationContext;
+import pl.com.dbs.reports.report.domain.ReportOrder;
+import pl.com.dbs.reports.report.pattern.dao.PatternDao;
 import pl.com.dbs.reports.report.pattern.domain.PatternManifestResolver;
+import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.security.domain.SessionContext;
-
-import com.google.common.collect.Lists;
 
 /**
  * Reports management.
@@ -31,116 +34,167 @@ import com.google.common.collect.Lists;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-@Service("report.service")
+@Service
 public class ReportService {
-	//private static final Logger logger = Logger.getLogger(ReportService.class);
-	public static final int MAX_TEMPORARY_REPORTS = 10;
+	private static final Logger logger = Logger.getLogger(ReportService.class);
+	public static final int MAX_UNARCHIVED = 100;
 	@Autowired private ReportDao reportDao;
+	@Autowired private ReportOrderDao reportOrderDao;
+	@Autowired private PatternDao patternDao;
 	@Autowired private ProfileDao profileDao;
 	@Autowired private PatternManifestResolver manifestResolver;
 
 
 	/**
-	 * Is there maximum temporary reports for this profile reached? 
-	 */
-	public boolean exceededsTemporaryReports() {
-		return reportDao.findTemporary(SessionContext.getProfile()).size()>=MAX_TEMPORARY_REPORTS;
-	}
-	
-	/**
-	 * Remove older temporary reports until number reach MAXIMUM.
+	 * Persist report of given id..
 	 */
 	@Transactional
-	public void cleanTemporaryReports() {
-		List<Report> reports = Lists.reverse(reportDao.findTemporary(SessionContext.getProfile()));
-		Iterator<Report> ir = reports.iterator();
-		while (ir.hasNext()&&reports.size()>MAX_TEMPORARY_REPORTS) {
-			Report report = ir.next();
-			reportDao.erase(report);
-			ir.remove();
-		}
-	}
-	
-	/**
-	 * Build report...
-	 */
-	@Transactional
-	public Report generate(final ReportGeneration context) throws PatternFactoryNotFoundException, ReportValidationException, DataAccessException {
-		Validate.notNull(context.getPattern(), "Pattern is no more!");
-		
-		ReportFactory factory = manifestResolver.resolveFactory(context.getPattern().getFactory()).getReportFactory();
-		Validate.notNull(factory, "Report factory is no more!");
-
-		//..create as temporary..
-		Report report = (Report)factory.produce(context);
-		reportDao.create(report);
-		
-		//..delete temporary if more than X..
-		cleanTemporaryReports();
-		
-		return report;
-	}
-
-	/**
-	 * Persist report..
-	 */
-	@Transactional
-	public Report archive(final Long id) {
-		Validate.notNull(id, "Report is no more!");
-		Report report = reportDao.findTemporaryById(SessionContext.getProfile(), id);
+	public Report archive(long id) {
+		Report report = reportDao.find(id);
 		Validate.notNull(report, "Report is no more!");
 		report.archive();
 		return report;
 	}
 	
 	/**
-	 * Erease report..
+	 * Erease report
 	 */
 	@Transactional
 	public void delete(final long id) {
-		Report report = findNoMatterWhat(id);
+		Report report = reportDao.find(id);
+		Validate.notNull(report, "Report is no more!");
 		reportDao.erase(report);
-	}
+		/**
+		 * ..erease order if is empty..
+		 */
+		
+		/**
+		 * erease notifiaction..
+		 */
+		
+		
+	}	
+	
+	/**
+	 * Erease report
+	 */
+	@Transactional
+	public Report confirm(final long id) {
+		Report report = reportDao.find(id);
+		Validate.notNull(report, "Report is no more!");
+		report.confirm();
+		return report;
+	}		
 	
 	
 	/**
-	 * Find ARCHIVED by filter.
+	 * Find reports by filter.
 	 */
-	public List<? extends Report> find(ReportFilter filter) {
+	public List<Report> find(ReportFilter filter) {
 		return reportDao.find(filter);
 	}
 
 	/**
-	 * Find ARCHIVED by id
+	 * Find by filter
 	 */
-	public Report find(long id) {
-		ReportFilter filter = new ReportFilter(id);
+	public Report findSingle(ReportFilter filter) {
 		return reportDao.findSingle(filter);
-	}
-	
-	/**
-	 * Find ARCHIVED or NOT
-	 */
-	public Report findNoMatterWhat(long id) {
-		Report report = find(id);
-		if (report==null) report = findTemporary(id);
-		return report;
 	}	
 	
 	
-
 	/**
-	 * Get temporary archives for this profile..
+	 * Is there maximum temporary reports for this profile reached? 
+	 * Counts if there is more generations (not sinngle reports) than MAX_TEMPORARY_REPORTS.
 	 */
-	public List<? extends Report> findTemporary() {
-		return reportDao.findTemporary(SessionContext.getProfile());
+	public int countUnarchived() {
+		ReportFilter filter = new ReportFilter().unarchived().fine();
+		reportDao.find(filter);
+		return filter.getPager().getDataSize();
 	}
-
-	/**
-	 * Get temporary by id for this profile
-	 */
-	public Report findTemporary(Long id) {
-		return reportDao.findTemporaryById(SessionContext.getProfile(), id);
-	}		
 	
+	
+	
+	/**
+	 * Makes report generation within proper reports seeds.
+	 * ReprtScheduler will process them later.
+	 */
+	@Transactional
+	public ReportOrder order(final ReportGenerationContext context) {
+		Validate.notNull(context.getPattern(), "Pattern is no more!");
+		Validate.notNull(context.getFormat(), "Format is no more!");
+		Validate.notNull(context.getFormat().getReportType(), "Report type is no more!");
+
+		/**
+		 * ..create generation (group)..
+		 */
+		ReportOrder order = new ReportOrder(new Date());
+		reportOrderDao.create(order);
+		
+		/**
+		 * ..create generations... multiselect splits..
+		 */
+		ReportBuilder reportbuilder = new ReportBuilder(context);
+		Report report = reportbuilder.build().getReport();
+		reportDao.create(report);		
+
+		
+		/**
+		 * ..add to order..
+		 */
+		order.add(report);
+
+		return order;
+	}	
+		
+	
+	
+	/**
+	 * Report builder.
+	 *
+	 * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+	 * @coptyright (c) 2013
+	 */
+	public final class ReportBuilder {
+		private ReportPattern pattern;
+		private PatternFormat format;
+		private String name;
+		private Map<String, String> inparams;
+		private Profile profile;
+		private Report report;
+		
+		public ReportBuilder(ReportGenerationContext context) {
+			ReportPattern pattern = patternDao.find(context.getPattern());
+			Profile profile = profileDao.find(SessionContext.getProfile().getId());
+			
+			PatternFormat format = context.getFormat();
+			String name = context.getName();			
+			
+			this.pattern = pattern;
+			this.format = format;
+			this.name = name;
+			//..store only input params ..
+			this.inparams = new HashMap<String, String>();
+			this.inparams.putAll(context.getParameters());
+			//..add parameters: profile login..
+			this.inparams.put(Profile.PARAMETER_USER, profile.getLogin());
+			//..add profile parameter (HR authorities)..
+			this.inparams.put(Profile.PARAMETER_PROFILE, SessionContext.getProfile().getClientAuthorityMetaData());
+			this.profile = profile;
+		}
+		
+		public ReportBuilder build() {
+			final String fullname = name+"."+format.getReportExtension();
+			
+			this.report = new Report(pattern, fullname, profile)
+					.format(format.getReportType())
+					.parameters(inparams);
+					
+			logger.info("Report with name:"+fullname+" is build!");
+			return this;
+		}
+		
+		public Report getReport() {
+			return report;
+		}
+	}	
 }

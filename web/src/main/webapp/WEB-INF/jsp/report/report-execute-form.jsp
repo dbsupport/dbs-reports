@@ -27,7 +27,7 @@
                     		<input type="hidden" name="page" value="1">
                             <div class="field-box">
                             	<label>Definicja:</label>
-                            	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportGenerationForm.pattern.name} ${reportGenerationForm.pattern.version}"/>
+                            	<input class="form-control inline-input" type="text" readonly="readonly" value="${pattern.name} ${pattern.version}"/>
                             </div>
                             
                             <spring:bind path="extension">
@@ -35,7 +35,7 @@
                             	<label>Format:</label>
 	                            <div class="ui-select">
 		                            <form:select path="extension">
-		                            	<form:options items="${reportGenerationForm.formats}" itemLabel="reportExtension" itemValue="reportExtension" />
+		                            	<form:options items="${pattern.formats}" itemLabel="reportExtension" itemValue="reportExtension" />
 		                            </form:select>
 	                            </div>                            	
                         	</div>
@@ -62,7 +62,7 @@
                                                     	
                     	
                             <div class="wizard-actions">
-                            	<button type="button" class="btn-glow" onclick="location.href='report/execute/${reportGenerationForm.pattern.id}'"><i class="icon-refresh"></i>&nbsp;Wyczyść</button><span>&nbsp;</span>
+                            	<button type="button" class="btn-glow" onclick="location.href='report/execute/${pattern.id}'"><i class="icon-refresh"></i>&nbsp;Wyczyść</button><span>&nbsp;</span>
                             	<button type="submit" class="btn-glow primary btn-next" data-last="Finish">Dalej&nbsp;&nbsp;<i class="icon-chevron-right"></i></button><span>&nbsp;</span>
                             </div>
                         </form:form>

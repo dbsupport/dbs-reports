@@ -1,5 +1,10 @@
 start-db.cmd
 
+/bin
+
+/app/bin
+
+
 /log
 
 /api/target

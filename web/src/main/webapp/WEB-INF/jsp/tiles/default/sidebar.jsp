@@ -42,7 +42,7 @@
                 </a>
                 <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-report')}">active</c:if>">
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-pattern')}">active</c:if>" href="report/pattern/list/init">Definicje</a></li>
-                    <li><a class="<c:if test="${fn:endsWith(id, 'dbs-page-report-archives')}">active</c:if>" href="report/archives/init">Archiwum</a></li>
+                    <li><a class="<c:if test="${fn:endsWith(id, 'dbs-page-report-archives')}">active</c:if>" href="report/archived/init">Archiwum</a></li>
                 </ul>
             </li>
             </sec:authorize>

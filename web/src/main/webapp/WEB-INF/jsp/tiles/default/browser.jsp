@@ -84,11 +84,6 @@
         
     </div>
     
-	<!-- scripts -->
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/theme.js"></script>
-    <script src="js/dbs/dbs-loading.js"></script>
-	<tiles:insertAttribute name="js"/>
+    <%@ include file="/WEB-INF/jsp/tiles/default/js.jsp" %>
 </body>
 </html>

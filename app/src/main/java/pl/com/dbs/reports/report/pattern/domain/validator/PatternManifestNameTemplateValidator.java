@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
 import pl.com.dbs.reports.api.report.pattern.PatternValidator;
-import pl.com.dbs.reports.report.domain.ReportNameTemplate;
+import pl.com.dbs.reports.report.pattern.domain.PatternReportNameTemplate;
 import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
 
 
@@ -40,7 +40,7 @@ public class PatternManifestNameTemplateValidator implements PatternValidator {
 	    	 * Check if variables are fine...
 	    	 */
 	    	final String variable = StringUtils.trim(m.group(1));
-	    	if (ReportNameTemplate.of(variable)==null)
+	    	if (PatternReportNameTemplate.of(variable)==null)
 	    		throw new PatternValidationException("report.pattern.import.manifest.field.validation.detailed.error", Arrays.asList(new String[] {ReportPatternManifest.ATTRIBUTE_NAME_TEMPLATE, variable}));
 	    }
 	}

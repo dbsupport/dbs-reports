@@ -3,7 +3,6 @@
  */
 package pl.com.dbs.reports.report.web.form;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -11,8 +10,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
-import pl.com.dbs.reports.report.domain.Report;
-import pl.com.dbs.reports.report.domain.ReportGeneration;
+import pl.com.dbs.reports.report.domain.ReportGenerationContext;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.support.web.form.DForm;
 
@@ -25,12 +23,15 @@ import pl.com.dbs.reports.support.web.form.DForm;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "form", namespace = "http://www.dbs.com.pl/reports/1.0/form")
-public class ReportGenerationForm extends DForm implements ReportGeneration {
+public class ReportGenerationForm extends DForm implements ReportGenerationContext {
 	public static final String KEY = "reportGenerationForm";
-	private ReportPattern pattern;
+	private Long pattern;
 	private String name;
 	private PatternFormat format;
-	private Report report;
+	/**
+	 * ...to satisfy interface..
+	 */
+	private List<PatternFormat> formats;
 	
 	public ReportGenerationForm() {
 		super();
@@ -38,10 +39,10 @@ public class ReportGenerationForm extends DForm implements ReportGeneration {
 	
 	public void reset(ReportPattern pattern) {
 		super.reset();
-		this.pattern = pattern;
+		this.pattern = pattern.getId();
 		this.name = pattern.getManifest().getNameTemplate();
-		List<PatternFormat> formats = getFormats();
-		if (formats.size()==1) this.format = formats.get(0);
+		this.formats = pattern.getFormats();
+		if (this.formats.size()==1) this.format = formats.get(0);
 	}
 
 	public void setName(String name) {
@@ -49,7 +50,7 @@ public class ReportGenerationForm extends DForm implements ReportGeneration {
 	}
 
 	public void setExtension(String value) {
-		for (PatternFormat format : getFormats()) {
+		for (PatternFormat format : formats) {
 			if (format.getReportExtension().equalsIgnoreCase(value)) {
 				this.format = format;
 				return;
@@ -62,20 +63,8 @@ public class ReportGenerationForm extends DForm implements ReportGeneration {
 		return this.format!=null?format.getReportExtension():"";
 	}
 
-	public void addReport(Report report) {
-		this.report = report;
-	}
-	
-	public Report getReport() {
-		return report;
-	}
-	
-	public List<PatternFormat> getFormats() {
-		return pattern!=null?pattern.getFormats():new ArrayList<PatternFormat>();
-	}
-	
 	@Override
-	public ReportPattern getPattern() {
+	public long getPattern() {
 		return pattern;
 	}
 

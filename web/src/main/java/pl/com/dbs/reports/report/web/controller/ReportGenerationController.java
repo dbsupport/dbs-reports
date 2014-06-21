@@ -12,7 +12,6 @@ import javax.xml.bind.JAXBException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,8 +25,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import pl.com.dbs.reports.api.report.Report;
-import pl.com.dbs.reports.api.report.ReportValidationException;
+import pl.com.dbs.reports.report.domain.ReportOrder;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.report.pattern.domain.ReportPatternForm;
 import pl.com.dbs.reports.report.pattern.service.PatternService;
@@ -58,6 +56,7 @@ public class ReportGenerationController {
 	@Autowired private Alerts alerts;
 	@Autowired private PatternService patternService;
 	@Autowired private ReportService reportService;
+	@Autowired private ReportsUnarchivedHelper reportsUnarchivedHelper;
 	
 	@ModelAttribute(ReportGenerationForm.KEY)
     public ReportGenerationForm createForm(Model model, HttpServletRequest request, RedirectAttributes ra) {
@@ -107,12 +106,18 @@ public class ReportGenerationController {
 		//..if it was no able to create form redirect and show error.. 
 		if (form==null) return "redirect:/report/pattern/list";
 		
-		if (reportService.exceededsTemporaryReports()) {
-			alerts.addWarning(request, "report.archive.maximum.exceeded", String.valueOf(reportService.findTemporary().size()));
-		}
+		warnAboutMaximum(request);
+		model.addAttribute("pattern", patternService.find(form.getPattern()));
 		
 		return "/report/report-execute-form";
     }
+
+	private void warnAboutMaximum(HttpServletRequest request) {
+		int count = reportService.countUnarchived();
+		if (count>=ReportService.MAX_UNARCHIVED) {
+			alerts.addWarning(request, "report.archive.maximum.exceeded", String.valueOf(count));
+		}
+	}
 	
 	
 	@RequestMapping(value= "/report/execute/form", method = RequestMethod.POST)
@@ -133,9 +138,8 @@ public class ReportGenerationController {
     public String generate(Model model, @Valid @ModelAttribute(ReportGenerationForm.KEY) ReportGenerationForm form, 
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		
-		if (reportService.exceededsTemporaryReports()) {
-			alerts.addWarning(request, "report.archive.maximum.exceeded", String.valueOf(reportService.findTemporary().size()));
-		}
+		warnAboutMaximum(request);
+		model.addAttribute("pattern", patternService.find(form.getPattern()));
 		
 		return "/report/report-execute-generate";
     }
@@ -145,8 +149,14 @@ public class ReportGenerationController {
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
 		if (!results.hasErrors()) {
 			try {
-				form.addReport(reportService.generate(form));
-				alerts.addSuccess(ra, "report.execute.success", form.getPattern().getName(), form.getPattern().getVersion());
+				//form.addReport(reportService.generate(form));
+				ReportOrder order = reportService.order(form);
+				ReportPattern pattern = patternService.find(form.getPattern());
+				if (order.count()>1) {
+					alerts.addSuccess(ra, "report.execute.multi.success", String.valueOf(order.count()), pattern.getName(), pattern.getVersion());
+				} else {
+					alerts.addSuccess(ra, "report.execute.single.success", pattern.getName(), pattern.getVersion());
+				}
 				return "redirect:/report/execute/summary";
 			} catch (Exception e) {
 				exception(e, form, ra, request);
@@ -159,12 +169,12 @@ public class ReportGenerationController {
 	@RequestMapping(value="/report/execute/summary", method = RequestMethod.GET)
     public String summary(Model model, @Valid @ModelAttribute(ReportGenerationForm.KEY) ReportGenerationForm form, 
     		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
-		if (results.hasErrors()) {
-			
-		}
+		if (results.hasErrors()) {}
 		
-		model.addAttribute("maxtemp", ReportService.MAX_TEMPORARY_REPORTS);
-		model.addAttribute("reports", reportService.findTemporary());
+		model.addAttribute("pattern", patternService.find(form.getPattern()));
+		
+		reportsUnarchivedHelper.unarchivedLimited(model);
+		
 		return "/report/report-execute-summary";
     }
 	
@@ -174,46 +184,6 @@ public class ReportGenerationController {
 		return "redirect:/report/execute/form";
 	}		
 	
-//	@RequestMapping(value="/report/execute/summary/archive", method = RequestMethod.GET)
-//    public String archive(Model model, @Valid @ModelAttribute(ReportExecuteForm.KEY) ReportExecuteForm form, 
-//    		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
-//
-//		Report report = form.getReport();
-//		if (report==null) {
-//			alerts.addError(ra, "report.execute.no.report");
-//			return "redirect:/report/execute/form";
-//		}
-//		
-//		try {
-//			reportService.archive(form.getReport().getId());
-//			alerts.addSuccess(ra, "report.execute.archive.file.success", report.getName());
-//		} catch (Exception e) {
-//			exception(e, form, ra, request);
-//			return "redirect:/report/execute/summary";
-//		}
-//		
-//		
-//		return "redirect:/report/archives";
-//	}
-	
-	@RequestMapping(value="/report/execute/archive/delete/{id}", method = RequestMethod.GET)
-    public String delete(Model model, @PathVariable("id") Long id,  RedirectAttributes ra, HttpServletRequest request) {
-		if (id==null) {
-			alerts.addError(ra, "report.archive.no.report");
-			return "redirect:/report/execute/summary";
-		}
-
-		try {
-			Report report = reportService.findNoMatterWhat(id);
-			reportService.delete(id);
-			alerts.addSuccess(ra, "report.archive.delete.success", report.getName());
-		} catch (Exception e) {
-			alerts.addError(ra, "report.archive.delete.error", e.getMessage());
-		}
-		
-		return "redirect:/report/execute/summary";
-	}		
-	
 	private void exception(Exception e, ReportGenerationForm form, RedirectAttributes ra, HttpServletRequest request) {
 		if (e instanceof IOException) {
 			alerts.addError(request, "report.execute.ioexception", e.getMessage());
@@ -221,16 +191,17 @@ public class ReportGenerationController {
 		} else if (e instanceof JAXBException) {
 			alerts.addError(request, "report.execute.jaxbexception", ((JAXBException)e).getLinkedException().getMessage());
 			logger.error("report.execute.jaxbexception:"+Exceptions.stack(e));
-		} else if (e instanceof ReportValidationException) {
-			alerts.addError(request, "report.execute.detailed.error", form.getName(), e.getMessage());
-			logger.error("report.execute.detailed.error:"+Exceptions.stack(e));
-		} else if (e instanceof DataAccessException) {
-			alerts.addError(request, "client.datasource.error.detailed", e.getMessage());
-			logger.error("client.datasource.error.detailed:"+Exceptions.stack(e));
-		} else {
-			alerts.addError(request, "report.execute.detailed.error", form.getName(), Exceptions.stack(e));
-			logger.error("report.execute.detailed.error:"+Exceptions.stack(e));
 		}
+//		} else if (e instanceof ReportValidationException) {
+//			alerts.addError(request, "report.execute.detailed.error", form.getName(), e.getMessage());
+//			logger.error("report.execute.detailed.error:"+Exceptions.stack(e));
+//		} else if (e instanceof DataAccessException) {
+//			alerts.addError(request, "client.datasource.error.detailed", e.getMessage());
+//			logger.error("client.datasource.error.detailed:"+Exceptions.stack(e));
+//		} else {
+//			alerts.addError(request, "report.execute.detailed.error", form.getName(), Exceptions.stack(e));
+//			logger.error("report.execute.detailed.error:"+Exceptions.stack(e));
+//		}
 	}
 	
 	

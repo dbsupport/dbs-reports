@@ -3,7 +3,7 @@
  */
 package pl.com.dbs.reports.report.dao;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -17,17 +17,23 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
 
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.domain.Profile_;
 import pl.com.dbs.reports.report.domain.Report;
+import pl.com.dbs.reports.report.domain.Report.ReportStatus;
+import pl.com.dbs.reports.report.domain.ReportPhase.ReportPhaseStatus;
+import pl.com.dbs.reports.report.domain.ReportPhase_;
 import pl.com.dbs.reports.report.domain.Report_;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern_;
 import pl.com.dbs.reports.support.db.dao.ADao;
 import pl.com.dbs.reports.support.db.dao.ContextDao;
 import pl.com.dbs.reports.support.db.dao.IContextDao;
+
+import com.google.common.collect.Lists;
 
 /**
  * Reports CRUD.
@@ -65,43 +71,17 @@ public class ReportDao extends ADao<Report, Long> {
 		return reports!=null&&!reports.isEmpty()?reports.get(0):null;
 	}
 	
-	/**
-	 * Returns newest first.
-	 */
-	public List<Report> findTemporary(final Profile profile) {
-		IContextDao<Report> c = new ContextDao<Report>(em, Report.class);
-		
-	    Predicate p = c.getBuilder().conjunction();
-	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Report_.temporary), 1));
-	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Report_.creator).get(Profile_.id), profile.getId()));
-	    
-		List<Order> orders = new ArrayList<Order>();
-		orders.add(c.getBuilder().desc(c.getRoot().get(Report_.generationDate)));
-		c.getCriteria().orderBy(orders);
-	    
-	    c.getCriteria().where(p);
-		
-		return executeQuery(c);
-	}
-	
-	public Report findTemporaryById(final Profile profile, final long id) {
-		IContextDao<Report> c = new ContextDao<Report>(em, Report.class);
-		
-	    Predicate p = c.getBuilder().conjunction();
-	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Report_.id), id));
-	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Report_.temporary), 1));
-	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Report_.creator).get(Profile_.id), profile.getId()));
-	    
-	    c.getCriteria().where(p);
-		
-		return executeQuerySingle(c);
-	}	
-	
 	public List<Report> find(final ReportFilter filter) {
 		IContextDao<Report> c = new ContextDao<Report>(em, Report.class, filter);
 		
 	    Predicate p = c.getBuilder().conjunction();
-	    p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Report_.temporary), 0));
+	    
+	    if (!filter.getPhases().isEmpty()) {
+	    	p = c.getBuilder().and(p, c.getRoot().get(Report_.phase).get(ReportPhase_.status).in(filter.getPhases()));
+	    }
+	    if (!filter.getStatuses().isEmpty()) {
+	    	p = c.getBuilder().and(p, c.getRoot().get(Report_.status).in(filter.getStatuses()));
+	    }
 	    
 	    if (!filter.getAccesses().isEmpty()) {
 	    	p = c.getBuilder().and(p, c.getRoot().get(Report_.pattern).get(ReportPattern_.accesses).in(filter.getAccesses()));
@@ -135,4 +115,86 @@ public class ReportDao extends ADao<Report, Long> {
 		
 		return executeQuery(c);
 	}
+	
+	/**
+	 * find oldest one (generationfate) with INIT phase
+	 */
+	public Long findAwaiting() {
+		IContextDao<Report> c = new ContextDao<Report>(em, Report.class);
+		
+		List<ReportPhaseStatus> phases = Lists.newArrayList(ReportPhaseStatus.INIT);
+		List<ReportStatus> statuses = Lists.newArrayList(ReportStatus.OK);
+		
+	    Predicate p = c.getBuilder().conjunction();
+	    p = c.getBuilder().and(p, c.getRoot().get(Report_.phase).get(ReportPhase_.status).in(phases));
+	    p = c.getBuilder().and(p, c.getRoot().get(Report_.status).in(statuses));
+
+	    
+		List<Order> orders = Lists.newArrayList();
+		orders.add(c.getBuilder().desc(c.getRoot().get(Report_.generationDate)));
+		c.getCriteria().orderBy(orders);
+	    
+	    c.getCriteria().where(p);
+		
+	    Report report = executeQuerySingle(c);
+	    return report!=null?report.getId():null;
+	}	
+
+	/**
+	 * find oldest with START/OK phase that was set in this phase after ... 
+	 */
+	public Long findLost() {
+		IContextDao<Report> c = new ContextDao<Report>(em, Report.class);
+		
+		List<ReportPhaseStatus> phases = Lists.newArrayList(ReportPhaseStatus.START);
+		List<ReportStatus> statuses = Lists.newArrayList(ReportStatus.OK);
+		Date date = DateTime.now().minusSeconds(70).toDate();
+		
+	    Predicate p = c.getBuilder().conjunction();
+	    p = c.getBuilder().and(p, c.getRoot().get(Report_.phase).get(ReportPhase_.status).in(phases));
+	    p = c.getBuilder().and(p, c.getBuilder().lessThan(c.getRoot().get(Report_.phase).get(ReportPhase_.date), date));
+	    p = c.getBuilder().and(p, c.getRoot().get(Report_.status).in(statuses));
+
+		List<Order> orders = Lists.newArrayList();
+		orders.add(c.getBuilder().desc(c.getRoot().get(Report_.generationDate)));
+		c.getCriteria().orderBy(orders);
+	    
+	    c.getCriteria().where(p);
+		
+	    Report report = executeQuerySingle(c);
+	    return report!=null?report.getId():null;
+	}
+	
+	/**
+	 * finds ...
+	 */
+	public Long findBroken() {
+		IContextDao<Report> c = new ContextDao<Report>(em, Report.class);
+		
+		List<ReportPhaseStatus> phases = Lists.newArrayList(ReportPhaseStatus.START);
+		List<ReportStatus> statuses = Lists.newArrayList(ReportStatus.OK);
+		Date date = DateTime.now().minusSeconds(70).toDate();
+		
+	    Predicate p = c.getBuilder().conjunction();
+	    p = c.getBuilder().and(p, c.getRoot().get(Report_.phase).get(ReportPhase_.status).in(phases));
+	    p = c.getBuilder().and(p, c.getBuilder().greaterThan(c.getRoot().get(Report_.phase).get(ReportPhase_.date), date));
+	    p = c.getBuilder().and(p, c.getRoot().get(Report_.status).in(statuses));
+
+		List<Order> orders = Lists.newArrayList();
+		orders.add(c.getBuilder().desc(c.getRoot().get(Report_.generationDate)));
+		c.getCriteria().orderBy(orders);
+	    
+	    c.getCriteria().where(p);
+		
+	    Report report = executeQuerySingle(c);
+	    return report!=null?report.getId():null;
+	}
+	
+//	public void confirmAllReady() {
+//  em.createQuery("update ReportExtended set status = :nstatus where status = :ostatus")
+//      .setParameter("nstatus", ReportExtended.Status.UNSEEN)
+//      .setParameter("ostatus", ReportExtended.Status.READY)
+//      .executeUpdate();
+//}
+	
 }

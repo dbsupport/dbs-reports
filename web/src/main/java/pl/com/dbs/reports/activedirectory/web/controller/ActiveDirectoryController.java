@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pl.com.dbs.reports.activedirectory.service.ActiveDirectoryService;
-import pl.com.dbs.reports.activedirectory.web.form.ActionDirectoryListAction;
 import pl.com.dbs.reports.activedirectory.web.form.ActiveDirectoryListForm;
+import pl.com.dbs.reports.activedirectory.web.form.ActiveDirectoryListForm.Action;
 import pl.com.dbs.reports.activedirectory.web.validator.ActiveDirectoryValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 
@@ -64,7 +64,7 @@ public class ActiveDirectoryController {
 			return "activedirectory/activedirectory-list";
 		}
 		
-		if (ActionDirectoryListAction.INSERT.equals(form.getAction())) {
+		if (Action.INSERT.equals(form.getAction())) {
 			try {
 				adService.update(form.getId(), form.getDate());
 				alerts.addSuccess(ra, 

@@ -19,7 +19,7 @@
                     		
                             <div class="field-box">
                             	<label>Definicja:</label>
-                            	<input class="form-control inline-input" type="text" readonly="readonly" value="${reportGenerationForm.pattern.name} ${reportGenerationForm.pattern.version}"/>
+                            	<input class="form-control inline-input" type="text" readonly="readonly" value="${pattern.name} ${pattern.version}"/>
                             </div>
                             
                     	 	<div class="field-box">

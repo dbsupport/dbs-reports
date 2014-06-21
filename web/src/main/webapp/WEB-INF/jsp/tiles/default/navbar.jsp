@@ -50,6 +50,28 @@
             
             </c:if>
             
+            <li class="notification-dropdown hidden-xs hidden-sm" id="new-reports">
+                <audio id="audio"><source src="js/dbs/pop.mp3" type="audio/mp3"></audio>
+                <a href="#" class="trigger" title="Nie wygenerowano ostatnio żadnych nowych raportów">
+                    <i class="icon-cogs"></i>
+                    <span class="count">0</span>
+                </a>
+                <div class="pop-dialog">
+                    <div class="pointer right">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
+                    <div class="body">
+                        <a href="#" class="close-icon"><i class="icon-remove-sign"></i></a>
+                        <div class="notifications">
+                        <h3>Nie wygenerowano ostatnio żadnych nowych raportów</h3>
+                        <div class="footer"><a href="report/unarchived" class="logout">Zobacz wszystkie</a></div>
+                        </div>
+                    </div>
+                </div>
+            </li>            
+            
+            
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle hidden-xs hidden-sm" data-toggle="dropdown">
                     Twoje konto
@@ -57,8 +79,8 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="profile">Twój profil</a></li>
-                    <li><a href="report/archives/current">Twoje archiwum</a></li>
-                    <li><a href="report/archives/temporary">Twoje raporty</a></li>
+                    <li><a href="report/archived/current">Twoje archiwum</a></li>
+                    <li><a href="report/unarchived">Twoje raporty</a></li>
                     <sec:authorize access="hasAnyRole('Admin')">
                     <li><a href="report/pattern/list/current">Twoje definicje</a></li>
                     </sec:authorize>

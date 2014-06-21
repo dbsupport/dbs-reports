@@ -34,6 +34,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.Validate;
 
 import pl.com.dbs.reports.access.domain.Access;
+import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.api.report.pattern.PatternManifest;
@@ -263,6 +264,15 @@ public class ReportPattern extends AEntity implements Pattern {
 		return ImmutableSortedSet.orderedBy(ordering).addAll(result).build().asList();
 	}
 	
+//	public PatternFormat getFormat(final ReportType type) {
+//		return Iterables.find(getFormats(), new Predicate<PatternFormat>() {
+//			@Override
+//			public boolean apply(PatternFormat input) { 
+//				return input.getReportType().equals(type); 
+//			}
+//		}, null);
+//	}
+	
 	public String getFormatsAsString() {
 		StringBuffer sb = new StringBuffer();
 		Separator s = new Separator(",");
@@ -279,6 +289,16 @@ public class ReportPattern extends AEntity implements Pattern {
 			if (transformate.getFormat().equals(format)) return transformate;
 		return null;
 	}
+	
+	public PatternTransformate getTransformate(final ReportType format) {
+		return Iterables.find(getTransformates(), new Predicate<PatternTransformate>() {
+			@Override
+			public boolean apply(PatternTransformate input) { 
+				return input.getFormat().getReportType().equals(format); 
+			}
+		}, null);		
+	}
+	
 
 	public void addInits(Map<String, byte[]> inits) {
 		if (inits != null) this.inits.putAll(inits);

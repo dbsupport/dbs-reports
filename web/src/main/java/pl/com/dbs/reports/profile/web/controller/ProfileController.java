@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import pl.com.dbs.reports.api.report.Report;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.domain.ProfileException;
 import pl.com.dbs.reports.profile.domain.ProfilePhoto;
@@ -39,7 +38,6 @@ import pl.com.dbs.reports.profile.web.form.ProfileListForm;
 import pl.com.dbs.reports.profile.web.validator.ProfileListValidator;
 import pl.com.dbs.reports.profile.web.validator.ProfileValidator;
 import pl.com.dbs.reports.report.service.ReportService;
-import pl.com.dbs.reports.report.web.controller.ReportArchivesController;
 import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 import pl.com.dbs.reports.support.web.file.FileMeta;
@@ -86,8 +84,7 @@ public class ProfileController {
 		Profile profile = profileService.findById(SessionContext.getProfile().getId());
 		model.addAttribute("profile", profile);
 		model.addAttribute("current", true);
-		model.addAttribute("reports", reportService.findTemporary());
-		model.addAttribute("maxtemp", ReportService.MAX_TEMPORARY_REPORTS);
+		
 		form.reset(profile);
 		return "profile/profile";
     }
@@ -195,28 +192,6 @@ public class ProfileController {
 		return "redirect:/profile/list";
     }
 
-	/**
-	 * @see ReportArchivesController
-	 */
-	@RequestMapping(value="/profile/report/archives/delete/{id}", method = RequestMethod.GET)
-    public String delete(Model model, @PathVariable("id") Long id,   RedirectAttributes ra, HttpServletRequest request) {
-		if (id==null) {
-			alerts.addError(ra, "report.archive.no.report");
-			return "redirect:/profile";
-		}
-
-		try {
-			Report report = reportService.findNoMatterWhat(id);
-			reportService.delete(id);
-			alerts.addSuccess(ra, "report.archive.delete.success", report.getName());
-		} catch (Exception e) {
-			alerts.addError(ra, "report.archive.delete.error", e.getMessage());
-		}
-		
-		return "redirect:/profile";
-	}
-	
-	
 	@RequestMapping(value="/profiles/synchronize", method = RequestMethod.GET)
     public String synchronize(Model model, RedirectAttributes ra) {
 		try {

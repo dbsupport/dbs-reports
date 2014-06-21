@@ -1,0 +1,3 @@
+Jesli nie buduje sie metamodel:
+# wymagane jest by eclipse mial podpieta jdk, a nie jre > installed JRE (?)
+# tomcat musi byc odpalany na JRE bo nie dziala JAX-B

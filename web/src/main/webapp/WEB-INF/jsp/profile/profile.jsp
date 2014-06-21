@@ -1,9 +1,10 @@
 <%@ include file="/WEB-INF/jsp/tiles/common/taglib.jsp" %>
 <%@ page session="false" contentType="text/html; charset=UTF-8" %>
 
-<tiles:insertDefinition name="tiles-default" flush="true">
+<tiles:insertDefinition name="tiles-tables" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-profile-profile<c:if test="${current}">-current</c:if></tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">profil użytkownika</tiles:putAttribute>
+<tiles:putAttribute name="sizer"></tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-profile.css" type="text/css" media="screen" />
@@ -116,59 +117,7 @@
                             </form:form>
                             
                         </div>                    
-
-						<c:if test="${!empty reports}">
-                        <h3>Twoje niezarchiwizowane raporty (${fn:length(reports)}/${maxtemp})</h3>
-			            <div class="row">
-			                <div class="col-md-11">
-			                    <table class="table table-hover">
-			                        <thead>
-			                            <tr>
-			                                <th class="col-md-3">Nazwa pliku
-			                                </th>
-			                                <th class="col-md-2">Data wygenerowania
-			                                    <span class="line"></span>
-			                                </th>
-			                                <th class="col-md-2">
-			                                    <span class="line"></span>Definicja
-			                                </th>
-			                                <th class="align-right">
-			                                    <span class="line"></span>&nbsp;
-			                                </th>   			                                
-			                            </tr>
-			                        </thead>
-			                        <tbody>
-			                        <c:forEach items="${reports}" var="report">
-			                        <!-- row -->
-			                        <tr class="first">
-			                            <td>
-			                            	<a href="report/archives/display/${report.id}" title="Podgląd">${report.name}</a>
-			                                
-			                            </td>
-			                            <td>
-			                            	<fmt:formatDate value="${report.generationDate}" type="both" pattern="dd-MM-yyyy HH:mm:ss" />
-			                            </td>
-			                            <td>
-			                            <c:choose>
-			                            <c:when test="${report.pattern.active eq true}"><a href="report/pattern/details/${report.pattern.id}">${report.pattern.name} ${report.pattern.version}</a></c:when>
-			                            <c:otherwise>${report.pattern.name} ${report.pattern.version}</c:otherwise>
-			                            </c:choose>
-			                            </td>
-			                            <td class="align-right">
-				                            <ul class="actions">
-				                                <li><a href="report/archives/archive/${report.id}"><i class="tool" title="Przenieś do archiwum"></i>&nbsp;</a></li>
-				                                <li class="last"><a href="#" class="report-delete" data-url="report/archives/temporary/delete/${report.id}?site=profile"><i class="table-delete" title="Usuń"></i>&nbsp;</a></li>
-				                            </ul>
-			                            </td>			                            
-			                        </tr>
-			                        </c:forEach>
-			                        </tbody>
-			                    </table>
-			                </div>                
-			            </div>
-			            </c:if>
-
-
+						
                     </div>
                 </div>
 

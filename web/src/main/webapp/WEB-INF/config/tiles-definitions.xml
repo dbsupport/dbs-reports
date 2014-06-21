@@ -26,6 +26,10 @@
         <put-attribute name="form" type="string" value=""/>
     </definition>   
     
+    <definition name="tiles-tables" template="/WEB-INF/jsp/tiles/tables/default.jsp" extends="tiles-default">
+
+    </definition>    
+    
     <definition name="tiles-browser-tables" template="/WEB-INF/jsp/tiles/tables/browser.jsp" extends="tiles-default">
         <put-attribute name="sizer" type="definition" value="tiles-sizer-tables"/>
         <put-attribute name="form" type="string" value=""/>

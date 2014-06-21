@@ -3,12 +3,6 @@
  */
 package pl.com.dbs.reports.report.domain.builders;
 
-import pl.com.dbs.reports.report.domain.ReportBlockException;
-
-
-
-
-
 
 /**
  * Abstract blocks builder for given type of transfromate.
@@ -22,7 +16,7 @@ public interface ReportBlocksBuilder {
 	 * Deconstructs content into blocks tree.
 	 * Process blocks.
 	 */
-	ReportBlocksBuilder build() throws ReportBlockException;
+	ReportBlocksBuilder build();
 	
 	ReportBlocksBuilder addParameter(final String key, final String value);
 

@@ -7,8 +7,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import pl.com.dbs.reports.activedirectory.web.form.ActionDirectoryListAction;
 import pl.com.dbs.reports.activedirectory.web.form.ActiveDirectoryListForm;
+import pl.com.dbs.reports.activedirectory.web.form.ActiveDirectoryListForm.Action;
 
 /**
  * ActiveDirectory data.
@@ -33,7 +33,7 @@ public class ActiveDirectoryValidator implements Validator {
 
 		if (errors.hasErrors()) return;
 		
-		if (ActionDirectoryListAction.INSERT.equals(form.getAction())) {
+		if (Action.INSERT.equals(form.getAction())) {
 			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "date", "errors.required");
 			if (errors.hasErrors()) return;
 			if (!form.anyIDselected()) {
@@ -43,7 +43,7 @@ public class ActiveDirectoryValidator implements Validator {
 		
 		if (errors.hasErrors()) return;
 		
-		if (!ActionDirectoryListAction.INSERT.equals(form.getAction())) {
+		if (!Action.INSERT.equals(form.getAction())) {
 			form.getFilter().putValue(form.getValue());
 		}
 	}

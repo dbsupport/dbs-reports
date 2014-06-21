@@ -30,14 +30,15 @@ public class ReportGenerationValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		ReportGenerationForm form = (ReportGenerationForm)target;
 		
-		
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "pattern", "report.execute.no.pattern");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "format", "report.execute.no.format");
 		if (errors.hasErrors()) return;
 		
 		switch (form.getPage()) {
 		case 3:
 		case 2:
 		case 1:
+			
 			form.validate(errors);
 		break;
 		}

@@ -12,6 +12,7 @@
     </persistence-unit-metadata>
     
     <converter class="pl.com.dbs.reports.report.pattern.domain.ReportPatternManifestConverter"/>
+    <!-- converter class="pl.com.dbs.reports.report.domain.ReportGenerationContextConverter"/-->
        	
 </entity-mappings>
 

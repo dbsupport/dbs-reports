@@ -11,24 +11,18 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
-import pl.com.dbs.reports.api.report.Report;
 import pl.com.dbs.reports.api.report.ReportFactory;
 import pl.com.dbs.reports.api.report.ReportProduceContext;
-import pl.com.dbs.reports.api.report.ReportValidationException;
-import pl.com.dbs.reports.api.report.pattern.PatternFormat;
+import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
-import pl.com.dbs.reports.profile.dao.ProfileDao;
-import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuilder;
 import pl.com.dbs.reports.report.domain.builders.ReportRtfPdfBlocksBuilder;
 import pl.com.dbs.reports.report.domain.builders.ReportTextBlockInflater;
 import pl.com.dbs.reports.report.domain.builders.ReportTextBlocksBuilder;
 import pl.com.dbs.reports.report.domain.builders.ReportTextPdfBlocksBuilder;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
-import pl.com.dbs.reports.security.domain.SessionContext;
 
 /**
  * Default report generation factory for reports.
@@ -42,12 +36,10 @@ import pl.com.dbs.reports.security.domain.SessionContext;
 @Component
 public class ReportFactoryDefault implements ReportFactory {
 	private static final Logger logger = Logger.getLogger(ReportFactoryDefault.class);
-	private ProfileDao profileDao;
 	private ReportTextBlockInflater inflater;
 	
 	@Autowired
-	public ReportFactoryDefault(ProfileDao profileDao, @Qualifier("report.block.inflater.query") ReportTextBlockInflater inflater) {
-		this.profileDao = profileDao;
+	public ReportFactoryDefault(@Qualifier("report.block.inflater.query") ReportTextBlockInflater inflater) {
 		this.inflater = inflater;
 	}
 	
@@ -65,12 +57,11 @@ public class ReportFactoryDefault implements ReportFactory {
 	 * @see pl.com.dbs.reports.api.report.ReportFactory#produce(pl.com.dbs.reports.api.report.ReportProduceContext)
 	 */
 	@Override
-	public Report produce(final ReportProduceContext context) throws ReportValidationException, DataAccessException {
-		ReportPattern pattern = ((ReportProduceContextDefault)context).getPattern();
-		PatternFormat format = ((ReportProduceContextDefault)context).getFormat();
-		String name = ((ReportProduceContextDefault)context).getName();
+	public byte[] produce(final ReportProduceContext context) {
+		ReportPattern pattern = (ReportPattern)(((ReportProduceContextDefault)context).getPattern());
+		ReportType format = ((ReportProduceContextDefault)context).getFormat();
 		Map<String, String> params = ((ReportProduceContextDefault)context).getParameters();
-
+		
 		//..find transformate..
 		PatternTransformate transformate = pattern.getTransformate(format);
 		Validate.notNull(transformate, "Transformate is no more!");
@@ -82,19 +73,13 @@ public class ReportFactoryDefault implements ReportFactory {
 		ReportBlocksBuilder blocksbuilder = resolveBlocksBuilder(transformate, params);
 		Validate.notNull(blocksbuilder, "Blocks builder is no more!");
 		
-		//.inflate blocks tree..
-		try {
-			blocksbuilder.build();
-		} catch (ReportBlockException e) {
-			throw new ReportValidationException(e);
-		}
-		
 		//..report builder..
-		Profile profile = profileDao.find(SessionContext.getProfile().getId());
-		ReportBuilder reportbuilder = new ReportBuilder(pattern, profile, format, name, params, blocksbuilder.getContent());
+//		Profile profile = profileDao.find(SessionContext.getProfile().getId());
+//		ReportBuilder reportbuilder = new ReportBuilder(pattern, profile, format, name, params);
 		
-		//..finally return new report...
-		return reportbuilder.build().getReport();
+		//.inflate blocks tree..
+		return blocksbuilder.build().getContent();
+		//return reportbuilder.build().getReport().content(blocksbuilder.getContent());
 	}
 	
 	
@@ -110,14 +95,6 @@ public class ReportFactoryDefault implements ReportFactory {
 			blocksbuilder = new ReportTextBlocksBuilder(transformate, inflater, params);
 		}
 		
-		if (blocksbuilder!=null) {
-			//Profile profile = profileDao.find(SessionContext.getProfile().getId());
-			//..add profile login..
-			blocksbuilder.addParameter(Profile.PARAMETER_USER, SessionContext.getProfile().getLogin())
-			//..add profile parameter (HR authorities)..
-			.addParameter(Profile.PARAMETER_PROFILE, SessionContext.getProfile().getClientAuthorityMetaData());
-		}
-
 		return blocksbuilder;
 	}
 	

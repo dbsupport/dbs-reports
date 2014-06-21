@@ -46,7 +46,7 @@
                 	<sec:authorize access="hasAnyRole('Admin')">
 	                <a href="#" data-url="report/pattern/delete/${pattern.id}" class="btn-flat icon pull-right delete-user pattern-delete" data-toggle="tooltip" title="Skasuj definicję" data-placement="top"><i class="icon-trash"></i></a>
 	                </sec:authorize>
-	                <a href="report/archives/${pattern.id}" class="btn-flat icon large pull-right edit">Raporty tej definicji</a>
+	                <a href="report/archived/${pattern.id}" class="btn-flat icon large pull-right edit">Raporty tej definicji</a>
                 </div>
             </div>
 

@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -32,13 +33,22 @@ import org.apache.commons.lang.Validate;
 import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.profile.domain.Profile;
+import pl.com.dbs.reports.report.domain.ReportPhase.ReportPhaseStatus;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.support.db.domain.AEntity;
 
 
 
 /**
+ * 
  * Report entity.
+ * This is report entity from beginning INIT to PERSIST (archived) state.
+ * 
+ * 
+ *                  user orders          scheduler takes         generation          user          user
+ *                   reports              processing              finish          confirms      archivize
+ * ---------------------|---------------------|---------------------|----------------|--------------|-------
+ * processing:         INIT                 START                 READY          TRANSIENT       PERSIST
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -79,32 +89,99 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     @JoinColumn(name="creator_id")
     private Profile creator;    
 	
-	@Column(name = "temporary")
-	private boolean temporary;	
-    
 	@Lob
 	@Column(name = "content")
 	@Basic(fetch = FetchType.LAZY)
 	private byte[] content;
-
+	
+	@Column(name = "status")
+	@Enumerated(EnumType.STRING)
+	private ReportStatus status;
+	
+    @Embedded
+    private ReportPhase phase;	
+	
     public Report() {/* JPA */}
     
-    public Report(ReportCreation context) {
+    public Report(ReportPattern pattern, String name, Profile creator) {
+    	Validate.notNull(pattern, "Pattern is no more!");
+    	Validate.notNull(creator, "Profile is no more!");
+    	Validate.notEmpty(name, "Name is no more!");
+    	
     	this.generationDate = new Date();
-    	Validate.notNull(context.getPattern(), "Pattern is no more!");
-    	this.pattern = context.getPattern();
-		Validate.notNull(context.getProfile(), "Profile is no more!");
-		this.creator = context.getProfile();
-		Validate.notEmpty(context.getName(), "Name is no more!");
-    	this.name = context.getName();
-    	this.content = context.getContent();
-    	this.format = context.getFormat().getReportType();
-    	this.parameters = context.getParams();
-    	this.temporary = context.getTemporary();
+    	Validate.notNull(pattern, "Pattern is no more!");
+    	this.pattern = pattern;
+		Validate.notNull(creator, "Profile is no more!");
+		this.creator = creator;
+    	this.name = name;
+    	this.status = ReportStatus.OK;
+    	this.phase = new ReportPhase(this.generationDate);
     }
     
+    public Report start() {
+    	if (!this.phase.is(ReportPhaseStatus.INIT))
+    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for start!");
+    		
+    	this.phase.rephase(ReportPhaseStatus.START);
+    	return this;
+    }       
+    
+    /**
+     * By using @ Transactional if there are any RuntimeExceptions thrown in the method, 
+     * it will automatically perform the rollback
+     */
+    public Report restart() {
+    	if (!this.phase.is(ReportPhaseStatus.START))
+    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for restart!");
+    	
+    	this.phase.rephase(ReportPhaseStatus.START);
+    	return this;
+    }    
+    
+    public Report ready(byte[] content) {
+    	if (!this.phase.is(ReportPhaseStatus.START))
+    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for ready!");
+    		
+    	this.phase.rephase(ReportPhaseStatus.READY);
+    	this.content = content;
+    	return this;
+    }   
+    
+    public Report failure(Exception e) {
+    	if (this.phase.is(ReportPhaseStatus.READY)
+    		||this.phase.is(ReportPhaseStatus.TRANSIENT))
+    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for failure!");
+    	
+    	this.phase.rephase(ReportPhaseStatus.READY);
+    	this.content = e.toString().getBytes();
+    	this.status = ReportStatus.FAILED;
+    	return this;
+    }
+    
+    public Report confirm() {
+    	if (!this.phase.is(ReportPhaseStatus.READY))
+    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for confirm!");
+    		
+    	this.phase.rephase(ReportPhaseStatus.TRANSIENT);
+    	return this;
+    }       
+    
     public Report archive() {
-    	this.temporary = false;
+    	if (!this.phase.is(ReportPhaseStatus.TRANSIENT)
+    		&&!ReportStatus.OK.equals(this.status))
+    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") or status("+status+") for archive!");
+    		
+    	this.phase.rephase(ReportPhaseStatus.PERSIST);
+    	return this;
+    }      
+    
+    public Report format(ReportType format) {
+    	this.format = format;
+    	return this;
+    }
+    
+    public Report parameters(Map<String, String> params) {
+    	this.parameters = params;
     	return this;
     }
     
@@ -146,5 +223,24 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 	public Profile getCreator() {
 		return creator;
 	}
+	
+	public ReportStatus getStatus() {
+		return status;
+	}
 
+    
+    public ReportPhase getPhase() {
+		return phase;
+	}
+
+
+	/**
+     * Status.
+     */
+    public enum ReportStatus {
+    	OK,
+    	FAILED;
+    }
+    
+    
 }

@@ -19,7 +19,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import pl.com.dbs.reports.api.report.pattern.PatternManifest;
-import pl.com.dbs.reports.report.domain.ReportNameTemplate;
 
 /**
  * Report pattern manifest entity.
@@ -48,7 +47,7 @@ public class ReportPatternManifest extends Manifest implements PatternManifest, 
 	public static final java.util.regex.Pattern EXTENSION_ENGINE_PATTERN = java.util.regex.Pattern.compile("^(.*)\\|(.*)$",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	public static final java.util.regex.Pattern VARIABLE_PATTERN = java.util.regex.Pattern.compile("(\\$\\{.+?\\})+",  java.util.regex.Pattern.CASE_INSENSITIVE);	
 	
-	public static final String REPORT_NAME_TEMPLATE_DEFAULT = ReportNameTemplate.FILENAME.getVkey()+"-"+ReportNameTemplate.DATE_TIME.getVkey();
+	public static final String REPORT_NAME_TEMPLATE_DEFAULT = PatternReportNameTemplate.FILENAME.getVkey()+"-"+PatternReportNameTemplate.DATE_TIME.getVkey();
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 	private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd-HHmmSS");
 	
@@ -96,7 +95,7 @@ public class ReportPatternManifest extends Manifest implements PatternManifest, 
 		Matcher name = VARIABLE_PATTERN.matcher(result);
 	    while (name.find()) {
 	    	String variable = StringUtils.trim(name.group(1));
-	    	ReportNameTemplate template = ReportNameTemplate.of(variable);
+	    	PatternReportNameTemplate template = PatternReportNameTemplate.of(variable);
 	    	switch (template.getId()) {
 	    	case  1: 
 	    		//..filename..

@@ -82,6 +82,7 @@
         <put-attribute name="inputclass" type="string" value="form-control"/>
         <put-attribute name="contentclass" type="string" value="col-md-12"/>
         <put-attribute name="attributes" type="string" value=""/>
+        <put-attribute name="disabled" type="string" value=""/>
     	<put-attribute name="validators" type="string" value="false"/>
     </definition>    
     
@@ -92,9 +93,12 @@
     </definition>
     
     <definition name="tiles-field-select" template="/WEB-INF/jsp/tiles/default/field-select.jsp" extends="tiles-field">
-        <put-attribute name="contentclass" type="string" value="ui-select"/>
-        <put-attribute name="inputclass" type="string" value=""/>    
+        <put-attribute name="inputclass" type="string" value="selectpicker"/>    
     </definition>    
+    
+    <definition name="tiles-field-multiselect" template="/WEB-INF/jsp/tiles/default/field-multiselect.jsp" extends="tiles-field">
+        <put-attribute name="inputclass" type="string" value="selectpicker"/>    
+    </definition>        
     
     
 </tiles-definitions>

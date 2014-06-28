@@ -3,8 +3,6 @@
  */
 package pl.com.dbs.reports.report.pattern.web.form;
 
-import javax.xml.bind.JAXBException;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
@@ -21,17 +19,15 @@ import pl.com.dbs.reports.support.web.form.AForm;
 public class PatternImportForm extends AForm {
 	public static final String KEY = "patternImportForm";
 	private MultipartFile  file;
+	/**
+	 * file converted into pattern
+	 */
 	private ReportPattern pattern;
 	
 	public PatternImportForm() {}
 	
-	public void reset() {
+	public void reset(ReportPattern pattern) {
 		super.reset();
-		this.file = null;
-		this.pattern = null;
-	}
-	
-	public void setup(ReportPattern pattern) throws JAXBException {
 		this.pattern = pattern;
 	}
 	
@@ -43,11 +39,7 @@ public class PatternImportForm extends AForm {
 		this.file = file;
 	}
 
-	public ReportPattern getPattern() {
+	public ReportPattern retrievePattern() {
 		return pattern;
-	}
-	
-	public boolean isForm() {
-		return this.pattern!=null&&this.pattern.getForm()!=null;
 	}
 }

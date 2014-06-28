@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,18 +18,21 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.support.db.domain.IEntity;
 
 
 
 /**
  * Groups generations.
- * Suposed to be deleted when all generations where archivized. 
+ * Starts with report(s) generation.
+ * Stay alive as long as has any report and at least one report is not PERSISTED.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2014
@@ -43,9 +48,20 @@ public class ReportOrder implements IEntity {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sg_order")
 	private Long id;	
 	
+	@OneToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="creator_id")
+    private Profile creator; 	
+	
+	@Column(name = "name")
+	private String name;	
+	
 	@Column(name = "date")
 	@Temporal(TemporalType.TIMESTAMP)	
 	private Date date;	
+	
+	@Column(name = "status")
+	@Enumerated(EnumType.STRING)
+	private ReportOrderStatus status;		
 	
 	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=false)
     @JoinTable(
@@ -56,14 +72,75 @@ public class ReportOrder implements IEntity {
 
     public ReportOrder() {/* JPA */}
     
-    public ReportOrder(Date date) {
-    	this.date = date;
+    public ReportOrder(String name, Profile profile) {
+    	this.name = name;
+    	this.creator = profile;
+    	this.date = new Date();
+    	this.status = ReportOrderStatus.NOTREADY;
+    }
+    
+	public ReportOrder ready() {
+		if (!ReportOrderStatus.NOTREADY.equals(this.status))
+			throw new IllegalStateException("Reports' order "+id+" has inproper status("+status+") for ready!");
+		
+    	this.status = ReportOrderStatus.UNNOTIFIED;
+    	return this;
+    }
+	
+	public ReportOrder notified() {
+		if (!ReportOrderStatus.NOTREADY.equals(this.status)
+			&&!ReportOrderStatus.UNNOTIFIED.equals(this.status))
+			throw new IllegalStateException("Reports' order "+id+" has inproper status("+status+") for nofication!");
+		
+    	this.status = ReportOrderStatus.NOTIFIED;
+    	return this;
     }
     
     public ReportOrder add(Report report) {
     	this.reports.add(report);
     	return this;
     }
+    
+    public ReportOrder remove(Report report) {
+    	this.reports.remove(report);
+    	return this;
+    }    
+    
+    /**
+     * All reports are finished?
+     */
+    public boolean isFinished() {
+    	for (Report report : reports)
+    		if (!report.getPhase().isFinished()) return false;
+    	return true;
+    }
+    
+    /**
+     * All reports are TRANSIENT or READY?
+     */
+    public boolean isConfirmed() {
+    	for (Report report : reports)
+    		if (!report.getPhase().isConfirmed()) return false;
+    	return true;
+    }
+    
+//    /**
+//     * All reports are PERSIST?
+//     * @return
+//     */
+//    public boolean isArchived() {
+//    	for (Report report : reports)
+//    		if (!report.getPhase().isArchived()) return false;
+//    	return true;
+//    }    
+    
+    /**
+     * Any reports in collection?
+     */
+    public boolean isEmpty() {
+    	return this.reports.isEmpty();
+    }    
+    
 
 	public Long getId() {
 		return id;
@@ -77,18 +154,39 @@ public class ReportOrder implements IEntity {
 		return date;
 	}
 
-	/**
-	 * Confirm all generations.
-	 */
-	public ReportOrder confirm() {
-		for (Report gen : reports) {
-			gen.confirm();
-		}
-		return this;
-	}
+//	/**
+//	 * Confirm all generations.
+//	 */
+//	public ReportOrder confirm() {
+//		for (Report gen : reports) {
+//			gen.confirm();
+//		}
+//		return this;
+//	}
 	
+	public ReportOrderStatus getStatus() {
+		return status;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Profile getCreator() {
+		return creator;
+	}
+
 	public int count() {
 		return this.reports.size();
 	}
+	
+    /**
+     * Status.
+     */
+    public enum ReportOrderStatus {
+    	NOTREADY,
+    	UNNOTIFIED, //user was NOT notified
+    	NOTIFIED; //user was notified
+    }	
 	
 }

@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorValue;
 
 import pl.com.dbs.reports.support.web.form.field.AField;
@@ -22,14 +21,14 @@ import pl.com.dbs.reports.support.web.form.field.AField;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("required")
-public class FieldValidatorRequired<T> extends AFieldValidator<T> {
+public class FieldValidatorRequired extends AFieldValidator {
 	public FieldValidatorRequired() {
 		super();
 	}
 	
 	@Override
-	public void validate(AField<T> field, LinkedList<AField<?>> fields) throws FieldValidatorException {
-		if (StringUtils.isBlank(field.getValue())) throw new FieldValidatorException(field, "errors.required");
+	public void validate(AField<?> field, LinkedList<AField<?>> fields) throws FieldValidatorException {
+		if (!field.hasValue()) throw new FieldValidatorException(field, "errors.required");
 	}
 
 	@Override

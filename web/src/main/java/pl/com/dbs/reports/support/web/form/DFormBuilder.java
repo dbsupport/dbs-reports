@@ -16,10 +16,14 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.springframework.dao.DataAccessException;
+
 import pl.com.dbs.reports.support.web.form.field.FieldDate;
+import pl.com.dbs.reports.support.web.form.field.FieldMultiSelect;
 import pl.com.dbs.reports.support.web.form.field.FieldNumber;
 import pl.com.dbs.reports.support.web.form.field.FieldSelect;
 import pl.com.dbs.reports.support.web.form.field.FieldText;
+import pl.com.dbs.reports.support.web.form.inflater.FieldInflater;
 import pl.com.dbs.reports.support.web.form.option.FieldOption;
 import pl.com.dbs.reports.support.web.form.validator.FieldValidatorAfter;
 import pl.com.dbs.reports.support.web.form.validator.FieldValidatorBefore;
@@ -43,6 +47,7 @@ public class DFormBuilder<T extends DForm> {
 	private Set<Class<?>> classes = new HashSet<Class<?>>();
 	private T form;
 	private byte[] content;
+	private Set<FieldInflater> inflaters;
 
 //	public DFormBuilder(byte[] content) {
 //		this.content = content;
@@ -72,6 +77,11 @@ public class DFormBuilder<T extends DForm> {
 		this.classes.add(clazz);	    
 	}
 	
+	public DFormBuilder<T> add(Set<FieldInflater> inflaters) {
+		this.inflaters = inflaters;
+		return this;
+	}
+	
 //	public DFormBuilder(byte[] content, Class<?>[] classes) throws IOException {
 //		this(content);
 //		this.classes = classes;
@@ -96,6 +106,7 @@ public class DFormBuilder<T extends DForm> {
 				FieldDate.class,
 				FieldNumber.class,
 				FieldSelect.class,
+				FieldMultiSelect.class,
 				
 				FieldOption.class,
 				
@@ -110,7 +121,7 @@ public class DFormBuilder<T extends DForm> {
 	/**
 	 * Build form from xml..
 	 */
-	public DFormBuilder<T> build() throws JAXBException {
+	public DFormBuilder<T> build() throws JAXBException, DataAccessException {
 		//Class<T> clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];			
 		//http://stackoverflow.com/questions/11785543/jaxbcontext-jaxb-properties-and-moxy
 		JAXBContext context = org.eclipse.persistence.jaxb.JAXBContextFactory.createContext(classes.toArray(new Class[this.classes.size()]), null);
@@ -119,7 +130,7 @@ public class DFormBuilder<T extends DForm> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private DFormBuilder<T> build(JAXBContext context) throws JAXBException {
+	private DFormBuilder<T> build(JAXBContext context) throws JAXBException, DataAccessException {
 	    Unmarshaller unmarshaller = context.createUnmarshaller();
 //		    unmarshaller.setEventHandler(new ValidationEventHandler() {
 //		        @Override
@@ -130,6 +141,12 @@ public class DFormBuilder<T extends DForm> {
 //		    });		    
 	    ByteArrayInputStream in = new ByteArrayInputStream(content);
 	    this.form = (T) unmarshaller.unmarshal(in);
+	    
+	    /**
+	     * check if form has special fields.. 
+	     */
+	    form.inflate(inflaters);
+	    
 		return this;
 	}	
 
@@ -140,6 +157,7 @@ public class DFormBuilder<T extends DForm> {
 	public T getForm() {
 		return form;
 	}
+
 	
 //	@SuppressWarnings("unchecked")
 //	private Class<T> getClazz() {

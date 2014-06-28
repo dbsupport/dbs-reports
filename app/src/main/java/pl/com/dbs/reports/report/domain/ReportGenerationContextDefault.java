@@ -4,7 +4,8 @@
 package pl.com.dbs.reports.report.domain;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
@@ -23,7 +24,7 @@ public class ReportGenerationContextDefault implements ReportGenerationContext, 
 	
 	private PatternFormat format;	
 	
-    private Map<String, String> parameters = new HashMap<String, String>(); 
+    private List<Map<String, String>> parameters = new ArrayList<Map<String, String>>(); 
 	
 	private long pattern;
 	
@@ -40,8 +41,8 @@ public class ReportGenerationContextDefault implements ReportGenerationContext, 
 	}
 
 	@Override
-	public Map<String, String> getParameters() {
-		return parameters;
+	public List<Map<String, String>> getParameters() {
+		return parameters; 
 	}
 
 	@Override

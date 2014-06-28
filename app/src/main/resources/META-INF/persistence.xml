@@ -18,7 +18,6 @@
 		<class>pl.com.dbs.reports.report.domain.Report</class>
 		<class>pl.com.dbs.reports.report.domain.Report.ReportPhase</class>
 		<class>pl.com.dbs.reports.report.domain.ReportOrder</class>
-		<class>pl.com.dbs.reports.report.domain.ReportOrderNotification</class>
 		
 		<class>pl.com.dbs.reports.profile.domain.Profile</class>
 		<class>pl.com.dbs.reports.profile.domain.ProfileAddress</class>

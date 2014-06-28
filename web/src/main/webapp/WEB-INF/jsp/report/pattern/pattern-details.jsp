@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="css/bootstrap/bootstrap-datetimepicker.min.css" type="text/css" >
 <link rel="stylesheet" href="css/dbs/dbs-wizard.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-select.min.css">
 <link rel="stylesheet" href="css/dbs/dbs-profile.css" type="text/css" media="screen" />
 </tiles:putAttribute>
 <tiles:putAttribute name="js" type="string">
@@ -18,6 +19,8 @@
 <script src="js/locales/bootstrap-datepicker.pl.js"></script>
 <script src="js/locales/bootstrap-datetimepicker.pl.js"></script>
 <script src="js/dbs/dbs-datepicker.js"></script>
+<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+<script src="js/dbs/dbs-multiselect.js"></script>
 <script src="js/dbs/dbs-pattern-details.js"></script>
 </tiles:putAttribute> 
 <tiles:putAttribute name="content" type="string">
@@ -64,7 +67,7 @@
 					<c:if test="${!empty pattern.form}">
 					<div class="profile-box">
                             <div class="row form-wrapper section">
-                            <form:form method="post" modelAttribute="reportGenerationForm" action="report/pattern/details/${pattern.id}" class="dbs-form">
+                            <form:form method="post" modelAttribute="reportGenerationForm" action="report/pattern/details" class="dbs-form">
 	                    	
 	                            <c:if test="${reportGenerationForm.fieldfull}">
 	                            <c:forEach var="field" items="${reportGenerationForm.fields}" varStatus="fstatus">

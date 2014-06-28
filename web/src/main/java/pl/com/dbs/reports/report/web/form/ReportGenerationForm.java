@@ -39,7 +39,7 @@ public class ReportGenerationForm extends DForm implements ReportGenerationConte
 	
 	public void reset(ReportPattern pattern) {
 		super.reset();
-		this.pattern = pattern.getId();
+		this.pattern = pattern.hasId()?pattern.getId():null;
 		this.name = pattern.getManifest().getNameTemplate();
 		this.formats = pattern.getFormats();
 		if (this.formats.size()==1) this.format = formats.get(0);

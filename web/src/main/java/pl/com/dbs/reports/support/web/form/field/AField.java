@@ -4,7 +4,6 @@
 package pl.com.dbs.reports.support.web.form.field;
 
 import java.util.LinkedList;
-import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -16,7 +15,6 @@ import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorNode;
 import org.springframework.validation.Errors;
 
 import pl.com.dbs.reports.support.utils.separator.Separator;
-import pl.com.dbs.reports.support.web.form.option.FieldOption;
 import pl.com.dbs.reports.support.web.form.validator.AFieldValidator;
 import pl.com.dbs.reports.support.web.form.validator.FieldValidatorException;
 
@@ -33,21 +31,16 @@ public abstract class AField<T> {
 	@XmlAttribute(name="type", required = true)
 	private String type;	
 	@XmlAttribute(name="name", required = true)
-	private String name;
-	
+	protected String name;
 	@XmlAttribute(name="label")
-	private String label;
-	//FIXME: private T value; nie dziala...
-	@XmlAttribute(name="value")
-	protected String value;
+	protected String label;
 	@XmlAttribute(name="tooltip")
-	private String tooltip;
+	protected String tooltip;
 	@XmlAttribute(name="format")
 	protected String format;
 	@XmlElement(name="validator", namespace = "http://www.dbs.com.pl/reports/1.0/form")
-	private LinkedList<AFieldValidator<T>> validators;
-	@XmlElement(name="option", namespace = "http://www.dbs.com.pl/reports/1.0/form")
-	private LinkedList<FieldOption> options;
+	protected LinkedList<AFieldValidator> validators;
+
 	
 	public AField() {}
 
@@ -75,27 +68,27 @@ public abstract class AField<T> {
 	public String getFormat() {
 		return StringUtils.isBlank(format)?"":format;
 	}
-	/**
-	 * Default.
-	 * Add field to parameters map in raw format.
-	 */
-	public void addAsParameter(Map<String, String> map) {
-		map.put(name, value);
-	}
 	
 	/**
-	 * Get RAW value.
+	 * 
 	 */
-	public String getValue() {
-		return this.value;
-	}
+	public abstract T getValue();
+	
+	/**
+	 * 
+	 */
+	public abstract String getValueAsString();
+	
 	/**
 	 * Set RAW value.
 	 */
-	public void setValue(String value) {
-		this.value = value;
-	}	
-
+	public abstract void setValue(T value);
+	
+	/**
+	 * 
+	 */
+	public abstract boolean hasValue();
+	
 	/**
 	 * Get DEFAULT renderer tile name.
 	 */
@@ -103,21 +96,18 @@ public abstract class AField<T> {
 		return "tiles-field-text";
 	}	
 	
-	public LinkedList<AFieldValidator<T>> getValidators() {
+	public LinkedList<AFieldValidator> getValidators() {
 		return validators;
-	}
-
-	public LinkedList<FieldOption> getOptions() {
-		return options;
 	}
 
 	/**
 	 * Run all validators assigned to this field.
 	 */
+
 	public void validate(LinkedList<AField<?>> fields, Errors errors, String name) {
 		if (!isValidated()) return;
 		
-		for (AFieldValidator<T> validator : validators) {
+		for (AFieldValidator validator : validators) {
 			try {
 				validator.validate(this, fields);
 			} catch (FieldValidatorException e) {
@@ -132,14 +122,9 @@ public abstract class AField<T> {
 	 */
 	public void init(LinkedList<AField<?>> fields) {
 		if (!isValidated()) return;
-		for (AFieldValidator<T> validator : validators) validator.init(this, fields);
+		for (AFieldValidator validator : validators) 
+			validator.init(this, fields);
 	}
-	
-	/**
-	 * Get typized value.
-	 */
-	public abstract T getValueTypized();
-	
 	
 
 	@Override
@@ -148,18 +133,12 @@ public abstract class AField<T> {
 		sb.append(getName()+"=");
 		sb.append("type:"+type);
 		if (!StringUtils.isBlank(label)) sb.append(";label:"+getLabel());
-		if (!StringUtils.isBlank(value)) sb.append(";value:"+getValue());
 		if (!StringUtils.isBlank(tooltip)) sb.append(";tooltip:"+getTooltip());
 		if (!StringUtils.isBlank(format)) sb.append(";format:"+format);
-		if (hasOptions()) {
-			sb.append(";options:");
-			Separator s = new Separator(",");
-			for (FieldOption option: options) sb.append(s).append("[").append(option).append("]");
-		}
 		if (isValidated()) {
 			sb.append(";validators:");
 			Separator s = new Separator(",");
-			for (AFieldValidator<T> validator: validators) sb.append(s).append("[").append(validator).append("]");
+			for (AFieldValidator validator: validators) sb.append(s).append("[").append(validator).append("]");
 		}
 		return sb.toString(); 
 	}
@@ -170,10 +149,4 @@ public abstract class AField<T> {
 	private boolean isValidated() {
 		return this.validators!=null&&!this.validators.isEmpty();
 	}
-	
-	private boolean hasOptions() {
-		return this.options!=null&&!this.options.isEmpty();
-	}
-	
-	
 }

@@ -11,6 +11,8 @@
 <link rel="stylesheet" href="css/compiled/form-wizard.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/bootstrap/bootstrap.datepicker.css" type="text/css" >
 <link rel="stylesheet" href="css/bootstrap/bootstrap-datetimepicker.min.css" type="text/css" >
+
+<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-select.min.css">
 <link rel="stylesheet" href="css/dbs/dbs-wizard.css" type="text/css" media="screen" />
 </tiles:putAttribute>
 
@@ -20,6 +22,9 @@
 <script src="js/locales/bootstrap-datepicker.pl.js"></script>
 <script src="js/locales/bootstrap-datetimepicker.pl.js"></script>
 <script src="js/dbs/dbs-datepicker.js"></script>
+
+<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+<script src="js/dbs/dbs-multiselect.js"></script>
 </tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 

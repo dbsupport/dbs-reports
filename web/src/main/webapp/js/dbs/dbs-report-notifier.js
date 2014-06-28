@@ -6,7 +6,7 @@ $(function () {
 		    /**
 		     * header: newly
 		     */
-	    	var header = 'Ostatnio nie wygenerowano żadnych nowych raportów.';
+	    	var header = 'Ostatnio nie zakończyła się żadna generacja.';
 	    	
 	    	if (data.reports==1) {
 	    		header = 'Zakończono generację jednego raportu!';
@@ -20,13 +20,13 @@ $(function () {
 	    	/**
 	    	 * counter
 	    	 */
-	    	$('#new-reports a .count').text(data.reports>9?'!':data.reports);
+	    	$('#new-reports a .count').text(data.reports);
 	    	
 	    	/**
 	    	 * construct orders list 
 	    	 */
 	    	$.each(data.orders, function (i, order) {
-	    		var item = '<a href="report/unarchived" data-id="'+order.id+'" class="item"><i class="icon-signin"></i> '+order.name+' <span class="time"><i class="icon-time"></i> '+order.time+'</span></a>';	    	    		
+	    		var item = '<a href="report/unarchived/order/'+order.reports+'" data-id="'+order.id+'" class="item"><i class="icon-signin"></i> '+order.name+' <span class="time"><i class="icon-time"></i> '+order.time+'</span></a>';	    	    		
 	    		$('#new-reports .pop-dialog .body .notifications').append(item);
 	    	});
 	    	

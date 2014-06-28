@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
@@ -21,10 +22,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import pl.com.dbs.reports.report.domain.ReportOrderNotification;
-import pl.com.dbs.reports.report.domain.ReportOrderNotification.PreReportOrderNotificationStatus;
+import pl.com.dbs.reports.report.domain.Report;
+import pl.com.dbs.reports.report.domain.ReportOrder;
+import pl.com.dbs.reports.report.domain.ReportOrder.ReportOrderStatus;
 import pl.com.dbs.reports.report.service.ReportOrderService;
+import pl.com.dbs.reports.security.domain.SessionContext;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import com.google.inject.internal.Lists;
 
 
@@ -35,6 +40,7 @@ import com.google.inject.internal.Lists;
  */
 @Controller
 public class ReportsStatusController {
+	private static final Logger logger = Logger.getLogger(ReportsStatusController.class);
 	private static final PeriodFormatter FORMAT = new PeriodFormatterBuilder()
 																			.printZeroAlways()
 																			.minimumPrintedDigits(2)
@@ -54,7 +60,11 @@ public class ReportsStatusController {
 	@RequestMapping(value="/report/order/notications", method = RequestMethod.GET)
     public @ResponseBody ReportsNotification ready(Model model, HttpServletRequest request) {
 		ReportsNotification notification = new ReportsNotification();
-		reportOrderService.notiftyAll();
+		try {
+			reportOrderService.notifi(SessionContext.getProfile());
+		} catch (Exception e) {
+			logger.error("Error while notofiaction orders..", e);
+		}
 		return notification;
     }	
 
@@ -63,17 +73,29 @@ public class ReportsStatusController {
 	}
 	
 	public class ReportsNotification {
+		/**
+		 * how many new order are finished?
+		 * 
+		 */
 		private int brandnew = 0;
+		/**
+		 * orders
+		 */
 		private List<ReportsNotificationOrder> orders;
+		/**
+		 * how many NOT archived reports in all orders
+		 */
 		private int reports = 0;
 		
 		ReportsNotification() {
-			List<ReportOrderNotification> notifications = reportOrderService.get();
 			this.orders = Lists.newArrayList();
-			for (ReportOrderNotification notification : notifications) {
-				this.orders.add(new ReportsNotificationOrder(notification));
-				this.reports += notification.getOrder().getReports().size();
-				if (PreReportOrderNotificationStatus.UNNOTIFIED.equals(notification.getStatus())) 
+			for (ReportOrder order : reportOrderService.findReady(SessionContext.getProfile())) {
+				this.orders.add(new ReportsNotificationOrder(order));
+				for (Report report : order.getReports()) {
+					if (report.getPhase().isFinishedUnarchived())
+						this.reports++;
+				}
+				if (ReportOrderStatus.UNNOTIFIED.equals(order.getStatus())) 
 					brandnew++;
 			}
 		}
@@ -102,17 +124,23 @@ public class ReportsStatusController {
 		private long id;
 		private String name;
 		private String time;
-		private int count = 0;
+		private List<Long> reports;
 		
-		ReportsNotificationOrder(ReportOrderNotification notification) {
-			this.id = notification.getOrder().getId();
-			this.name = notification.getOrder().getReports().get(0).getName();
+		ReportsNotificationOrder(ReportOrder order) {
+			this.id = order.getId();
+			this.name = order.getName();
 			this.name = this.name.length()>NAME_LENGTH?(this.name.substring(0, NAME_LENGTH-2)+".."):this.name;
-			DateTime start = new DateTime(notification.getOrder().getDate());
+			DateTime start = new DateTime(order.getDate());
 			DateTime now = new DateTime();
 			Period period = new Period(start, now);
 			this.time = FORMAT.print(period);
-			this.count = notification.getOrder().getReports().size();
+			this.reports = Lists.newArrayList(
+					Iterables.transform(order.getReports(), new Function<Report, Long>() {
+							@Override
+							public Long apply(Report input) {
+								return input.getId();
+							}
+						}));
 		}
 
 		public long getId() {
@@ -127,8 +155,8 @@ public class ReportsStatusController {
 			return time;
 		}
 
-		public int getCount() {
-			return count;
+		public List<Long> getReports() {
+			return reports;
 		}
 
 	}

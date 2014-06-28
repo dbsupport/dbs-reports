@@ -28,7 +28,7 @@ import pl.com.dbs.reports.support.web.form.field.FieldNumber;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("before")
-public class FieldValidatorBefore<T> extends AFieldValidator<T> {
+public class FieldValidatorBefore extends AFieldValidator {
 	private static final DateFormat DATEFORMAT_DEFAULT = new SimpleDateFormat("yyyy-MM-dd");
 	private static final String NOW = "now";
 	
@@ -37,21 +37,21 @@ public class FieldValidatorBefore<T> extends AFieldValidator<T> {
 	}
 	
 	@Override
-	public void validate(AField<T> field, LinkedList<AField<?>> fields) throws FieldValidatorException {
+	public void validate(AField<?> field, LinkedList<AField<?>> fields) throws FieldValidatorException {
 		if (field instanceof FieldDate) {
 			FieldDate f1 = (FieldDate)field;
 			
 			Date when = null;
 			if (NOW.equalsIgnoreCase(this.parameter)) {
 				when = new Date();
-				if (f1.getValueTypized()==null||!when.after(f1.getValueTypized())) {
+				if (f1.getValue()==null||!when.after(f1.getValue())) {
 					throw new FieldValidatorException(f1, "errors.before.date.when", new String[]{DATEFORMAT_DEFAULT.format(when)});
 				}
 			} else {
 				//..get field of param name..
 				AField<?> f2 = findField(fields, this.parameter);
-				if (f2!=null&&f2 instanceof FieldDate) when = ((FieldDate)f2).getValueTypized();
-				if (when==null||f1.getValueTypized()==null||!when.after(f1.getValueTypized())) {
+				if (f2!=null&&f2 instanceof FieldDate) when = ((FieldDate)f2).getValue();
+				if (when==null||f1.getValue()==null||!when.after(f1.getValue())) {
 					String f2n = StringUtils.isBlank(f2.getLabel())?f2.getName():f2.getLabel();
 					throw new FieldValidatorException(f1, "errors.before.date", new String[]{f2n});
 				}
@@ -61,8 +61,8 @@ public class FieldValidatorBefore<T> extends AFieldValidator<T> {
 			Number when = null;
 			//..get field of param name..
 			AField<?> f2 = findField(fields, this.parameter);
-			if (f2!=null&&f2 instanceof FieldNumber) when = ((FieldNumber)f2).getValueTypized();
-			if (when==null||f1.getValueTypized()==null||when.doubleValue()<=f1.getValueTypized().doubleValue()) {
+			if (f2!=null&&f2 instanceof FieldNumber) when = ((FieldNumber)f2).getValue();
+			if (when==null||f1.getValue()==null||when.doubleValue()<=f1.getValue().doubleValue()) {
 				String f2n = StringUtils.isBlank(f2.getLabel())?f2.getName():f2.getLabel();
 				throw new FieldValidatorException(f1, "errors.before.number", new String[]{f2n});			
 			}

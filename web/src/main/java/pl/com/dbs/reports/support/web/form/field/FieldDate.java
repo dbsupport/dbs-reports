@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -30,26 +31,54 @@ public class FieldDate  extends AField<Date> {
 	private static final Pattern TIME_PATTERN = Pattern.compile("hh|HH|HH24|hh24", Pattern.CASE_INSENSITIVE);
 	private static final Pattern NOW_PATTERN = Pattern.compile("now|teraz", Pattern.CASE_INSENSITIVE);
 	
+	private Date value;
+	/**
+	 * value as string coz it can be initialized by pattern, i.e. NOW
+	 * temporary value.
+	 */
+	//FIXME: private T value; nie dziala...
+	@XmlAttribute(name="value")
+	private String svalue;
+	
 	public FieldDate() {
 		super();
 	}
 	
 	@Override
-	public Date getValueTypized() {
+	public Date getValue() {
+		return this.value;
+	}
+	
+	@Override
+	public String getValueAsString() {
+		return svalue;
+	}
+	
+	public void setValueAsString(String value) {
+		this.svalue = value;
 		try {
-			return DateTimeFormat.forPattern(resolveFormat()).parseDateTime(this.value).toDate();
+			this.value = DateTimeFormat.forPattern(resolveFormat()).parseDateTime(value).toDate();
 		} catch (Exception e) {}
-		return null;
+	}
+	
+	@Override
+	public void setValue(Date value) {
+		this.value = value;
+	}
+	
+	@Override
+	public boolean hasValue() {
+		return getValue()!=null;
 	}
 
 	@Override
 	public void init(LinkedList<AField<?>> fields) {
-		if (!StringUtils.isBlank(getValue())&&NOW_PATTERN.matcher(getValue()).find()) {
-			setValue(DateFormatUtils.format(new Date(), resolveFormat()));
+		if (!StringUtils.isBlank(svalue)&&NOW_PATTERN.matcher(svalue).find()) {
+			this.value = new Date();
+			this.svalue = DateFormatUtils.format(this.value, resolveFormat());
 		}
 		super.init(fields);
 	}
-	
 	
 	@Override
 	public String getTile() {
@@ -78,5 +107,12 @@ public class FieldDate  extends AField<Date> {
 		
 		return format;
 	}
+
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer(super.toString());
+		sb.append(";value:"+(hasValue()?svalue:""));
+		return sb.toString(); 
+	}	
 	
 }

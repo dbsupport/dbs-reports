@@ -3,6 +3,7 @@
  */
 package pl.com.dbs.reports.report.domain;
 
+import java.util.List;
 import java.util.Map;
 
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
@@ -18,7 +19,7 @@ public interface ReportGenerationContext {
 	
 	PatternFormat getFormat();	
 	
-    Map<String, String> getParameters(); 
+    List<Map<String, String>> getParameters(); 
 	
 	long getPattern();
 }

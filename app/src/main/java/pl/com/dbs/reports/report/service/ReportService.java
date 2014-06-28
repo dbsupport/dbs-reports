@@ -3,11 +3,11 @@
  */
 package pl.com.dbs.reports.report.service;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +43,7 @@ public class ReportService {
 	@Autowired private PatternDao patternDao;
 	@Autowired private ProfileDao profileDao;
 	@Autowired private PatternManifestResolver manifestResolver;
+	@Autowired private ReportOrderService reportOrderService;
 
 
 	/**
@@ -53,6 +54,11 @@ public class ReportService {
 		Report report = reportDao.find(id);
 		Validate.notNull(report, "Report is no more!");
 		report.archive();
+		/**
+		 * ..remove order if all reports are TRANSIENT/PERSIST...
+		 */
+		reportOrderService.cleanupConfirmed(report);
+		
 		return report;
 	}
 	
@@ -63,26 +69,36 @@ public class ReportService {
 	public void delete(final long id) {
 		Report report = reportDao.find(id);
 		Validate.notNull(report, "Report is no more!");
+		
+		ReportOrder order = reportOrderDao.find(report);
+		if (order!=null) {
+			order = reportOrderDao.find(order.getId());
+			/**
+			 * remove report from order..
+			 */
+			order.remove(report);
+			/**
+			 * ..erease order if is empty or all reports PERSIST ..
+			 */
+			if (order.isEmpty()||order.isConfirmed())
+				reportOrderDao.erase(order);
+		}
 		reportDao.erase(report);
-		/**
-		 * ..erease order if is empty..
-		 */
-		
-		/**
-		 * erease notifiaction..
-		 */
-		
 		
 	}	
 	
 	/**
-	 * Erease report
+	 * Make report TRANSIENT
 	 */
 	@Transactional
 	public Report confirm(final long id) {
 		Report report = reportDao.find(id);
 		Validate.notNull(report, "Report is no more!");
 		report.confirm();
+		/**
+		 * ..remove order if all reports are TRANSIENT/PERSIST...
+		 */
+		reportOrderService.cleanupConfirmed(report);		
 		return report;
 	}		
 	
@@ -125,23 +141,28 @@ public class ReportService {
 		Validate.notNull(context.getFormat().getReportType(), "Report type is no more!");
 
 		/**
-		 * ..create generation (group)..
+		 * ..create order ..
 		 */
-		ReportOrder order = new ReportOrder(new Date());
+		Profile profile = profileDao.find(SessionContext.getProfile().getId());
+		
+		ReportOrder order = new ReportOrder(context.getName(), profile);
 		reportOrderDao.create(order);
 		
 		/**
-		 * ..create generations... multiselect splits..
+		 * find multiselect variable..
 		 */
-		ReportBuilder reportbuilder = new ReportBuilder(context);
-		Report report = reportbuilder.build().getReport();
-		reportDao.create(report);		
-
 		
 		/**
-		 * ..add to order..
+		 * ..create reports... multiselect splits..
 		 */
-		order.add(report);
+		for (int counter=0; counter<context.getParameters().size(); counter++) {
+			ReportBuilder reportbuilder = new ReportBuilder(context, profile);
+			reportbuilder.parameters(context.getParameters().get(counter));
+			if (context.getParameters().size()>1) reportbuilder.suffix("fixme"+String.valueOf(counter));
+			Report report = reportbuilder.build().getReport();
+			reportDao.create(report);		
+			order.add(report);
+		}
 
 		return order;
 	}	
@@ -158,14 +179,13 @@ public class ReportService {
 		private ReportPattern pattern;
 		private PatternFormat format;
 		private String name;
+		private String suffix;
 		private Map<String, String> inparams;
 		private Profile profile;
 		private Report report;
 		
-		public ReportBuilder(ReportGenerationContext context) {
+		public ReportBuilder(ReportGenerationContext context, Profile profile) {
 			ReportPattern pattern = patternDao.find(context.getPattern());
-			Profile profile = profileDao.find(SessionContext.getProfile().getId());
-			
 			PatternFormat format = context.getFormat();
 			String name = context.getName();			
 			
@@ -174,7 +194,6 @@ public class ReportService {
 			this.name = name;
 			//..store only input params ..
 			this.inparams = new HashMap<String, String>();
-			this.inparams.putAll(context.getParameters());
 			//..add parameters: profile login..
 			this.inparams.put(Profile.PARAMETER_USER, profile.getLogin());
 			//..add profile parameter (HR authorities)..
@@ -182,14 +201,29 @@ public class ReportService {
 			this.profile = profile;
 		}
 		
+		public ReportBuilder parameters(Map<String, String> parameters) {
+			this.inparams.putAll(parameters);
+			return this;
+		}
+		
+		public ReportBuilder suffix(String suffix) {
+			this.suffix = suffix;
+			return this;
+		}
+		
 		public ReportBuilder build() {
-			final String fullname = name+"."+format.getReportExtension();
+			for (Map.Entry<String, String> p : this.inparams.entrySet()) 
+				logger.debug(p.getKey()+":"+p.getValue());
+			
+			String fullname = name;
+			if (!StringUtils.isBlank(this.suffix))
+				fullname += "-"+this.suffix;
+			fullname += "."+format.getReportExtension();
 			
 			this.report = new Report(pattern, fullname, profile)
 					.format(format.getReportType())
 					.parameters(inparams);
 					
-			logger.info("Report with name:"+fullname+" is build!");
 			return this;
 		}
 		

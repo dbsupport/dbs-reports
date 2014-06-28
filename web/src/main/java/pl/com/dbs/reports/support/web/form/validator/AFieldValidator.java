@@ -28,7 +28,7 @@ import com.google.common.collect.Iterables;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorNode("@type")
-public abstract class AFieldValidator<T> {
+public abstract class AFieldValidator {
 	@XmlAttribute(name="type", required = true)
 	protected String type;
 	@XmlAttribute(name="stop")
@@ -72,7 +72,7 @@ public abstract class AFieldValidator<T> {
 	/**
 	 * Process validation
 	 */
-	public abstract void validate(AField<T> field, LinkedList<AField<?>> fields) throws FieldValidatorException;
+	public abstract void validate(AField<?> field, LinkedList<AField<?>> fields) throws FieldValidatorException;
 	
 	/**
 	 * Initialize description.

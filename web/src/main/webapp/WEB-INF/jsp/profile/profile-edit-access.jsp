@@ -9,12 +9,13 @@
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/new-user.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/compiled/form-wizard.css" type="text/css" media="screen" />
-<link href="css/lib/select2.css" type="text/css" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-select.min.css">
 <link rel="stylesheet" href="css/dbs/dbs-wizard.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-profile-new.css" type="text/css" media="screen" />
 </tiles:putAttribute>
 <tiles:putAttribute name="js" type="string">
-<script src="js/select2.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
 <script src="js/dbs/dbs-multiselect.js"></script>
 </tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
@@ -27,7 +28,7 @@
     <c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>    	
    	<div class="field-box ${classes}">
     	<label>Uprawnienia dostępu</label>
-        <form:select multiple="multiple" path="authorities" cssClass="multiselect">
+        <form:select multiple="multiple" path="authorities" cssClass="selectpicker" data-width="400px" data-size="20" title="- wybierz -">
 			<form:options items="${authorities}" itemLabel="name" itemValue="id"/>
 		</form:select>
 		<c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
@@ -38,7 +39,7 @@
     <c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>    	
    	<div class="field-box ${classes}">    	
     	<label>Uprawnienia raportowe</label>
-    	<form:select multiple="multiple" path="accesses" cssClass="multiselect">
+    	<form:select multiple="multiple" path="accesses" cssClass="selectpicker" data-width="400px" data-size="20" title="- wybierz -">
 			<form:options items="${accesses}" itemLabel="name" itemValue="id"/>
 		</form:select>
 		<c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>

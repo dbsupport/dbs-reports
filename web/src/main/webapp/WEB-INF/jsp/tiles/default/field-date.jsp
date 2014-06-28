@@ -11,13 +11,13 @@
 	<div class="input-append date">
 	<c:choose>
 	<c:when test="${field.withTime}">
-	<input name="${fieldname}.value" value="${field.value}" type="text" 
+	<input name="${fieldname}.valueAsString" value="${field.valueAsString}" type="text" 
 	class="<tiles:getAsString name="inputclass"/> input-datetimepicker" 
 	data-date-format="${field.format}" 
 	placeholder="<c:out value="${field.tooltip}" escapeXml="false"/>" <tiles:getAsString name="attributes"/>/>
 	</c:when>
 	<c:otherwise>
-    <input name="${fieldname}.value" value="${field.value}" type="text" 
+    <input name="${fieldname}.valueAsString" value="${field.valueAsString}" type="text" 
     class="<tiles:getAsString name="inputclass"/> input-datepicker" 
     data-date-format="${field.format}" 
     placeholder="<c:out value="${field.tooltip}" escapeXml="false"/>" <tiles:getAsString name="attributes"/>/>	

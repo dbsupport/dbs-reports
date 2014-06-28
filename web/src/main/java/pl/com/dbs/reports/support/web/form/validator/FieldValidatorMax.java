@@ -26,23 +26,24 @@ import pl.com.dbs.reports.support.web.form.field.FieldText;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("max")
-public class FieldValidatorMax<T> extends AFieldValidator<T> {
+public class FieldValidatorMax extends AFieldValidator {
 	
 	public FieldValidatorMax() {
 		super();
 	}
 	
 	@Override
-	public void validate(AField<T> field, LinkedList<AField<?>> fields) throws FieldValidatorException {
+	public void validate(AField<?> field, LinkedList<AField<?>> fields) throws FieldValidatorException {
 		if (field instanceof FieldText) {
+			FieldText f = (FieldText)field;
 			int max = Integer.valueOf(this.parameter);
-			if (field.getValue()==null||max<field.getValue().length()) 
+			if (field.getValue()==null||max<f.getValue().length()) 
 				throw new FieldValidatorException(field, "errors.max.text",  new String[]{this.parameter});
 		} else if (field instanceof FieldNumber) {
 			FieldNumber f = (FieldNumber)field;
 			try {
 				Number max = NumberFormat.getNumberInstance().parse(this.parameter);
-				if (f.getValueTypized()==null||f.getValueTypized().doubleValue()>max.doubleValue())
+				if (f.getValue()==null||f.getValue().doubleValue()>max.doubleValue())
 					throw new FieldValidatorException(field, "errors.max.number", new String[]{this.parameter});
 			} catch (ParseException e) {
 				throw new FieldValidatorImproperException(field, this.type, e);

@@ -44,7 +44,39 @@ public class ReportPhase {
 		this.date = new Date();
 		return this;
 	}
+	
+	/**
+	 * is report in READY/TRANSIENT/PERSIST phase?
+	 */
+	public boolean isFinished() {
+		return ReportPhaseStatus.READY.equals(this.status)
+				||ReportPhaseStatus.TRANSIENT.equals(this.status)
+				||ReportPhaseStatus.PERSIST.equals(this.status);
+	}
 
+	/**
+	 * is report TRANSIENT or PERSIST?
+	 */
+	public boolean isConfirmed() {
+		return ReportPhaseStatus.TRANSIENT.equals(this.status)
+				||ReportPhaseStatus.PERSIST.equals(this.status);
+	}
+	
+	/**
+	 * is report READY/TRANSIENT?
+	 */
+	public boolean isFinishedUnarchived() {
+		return ReportPhaseStatus.READY.equals(this.status)
+				||ReportPhaseStatus.TRANSIENT.equals(this.status);
+	}	
+
+	/**
+	 * PERSIST?
+	 */
+	public boolean isArchived() {
+		return ReportPhaseStatus.PERSIST.equals(this.status);
+	}	
+	
 	public ReportPhaseStatus getStatus() {
 		return status;
 	}

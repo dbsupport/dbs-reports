@@ -199,6 +199,10 @@ public class ReportPattern extends AEntity implements Pattern {
 	public long getId() {
 		return id;
 	}
+	
+	public boolean hasId() {
+		return id!=null;
+	}
 
 	public boolean isActive() {
 		return active;

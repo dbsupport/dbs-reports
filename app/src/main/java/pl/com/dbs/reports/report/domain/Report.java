@@ -100,6 +100,14 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 	
     @Embedded
     private ReportPhase phase;	
+
+//recznie obsluguj usuwanie ReportOrder bo powinien byc usuwany tylko jesli wszystkie raporty sa usuniete..    
+//    @ManyToOne(fetch=FetchType.LAZY)//, cascade={CascadeType.REMOVE})
+//    @JoinTable(
+//            name="tre_order_report",
+//            joinColumns = @JoinColumn( name="report_id"),
+//            inverseJoinColumns = @JoinColumn( name="order_id"))
+//    private ReportOrder order;    
 	
     public Report() {/* JPA */}
     

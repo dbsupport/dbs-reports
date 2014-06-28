@@ -27,22 +27,23 @@ import pl.com.dbs.reports.support.web.form.field.FieldText;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("min")
-public class FieldValidatorMin<T> extends AFieldValidator<T> {
+public class FieldValidatorMin extends AFieldValidator {
 	public FieldValidatorMin() {
 		super();
 	}
 	
 	@Override
-	public void validate(AField<T> field, LinkedList<AField<?>> fields) throws FieldValidatorException {
+	public void validate(AField<?> field, LinkedList<AField<?>> fields) throws FieldValidatorException {
 		if (field instanceof FieldText) {
+			FieldText f = (FieldText)field;
 			int min = Integer.valueOf(this.parameter);
-			if (field.getValue()==null||min>field.getValue().length()) 
+			if (field.getValue()==null||min>f.getValue().length()) 
 				throw new FieldValidatorException(field, "errors.min.text",  new String[]{this.parameter});
 		} else if (field instanceof FieldNumber) {
 			FieldNumber f = (FieldNumber)field;
 			try {
 				Number min = NumberFormat.getNumberInstance().parse(this.parameter);
-				if (f.getValueTypized()==null||f.getValueTypized().doubleValue()<min.doubleValue())
+				if (f.getValue()==null||f.getValue().doubleValue()<min.doubleValue())
 					throw new FieldValidatorException(field, "errors.min.number", new String[]{this.parameter});
 			} catch (ParseException e) {
 				throw new FieldValidatorImproperException(field, this.type, e);

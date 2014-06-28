@@ -75,6 +75,14 @@ Order counts.</xs:documentation>
 http://www.malot.fr/bootstrap-datetimepicker/</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+		<xs:attribute name="source" type="xs:string">
+			<xs:annotation>
+				<xs:documentation>Source for options.
+Should be SQL that returns two-column result.
+If no PREFIX provided - queries local DB.
+If PREFIX: CLIENT - queries client DB.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="field-option">
 		<xs:annotation>
@@ -95,6 +103,7 @@ http://www.malot.fr/bootstrap-datetimepicker/</xs:documentation>
 			<xs:enumeration value="number"/>
 			<xs:enumeration value="date"/>
 			<xs:enumeration value="select"/>
+			<xs:enumeration value="multiselect"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:annotation/>

@@ -17,6 +17,8 @@ import pl.com.dbs.reports.report.domain.Report_;
 import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.db.dao.AFilter;
 
+import com.google.inject.internal.Lists;
+
 /**
  * Report filter.
  *
@@ -25,7 +27,7 @@ import pl.com.dbs.reports.support.db.dao.AFilter;
  */
 public class ReportFilter extends AFilter<Report> {
 	private static final int DEFAULT_PAGER_SIZE = 10;
-	private Long id;
+	private List<Long> id;
 	private String name;
 	private Long profileId;
 	private List<String> accesses = new ArrayList<String>();
@@ -35,6 +37,7 @@ public class ReportFilter extends AFilter<Report> {
 	public ReportFilter() {
 		Profile profile = SessionContext.getProfile();
 		Validate.notNull(profile, "Profile is no more!");
+		this.profileId = profile.getId();
 		this.accesses = new ArrayList<String>();
 		for (Access access : profile.getAccesses())
 			this.accesses.add(access.getName());
@@ -76,9 +79,14 @@ public class ReportFilter extends AFilter<Report> {
 	}
 	
 	public ReportFilter onlyFor(long id) {
-		this.id = id;
+		this.id = Lists.newArrayList(id);
 		return this;
 	}
+	
+	public ReportFilter onlyFor(Long[] ids) {
+		this.id = Lists.newArrayList(ids);
+		return this;
+	}	
 	
 	public ReportFilter onlyFor(Profile profile) {
 		this.profileId = profile.getId();
@@ -102,7 +110,7 @@ public class ReportFilter extends AFilter<Report> {
 		return accesses;
 	}
 
-	public Long getId() {
+	public List<Long> getId() {
 		return id;
 	}
 

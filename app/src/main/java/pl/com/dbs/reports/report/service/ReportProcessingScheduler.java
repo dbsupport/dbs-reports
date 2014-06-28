@@ -12,6 +12,8 @@ import pl.com.dbs.reports.report.dao.ReportDao;
 
 /**
  * Reports generation scheduler.
+ * 
+ * http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/scheduling.html
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2014
@@ -23,7 +25,10 @@ public class ReportProcessingScheduler {
 	@Autowired private ReportProcessingService reportProcessingService;
 	@Autowired private ReportOrderService reportOrderService;
 	
-	@Scheduled(cron="0 */1 * * * ?")
+	/**
+	 * ..process reports from INIT state...
+	 */
+	@Scheduled(fixedRate=20000)// (cron="0 */1 * * * ?")
 	public void generate() {
 		/**
 		 * ..find oldest generation to process..
@@ -39,6 +44,9 @@ public class ReportProcessingScheduler {
 	
 	
 	//@Scheduled(cron="0 */2 * * * ?")
+	/**
+	 * Try to clean START'ed reports that stucked...
+	 */
 	public void regenerate() {
 		/**
 		 * ..find oldest generation to process..
@@ -50,18 +58,42 @@ public class ReportProcessingScheduler {
 		}
 	}	
 	
+	/**
+	 * ..make some notification if reports are ready..
+	 */
+	//@Scheduled(cron="0 */1 * * * ?")
+	public void notification() {
+		reportOrderService.ready();
+	}		
 
+	
+	/**
+	 * ..cleanup orders..
+	 */
+	@Scheduled(fixedRate=30000)
+	public void orders() {
+		reportOrderService.cleanupConfirmed();
+	}
+	
+	
+	
+	
+	
+	
+	
 	private void reprocess(final long id) {
 		logger.debug("Report re-processing: "+id);
 		reportProcessingService.restart(id);
 		reportProcessingService.generate(id);
+		reportOrderService.ready(id);
 	}
 	
 	private void process(final long id) {
 		logger.debug("Report processing: "+id);
 		reportProcessingService.start(id);
 		reportProcessingService.generate(id);
-		reportOrderService.generate(id);
+		reportOrderService.ready(id);
+		
 	}
 	
 }

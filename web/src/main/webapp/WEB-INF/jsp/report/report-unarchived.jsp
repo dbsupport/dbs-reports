@@ -101,6 +101,10 @@
                                 <c:set var="sorter" value="${reportsunarchivedform.filter.sorter}" scope="request"/>
                                 </tiles:insertDefinition>
                                 
+                                <th tabindex="0" class="">
+                                    <a class="sorter-ctrl">&nbsp;</a>
+                                </th>                                
+                                
                             </tr>
                         </thead>
                         <tfoot>
@@ -138,7 +142,11 @@
                                 <tiles:putAttribute name="name" type="string">locationName</tiles:putAttribute>
                                 <tiles:putAttribute name="label" type="string">Definicja</tiles:putAttribute>
                                 <c:set var="sorter" value="${reportsunarchivedform.filter.sorter}" scope="request"/>
-                                </tiles:insertDefinition>                                                            
+                                </tiles:insertDefinition>  
+                                
+                                <th tabindex="0" class="">
+                                    <a class="sorter-ctrl">&nbsp;</a>
+                                </th> 
                             </tr>
                         </tfoot> 
                                                 
@@ -159,22 +167,73 @@
                                 <td>
                                 <c:choose>
                                 <c:when test="${report.phase.status == 'READY'}">
-                                <a href="report/unarchived/confirm/${report.id}" class="btn-flat primary" title="Zaakceptuj raport">gotowy</a>
+                                <span class="label label-info">&nbsp;&nbsp;&nbsp;&nbsp;gotowy&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 </c:when>
-                                <c:otherwise><span class="label label-success">niezarchiwizowany</c:otherwise>
+                                <c:otherwise><span class="label label-success">niezarchiwizowany</span></c:otherwise>
                                 </c:choose>
                                 </td>
                                 
                                 
                                 <td>
                                 <c:choose>
-                                <c:when test="${report.status == 'FAILED'}"><span class="label label-danger">błędny</span></c:when>
+                                <c:when test="${report.status == 'FAILED'}">
+                                
+                                
+                                <span class="label label-danger">błędny</span>
+                                <!-- a href="#" class="trigger">błędny</a>
+                                
+                                
+                                
+                <div class="pop-dialog">
+                    <div class="pointer right">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
+                    <div class="body">
+                        <a href="#" class="close-icon"><i class="icon-remove-sign"></i></a>
+                        <div class="messages">
+                            <a href="#" class="item">
+                                <img src="img/contact-img.png" class="display">
+                                <div class="name">Alejandra Galván</div>
+                                <div class="msg">
+                                    There are many variations of available, but the majority have suffered alterations.
+                                </div>
+                                <span class="time"><i class="icon-time"></i> 13 min.</span>
+                            </a>
+                            <div class="footer">
+                                <a href="#" class="logout">View all messages</a>
+                            </div>
+                        </div>
+                    </div>
+                </div-->                                
+                                
+                                
+                                </c:when>
                                 <c:otherwise><span class="label label-success">poprawny</c:otherwise>
                                 </c:choose>
                                 </td>
                                 
                                 <td><fmt:formatDate value="${report.generationDate}" type="both" pattern="dd-MM-yyyy HH:mm:ss" /></td>
                                 <td>${report.pattern.name} ${report.pattern.version}</td>
+                                
+                                <td>
+                                <c:if test="${report.status eq 'OK' and (report.phase.status eq 'READY')}">
+				                    <a class="btn-flat primary btn-next" href="report/unarchived/confirm/${report.id}">
+				                    <i class="icon-ok"></i>
+				                    Zaakceptuj&nbsp;&nbsp;</a><span>&nbsp;</span>
+				                </c:if>
+				                
+                                <c:if test="${report.status eq 'OK' and (report.phase.status eq 'READY' or report.phase.status eq 'TRANSIENT')}">
+                                    <a class="btn-flat success btn-finish" href="report/unarchived/archive/${report.id}">
+                                    <i class="icon-folder-open"></i>
+                                    Archiwizuj&nbsp;&nbsp;</a><span>&nbsp;</span>
+                                </c:if>
+                    
+				                
+				                    <a class="btn-flat inverse" href="report/unarchived/delete/${report.id}">
+				                    <i class="icon-remove"></i>
+				                    Usuń&nbsp;&nbsp;</a>                                
+                                </td>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -187,12 +246,18 @@
                     
                       
                     <div class="field-box">
-                    <button type="submit" class="btn-glow success btn-finish" data-last="Finish" onclick="this.form.action.value='ARCHIVE'">
-                    <i class="icon-folder-open"></i>
-                    Archiwizuj&nbsp;&nbsp;</button><span>&nbsp;</span>
+                    <c:if test="${(reportsunarchivedform.status eq 'ALL' or  reportsunarchivedform.status eq 'OK') and (reportsunarchivedform.phase eq 'ALL' or reportsunarchivedform.phase eq 'READY')}">
                     <button type="submit" class="btn-glow primary btn-next" data-last="Finish" onclick="this.form.action.value='CONFIRM'">
                     <i class="icon-ok"></i>
                     Zaakceptuj&nbsp;&nbsp;</button><span>&nbsp;</span>
+                    </c:if>                    
+                    
+                    <c:if test="${reportsunarchivedform.status eq 'ALL' or  reportsunarchivedform.status eq 'OK'}">
+                    <button type="submit" class="btn-glow success btn-finish" data-last="Finish" onclick="this.form.action.value='ARCHIVE'">
+                    <i class="icon-folder-open"></i>
+                    Archiwizuj&nbsp;&nbsp;</button><span>&nbsp;</span>
+                    </c:if>
+
                     <button type="submit" class="btn-glow inverse" data-last="Finish" onclick="this.form.action.value='REMOVE'">
                     <i class="icon-remove"></i>
                     Usuń&nbsp;&nbsp;</button><span>&nbsp;</span>

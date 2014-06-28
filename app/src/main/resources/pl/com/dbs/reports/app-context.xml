@@ -17,6 +17,12 @@
     
     <context:annotation-config />
     
-    <task:annotation-driven/>
+    <task:annotation-driven />
+    
+    <!-- task:annotation-driven executor="tasks.executor" scheduler="tasks.scheduler"/>
+    
+    <task:executor id="tasks.executor" pool-size="5" rejection-policy="CALLER_RUNS"/>
+    
+    <task:scheduler id="tasks.scheduler" pool-size="10"/-->
     
 </beans>

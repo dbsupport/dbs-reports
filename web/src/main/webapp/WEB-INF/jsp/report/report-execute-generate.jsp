@@ -9,7 +9,13 @@
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/new-user.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/compiled/form-wizard.css" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-select.min.css">
 <link rel="stylesheet" href="css/dbs/dbs-wizard.css" type="text/css" media="screen" />
+</tiles:putAttribute>
+
+<tiles:putAttribute name="js" type="string">
+<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+<script src="js/dbs/dbs-multiselect.js"></script>
 </tiles:putAttribute>
 
 <tiles:putAttribute name="content" type="string">
@@ -39,6 +45,7 @@
                                 <c:set var="fieldname" value="fields[${fstatus.index}]" scope="request" />
                             	<tiles:putAttribute name="inputclass" type="string">form-control inline-input</tiles:putAttribute>
                             	<tiles:putAttribute name="attributes" type="string">readonly="readonly"</tiles:putAttribute>
+                            	<tiles:putAttribute name="disabled" type="string">disabled</tiles:putAttribute>
                             	</tiles:insertDefinition>
                             </c:forEach>
                             </c:if>                     		

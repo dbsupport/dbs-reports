@@ -38,7 +38,6 @@ public class ReportGenerationValidator implements Validator {
 		case 3:
 		case 2:
 		case 1:
-			
 			form.validate(errors);
 		break;
 		}

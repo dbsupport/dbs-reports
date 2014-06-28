@@ -104,8 +104,8 @@ public class ReportDao extends ADao<Report, Long> {
 
 	    	p = c.getBuilder().or(ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8);	    	
 	    }	    
-	    if (filter.getId()!=null) {
-	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Report_.id), filter.getId()));
+	    if (filter.getId()!=null&&!filter.getId().isEmpty()) {
+	    	p = c.getBuilder().and(p, c.getRoot().get(Report_.id).in(filter.getId()));
 	    }
 	    if (filter.getProfileId()!=null) {
 	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Report_.creator).get(Profile_.id), filter.getProfileId()));

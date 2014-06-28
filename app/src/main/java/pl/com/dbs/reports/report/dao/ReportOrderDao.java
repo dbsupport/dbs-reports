@@ -3,22 +3,30 @@
  */
 package pl.com.dbs.reports.report.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
+import pl.com.dbs.reports.profile.domain.Profile;
+import pl.com.dbs.reports.profile.domain.Profile_;
 import pl.com.dbs.reports.report.domain.Report;
 import pl.com.dbs.reports.report.domain.ReportOrder;
+import pl.com.dbs.reports.report.domain.ReportOrder.ReportOrderStatus;
 import pl.com.dbs.reports.report.domain.ReportOrder_;
-import pl.com.dbs.reports.report.domain.ReportPhase.ReportPhaseStatus;
 import pl.com.dbs.reports.support.db.dao.ADao;
 import pl.com.dbs.reports.support.db.dao.ContextDao;
 import pl.com.dbs.reports.support.db.dao.IContextDao;
+
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Reports orders CRUD.
@@ -38,40 +46,159 @@ public class ReportOrderDao extends ADao<ReportOrder, Long> {
 	}
 
 	/**
-	 * ..find order with given report if all reports are ready...
+	 * ..return orders if all reports are confirmed (TRANSIEN/PERSIST)...
 	 */
-	public ReportOrder findAllReady(Report report) {
+	public List<ReportOrder> findWithAllReportsConfirmed() {
 		IContextDao<ReportOrder> c = new ContextDao<ReportOrder>(em, ReportOrder.class);
 		CriteriaBuilder b = c.getBuilder();
-		CriteriaQuery<ReportOrder> cq = c.getCriteria();
+		CriteriaQuery<ReportOrder> cr = c.getCriteria();
+		Predicate p = b.conjunction();
+		
+	    cr.where(p);
+
+	    /**
+	     * check if all reports are >= READY
+	     */
+	    return Lists.newArrayList(Iterables.filter(executeQuery(c), new com.google.common.base.Predicate<ReportOrder>() {
+			@Override
+			public boolean apply(ReportOrder input) {
+				return input.isConfirmed();
+			}
+	    }));
+	}	
+	
+	
+	/**
+	 * ..find order with given report if all reports are confirmed (TRANSIEN/PERSIST)...
+	 */
+	public ReportOrder findWithAllReportsConfirmed(Report report) {
+		IContextDao<ReportOrder> c = new ContextDao<ReportOrder>(em, ReportOrder.class);
+		CriteriaBuilder b = c.getBuilder();
+		CriteriaQuery<ReportOrder> cr = c.getCriteria();
 		Predicate p = b.conjunction();
 		Root<ReportOrder> r = c.getRoot();
 		
-		/**
-		 * find order with given report..
-		 * 	
-		 	select o.id
-			from
-			tre_order o,
-			tre_order_report ro
-			where
-			ro.order_id = o.id
-			and ro.report_id = 292
-		 */
-		
-		p = b.and(p, r.get(ReportOrder_.reports).in(report));
-	    cq.where(p);
-		
+		List<Report> reports = Lists.newArrayList(report);
+		p = b.and(p, r.get(ReportOrder_.reports).in(reports));
+	    cr.where(p);
+	    
 	    ReportOrder order = executeQuerySingle(c);
+	    return order!=null&&order.isConfirmed()?order:null;
+	}
+	
+	
+	/**
+	 * ..find orders if all theirs reports are ready...
+	 */
+	public List<ReportOrder> findWithAllReportsFinished() {
+		IContextDao<ReportOrder> c = new ContextDao<ReportOrder>(em, ReportOrder.class);
+		CriteriaBuilder b = c.getBuilder();
+		CriteriaQuery<ReportOrder> cr = c.getCriteria();
+		Predicate p = b.conjunction();
+		Root<ReportOrder> r = c.getRoot();
+		
+		List<ReportOrderStatus> statuses = Lists.newArrayList(ReportOrderStatus.NOTREADY);
+		p = b.and(p, r.get(ReportOrder_.status).in(statuses));
+		
+		List<Order> orders = Lists.newArrayList();
+		orders.add(b.desc(r.get(ReportOrder_.date)));
+		cr.orderBy(orders);
+	    cr.where(p);
 
 	    /**
-	     * ..all reports are READY?
+	     * check if all reports are >= READY
 	     */
-	    for (Report rep : order.getReports())
-	    	if (!ReportPhaseStatus.READY.equals(rep.getPhase().getStatus())) return null;
-	    
-	    return order;
-
+	    return Lists.newArrayList(Iterables.filter(executeQuery(c), new com.google.common.base.Predicate<ReportOrder>() {
+			@Override
+			public boolean apply(ReportOrder input) {
+				return input.isFinished();
+			}
+	    }));
 	}
+	
+	/**
+	 * ..find order with of given report if all reports are ready...
+	 */
+	public ReportOrder findWithAllReportsFinished(Report report) {
+		IContextDao<ReportOrder> c = new ContextDao<ReportOrder>(em, ReportOrder.class);
+		CriteriaBuilder b = c.getBuilder();
+		CriteriaQuery<ReportOrder> cr = c.getCriteria();
+		Predicate p = b.conjunction();
+		Root<ReportOrder> r = c.getRoot();
+		
+		List<ReportOrderStatus> statuses = Lists.newArrayList(ReportOrderStatus.NOTREADY);
+		p = b.and(p, r.get(ReportOrder_.status).in(statuses));
+		List<Report> reports = Lists.newArrayList(report);
+		p = b.and(p, r.get(ReportOrder_.reports).in(reports));		
+		
+	    cr.where(p);
+
+	    ReportOrder order = executeQuerySingle(c);
+	    return order!=null&&order.isFinished()?order:null;
+	}	
+	
+	/**
+	 * ..find UNNOTIFIED/NOTIFIED for given user 
+	 * ordered from newest to oldest..
+	 */
+	public List<ReportOrder> findReady(Profile profile) {
+		IContextDao<ReportOrder> c = new ContextDao<ReportOrder>(em, ReportOrder.class);
+		CriteriaBuilder b = c.getBuilder();
+		CriteriaQuery<ReportOrder> cr = c.getCriteria();
+		Predicate p = b.conjunction();
+		Root<ReportOrder> r = c.getRoot();
+
+		
+		p = b.and(p, b.equal(r.get(ReportOrder_.creator).get(Profile_.id), profile.getId()));
+		
+		List<ReportOrderStatus> statuses = Lists.newArrayList(ReportOrderStatus.UNNOTIFIED, ReportOrderStatus.NOTIFIED);
+		p = b.and(p, r.get(ReportOrder_.status).in(statuses));
+		
+		List<Order> orders = Lists.newArrayList();
+		orders.add(b.desc(r.get(ReportOrder_.date)));
+		cr.orderBy(orders);
+		
+	    cr.where(p);
+		
+	    return executeQuery(c);
+	}		
+	
+	/**
+	 * ..find UNNOTIFIED for given user.. 
+	 */
+	public List<ReportOrder> findUnnotified(Profile profile) {
+		IContextDao<ReportOrder> c = new ContextDao<ReportOrder>(em, ReportOrder.class);
+		CriteriaBuilder b = c.getBuilder();
+		CriteriaQuery<ReportOrder> cr = c.getCriteria();
+		Predicate p = b.conjunction();
+		Root<ReportOrder> r = c.getRoot();
+
+		p = b.and(p, b.equal(r.get(ReportOrder_.creator).get(Profile_.id), profile.getId()));
+		
+		List<ReportOrderStatus> statuses = Lists.newArrayList(ReportOrderStatus.UNNOTIFIED);
+		p = b.and(p, r.get(ReportOrder_.status).in(statuses));
+		
+	    cr.where(p);
+		
+	    return executeQuery(c);
+	}
+	
+	/**
+	 * ..find order by report..
+	 */
+	public ReportOrder find(Report report) {
+		IContextDao<ReportOrder> c = new ContextDao<ReportOrder>(em, ReportOrder.class);
+		CriteriaBuilder b = c.getBuilder();
+		CriteriaQuery<ReportOrder> cr = c.getCriteria();
+		Predicate p = b.conjunction();
+		Root<ReportOrder> r = c.getRoot();
+		
+		List<Report> reports = Lists.newArrayList(report);
+		p = b.and(p, r.get(ReportOrder_.reports).in(reports));
+	    cr.where(p);
+	    
+	    return executeQuerySingle(c);
+	}
+	
 	
 }

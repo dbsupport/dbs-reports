@@ -65,6 +65,12 @@ public class ReportsUnarchivedController {
 		return "redirect:/report/unarchived/list";
 	}
 	
+	@RequestMapping(value="/report/unarchived/order/{ids}", method = RequestMethod.GET)
+    public String order(Model model, @PathVariable("ids") Long[] ids, @ModelAttribute(ReportsUnarchivedForm.KEY) final ReportsUnarchivedForm form) {
+		form.reset(ids);
+		return "redirect:/report/unarchived/list";
+	}	
+	
 	@RequestMapping(value="/report/unarchived/list", method = RequestMethod.GET)
     public String unarchiveds(Model model, @ModelAttribute(ReportsUnarchivedForm.KEY) final ReportsUnarchivedForm form) {
 		List<Report> reports = reportService.find(form.getFilter());

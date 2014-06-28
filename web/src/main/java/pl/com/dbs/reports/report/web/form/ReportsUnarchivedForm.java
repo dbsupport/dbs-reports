@@ -34,10 +34,19 @@ public class ReportsUnarchivedForm {
 		filter = new ReportFilter().unarchived();
 	}
 	
-	public void reset() {
+	public ReportsUnarchivedForm reset() {
 		this.id = new ArrayList<Long>();
 		this.action = null;
+		this.filter.onlyFor(new Long[]{});
+		return this;
 	}
+	
+	public ReportsUnarchivedForm reset(Long[] ids) {
+		this.id = new ArrayList<Long>();
+		this.action = null;
+		this.filter.onlyFor(ids);
+		return this;
+	}	
 	
 	public boolean anyIDselected() {
 		return id!=null&&!id.isEmpty();
@@ -121,7 +130,7 @@ public class ReportsUnarchivedForm {
 	
 	public enum Status {
 		ALL("wszystkie", ReportStatus.OK, ReportStatus.FAILED),
-		FINE("poprawne", ReportStatus.OK),
+		OK("poprawne", ReportStatus.OK),
 		FAILED("błędne", ReportStatus.FAILED);
 
 		private String label;

@@ -51,8 +51,15 @@
 
     <!-- main container -->
     <div id="main-container">
-    <%@ include file="/WEB-INF/jsp/tiles/security/alerts.jsp" %>
     
+	    <div id="security-alerts-wrapper">
+		<div class="section">
+		<div class="row">
+		    <dbs:alerts/>
+		</div>
+		</div>
+		</div>  
+	    
     <tiles:insertAttribute name="content"/>
     </div>
 	<!-- scripts -->
@@ -60,6 +67,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/dbs/dbs-security.js"></script>
     <!-- script src="js/theme.js"></script-->    
+    <dbs:alerts clean="true"/>
 
 </body>
 </html>

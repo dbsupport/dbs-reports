@@ -3,7 +3,7 @@
 
 <tiles:insertDefinition name="tiles-tables" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-profile-profile<c:if test="${current}">-current</c:if></tiles:putAttribute>
-<tiles:putAttribute name="title" type="string">profil użytkownika</tiles:putAttribute>
+<tiles:putAttribute name="title" type="string">Profil użytkownika</tiles:putAttribute>
 <tiles:putAttribute name="sizer"></tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/user-profile.css" type="text/css" media="screen" />

@@ -4,7 +4,7 @@
 <tiles:insertDefinition name="tiles-wizard" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-report-execute-form</tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">Generowanie raportu</tiles:putAttribute>
-<tiles:putAttribute name="steps" type="string">Ustaw parametry raportu;Wygeneruj raport;Obejrzyj raport</tiles:putAttribute>
+<tiles:putAttribute name="steps" type="string">Ustaw parametry raportu;Wygeneruj raport</tiles:putAttribute>
 <tiles:putAttribute name="step" type="string">1</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/new-user.css" type="text/css" media="screen" />
@@ -31,25 +31,31 @@
                     	<form:form method="post" modelAttribute="reportGenerationForm" action="report/execute/form" class="dbs-form">
                     		<input type="hidden" name="page" value="1">
                             <div class="field-box">
-                            	<label>Definicja:</label>
+                            	<label>Definicja</label>
                             	<input class="form-control inline-input" type="text" readonly="readonly" value="${pattern.name} ${pattern.version}"/>
                             </div>
                             
                             <spring:bind path="extension">
-                    	 	<div class="field-box">
-                            	<label>Format:</label>
-	                            <div class="ui-select">
-		                            <form:select path="extension">
-		                            	<form:options items="${pattern.formats}" itemLabel="reportExtension" itemValue="reportExtension" />
-		                            </form:select>
-	                            </div>                            	
-                        	</div>
+								<div class="field-box<c:choose><c:when test="${status.error}"> error</c:when></c:choose>">
+								    <label>Format</label>
+
+								    <form:select path="extension" 
+								                cssClass="selectpicker" 
+								                data-width="400px"
+								                data-size="20"
+								                title="wybierz format">
+								        <form:options items="${pattern.formats}" itemLabel="reportExtension" itemValue="reportExtension" />
+								    </form:select>
+								
+								    <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
+								    
+								</div>                            
                         	</spring:bind>                        	
                         	
                     		<spring:bind path="name">
                     		<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
                             <div class="field-box ${classes}">
-                            	<label>Nazwa:</label>
+                            	<label>Nazwa</label>
                                 <form:input path="name" cssClass="form-control" placeholder="Nazwa"/>
                                 <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
                             </div>

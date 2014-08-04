@@ -48,7 +48,7 @@ public class FieldMultiSelect  extends AField<List<String>> implements IFieldInf
 	private List<String> value;
 	
 	@XmlElement(name="option", namespace = "http://www.dbs.com.pl/reports/1.0/form")
-	private LinkedList<FieldOption> options;
+	private List<FieldOption> options;
 	
 	@XmlAttribute(name="source")
 	private String source;
@@ -63,10 +63,11 @@ public class FieldMultiSelect  extends AField<List<String>> implements IFieldInf
 		if (this.validators==null) this.validators = new LinkedList<AFieldValidator>();
 		this.validators.add(new FieldValidatorDivisibles());
 		super.init(fields);
+		if (hasOptions()) for (FieldOption option : options) option.init();
 	}	
 
 	@Override
-	public LinkedList<FieldOption> getOptions() {
+	public List<FieldOption> getOptions() {
 		return options;
 	}
 	
@@ -88,6 +89,8 @@ public class FieldMultiSelect  extends AField<List<String>> implements IFieldInf
 			for (String value : this.value) {
 				sb.append(s).append(value);
 			}
+		} else {
+			sb.append(s).append("");
 		}
 		return sb.toString();
 	}

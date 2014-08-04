@@ -3,10 +3,13 @@
  */
 package pl.com.dbs.reports.report.domain.builders;
 
+import java.util.List;
+
+import pl.com.dbs.reports.api.report.ReportLog;
+
 
 /**
- * Abstract blocks builder for given type of transfromate.
- * Holds branch of blocks.
+ * Interface blocks builder for given type of transfromate.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
@@ -21,8 +24,13 @@ public interface ReportBlocksBuilder {
 	ReportBlocksBuilder addParameter(final String key, final String value);
 
 	/**
-	 * Results
+	 * Results: content
 	 */
-	byte[] getContent();	
+	byte[] getContent();
+
+	/**
+	 * Results: logs
+	 */
+	List<ReportLog> getLogs();
 
 }

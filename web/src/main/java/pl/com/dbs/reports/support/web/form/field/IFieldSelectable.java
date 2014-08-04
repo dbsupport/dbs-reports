@@ -3,7 +3,7 @@
  */
 package pl.com.dbs.reports.support.web.form.field;
 
-import java.util.LinkedList;
+import java.util.List;
 
 import pl.com.dbs.reports.support.web.form.option.FieldOption;
 
@@ -14,5 +14,5 @@ import pl.com.dbs.reports.support.web.form.option.FieldOption;
  * @coptyright (c) 2014
  */
 public interface IFieldSelectable {
-	LinkedList<FieldOption> getOptions();
+	List<FieldOption> getOptions();
 }

@@ -11,7 +11,6 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import pl.com.dbs.reports.report.domain.ReportBlockException;
 import pl.com.dbs.reports.report.domain.rules.ReportBlockReplaceRule;
 import pl.com.dbs.reports.report.domain.rules.ReportBlockRule;
 import pl.com.dbs.reports.report.domain.rules.ReportBlockSwitchRule;
@@ -94,7 +93,7 @@ public class ReportTextBlock {
 	/**
 	 * Requires to be inflated with some data?
 	 */
-	boolean isInflateable() {
+	public boolean isInflateable() {
 		return !parameters.isEmpty();
 	}
 
@@ -104,7 +103,7 @@ public class ReportTextBlock {
 	 * Only for inflateable blocks!
 	 * Can produce no data if content is empty.
 	 */
-	ReportTextBlock build(final Map<String, String> params, final StringBuilder sb) throws ReportBlockException {
+	public ReportTextBlock build(final Map<String, String> params, final StringBuilder sb) throws ReportBlockException {
 		if (params.isEmpty()&&isInflateable()) throw new IllegalStateException("Block ("+label+") requires input parameters but you try to build it without any!");
 		
 		if (content==null) return this;
@@ -117,7 +116,7 @@ public class ReportTextBlock {
 		return this;
 	}
 
-	String getLabel() {
+	public String getLabel() {
 		return label;
 	}
 	
@@ -125,11 +124,11 @@ public class ReportTextBlock {
 		return parent;
 	}
 
-	LinkedList<ReportTextBlock> getBlocks() {
+	public LinkedList<ReportTextBlock> getBlocks() {
 		return blocks;
 	}
 	
-	boolean hasContent() {
+	public boolean hasContent() {
 		return !StringUtils.isBlank(content);
 	}
 	

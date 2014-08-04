@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Download common controller.
+ * 
+ * http://stackoverflow.com/questions/6293893/how-to-force-pdf-files-to-open-in-browser
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2014
@@ -26,7 +28,8 @@ public class DownloadController {
 		response.setContentLength(content.length);
 		//response.setHeader("Content-Transfer-Encoding", "binary");
 		response.setHeader("Content-Disposition","attachment;filename="+filename);
-	 
+		response.setHeader("Content-Type", "application/pdf");
+		
 		ServletOutputStream out = null;
 		try {
 			out = response.getOutputStream();
@@ -39,4 +42,22 @@ public class DownloadController {
 		
 		return null;
     }
+    
+    public static String view(byte[] content, String filename, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream;charset=UTF-8");
+		response.setContentLength(content.length);
+		response.setHeader("Content-Disposition","inline;filename="+filename);
+	 
+		ServletOutputStream out = null;
+		try {
+			out = response.getOutputStream();
+			out.write(content);
+			out.flush();
+			out.close();
+		} finally {
+			out.close();
+		}
+		
+		return null;
+    }    
 }

@@ -9,14 +9,22 @@
 
     <c:if test="${disabled ne ''}">
         <div class="<tiles:getAsString name="contentclass"/>">
-           <input value="<c:out value="${field.valueAsLabel}"/>" type="text" class="<tiles:getAsString name="inputclass"/>" readonly="readonly"/>
+           <input value="<c:out value="${field.valueAsLabel}"/>" 
+                type="text" 
+                class="<tiles:getAsString name="inputclass"/>"
+                <%@ include file="/WEB-INF/jsp/tiles/default/field/field-tooltip.jsp" %> 
+                readonly="readonly"/>
         </div>
     </c:if>
 
     <c:if test="${disabled eq ''}">
-    <select name="${fieldname}.value" class="<tiles:getAsString name="inputclass"/>" data-width="400px" data-size="20" placeholder="<c:out value="${field.tooltip}" escapeXml="false"/>">
+    <select name="${fieldname}.value" 
+            class="<tiles:getAsString name="inputclass"/>" 
+            data-width="400px" 
+            data-size="20" 
+            <%@ include file="/WEB-INF/jsp/tiles/default/field/field-tooltip.jsp" %>>
         <c:forEach var="option" items="${field.options}">
-        <option value="${option.value}" <c:if test="${field.value eq option.value}">selected="selected"</c:if>>
+        <option value="${option.value}" <c:if test="${!empty field.value and field.value eq option.value}">selected="selected"</c:if>>
         <c:choose>
         <c:when test="${!empty option.label}">${option.label}</c:when>
         <c:otherwise>${option.value}</c:otherwise>
@@ -30,7 +38,7 @@
     
 </div>
 
-<%@ include file="/WEB-INF/jsp/tiles/default/field-validators.jsp" %>
+<%@ include file="/WEB-INF/jsp/tiles/default/field/field-validators.jsp" %>
 
 </spring:bind>
 

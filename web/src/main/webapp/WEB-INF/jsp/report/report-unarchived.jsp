@@ -3,19 +3,52 @@
 
 <tiles:insertDefinition name="tiles-browser-tables" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-report-unarchived</tiles:putAttribute>
-<tiles:putAttribute name="title" type="string">Twoje</span> niezarchiwizowane raporty (${reportsunarchivedform.filter.pager.dataSize}/${max})</tiles:putAttribute>
+<tiles:putAttribute name="title" type="string">Twoje raporty (${reportsunarchivedform.filter.pager.dataSize}/${max})</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/form-wizard.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/dbs/dbs-activedirectory-list.css" type="text/css" media="screen" />
-
+<link rel="stylesheet" href="css/dbs/dbs-report-logs.css" type="text/css" media="screen" />
 </tiles:putAttribute>
+
+
 <tiles:putAttribute name="js" type="string">
 <script src="js/jquery.dataTables.js"></script>
-<script src="js/dbs/dbs-tables-checker.js"></script>
+<script src="js/jquery.multiDownload.js"></script>
+<script src="js/dbs/dbs-report-logs.js"></script>
+
+<script>
+$(document).on("notification-brandnew", function(e) {
+    setTimeout(function () { $('#reportsunarchivedform').submit(); }, 2000);
+});
+$(document).ready(function() {
+    $("input[type=checkbox].checker-ctrl").click(function() {
+        var checked = $(this).is(':checked');
+        $("input:checkbox[name='id']").each(function() {
+            $(this).prop('checked', checked);
+        });
+    });
+
+    $("input[type=checkbox].report").click(function() {
+        var checked = $(this).is(':checked');
+        //alert($(this).val());
+        if (checked) {
+        	$("a#report"+$(this).val()).addClass("ready2download");
+        } else {
+        	$("a#report"+$(this).val()).removeClass("ready2download");
+        }
+    });
+
+	$('#downloadall').click(function (event) {
+	    event.preventDefault();
+	    $('.ready2download').multiDownload({delay: 500});
+	});
+});
+
+</script>
 </tiles:putAttribute>
 
 <tiles:putAttribute name="form" type="string">
-                <form:form method="post" modelAttribute="reportsunarchivedform" action="report/unarchived/list" class="dbs-form">
+                <form:form method="post" modelAttribute="reportsunarchivedform" id="reportsunarchivedform" action="report/unarchived/list" class="dbs-form">
                     <input type="hidden" name="action" value=""/>
                     
                 <div class="row filter-block">
@@ -48,16 +81,7 @@
                 </form:form>
 </tiles:putAttribute>
 
-<tiles:putAttribute name="custom-alerts" type="string">
-<spring:hasBindErrors name="reportsunarchivedform">
-    <c:forEach items="${errors.globalErrors}" var="error">
-                <div class="alert alert-danger">
-                    <i class="icon-remove-sign"></i>
-                    <spring:message code="${error.code}" text="${error.defaultMessage}" htmlEscape="false"/>
-                </div>    
-    </c:forEach>
-</spring:hasBindErrors>    
-</tiles:putAttribute>
+
 
 <tiles:putAttribute name="content" type="string">
 <div class="form-wrapper">
@@ -101,10 +125,6 @@
                                 <c:set var="sorter" value="${reportsunarchivedform.filter.sorter}" scope="request"/>
                                 </tiles:insertDefinition>
                                 
-                                <th tabindex="0" class="">
-                                    <a class="sorter-ctrl">&nbsp;</a>
-                                </th>                                
-                                
                             </tr>
                         </thead>
                         <tfoot>
@@ -144,9 +164,6 @@
                                 <c:set var="sorter" value="${reportsunarchivedform.filter.sorter}" scope="request"/>
                                 </tiles:insertDefinition>  
                                 
-                                <th tabindex="0" class="">
-                                    <a class="sorter-ctrl">&nbsp;</a>
-                                </th> 
                             </tr>
                         </tfoot> 
                                                 
@@ -154,11 +171,11 @@
                         <c:forEach items="${reports}" varStatus="rstatus" var="report">
                         <c:set var="trclass" scope="page"><c:choose><c:when test="${rstatus.index mod 2 eq 0}">odd</c:when><c:otherwise>even</c:otherwise></c:choose></c:set>
                         <tr class="${trclass}">
-                                <td>&nbsp;&nbsp;&nbsp;<form:checkbox path="id" value="${report.id}"/></td>
+                                <td>&nbsp;&nbsp;&nbsp;<form:checkbox path="id" value="${report.id}" class="report"/></td>
                                 <td>
                                 <c:choose>
-                                <c:when test="${report.status == 'OK'}">
-                                    <a href="report/unarchived/${report.id}/download" title="Podgląd">${report.name}</a>
+                                <c:when test="${report.downloadable}">
+                                    <a href="report/unarchived/${report.id}/download" title="Podgląd" id="report${report.id}">${report.name}</a>
                                 </c:when>
                                 <c:otherwise><c:out value="${report.name}"/></c:otherwise>
                                 </c:choose>
@@ -166,74 +183,41 @@
                                 
                                 <td>
                                 <c:choose>
-                                <c:when test="${report.phase.status == 'READY'}">
-                                <span class="label label-info">&nbsp;&nbsp;&nbsp;&nbsp;gotowy&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <c:when test="${report.phase.ordered}">
+                                    <div class="col-md-4">
+                                        <span class="label label-warning report-phase-label">zlecony</span>
+                                    </div>                                
                                 </c:when>
-                                <c:otherwise><span class="label label-success">niezarchiwizowany</span></c:otherwise>
+                                <c:when test="${report.phase.status == 'READY'}">
+                                    <div class="col-md-4 log">
+                                    <a class="pop-dialog-log-trigger"><span class="label label-info report-phase-label">gotowy</span></a>
+                                    <%@ include file="/WEB-INF/jsp/report/report-logs.jsp" %> 
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="col-md-4 log">
+                                    <a class="pop-dialog-log-trigger"><span class="label label-success report-phase-label">niezarchiwizowany</span></a>
+                                    <%@ include file="/WEB-INF/jsp/report/report-logs.jsp" %> 
+                                    </div>                                
+                                </c:otherwise>
                                 </c:choose>
                                 </td>
                                 
-                                
                                 <td>
                                 <c:choose>
-                                <c:when test="${report.status == 'FAILED'}">
-                                
-                                
-                                <span class="label label-danger">błędny</span>
-                                <!-- a href="#" class="trigger">błędny</a>
-                                
-                                
-                                
-                <div class="pop-dialog">
-                    <div class="pointer right">
-                        <div class="arrow"></div>
-                        <div class="arrow_border"></div>
-                    </div>
-                    <div class="body">
-                        <a href="#" class="close-icon"><i class="icon-remove-sign"></i></a>
-                        <div class="messages">
-                            <a href="#" class="item">
-                                <img src="img/contact-img.png" class="display">
-                                <div class="name">Alejandra Galván</div>
-                                <div class="msg">
-                                    There are many variations of available, but the majority have suffered alterations.
-                                </div>
-                                <span class="time"><i class="icon-time"></i> 13 min.</span>
-                            </a>
-                            <div class="footer">
-                                <a href="#" class="logout">View all messages</a>
-                            </div>
-                        </div>
-                    </div>
-                </div-->                                
-                                
-                                
-                                </c:when>
-                                <c:otherwise><span class="label label-success">poprawny</c:otherwise>
+                                <c:when test="${report.status == 'FAILED'}"><span class="label label-danger report-phase-label">błędny</span></c:when>
+                                <c:otherwise><span class="label label-success report-phase-label">poprawny</span></c:otherwise>
                                 </c:choose>
                                 </td>
                                 
                                 <td><fmt:formatDate value="${report.generationDate}" type="both" pattern="dd-MM-yyyy HH:mm:ss" /></td>
-                                <td>${report.pattern.name} ${report.pattern.version}</td>
-                                
                                 <td>
-                                <c:if test="${report.status eq 'OK' and (report.phase.status eq 'READY')}">
-				                    <a class="btn-flat primary btn-next" href="report/unarchived/confirm/${report.id}">
-				                    <i class="icon-ok"></i>
-				                    Zaakceptuj&nbsp;&nbsp;</a><span>&nbsp;</span>
-				                </c:if>
-				                
-                                <c:if test="${report.status eq 'OK' and (report.phase.status eq 'READY' or report.phase.status eq 'TRANSIENT')}">
-                                    <a class="btn-flat success btn-finish" href="report/unarchived/archive/${report.id}">
-                                    <i class="icon-folder-open"></i>
-                                    Archiwizuj&nbsp;&nbsp;</a><span>&nbsp;</span>
-                                </c:if>
-                    
-				                
-				                    <a class="btn-flat inverse" href="report/unarchived/delete/${report.id}">
-				                    <i class="icon-remove"></i>
-				                    Usuń&nbsp;&nbsp;</a>                                
+		                            <c:choose>
+		                            <c:when test="${report.pattern.active eq true}"><a href="report/pattern/details/${report.pattern.id}">${report.pattern.name} ${report.pattern.version}</a></c:when>
+		                            <c:otherwise>${report.pattern.name} ${report.pattern.version}</c:otherwise>
+		                            </c:choose>
                                 </td>
+                                
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -261,6 +245,10 @@
                     <button type="submit" class="btn-glow inverse" data-last="Finish" onclick="this.form.action.value='REMOVE'">
                     <i class="icon-remove"></i>
                     Usuń&nbsp;&nbsp;</button><span>&nbsp;</span>
+                    
+                    <button type="button" class="btn-glow primary btn-next" data-last="Finish" id="downloadall">
+                    <i class="icon-download"></i>
+                    Pobierz&nbsp;&nbsp;</button><span>&nbsp;</span>                    
                     </div>
                    
     </form:form>

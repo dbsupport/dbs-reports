@@ -10,13 +10,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,7 +50,6 @@ import pl.com.dbs.reports.support.web.file.FileMeta;
  */
 @Controller
 @SessionAttributes({ProfileNewForm.KEY})
-@Scope("request")
 public class ProfileNewController {
 	private static final Logger logger = Logger.getLogger(ProfileNewController.class);
 	@Autowired private Alerts alerts;
@@ -119,48 +118,48 @@ public class ProfileNewController {
 	
 	
 	@RequestMapping(value= "/profile/new/personal", method = RequestMethod.POST)
-    public String personal(@Valid @ModelAttribute(ProfileNewForm.KEY) final ProfileNewForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+    public String personal(@Valid @ModelAttribute(ProfileNewForm.KEY) final ProfileNewForm form, BindingResult results) {
 		if (!results.hasErrors()) {
 			return "redirect:/profile/new/access";
 		}
-		return "profile/profile-new-personal";
+		return "redirect:/profile/new/personal";
 	}
 	
 	@RequestMapping(value= "/profile/new/access", method = RequestMethod.POST)
-    public String access(@Valid @ModelAttribute(ProfileNewForm.KEY) final ProfileNewForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+    public String access(@Valid @ModelAttribute(ProfileNewForm.KEY) final ProfileNewForm form, BindingResult results, HttpServletRequest request) {
 		if (!results.hasErrors()) {
 			return "redirect:/profile/new/summary";
 		}
-		return "profile/profile-new-access";
+		return "redirect:/profile/new/access";
 	}
 	
 	@RequestMapping(value= "/profile/new/summary", method = RequestMethod.POST)
-    public String summary(@Valid @ModelAttribute(ProfileNewForm.KEY) final ProfileNewForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+    public String summary(@Valid @ModelAttribute(ProfileNewForm.KEY) final ProfileNewForm form, BindingResult results, HttpSession session) {
 		if (!results.hasErrors()) {
 			try {
 				profileService.add(form);
 			} catch (Exception e) {
-				exception(e, request, ra);
+				exception(e, session);
 				return "redirect:/profile/new/summary";
 			}
 			
-			alerts.addSuccess(ra, "profile.new.added", form.getLogin());
+			alerts.addSuccess(session, "profile.new.added", form.getLogin());
 			return "redirect:/profile/list";
 		}
 		return "redirect:/profile/new/summary";
 	}
 	
-	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {
+	private void exception(Exception e, HttpSession session) {
 		if (e instanceof ProfileException) {
 			String msg = e.getMessage();
 			if (((ProfileException) e).getCode()!=null) {
 				if (!((ProfileException) e).getParams().isEmpty()) 
 					msg = messageSource.getMessage(((ProfileException) e).getCode(), ((ProfileException) e).getParams().toArray(), null);
 				else msg = messageSource.getMessage(((ProfileException) e).getCode(), null, null);
-				alerts.addError(ra, msg);
+				alerts.addError(session, msg);
 			}
 		} else {
-			alerts.addError(ra, "profile.add.unknown.error", e.getMessage());
+			alerts.addError(session, "profile.add.unknown.error", e.getMessage());
 			logger.error("profile.add.unknown.error:"+e.getMessage());
 		}
 	}	

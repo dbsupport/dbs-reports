@@ -4,6 +4,7 @@
 package pl.com.dbs.reports.support.web.form.field;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -13,11 +14,11 @@ import javax.xml.bind.annotation.XmlElement;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorValue;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-
 import pl.com.dbs.reports.support.utils.separator.Separator;
 import pl.com.dbs.reports.support.web.form.option.FieldOption;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 
 /**
@@ -33,7 +34,7 @@ public class FieldSelect extends AField<String> implements IFieldInflatable, IFi
 	@XmlAttribute(name="value")
 	protected String value;		
 	@XmlElement(name="option", namespace = "http://www.dbs.com.pl/reports/1.0/form")
-	private LinkedList<FieldOption> options;
+	private List<FieldOption> options;
 	@XmlAttribute(name="source")
 	private String source;	
 	
@@ -48,7 +49,7 @@ public class FieldSelect extends AField<String> implements IFieldInflatable, IFi
 	
 	@Override
 	public String getValueAsString() {
-		return value;
+		return hasValue()?value:"";
 	}
 	
 	public String getValueAsLabel() {
@@ -68,7 +69,7 @@ public class FieldSelect extends AField<String> implements IFieldInflatable, IFi
 	}		
 	
 	@Override
-	public LinkedList<FieldOption> getOptions() {
+	public List<FieldOption> getOptions() {
 		return options;
 	}
 	
@@ -88,6 +89,12 @@ public class FieldSelect extends AField<String> implements IFieldInflatable, IFi
 	@Override
 	public String getTile() {
 		return "tiles-field-select";
+	}
+	
+	@Override
+	public void init(LinkedList<AField<?>> fields) {
+		super.init(fields);
+		if (hasOptions()) for (FieldOption option : options) option.init();
 	}
 	
 	@Override

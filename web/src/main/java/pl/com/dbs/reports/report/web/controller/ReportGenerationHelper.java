@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
@@ -101,12 +101,12 @@ public class ReportGenerationHelper {
 	/**
 	 * 
 	 */
-	public void exception(Throwable e, HttpServletRequest request) {
+	public void exception(Throwable e, HttpSession session) {
 		if (e instanceof PatternFactoryNotFoundException) {
-			alerts.addError(request, "report.pattern.import.factory.error", ((PatternFactoryNotFoundException)e).getFactory());
+			alerts.addError(session, "report.pattern.import.factory.error", ((PatternFactoryNotFoundException)e).getFactory());
 			logger.error("report.pattern.import.factory.error:"+e.getMessage());
 		} else if (e instanceof IOException) {
-			alerts.addError(request, "report.pattern.import.file.ioexception", e.getMessage());
+			alerts.addError(session, "report.pattern.import.file.ioexception", e.getMessage());
 			logger.error("report.pattern.import.file.ioexception"+e.getMessage());
 		} else if (e instanceof PatternValidationException) {
 			String msg = e.getMessage();
@@ -115,14 +115,14 @@ public class ReportGenerationHelper {
 					msg = messageSource.getMessage(((PatternValidationException) e).getCode(), ((PatternValidationException) e).getParams().toArray(), null);
 				else msg = messageSource.getMessage(((PatternValidationException) e).getCode(), null, null);
 				
-				alerts.addError(request, msg);
+				alerts.addError(session, msg);
 				logger.error(msg);
 			}
 		} else if (e instanceof JAXBException) {
-			alerts.addError(request, "report.execute.jaxbexception", ((JAXBException)e).getLinkedException().getMessage());
+			alerts.addError(session, "report.execute.jaxbexception", ((JAXBException)e).getLinkedException().getMessage());
 			logger.error("report.execute.jaxbexception:"+((JAXBException)e).getLinkedException().getMessage());
 		} else {
-			alerts.addError(request, "report.pattern.import.file.unknown", e.getMessage());
+			alerts.addError(session, "report.pattern.import.file.unknown", e.getMessage());
 			logger.error("report.pattern.import.file.unknown:"+e.getMessage());
 		}
 	}	

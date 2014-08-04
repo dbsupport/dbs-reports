@@ -45,6 +45,10 @@ public class ReportPhase {
 		return this;
 	}
 	
+	public boolean isOrdered() {
+		return ReportPhaseStatus.INIT.equals(this.status)||ReportPhaseStatus.START.equals(this.status);
+	}
+	
 	/**
 	 * is report in READY/TRANSIENT/PERSIST phase?
 	 */

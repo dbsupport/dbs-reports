@@ -30,8 +30,8 @@ public class ReportsUnarchivedForm {
 	
 	private ReportFilter filter;
 	
-	public ReportsUnarchivedForm() { 
-		filter = new ReportFilter().unarchived();
+	public ReportsUnarchivedForm() {
+		filter = new ReportFilter().inPhases(phase.getPhases());
 	}
 	
 	public ReportsUnarchivedForm reset() {
@@ -44,7 +44,7 @@ public class ReportsUnarchivedForm {
 	public ReportsUnarchivedForm reset(Long[] ids) {
 		this.id = new ArrayList<Long>();
 		this.action = null;
-		this.filter.onlyFor(ids);
+		filter = new ReportFilter().inPhases(phase.getPhases()).onlyFor(ids);
 		return this;
 	}	
 	
@@ -107,7 +107,7 @@ public class ReportsUnarchivedForm {
 	
 	public enum Phase {
 		ALL("wszystkie", ReportPhaseStatus.INIT, ReportPhaseStatus.START, ReportPhaseStatus.READY, ReportPhaseStatus.TRANSIENT),
-		//INITIALIZED("oczekujące", ReportPhase.INIT, ReportPhase.START),
+		INITIALIZED("zlecone", ReportPhaseStatus.INIT, ReportPhaseStatus.START),
 		READY("gotowe", ReportPhaseStatus.READY),
 		TRANSIENT("niezarchowiz.", ReportPhaseStatus.TRANSIENT);
 

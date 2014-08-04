@@ -4,11 +4,11 @@
 package pl.com.dbs.reports.report.pattern.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pl.com.dbs.reports.report.pattern.service.PatternService;
 import pl.com.dbs.reports.report.web.controller.ReportGenerationException;
@@ -40,7 +39,6 @@ import pl.com.dbs.reports.support.web.alerts.Alerts;
  */
 @Controller
 @SessionAttributes({ReportGenerationForm.KEY})
-@Scope("request")
 public class PatternController {
 	@Autowired private Alerts alerts;
 	@Autowired private PatternService patternService;
@@ -74,13 +72,11 @@ public class PatternController {
 	
 	@RequestMapping(value= "/report/pattern/details", method = RequestMethod.POST)
     public String form(Model model, @Valid @ModelAttribute(ReportGenerationForm.KEY) final ReportGenerationForm form, 
-    		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
-		if (results.hasErrors()) {
-			model.addAttribute("pattern", patternService.find(form.getPattern()));
-			return "report/pattern/pattern-details";
+    		BindingResult results, HttpSession session) {
+		if (!results.hasErrors()) {
+			alerts.addSuccess(session, "report.pattern.import.form.valid");
 		}
 		
-		alerts.addSuccess(ra, "report.pattern.import.form.valid");
 		return "redirect:/report/pattern/details";
 	}
 	
@@ -89,8 +85,8 @@ public class PatternController {
 	 * overwrite..
 	 */
 	@ExceptionHandler(ReportGenerationException.class)
-	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {
-		reportGenerationHelper.exception(e, request);
+	private void exception(Exception e, HttpSession session) {
+		reportGenerationHelper.exception(e, session);
 	}		
 	
 	@InitBinder

@@ -17,7 +17,15 @@
 
     <c:if test="${disabled eq ''}">
         <label><c:out value="${field.label}" escapeXml="false"/></label>
-	    <select name="${fieldname}.value" id="${field.name}" multiple class="<tiles:getAsString name="inputclass"/>" data-width="400px" data-size="20" data-selected-text-format="count>3" title="<c:out value="${field.tooltip}" escapeXml="false"/>" <tiles:getAsString name="disabled"/>>
+	    <select name="${fieldname}.value" 
+	           id="${field.name}" 
+	           multiple 
+	           class="<tiles:getAsString name="inputclass"/>" 
+	           data-width="400px" 
+	           data-size="20" 
+	           data-selected-text-format="count>3" 
+	           <%@ include file="/WEB-INF/jsp/tiles/default/field/field-tooltip.jsp" %> 
+	           <tiles:getAsString name="disabled"/>>
 	        <c:forEach var="option" items="${field.options}" varStatus="rstatus">
 	        <option value="${option.value}" <c:if test="${option.checked}">selected="selected"</c:if>>
 	        <c:choose>
@@ -38,7 +46,7 @@
 	
 </div>
 
-<%@ include file="/WEB-INF/jsp/tiles/default/field-validators.jsp" %>
+<%@ include file="/WEB-INF/jsp/tiles/default/field/field-validators.jsp" %>
 
 </spring:bind>
 

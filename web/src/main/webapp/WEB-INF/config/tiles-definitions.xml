@@ -9,7 +9,6 @@
         <put-attribute name="title" type="string" value=""/>
         <put-attribute name="css" type="string" value=""/>
         <put-attribute name="js" type="string" value=""/>
-        <put-attribute name="custom-alerts" type="string" value=""/>
         <put-attribute name="content" type="string" value=""/>
     </definition>
 
@@ -84,19 +83,20 @@
         <put-attribute name="attributes" type="string" value=""/>
         <put-attribute name="disabled" type="string" value=""/>
     	<put-attribute name="validators" type="string" value="false"/>
+    	<put-attribute name="tooltips" type="string" value="true"/>
     </definition>    
     
-    <definition name="tiles-field-text" template="/WEB-INF/jsp/tiles/default/field-text.jsp" extends="tiles-field">
+    <definition name="tiles-field-text" template="/WEB-INF/jsp/tiles/default/field/field-text.jsp" extends="tiles-field">
     </definition>
     
-    <definition name="tiles-field-date" template="/WEB-INF/jsp/tiles/default/field-date.jsp" extends="tiles-field">
+    <definition name="tiles-field-date" template="/WEB-INF/jsp/tiles/default/field/field-date.jsp" extends="tiles-field">
     </definition>
     
-    <definition name="tiles-field-select" template="/WEB-INF/jsp/tiles/default/field-select.jsp" extends="tiles-field">
+    <definition name="tiles-field-select" template="/WEB-INF/jsp/tiles/default/field/field-select.jsp" extends="tiles-field">
         <put-attribute name="inputclass" type="string" value="selectpicker"/>    
     </definition>    
     
-    <definition name="tiles-field-multiselect" template="/WEB-INF/jsp/tiles/default/field-multiselect.jsp" extends="tiles-field">
+    <definition name="tiles-field-multiselect" template="/WEB-INF/jsp/tiles/default/field/field-multiselect.jsp" extends="tiles-field">
         <put-attribute name="inputclass" type="string" value="selectpicker"/>    
     </definition>        
     

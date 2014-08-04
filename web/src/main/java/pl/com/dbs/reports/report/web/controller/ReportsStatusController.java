@@ -3,6 +3,7 @@
  */
 package pl.com.dbs.reports.report.web.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -120,7 +121,7 @@ public class ReportsStatusController {
 	 */
 	@JsonIgnoreProperties({"NAME_LENGTH"})
 	public class ReportsNotificationOrder {
-		private static final int NAME_LENGTH = 30;
+		private static final int NAME_LENGTH = 35;
 		private long id;
 		private String name;
 		private String time;
@@ -130,9 +131,9 @@ public class ReportsStatusController {
 			this.id = order.getId();
 			this.name = order.getName();
 			this.name = this.name.length()>NAME_LENGTH?(this.name.substring(0, NAME_LENGTH-2)+".."):this.name;
-			DateTime start = new DateTime(order.getDate());
-			DateTime now = new DateTime();
-			Period period = new Period(start, now);
+			DateTime start = new DateTime(order.getStart());
+			DateTime end = new DateTime(order.getEnd()!=null?order.getEnd():new Date());
+			Period period = new Period(start, end);
 			this.time = FORMAT.print(period);
 			this.reports = Lists.newArrayList(
 					Iterables.transform(order.getReports(), new Function<Report, Long>() {

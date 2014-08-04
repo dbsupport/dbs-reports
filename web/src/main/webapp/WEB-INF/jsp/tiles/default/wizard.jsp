@@ -63,7 +63,16 @@
             </a>
         </div>
         
-        <%@ include file="/WEB-INF/jsp/tiles/default/alerts.jsp" %>
+        <div id="alerts-wrapper">
+        <div class="section">
+        <div class="row">
+        <div class="col-md-7">
+           <dbs:alerts/>
+        </div>
+        </div>
+        </div>
+        </div>
+
 	 	
 		<div id="pad-wrapper">
             <div class="row header">
@@ -110,5 +119,7 @@
     </div>
     
     <%@ include file="/WEB-INF/jsp/tiles/default/js.jsp" %>
+    
+    <dbs:alerts clean="true"/>
 </body>
 </html>

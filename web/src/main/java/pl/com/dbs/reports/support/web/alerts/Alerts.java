@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,19 +31,19 @@ public class Alerts {
 	/**
 	 * Success messages - green background
 	 */
-	private final static String SUCCESSES_KEY = "successes";
+	final static String SUCCESSES_KEY = "successes";
 	/**
 	 * Error messages - red background
 	 */
-	private final static String ERRORS_KEY = "errors";
+	final static String ERRORS_KEY = "errors";
 	/**
 	 * Warning messages - yellow background
 	 */
-	private final static String WARNINGS_KEY = "warnings";
+	final static String WARNINGS_KEY = "warnings";
 	/**
 	 * Info messages - blue background
 	 */
-	private final static String INFOS_KEY = "infos";
+	final static String INFOS_KEY = "infos";
 	
 	@Autowired private MessageSource messageSource;
 	
@@ -51,91 +52,137 @@ public class Alerts {
 	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
 	 * w liscie w Redirect Attribute pod kluczem SUCCESSES_KEY
 	 */
-	public void addSuccess(RedirectAttributes ra, String code, String... args) {
-		addAlert(ra, SUCCESSES_KEY, code, args);
-	}
+//	public void addSuccess(RedirectAttributes ra, String code, String... args) {
+//		addAlert(ra, SUCCESSES_KEY, code, args);
+//	}
+//	
+//	/**
+//	 * Umiesc komunikat spod podanego klucza 
+//	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
+//	 * w liscie w Redirect Attribute pod kluczem SUCCESSES_KEY
+//	 */	
+//	public void addSuccess(HttpServletRequest request, String code, String... args) {
+//		addAlert(request, SUCCESSES_KEY, code, args);
+//	}
 	
 	/**
 	 * Umiesc komunikat spod podanego klucza 
 	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
-	 * w liscie w Redirect Attribute pod kluczem SUCCESSES_KEY
+	 * w liscie w HttpSession pod kluczem SUCCESSES_KEY
 	 */	
-	public void addSuccess(HttpServletRequest request, String code, String... args) {
-		addAlert(request, SUCCESSES_KEY, code, args);
-	}
+	public void addSuccess(HttpSession session, String code, String... args) {
+		addAlert(session, SUCCESSES_KEY, code, args);
+	}	
+	
+//	/**
+//	 * Umiesc komunikat spod podanego klucza 
+//	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
+//	 * w liscie w Redirect Attribute pod kluczem ERRORS_KEY.
+//	 */
+//	public void addError(RedirectAttributes ra, String code, String... args) {
+//		addAlert(ra, ERRORS_KEY, code, args);
+//	}
+//
+//	/**
+//	 * Umiesc komunikat spod podanego klucza 
+//	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
+//	 * w liscie w Redirect Attribute pod kluczem ERRORS_KEY.
+//	 */
+//	public void addError(HttpServletRequest request, String code, String... args) {
+//		addAlert(request, ERRORS_KEY, code, args);
+//	}
 	
 	/**
 	 * Umiesc komunikat spod podanego klucza 
 	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
-	 * w liscie w Redirect Attribute pod kluczem ERRORS_KEY.
+	 * w liscie w HttpSession pod kluczem ERRORS_KEY.
 	 */
-	public void addError(RedirectAttributes ra, String code, String... args) {
-		addAlert(ra, ERRORS_KEY, code, args);
-	}
-
-	/**
-	 * Umiesc komunikat spod podanego klucza 
-	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
-	 * w liscie w Redirect Attribute pod kluczem ERRORS_KEY.
-	 */
-	public void addError(HttpServletRequest request, String code, String... args) {
-		addAlert(request, ERRORS_KEY, code, args);
-	}
+	public void addError(HttpSession session, String code, String... args) {
+		addAlert(session, ERRORS_KEY, code, args);
+	}	
 	
 	/**
 	 * Umiesc komunikat spod podanego klucza 
 	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
 	 * w liscie w Redirect Attribute pod kluczem WARNINGS_KEY.
 	 */
-	public void addWarning(RedirectAttributes ra, String code, String... args) {
-		addAlert(ra, WARNINGS_KEY, code, args);
-	}
+//	public void addWarning(RedirectAttributes ra, String code, String... args) {
+//		addAlert(ra, WARNINGS_KEY, code, args);
+//	}
+//	
+//	/**
+//	 * Umiesc komunikat spod podanego klucza 
+//	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
+//	 * w liscie w Redirect Attribute pod kluczem WARNINGS_KEY.
+//	 */
+//	public void addWarning(HttpServletRequest request, String code, String... args) {
+//		addAlert(request, WARNINGS_KEY, code, args);
+//	}
 	
 	/**
 	 * Umiesc komunikat spod podanego klucza 
 	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
-	 * w liscie w Redirect Attribute pod kluczem WARNINGS_KEY.
-	 */
-	public void addWarning(HttpServletRequest request, String code, String... args) {
-		addAlert(request, WARNINGS_KEY, code, args);
+	 * w liscie w HttpSession pod kluczem WARNINGS_KEY.
+	 */	
+	public void addWarning(HttpSession session, String code, String... args) {
+		addAlert(session, WARNINGS_KEY, code, args);
 	}	
+	
 	
 	/**
 	 * Umiesc komunikat spod podanego klucza 
 	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
 	 * w liscie w Redirect Attribute pod kluczem INFOS_KEY.
 	 */
-	public void addInfo(RedirectAttributes ra, String code, String... args) {
-		addAlert(ra, INFOS_KEY, code, args);
-	}	
+//	public void addInfo(RedirectAttributes ra, String code, String... args) {
+//		addAlert(ra, INFOS_KEY, code, args);
+//	}	
+//	
+//	/**
+//	 * Umiesc komunikat spod podanego klucza 
+//	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
+//	 * w liscie w Redirect Attribute pod kluczem INFOS_KEY.
+//	 */
+//	public void addInfo(HttpServletRequest request, String code, String... args) {
+//		addAlert(request, INFOS_KEY, code, args);
+//	}	
 	
 	/**
 	 * Umiesc komunikat spod podanego klucza 
 	 * (lub jesli nie ma takiego klucza to bezposrednio te wartosc)
-	 * w liscie w Redirect Attribute pod kluczem INFOS_KEY.
+	 * w liscie w HttpSession pod kluczem INFOS_KEY.
 	 */
-	public void addInfo(HttpServletRequest request, String code, String... args) {
-		addAlert(request, INFOS_KEY, code, args);
+	public void addInfo(HttpSession session, String code, String... args) {
+		addAlert(session, INFOS_KEY, code, args);
 	}		
 	
-	/**
-	 * Adds messages into collectio.
-	 * Only if given msg/code is no empty.
-	 */
-	private void addAlert(RedirectAttributes ra, String key, String code, String... args) {
-		String msg = messageSource.getMessage(code, args, code, null);
-		msg = StringUtils.isBlank(msg)?code:msg;
-		if (!StringUtils.isBlank(msg)) {
-			List<String> alerts = retreiveCollection(ra, key);
-			alerts.add(msg);
-		}
-	}
+//	/**
+//	 * Adds messages into collectio.
+//	 * Only if given msg/code is no empty.
+//	 */
+//	private void addAlert(RedirectAttributes ra, String key, String code, String... args) {
+//		String msg = messageSource.getMessage(code, args, code, null);
+//		msg = StringUtils.isBlank(msg)?code:msg;
+//		if (!StringUtils.isBlank(msg)) {
+//			List<String> alerts = retreiveCollection(ra, key);
+//			alerts.add(msg);
+//		}
+//	}
+//	
+//	private void addAlert(HttpServletRequest request, String key, String code, String... args) {
+//		String msg = messageSource.getMessage(code, args, code, null);
+//		msg = StringUtils.isBlank(msg)?code:msg;
+//		if (!StringUtils.isBlank(msg)) {
+//			List<String> alerts = retreiveCollection(request, key);
+//			alerts.add(msg);
+//		}
+//	}
 	
-	private void addAlert(HttpServletRequest request, String key, String code, String... args) {
+	private void addAlert(HttpSession session, String key, String code, String... args) {
 		String msg = messageSource.getMessage(code, args, code, null);
 		msg = StringUtils.isBlank(msg)?code:msg;
 		if (!StringUtils.isBlank(msg)) {
-			List<String> alerts = retreiveCollection(request, key);
+			List<String> alerts = retreiveCollection(session, key);
 			alerts.add(msg);
 		}
 	}	
@@ -145,7 +192,7 @@ public class Alerts {
 	 * If not found returns empty which is already in RedirectAttributes.
 	 */
 	@SuppressWarnings("unchecked")
-	private List<String> retreiveCollection(RedirectAttributes ra, String key) {
+	static List<String> retreiveCollection(RedirectAttributes ra, String key) {
 		Map<String, ?> attributes = ra.getFlashAttributes();
 		if (attributes != null) {
 			for (Map.Entry<String, ?> attr : attributes.entrySet()) {
@@ -161,20 +208,17 @@ public class Alerts {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<String> retreiveCollection(HttpServletRequest request, String key) {
+	static List<String> retreiveCollection(ServletRequest request, String key) {
 		List<String> alerts = request.getAttribute(key)==null?new ArrayList<String>():(List<String>)request.getAttribute(key);
 		request.setAttribute(key, alerts);
-//		Map<String, ?> map = RequestContextUtils.getInputFlashMap(request);
-//		if (map!=null) {
-//			if (map.get(key)==null) map.put(key, new ArrayList<String>());
-//			alerts = (List<String>)map.get(key);
-//		}
-//		FlashMap outFlash = RequestContextUtils.getOutputFlashMap(request);
-//		if (outFlash!=null) {
-//			if (outFlash.get(key)==null) outFlash.put(key, new ArrayList<String>());
-//			messages = (List<String>)outFlash.get(key);
-//		}
 		return alerts;
 	}
+	
+	@SuppressWarnings("unchecked")
+	static List<String> retreiveCollection(HttpSession session, String key) {
+		List<String> alerts = session.getAttribute(key)==null?new ArrayList<String>():(List<String>)session.getAttribute(key);
+		session.setAttribute(key, alerts);
+		return alerts;
+	}	
 	
 }

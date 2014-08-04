@@ -36,7 +36,6 @@ import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
 import pl.com.dbs.reports.api.report.pattern.PatternValidator;
 import pl.com.dbs.reports.profile.dao.ProfileDao;
 import pl.com.dbs.reports.profile.domain.Profile;
-import pl.com.dbs.reports.report.domain.ReportValidationException;
 import pl.com.dbs.reports.report.pattern.domain.PatternFactoryDefault;
 import pl.com.dbs.reports.report.pattern.domain.PatternProduceContextDefault;
 import pl.com.dbs.reports.report.pattern.domain.validator.PatternContentFormValidator;
@@ -74,7 +73,7 @@ public class PatternFactoryDefaultTest {
     } 	
 	
 	@Test
-	public void testDefinicjaTest3() throws PatternValidationException, ReportValidationException, SQLException, ClassNotFoundException, IOException, BadLocationException {
+	public void testDefinicjaTest3() throws PatternValidationException, SQLException, ClassNotFoundException, IOException, BadLocationException {
 		pfactory = new PatternFactoryDefault(profileDao, null, Collections.<PatternValidator>emptyList());
 		
 		File file = read("pl/com/dbs/reports/pattern/test3/test3.zip");
@@ -106,7 +105,7 @@ public class PatternFactoryDefaultTest {
 	
 
 	@Test
-	public void testDefinicjaTest5() throws PatternValidationException, ReportValidationException, SQLException, ClassNotFoundException, IOException, BadLocationException {
+	public void testDefinicjaTest5() throws PatternValidationException, SQLException, ClassNotFoundException, IOException, BadLocationException {
 		pfactory = new PatternFactoryDefault(profileDao, null, Arrays.asList(new PatternValidator[] {new PatternContentFormValidator()}));
 		
 		File file = read("pl/com/dbs/reports/pattern/test5/test5.zip");
@@ -121,7 +120,7 @@ public class PatternFactoryDefaultTest {
 	}
 	
 	//@Test(expected=PatternValidationException.class)
-	public void testDefinicjaTest5NotValidForm() throws PatternValidationException, ReportValidationException, SQLException, ClassNotFoundException, IOException, BadLocationException {
+	public void testDefinicjaTest5NotValidForm() throws PatternValidationException, SQLException, ClassNotFoundException, IOException, BadLocationException {
 		pfactory = new PatternFactoryDefault(profileDao, null, Arrays.asList(new PatternValidator[] {new PatternContentFormValidator()}));
 		
 		File file = read("pl/com/dbs/reports/pattern/test5/test5.1.zip");

@@ -41,8 +41,8 @@
                     <i class="icon-chevron-down"></i>
                 </a>
                 <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-report')}">active</c:if>">
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-unarchived')}">active</c:if>" href="report/unarchived">Twoje raporty</a></li>
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-pattern')}">active</c:if>" href="report/pattern/list/init">Definicje</a></li>
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-report-unarchived')}">active</c:if>" href="report/unarchived">Raporty</a></li>
                     <li><a class="<c:if test="${fn:endsWith(id, 'dbs-page-report-archives')}">active</c:if>" href="report/archived/init">Archiwum</a></li>
                 </ul>
             </li>

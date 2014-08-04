@@ -36,7 +36,7 @@ public class FieldNumber extends AField<Number> {
 	
 	@Override
 	public String getValueAsString() {
-		return hasValue()?NumberFormat.getNumberInstance().format(value):null;
+		return hasValue()?NumberFormat.getNumberInstance().format(value):"";
 	}
 
 	@Override

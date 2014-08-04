@@ -7,11 +7,11 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.report.pattern.service.PatternService;
@@ -41,7 +40,6 @@ import pl.com.dbs.reports.support.web.controller.DownloadController;
  */
 @Controller
 @SessionAttributes({PatternListForm.KEY})
-@Scope("request")
 public class PatternsController {
 	private static final Logger logger = Logger.getLogger(PatternsController.class);
 	@Autowired private Alerts alerts;
@@ -74,58 +72,58 @@ public class PatternsController {
 	
 	
 	@RequestMapping(value= "/report/pattern/list", method = RequestMethod.POST)
-    public String patterns(Model model, @Valid @ModelAttribute(PatternListForm.KEY) final PatternListForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+    public String patterns(Model model, @Valid @ModelAttribute(PatternListForm.KEY) final PatternListForm form, BindingResult results, HttpServletRequest request) {
 		return "redirect:/report/pattern/list";
 	}	
 	
 	@RequestMapping(value="/report/pattern/delete/{id}", method = RequestMethod.GET)
-    public String delete(Model model, @PathVariable("id") Long id, RedirectAttributes ra) {
+    public String delete(Model model, @PathVariable("id") Long id, HttpSession session) {
 		ReportPattern pattern = patternService.find(id);
 		if (pattern==null) {
-			alerts.addError(ra, "report.pattern.wrong.id");
+			alerts.addError(session, "report.pattern.wrong.id");
 			return "redirect:/report/pattern/list";
 		}
 		
 		if (!pattern.isAccessible()) {
-			alerts.addError(ra, "report.pattern.not.accessible");
+			alerts.addError(session, "report.pattern.not.accessible");
 			return "redirect:/report/pattern/list";
 		}
 
 		patternService.delete(id);
-		alerts.addSuccess(ra, "report.pattern.deleted", pattern.getName(), pattern.getVersion(), pattern.getAccessesAsString());
+		alerts.addSuccess(session, "report.pattern.deleted", pattern.getName(), pattern.getVersion(), pattern.getAccessesAsString());
 		
 		return "redirect:/report/pattern/list";
     }
 	
 	@RequestMapping(value="/report/pattern/download/{id}", method = RequestMethod.GET)
-    public String download(Model model, @PathVariable("id") Long id,  RedirectAttributes ra, HttpServletRequest request, HttpServletResponse response) {
+    public String download(Model model, @PathVariable("id") Long id, HttpSession session,  HttpServletRequest request, HttpServletResponse response) {
 		if (id==null) {
-			alerts.addError(ra, "report.pattern.no.pattern");
+			alerts.addError(session, "report.pattern.no.pattern");
 			return "redirect:/report/pattern/list";
 		}
 
 		ReportPattern pattern = patternService.find(id);
 		if (pattern==null) {
-			alerts.addError(ra, "report.pattern.no.pattern");
+			alerts.addError(session, "report.pattern.no.pattern");
 			return "redirect:/report/pattern/list";
 		}
 		
 		try {
 			DownloadController.download(pattern.getContent(), pattern.getFilename(), request, response);
 		} catch (IOException e) {
-			exception(e, request, ra);
+			exception(e, session);
 			return "redirect:/report/pattern/list";
 		}
 		
 		return null;
     }	
 	
-	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {
+	private void exception(Exception e, HttpSession session) {
 		if (e instanceof IOException) {
-			alerts.addError(request, "report.pattern.download.error", e.getMessage());
+			alerts.addError(session, "report.pattern.download.error", e.getMessage());
 			logger.error("report.pattern.download.error:"+e.getMessage());
 		} else {
-			alerts.addError(request, "report.pattern.download.error", e.getMessage());
+			alerts.addError(session, "report.pattern.download.error", e.getMessage());
 			logger.error("report.pattern.download.error:"+e.getMessage());
 		}
 	}		

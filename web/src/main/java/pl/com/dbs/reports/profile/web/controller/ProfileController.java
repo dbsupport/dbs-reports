@@ -6,12 +6,12 @@ package pl.com.dbs.reports.profile.web.controller;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.domain.ProfileException;
@@ -50,7 +49,6 @@ import pl.com.dbs.reports.support.web.file.FileMeta;
  */
 @Controller
 @SessionAttributes({ProfileListForm.KEY, ProfileForm.KEY})
-@Scope("request")
 public class ProfileController {
 	private static final Logger logger = Logger.getLogger(ProfileController.class);
 	@Autowired private Alerts alerts;
@@ -90,14 +88,14 @@ public class ProfileController {
     }
 	
 	@RequestMapping(value= "/profile/note", method = RequestMethod.POST)
-    public String note(@Valid @ModelAttribute(ProfileForm.KEY) final ProfileForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+    public String note(@Valid @ModelAttribute(ProfileForm.KEY) final ProfileForm form, BindingResult results, HttpSession session, HttpServletRequest request) {
 		if (!results.hasErrors()) {
 			try {
 				Profile profile = profileService.note(form.getId(), form.getNote());
 				ProfileSession.update(profile, request);
-				alerts.addSuccess(ra, "profile.note.edited");
+				alerts.addSuccess(session, "profile.note.edited");
 			} catch (Exception e) {
-				alerts.addError(ra, "profile.note.not.edited", e.getMessage());
+				alerts.addError(session, "profile.note.not.edited", e.getMessage());
 			}
 		}
 		
@@ -130,17 +128,17 @@ public class ProfileController {
     }
 	
 	@RequestMapping(value="/profile/accept/{id}", method = RequestMethod.GET)
-    public String accept(Model model, @PathVariable("id") Long id, RedirectAttributes ra) {
+    public String accept(Model model, @PathVariable("id") Long id, HttpSession session) {
 		if (id.equals(SessionContext.getProfile().getId())) {
-			alerts.addError(ra, "profile.accept.session.profile");
+			alerts.addError(session, "profile.accept.session.profile");
 			return "redirect:/profile/"+id;	
 		}
 		
 		try {
 			Profile profile = profileService.accept(id);
-			alerts.addSuccess(ra, "profile.accepted", profile.getName());
+			alerts.addSuccess(session, "profile.accepted", profile.getName());
 		} catch (Exception e) {
-			alerts.addError(ra, "profile.delete.wrong.id");
+			alerts.addError(session, "profile.delete.wrong.id");
 			return "redirect:/profile/list";	
 		}
 		
@@ -148,17 +146,17 @@ public class ProfileController {
     }		
 	
 	@RequestMapping(value="/profile/unaccept/{id}", method = RequestMethod.GET)
-    public String unaccept(Model model, @PathVariable("id") Long id, RedirectAttributes ra) {
+    public String unaccept(Model model, @PathVariable("id") Long id, HttpSession session) {
 		if (id.equals(SessionContext.getProfile().getId())) {
-			alerts.addError(ra, "profile.unaccept.session.profile");
+			alerts.addError(session, "profile.unaccept.session.profile");
 			return "redirect:/profile/"+id;	
 		}
 		
 		try {
 			Profile profile = profileService.unaccept(id);
-			alerts.addSuccess(ra, "profile.unaccepted", profile.getName());
+			alerts.addSuccess(session, "profile.unaccepted", profile.getName());
 		} catch (Exception e) {
-			alerts.addError(ra, "profile.delete.wrong.id");
+			alerts.addError(session, "profile.delete.wrong.id");
 			return "redirect:/profile/list";	
 		}
 		
@@ -166,54 +164,54 @@ public class ProfileController {
     }	
 	
 	@RequestMapping(value= "/profile/list", method = RequestMethod.POST)
-    public String profiles(@Valid @ModelAttribute(ProfileListForm.KEY) final ProfileListForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+    public String profiles(@Valid @ModelAttribute(ProfileListForm.KEY) final ProfileListForm form, BindingResult results) {
 		return "redirect:/profile/list";
 	}
 	
 	@RequestMapping(value="/profile/delete/{id}", method = RequestMethod.GET)
-    public String delete(Model model, @PathVariable("id") Long id, HttpServletRequest request, RedirectAttributes ra) {
+    public String delete(Model model, @PathVariable("id") Long id, HttpSession session) {
 		Profile profile = profileService.findById(id);
 		if (profile==null) {
-			alerts.addError(ra, "profile.delete.wrong.id");
+			alerts.addError(session, "profile.delete.wrong.id");
 			return "redirect:/profile/list";
 		}
 		
 		if (SessionContext.getProfile().getId().equals(id)) { 
-			alerts.addWarning(ra, "profile.delete.current");
+			alerts.addWarning(session, "profile.delete.current");
 			return "redirect:/profile/list";
 		}
 		
 		try {
 			profileService.delete(id);
-			alerts.addSuccess(ra, "profile.delete.deleted", profile.getName());
+			alerts.addSuccess(session, "profile.delete.deleted", profile.getName());
 		} catch (Exception e) {
-			exception(e, request, ra);
+			exception(e, session);
 		}
 		return "redirect:/profile/list";
     }
 
 	@RequestMapping(value="/profiles/synchronize", method = RequestMethod.GET)
-    public String synchronize(Model model, RedirectAttributes ra) {
+    public String synchronize(Model model, HttpSession session) {
 		try {
 			profileScheduler.synchronize();
-			alerts.addSuccess(ra, "profile.synchronization");
+			alerts.addSuccess(session, "profile.synchronization");
 		} catch (Exception e) {
-			alerts.addError(ra, "profile.synchronization.error", e.getMessage());
+			alerts.addError(session, "profile.synchronization.error", e.getMessage());
 		}
 		return "redirect:/profile/list";
     }
 	
-	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {
+	private void exception(Exception e, HttpSession session) {
 		if (e instanceof ProfileException) {
 			String msg = e.getMessage();
 			if (((ProfileException) e).getCode()!=null) {
 				if (!((ProfileException) e).getParams().isEmpty()) 
 					msg = messageSource.getMessage(((ProfileException) e).getCode(), ((ProfileException) e).getParams().toArray(), null);
 				else msg = messageSource.getMessage(((ProfileException) e).getCode(), null, null);
-				alerts.addError(ra, msg);
+				alerts.addError(session, msg);
 			}
 		} else {
-			alerts.addError(ra, "profile.add.unknown.error", e.getMessage());
+			alerts.addError(session, "profile.add.unknown.error", e.getMessage());
 			logger.error("profile.add.unknown.error:"+e.getMessage());
 		}
 	}		

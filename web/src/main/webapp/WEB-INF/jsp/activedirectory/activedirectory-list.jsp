@@ -25,17 +25,6 @@
                 </form:form>
 </tiles:putAttribute>
 
-<tiles:putAttribute name="custom-alerts" type="string">
-<spring:hasBindErrors name="activeDirectoryListForm">
-    <c:forEach items="${errors.globalErrors}" var="error">
-                <div class="alert alert-danger">
-                    <i class="icon-remove-sign"></i>
-                    <spring:message code="${error.code}" text="${error.defaultMessage}" htmlEscape="false"/>
-                </div>    
-    </c:forEach>
-</spring:hasBindErrors>    
-</tiles:putAttribute>
-
 <tiles:putAttribute name="content" type="string">
 <div class="form-wrapper">
     <form:form method="post" modelAttribute="activeDirectoryListForm" action="activedirectory/list" class="dbs-form">

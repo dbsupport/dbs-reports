@@ -43,7 +43,7 @@ public class FieldOption {
 	}
 	
 	public String getValue() {
-		return StringUtils.isBlank(value)?label:value;
+		return value;
 	}
 
 	public String getLabel() {
@@ -63,7 +63,13 @@ public class FieldOption {
 	public void setChecked(boolean checked) {
 		this.checked = checked;
 	}
-
+	
+	public void init() {
+		if (StringUtils.isBlank(value)) {
+			value = label;
+		}
+	}
+	
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();

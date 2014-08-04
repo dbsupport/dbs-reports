@@ -92,6 +92,9 @@ public abstract class DForm extends AForm {
 			String name = divisible.getName();
 			for (String value : divisible.getValue()) {
 				Map<String, String> params = getNonDivisiblesAsMap();
+				/**
+				 * FIXME: divisible ALWAYS at the END of the map!
+				 */
 				params.put(name, value);
 				result.add(params);
 			}
@@ -164,9 +167,9 @@ public abstract class DForm extends AForm {
 	}	
 	
 	private Map<String, String> getNonDivisiblesAsMap() {
-		Map<String, String> parameters = Maps.newHashMap();
+		Map<String, String> parameters = Maps.newLinkedHashMap();
 		for (AField<?> field : getNonDivisibles()) {
-			if (field.hasValue())
+			//if (field.hasValue())
 				parameters.put(field.getName(), field.getValueAsString());
 		}
 		return parameters;

@@ -35,7 +35,7 @@ public class FieldText extends AField<String> {
 	
 	@Override
 	public String getValueAsString() {
-		return value;
+		return hasValue()?value:"";
 	}	
 
 	@Override

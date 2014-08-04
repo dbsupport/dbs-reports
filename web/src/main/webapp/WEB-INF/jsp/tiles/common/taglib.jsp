@@ -6,3 +6,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--@ taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" --%>
+<%@ taglib prefix="dbs" uri="http://dbs.com.pl/tags-dbs" %>

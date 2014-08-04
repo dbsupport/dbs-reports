@@ -3,6 +3,8 @@
  */
 package pl.com.dbs.reports.support.web.form.inflater;
 
+import java.util.List;
+
 import pl.com.dbs.reports.support.web.form.field.IFieldInflatable;
 import pl.com.dbs.reports.support.web.form.option.FieldOption;
 
@@ -23,6 +25,8 @@ public class FieldInflaterMock implements FieldInflater {
 
 	@Override
 	public FieldInflaterMock inflate(IFieldInflatable field) {
+		List<FieldOption> options = field.getOptions();
+		if (options!=null&&!options.isEmpty()) return this;
 		for (int idx=0; idx<LABELS.length; idx++) {
 			FieldOption option = new FieldOption(String.valueOf(idx), LABELS[idx]);
 			field.inflate(option);

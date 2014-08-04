@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain.builders;
+package pl.com.dbs.reports.report.domain.builders.inflaters;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,8 +20,12 @@ import org.springframework.stereotype.Component;
 
 import pl.com.dbs.reports.api.support.db.SqlExecutor;
 import pl.com.dbs.reports.api.support.db.SqlExecutorContext;
-import pl.com.dbs.reports.report.domain.ReportBlockException;
-import pl.com.dbs.reports.report.domain.ReportBlockInflationException;
+import pl.com.dbs.reports.report.domain.builders.ReportBlockException;
+import pl.com.dbs.reports.report.domain.builders.ReportBlockInflation;
+import pl.com.dbs.reports.report.domain.builders.ReportBlockInflationException;
+import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuildContext;
+import pl.com.dbs.reports.report.domain.builders.ReportTextBlock;
+import pl.com.dbs.reports.report.domain.builders.inflaters.functions.ReportBlockInflaterFunction;
 import pl.com.dbs.reports.support.encoding.EncodingContext;
 import pl.com.dbs.reports.support.encoding.EncodingService;
 
@@ -35,12 +39,14 @@ import pl.com.dbs.reports.support.encoding.EncodingService;
  * @coptyright (c) 2014
  */
 @Component("report.block.inflater.query")
-public class ReportTextBlockInflaterQuery implements ReportTextBlockInflater {
+public class ReportTextBlockInflaterQuery extends ReportTextBlockInflater {
+	private static final Logger logger = Logger.getLogger(ReportTextBlockInflaterQuery.class);
 	/**
 	 * Inflation executing endpoint.
 	 */
 	private SqlExecutor<Map<String, String>> executor;
 	private EncodingService encodingService;
+
 	
 	@Autowired
 	public ReportTextBlockInflaterQuery(SqlExecutor<Map<String, String>> executor, EncodingService encodingService) {
@@ -49,42 +55,54 @@ public class ReportTextBlockInflaterQuery implements ReportTextBlockInflater {
 	}
 	
 	/**
-	 * Iterates through blocks and chenges its content inflating them from sql-inflations.
+	 * Iterates through blocks and changes its content inflating them from sql-inflations.
 	 */
 	@Override
-	public void inflate(final ReportTextBlock root, final Map<String, String> parameters, final StringBuilder content) throws ReportBlockException {
+	public void inflate(final ReportBlocksBuildContext context) throws ReportBlockException {
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {}
+		
 		EncodingContext encodingContext = encodingService.getEncodingContext();
-		for (ReportTextBlock block : root.getBlocks()) {
+		for (ReportTextBlock block : context.getBlocks()) {
 			try {
-				inflateBlock(block, parameters, encodingContext, content);
+				inflateBlock(block, context, encodingContext);
 			} catch (ReportBlockInflationException e) {
+				logger.error("Error inflating block:"+block.getLabel(), e);
 				throw new ReportBlockException(e);
 			}
-			
 		}
 	}
 	
 	/**
 	 * Takes block and corelated inflation (if any).
 	 * Executes inflation - producing parameters which are used to build (replace) block's variables.
-	 *  
 	 */
-	private void inflateBlock(final ReportTextBlock block, final Map<String, String> parameters, final EncodingContext encodingContext, final StringBuilder sb) throws ReportBlockException, ReportBlockInflationException, DataAccessException { 
+	private void inflateBlock(final ReportTextBlock block, final ReportBlocksBuildContext context, final EncodingContext encodingContext) throws ReportBlockException, ReportBlockInflationException, DataAccessException { 
 		if (block.hasContent()) {
 			//..no more block inside.. generate content..
-			block.build(parameters, sb);
+			block.build(context.getParams(), context.getContent());
 			return;
 		}
 		//..result of inflations..
-		final List<Map<String, String>> result = query(block, parameters, encodingContext);
+		final List<Map<String, String>> result = query(block, context.getParams(), encodingContext);
 		
 		//..repeat block generation as many times as received data on list..
 		for (Map<String, String> row : result) {
 			//..remember parameters (put on stack latest values)..
-			for (Entry<String, String> value : row.entrySet()) addParam(parameters, value.getKey(), value.getValue());
+			for (Entry<String, String> param : row.entrySet()) {
+				//..is this param a function?
+				ReportBlockInflaterFunction function = resolveFunction(param);
+				if (function != null) {
+					function.apply(context, param);
+				} else {
+					//..add parameter then..
+					context.addParam(param);
+				}
+			}
 			//..go deeper and inflate children..
 			for (final ReportTextBlock child : block.getBlocks()) {
-				inflateBlock(child, parameters, encodingContext, sb);
+				inflateBlock(child, context, encodingContext);
 			}
 		}
 	}
@@ -113,18 +131,12 @@ public class ReportTextBlockInflaterQuery implements ReportTextBlockInflater {
 							return params;
 						}
 				}));				
-		} else if (block.isInflateable()) 
+		} else if (block.isInflateable()) {
+			logger.error("Block("+block.getLabel()+") requires inflation but cant find one!");
 			throw new IllegalStateException("Block("+block.getLabel()+") requires inflation but cant find one!");
+		}
 
 		return result;
 	}
 	
-	private void addParam(final Map<String, String> parameters, String key, final String value) {
-		if (StringUtils.isBlank(key)) return;
-		key = key.toUpperCase().trim();
-		//..if param already exists - replace it..
-		if (parameters.containsKey(key)) parameters.remove(key);
-		//if (encodingContext!=null) params.put(key, encodingService.encode(value, encodingContext)); else 
-		parameters.put(key, value);
-	}	
 }

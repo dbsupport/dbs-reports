@@ -55,9 +55,14 @@ public class ReportOrder implements IEntity {
 	@Column(name = "name")
 	private String name;	
 	
-	@Column(name = "date")
+	@Column(name = "start_date")
 	@Temporal(TemporalType.TIMESTAMP)	
-	private Date date;	
+	private Date start;
+	
+	@Column(name = "end_date")
+	@Temporal(TemporalType.TIMESTAMP)	
+	private Date end;	
+	
 	
 	@Column(name = "status")
 	@Enumerated(EnumType.STRING)
@@ -75,7 +80,7 @@ public class ReportOrder implements IEntity {
     public ReportOrder(String name, Profile profile) {
     	this.name = name;
     	this.creator = profile;
-    	this.date = new Date();
+    	this.start = new Date();
     	this.status = ReportOrderStatus.NOTREADY;
     }
     
@@ -84,6 +89,7 @@ public class ReportOrder implements IEntity {
 			throw new IllegalStateException("Reports' order "+id+" has inproper status("+status+") for ready!");
 		
     	this.status = ReportOrderStatus.UNNOTIFIED;
+    	this.end = new Date();
     	return this;
     }
 	
@@ -150,9 +156,14 @@ public class ReportOrder implements IEntity {
 		return reports;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getStart() {
+		return start;
 	}
+	
+	public Date getEnd() {
+		return end;
+	}
+	
 
 //	/**
 //	 * Confirm all generations.

@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 
 import org.apache.commons.lang.StringUtils;
 
-import pl.com.dbs.reports.report.domain.ReportBlockException;
+import pl.com.dbs.reports.report.domain.builders.ReportBlockException;
 
 /**
  * SWITCH rule.
@@ -66,9 +66,7 @@ public class ReportBlockSwitchRule implements ReportBlockRule {
 		while (caseMatcher.find()) {
 			String caseOption = caseMatcher.group(1);
 			String caseContent = caseMatcher.group(2);
-			if (!StringUtils.isBlank(caseContent)) {
-				result.add(new ReportBlockRuleCase(caseOption, caseContent));
-			}
+			result.add(new ReportBlockRuleCase(caseOption, caseContent));
 		}
 		return result;
 	}
@@ -131,8 +129,8 @@ public class ReportBlockSwitchRule implements ReportBlockRule {
 		private String content = "";
 		
 		ReportBlockRuleCase(String option, String content) {
-			this.option = !StringUtils.isBlank(option)?option.trim():"";
-			this.content = content;
+			this.option = option==null?"":option;
+			this.content = content==null?"":content;
 		}
 		
 		private boolean isEqual(String option) {

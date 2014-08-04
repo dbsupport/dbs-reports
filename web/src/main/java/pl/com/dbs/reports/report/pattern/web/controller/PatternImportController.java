@@ -20,16 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.report.pattern.service.PatternService;
 import pl.com.dbs.reports.report.pattern.web.form.PatternImportForm;
+import pl.com.dbs.reports.report.pattern.web.validator.PatternImportFormValidator;
 import pl.com.dbs.reports.report.pattern.web.validator.PatternImportValidator;
 import pl.com.dbs.reports.report.web.controller.ReportGenerationException;
 import pl.com.dbs.reports.report.web.controller.ReportGenerationHelper;
 import pl.com.dbs.reports.report.web.form.ReportGenerationForm;
-import pl.com.dbs.reports.report.web.validator.ReportGenerationValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 import pl.com.dbs.reports.support.web.file.FileMeta;
 
@@ -89,11 +88,11 @@ public class PatternImportController {
 				form.reset(pattern);
 				return "redirect:/report/pattern/import/summary";
 			} catch (Throwable e) {
-				reportGenerationHelper.exception(e, request);
+				reportGenerationHelper.exception(e, session);
 			}
 		}
 		
-		return "report/pattern/pattern-import-read";
+		return "redirect:/report/pattern/import/read";
 	}	
 	
 	
@@ -106,34 +105,34 @@ public class PatternImportController {
 	
 	@RequestMapping(value= "/report/pattern/import/summary", method = RequestMethod.POST)
     public String summary(@Valid @ModelAttribute(PatternImportForm.KEY) final PatternImportForm form, 
-    		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+    		BindingResult results, HttpServletRequest request, HttpSession session) {
 		if (!results.hasErrors()) {
 			try {
 				//..upload and save..
 				ReportPattern pattern = patternService.upload(FileMeta.multipartToFile(form.getFile()));
-				alerts.addSuccess(ra, "report.pattern.import.file.success", pattern.getName(), pattern.getVersion(), pattern.getAccessesAsString());
+				alerts.addSuccess(session, "report.pattern.import.file.success", pattern.getName(), pattern.getVersion(), pattern.getAccessesAsString());
 				return "redirect:/report/pattern/list";
 			} catch (Exception e) {
-				reportGenerationHelper.exception(e, request);
+				reportGenerationHelper.exception(e, session);
 			}
 		}
 		
-		return "report/pattern/pattern-import-summary";
+		return "redirect:/report/pattern/import/summary";
 	}	
 	
 
 	@RequestMapping(value="/report/pattern/import/form", method = RequestMethod.GET)
-    public String form(Model model, @ModelAttribute(ReportGenerationForm.KEY) final ReportGenerationForm form, HttpServletRequest request, RedirectAttributes ra) {
+    public String form(Model model, 
+    		@ModelAttribute(ReportGenerationForm.KEY) final ReportGenerationForm form, HttpServletRequest request) {
 		return "report/pattern/pattern-import-form";
     }
 	
 	@RequestMapping(value= "/report/pattern/import/form", method = RequestMethod.POST)
     public String form(@Valid @ModelAttribute(ReportGenerationForm.KEY) final ReportGenerationForm form, 
-    		BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
-		if (results.hasErrors())
-			return "report/pattern/pattern-import-form";
+    		BindingResult results, HttpSession session) {
+		if (!results.hasErrors())
+			alerts.addSuccess(session, "report.pattern.import.form.valid");
 		
-		alerts.addSuccess(ra, "report.pattern.import.form.valid");
 		return "redirect:/report/pattern/import/form";
 	}
 	
@@ -142,14 +141,14 @@ public class PatternImportController {
 	 * overwrite..
 	 */
 	@ExceptionHandler(ReportGenerationException.class)
-	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {
-		reportGenerationHelper.exception(e, request);
+	private void exception(Exception e, HttpSession session) {
+		reportGenerationHelper.exception(e, session);
 	}		
 	
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
 		if (binder.getTarget() instanceof PatternImportForm) binder.setValidator(new PatternImportValidator());
-		if (binder.getTarget() instanceof ReportGenerationForm) binder.setValidator(new ReportGenerationValidator());
+		if (binder.getTarget() instanceof ReportGenerationForm) binder.setValidator(new PatternImportFormValidator());
 	}
 }

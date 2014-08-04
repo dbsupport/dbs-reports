@@ -21,8 +21,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import pl.com.dbs.reports.report.PatternFactoryDefaultTest;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuilder;
-import pl.com.dbs.reports.report.domain.builders.ReportTextBlockInflaterDefault;
 import pl.com.dbs.reports.report.domain.builders.ReportTextBlocksBuilder;
+import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflaterDefault;
 import pl.com.dbs.reports.report.pattern.domain.ReportPatternTransformate;
 import pl.com.dbs.reports.security.domain.SessionContext;
 
@@ -57,6 +57,11 @@ public abstract class ReportBlockRuleTest {
 		ReportPatternTransformate transformate = new ReportPatternTransformate(content, filename, null);
 		return new ReportTextBlocksBuilder(transformate, inflater, params);
 	}
+	
+	ReportBlocksBuilder builderContent(String content) throws IOException {
+		ReportPatternTransformate transformate = new ReportPatternTransformate(content.getBytes(), "test", null);
+		return new ReportTextBlocksBuilder(transformate, inflater, params);
+	}	
 	
 	private File read(String src) {
 		File file = null;

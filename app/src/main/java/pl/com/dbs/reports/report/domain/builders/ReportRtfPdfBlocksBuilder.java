@@ -11,7 +11,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
-import pl.com.dbs.reports.report.domain.ReportBlockException;
+import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflater;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;

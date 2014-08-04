@@ -1,7 +1,7 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain;
+package pl.com.dbs.reports.report.domain.builders;
 
 /**
  * Error while inflating a block. 

@@ -28,7 +28,7 @@ public class ReportsUnarchivedValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		ReportsUnarchivedForm form = (ReportsUnarchivedForm)target;
-
+		
 		if (errors.hasErrors()) return;
 		
 		if (form.getAction()!=null) {

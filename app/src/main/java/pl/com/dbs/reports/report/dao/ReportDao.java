@@ -12,7 +12,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -117,10 +116,13 @@ public class ReportDao extends ADao<Report, Long> {
 	}
 	
 	/**
-	 * find oldest one (generationfate) with INIT phase
+	 * find limit awaiting (generationfate) with INIT phase
 	 */
-	public Long findAwaiting() {
-		IContextDao<Report> c = new ContextDao<Report>(em, Report.class);
+	public List<Report> findAwaiting(Integer limit) {
+		ReportFilter filter = new ReportFilter(limit);
+		filter.getSorter().add(Report_.generationDate.getName(), true);
+		
+		IContextDao<Report> c = new ContextDao<Report>(em, Report.class, filter);
 		
 		List<ReportPhaseStatus> phases = Lists.newArrayList(ReportPhaseStatus.INIT);
 		List<ReportStatus> statuses = Lists.newArrayList(ReportStatus.OK);
@@ -130,71 +132,67 @@ public class ReportDao extends ADao<Report, Long> {
 	    p = c.getBuilder().and(p, c.getRoot().get(Report_.status).in(statuses));
 
 	    
-		List<Order> orders = Lists.newArrayList();
-		orders.add(c.getBuilder().desc(c.getRoot().get(Report_.generationDate)));
-		c.getCriteria().orderBy(orders);
-	    
+//		List<Order> orders = Lists.newArrayList();
+//		orders.add(c.getBuilder().asc(c.getRoot().get(Report_.generationDate)));
+//		c.getCriteria().orderBy(orders);
+		
 	    c.getCriteria().where(p);
 		
-	    Report report = executeQuerySingle(c);
-	    return report!=null?report.getId():null;
+	    return (List<Report>)executeQuery(c);
 	}	
 
 	/**
-	 * find oldest with START/OK phase that was set in this phase after ... 
+	 * ..find oldest with START/OK phase more than 24h.. 
 	 */
-	public Long findLost() {
-		IContextDao<Report> c = new ContextDao<Report>(em, Report.class);
+	public List<Report> findLost(Integer limit) {
+		ReportFilter filter = new ReportFilter(limit);
+		filter.getSorter().add(Report_.generationDate.getName(), true);
+		
+		IContextDao<Report> c = new ContextDao<Report>(em, Report.class, filter);
 		
 		List<ReportPhaseStatus> phases = Lists.newArrayList(ReportPhaseStatus.START);
 		List<ReportStatus> statuses = Lists.newArrayList(ReportStatus.OK);
-		Date date = DateTime.now().minusSeconds(70).toDate();
+		Date date = DateTime.now().minusSeconds(60*60*24).toDate();
 		
 	    Predicate p = c.getBuilder().conjunction();
 	    p = c.getBuilder().and(p, c.getRoot().get(Report_.phase).get(ReportPhase_.status).in(phases));
 	    p = c.getBuilder().and(p, c.getBuilder().lessThan(c.getRoot().get(Report_.phase).get(ReportPhase_.date), date));
 	    p = c.getBuilder().and(p, c.getRoot().get(Report_.status).in(statuses));
 
-		List<Order> orders = Lists.newArrayList();
-		orders.add(c.getBuilder().desc(c.getRoot().get(Report_.generationDate)));
-		c.getCriteria().orderBy(orders);
+//		List<Order> orders = Lists.newArrayList();
+//		orders.add(c.getBuilder().asc(c.getRoot().get(Report_.generationDate)));
+//		c.getCriteria().orderBy(orders);
 	    
 	    c.getCriteria().where(p);
 		
-	    Report report = executeQuerySingle(c);
-	    return report!=null?report.getId():null;
+	    return (List<Report>)executeQuery(c);
 	}
 	
 	/**
-	 * finds ...
+	 * find oldest with START/OK phase more than 48h.. 
 	 */
-	public Long findBroken() {
+	public List<Report> findBroken(Integer limit) {
+		ReportFilter filter = new ReportFilter(limit);
+		filter.getSorter().add(Report_.generationDate.getName(), true);
+		
 		IContextDao<Report> c = new ContextDao<Report>(em, Report.class);
 		
 		List<ReportPhaseStatus> phases = Lists.newArrayList(ReportPhaseStatus.START);
 		List<ReportStatus> statuses = Lists.newArrayList(ReportStatus.OK);
-		Date date = DateTime.now().minusSeconds(70).toDate();
+		Date date = DateTime.now().minusSeconds(60*60*24*2).toDate();
 		
 	    Predicate p = c.getBuilder().conjunction();
 	    p = c.getBuilder().and(p, c.getRoot().get(Report_.phase).get(ReportPhase_.status).in(phases));
 	    p = c.getBuilder().and(p, c.getBuilder().greaterThan(c.getRoot().get(Report_.phase).get(ReportPhase_.date), date));
 	    p = c.getBuilder().and(p, c.getRoot().get(Report_.status).in(statuses));
 
-		List<Order> orders = Lists.newArrayList();
-		orders.add(c.getBuilder().desc(c.getRoot().get(Report_.generationDate)));
-		c.getCriteria().orderBy(orders);
+//		List<Order> orders = Lists.newArrayList();
+//		orders.add(c.getBuilder().desc(c.getRoot().get(Report_.generationDate)));
+//		c.getCriteria().orderBy(orders);
 	    
 	    c.getCriteria().where(p);
 		
-	    Report report = executeQuerySingle(c);
-	    return report!=null?report.getId():null;
+	    return (List<Report>)executeQuery(c);
 	}
-	
-//	public void confirmAllReady() {
-//  em.createQuery("update ReportExtended set status = :nstatus where status = :ostatus")
-//      .setParameter("nstatus", ReportExtended.Status.UNSEEN)
-//      .setParameter("ostatus", ReportExtended.Status.READY)
-//      .executeUpdate();
-//}
-	
+
 }

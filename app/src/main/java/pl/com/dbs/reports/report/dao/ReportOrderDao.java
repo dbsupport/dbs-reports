@@ -101,7 +101,7 @@ public class ReportOrderDao extends ADao<ReportOrder, Long> {
 		p = b.and(p, r.get(ReportOrder_.status).in(statuses));
 		
 		List<Order> orders = Lists.newArrayList();
-		orders.add(b.desc(r.get(ReportOrder_.date)));
+		orders.add(b.desc(r.get(ReportOrder_.start)));
 		cr.orderBy(orders);
 	    cr.where(p);
 
@@ -155,7 +155,7 @@ public class ReportOrderDao extends ADao<ReportOrder, Long> {
 		p = b.and(p, r.get(ReportOrder_.status).in(statuses));
 		
 		List<Order> orders = Lists.newArrayList();
-		orders.add(b.desc(r.get(ReportOrder_.date)));
+		orders.add(b.desc(r.get(ReportOrder_.start)));
 		cr.orderBy(orders);
 		
 	    cr.where(p);

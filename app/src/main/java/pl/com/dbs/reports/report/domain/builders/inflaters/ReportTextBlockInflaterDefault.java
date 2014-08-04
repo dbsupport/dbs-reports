@@ -1,13 +1,15 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.domain.builders;
+package pl.com.dbs.reports.report.domain.builders.inflaters;
 
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import pl.com.dbs.reports.report.domain.ReportBlockException;
+import pl.com.dbs.reports.report.domain.builders.ReportBlockException;
+import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuildContext;
+import pl.com.dbs.reports.report.domain.builders.ReportTextBlock;
 
 /**
  * Inflates blocks.
@@ -19,14 +21,14 @@ import pl.com.dbs.reports.report.domain.ReportBlockException;
  * @coptyright (c) 2014
  */
 @Component("report.block.inflater.default")
-public class ReportTextBlockInflaterDefault implements ReportTextBlockInflater {
+public class ReportTextBlockInflaterDefault extends ReportTextBlockInflater {
 	/**
 	 * Iterates through blocks and chenges its content inflating them from sql-inflations.
 	 */
 	@Override
-	public void inflate(final ReportTextBlock root, final Map<String, String> params, final StringBuilder sb) throws ReportBlockException {
-		for (ReportTextBlock block : root.getBlocks()) {
-			inflateBlock(block, params, sb);
+	public void inflate(final ReportBlocksBuildContext context) throws ReportBlockException {
+		for (ReportTextBlock block : context.getBlocks()) {
+			inflateBlock(block, context.getParams(), context.getContent());
 		}
 	}
 	

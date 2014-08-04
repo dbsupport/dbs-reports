@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pl.com.dbs.reports.api.report.Report;
 import pl.com.dbs.reports.report.dao.ReportFilter;
@@ -85,24 +85,24 @@ public class ReportsArchivedController {
     }	
 	
 	@RequestMapping(value= "/report/archived", method = RequestMethod.POST)
-    public String archives(Model model, @Valid @ModelAttribute(ReportsArchivedForm.KEY) final ReportsArchivedForm form, BindingResult results, HttpServletRequest request, RedirectAttributes ra) {
+    public String archives(Model model, @Valid @ModelAttribute(ReportsArchivedForm.KEY) final ReportsArchivedForm form, BindingResult results) {
 		return "redirect:/report/archived";
 	}
 	
 	@RequestMapping(value="/report/archive/{id}/download", method = RequestMethod.GET)
     public String display(Model model, @PathVariable("id") Long id,  @ModelAttribute(ReportsArchivedForm.KEY) final ReportsArchivedForm form,
-    		RedirectAttributes ra, HttpServletRequest request, HttpServletResponse response) {
+    		HttpServletRequest request, HttpSession session, HttpServletResponse response) {
 		ReportFilter filter = new ReportFilter().archived().onlyFor(id);
 		Report report = reportService.findSingle(filter);
 		if (report==null) {
-			alerts.addError(ra, "report.archives.no.report");
+			alerts.addError(session, "report.archives.no.report");
 			return "redirect:/report/archived";
 		}
 		
 		try {
 			DownloadController.download(report.getContent(), report.getName(), request, response);
 		} catch (IOException e) {
-			exception(e, request, ra);
+			exception(e, session);
 			return "redirect:/report/archived";
 		}
 		
@@ -111,7 +111,7 @@ public class ReportsArchivedController {
 	
 	
 	@RequestMapping(value="/report/archived/delete/{id}", method = RequestMethod.GET)
-    public String delete(Model model, @RequestParam(required=false) String site, @PathVariable("ids") Long[] ids,  RedirectAttributes ra, HttpServletRequest request) {
+    public String delete(Model model, @RequestParam(required=false) String site, @PathVariable("ids") Long[] ids,  HttpSession session) {
 		List<Report> reports = new ArrayList<Report>();
 		for (Long id : ids) {
 			try {
@@ -126,20 +126,20 @@ public class ReportsArchivedController {
 			}
 		}
 		
-		if (reports.size()>1) alerts.addSuccess(request, "report.archive.multi.delete.success", String.valueOf(reports.size()));
-		else if (reports.size()==1) alerts.addSuccess(request, "report.archive.delete.success", reports.get(0).getName());
-		else alerts.addError(request, "report.archive.delete.error", "");
+		if (reports.size()>1) alerts.addSuccess(session, "report.archive.multi.delete.success", String.valueOf(reports.size()));
+		else if (reports.size()==1) alerts.addSuccess(session, "report.archive.delete.success", reports.get(0).getName());
+		else alerts.addError(session, "report.archive.delete.error", "");
 		
 		return StringUtils.isBlank(site)?"redirect:/report/archived":"redirect:/"+site;
 	}
 
 	
-	private void exception(Exception e, HttpServletRequest request, RedirectAttributes ra) {
+	private void exception(Exception e, HttpSession session) {
 		if (e instanceof IOException) {
-			alerts.addError(request, "report.archive.ioexception", e.getMessage());
+			alerts.addError(session, "report.archive.ioexception", e.getMessage());
 			logger.error("report.archive.ioexception:"+e.getMessage());
 		} else {
-			alerts.addError(request, "report.archive.read.error", e.getMessage());
+			alerts.addError(session, "report.archive.read.error", e.getMessage());
 			logger.error("report.archive.read.error:"+e.getMessage());
 		}
 	}	

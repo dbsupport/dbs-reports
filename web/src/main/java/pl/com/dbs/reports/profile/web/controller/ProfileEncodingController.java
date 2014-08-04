@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,7 +35,6 @@ import pl.com.dbs.reports.profile.web.view.ClientProfileEncoding;
  */
 @Controller
 @SessionAttributes({ProfileEncodingForm.KEY})
-@Scope("request")
 public class ProfileEncodingController {
 	@Autowired private ProfileScheduler profileScheduler;
 

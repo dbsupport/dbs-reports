@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.springframework.core.Ordered;
 
-import pl.com.dbs.reports.report.domain.ReportBlockException;
+import pl.com.dbs.reports.report.domain.builders.ReportBlockException;
 
 /**
  * Rule to apply while inflating a block.

@@ -44,7 +44,7 @@ public class ReportGenerationForm extends DForm implements ReportGenerationConte
 		this.formats = pattern.getFormats();
 		if (this.formats.size()==1) this.format = formats.get(0);
 	}
-
+	
 	public void setName(String name) {
 		this.name = name;
 	}

@@ -4,11 +4,13 @@
 package pl.com.dbs.reports.security.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,14 +42,14 @@ public class SecurityController {
     }
 	
 	@RequestMapping(value="/security/loginfailed", method = RequestMethod.GET)
-    public String loginfailed(RedirectAttributes ra, @RequestParam(value="code", required=false) String code) {
-		if (!StringUtils.isBlank(code)) alerts.addError(ra, code);	
+    public String loginfailed(Model model, @RequestParam(value="code", required=false) String code, HttpSession session) {
+		if (!StringUtils.isBlank(code)) alerts.addError(session, code);	
 		return "redirect:/security/login";
     }
 	
 	@RequestMapping(value="/security/noaccess", method = RequestMethod.GET)
-    public String noaccess(ModelMap model, @RequestParam(value="code", required=false) String code, RedirectAttributes ra) {
-		if (!StringUtils.isBlank(code)) alerts.addError(ra, code);
+    public String noaccess(ModelMap model, @RequestParam(value="code", required=false) String code, HttpSession session) {
+		if (!StringUtils.isBlank(code)) alerts.addError(session, code);
 		model.addAttribute("profile", SessionContext.getProfile());
 		return "security/noaccess";
 	}	

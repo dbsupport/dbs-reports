@@ -51,7 +51,7 @@ public class FieldDate  extends AField<Date> {
 	
 	@Override
 	public String getValueAsString() {
-		return svalue;
+		return hasValue()?svalue:"";
 	}
 	
 	public void setValueAsString(String value) {

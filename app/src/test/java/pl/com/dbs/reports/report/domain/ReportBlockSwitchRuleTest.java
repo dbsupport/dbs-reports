@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import pl.com.dbs.reports.report.domain.builders.ReportBlockException;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuilder;
 import pl.com.dbs.reports.security.domain.SessionContext;
 
@@ -239,5 +240,41 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 		
 		System.out.print(sb);		
 		assertTrue(sb.equals(SENTENCE+params.get(I_3)));			
+	}	
+	
+	@Test
+	public void should_choose_space() throws IOException, ReportBlockException {
+		params.put("INTEXT", " ");
+
+		ReportBlocksBuilder builder = builderContent("[BLOCK(INIT)BLOCK][SWITCH(^$INTEXT^)#CASE( )spacja #CASE()pusty #CASE(aa)aa #CASE($)inny SWITCH]");
+		
+		String sb = new String(builder.build().getContent());
+		
+		System.out.print(sb);		
+		assertTrue(sb.equals("spacja "));			
+	}
+	
+	@Test
+	public void should_choose_empty() throws IOException, ReportBlockException {
+		params.put("INTEXT", "");
+
+		ReportBlocksBuilder builder = builderContent("[BLOCK(INIT)BLOCK][SWITCH(^$INTEXT^)#CASE( )spacja #CASE()pusty #CASE(aa)aa #CASE($)inny SWITCH]");
+		
+		String sb = new String(builder.build().getContent());
+		
+		System.out.print(sb);		
+		assertTrue(sb.equals("pusty "));			
+	}
+	
+	@Test
+	public void should_choose_otherwise() throws IOException, ReportBlockException {
+		params.put("INTEXT", "bum tralalala chlupie fala");
+
+		ReportBlocksBuilder builder = builderContent("[BLOCK(INIT)BLOCK][SWITCH(^$INTEXT^)#CASE( )spacja #CASE()pusty #CASE(aa)aa #CASE($)inny SWITCH]");
+		
+		String sb = new String(builder.build().getContent());
+		
+		System.out.print(sb);		
+		assertTrue(sb.equals("inny "));			
 	}	
 }

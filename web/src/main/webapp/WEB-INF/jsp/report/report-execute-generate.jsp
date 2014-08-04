@@ -4,7 +4,7 @@
 <tiles:insertDefinition name="tiles-wizard" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-report-execute-generate</tiles:putAttribute>
 <tiles:putAttribute name="title" type="string">Generowanie raportu</tiles:putAttribute>
-<tiles:putAttribute name="steps" type="string">Ustaw parametry raportu;Wygeneruj raport;Obejrzyj raport</tiles:putAttribute>
+<tiles:putAttribute name="steps" type="string">Ustaw parametry raportu;Wygeneruj raport</tiles:putAttribute>
 <tiles:putAttribute name="step" type="string">2</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/new-user.css" type="text/css" media="screen" />
@@ -46,6 +46,7 @@
                             	<tiles:putAttribute name="inputclass" type="string">form-control inline-input</tiles:putAttribute>
                             	<tiles:putAttribute name="attributes" type="string">readonly="readonly"</tiles:putAttribute>
                             	<tiles:putAttribute name="disabled" type="string">disabled</tiles:putAttribute>
+                            	<tiles:putAttribute name="tooltips" type="string">false</tiles:putAttribute>
                             	</tiles:insertDefinition>
                             </c:forEach>
                             </c:if>                     		

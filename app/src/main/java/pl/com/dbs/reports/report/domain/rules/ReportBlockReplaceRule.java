@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
-import pl.com.dbs.reports.report.domain.ReportBlockException;
+import pl.com.dbs.reports.report.domain.builders.ReportBlockException;
 
 /**
  * Simple replace rule.

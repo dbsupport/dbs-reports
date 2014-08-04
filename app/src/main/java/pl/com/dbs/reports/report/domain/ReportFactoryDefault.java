@@ -3,25 +3,27 @@
  */
 package pl.com.dbs.reports.report.domain;
 
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import pl.com.dbs.reports.api.report.ReportFactory;
+import pl.com.dbs.reports.api.report.ReportLog;
 import pl.com.dbs.reports.api.report.ReportProduceContext;
+import pl.com.dbs.reports.api.report.ReportProduceResult;
 import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuilder;
 import pl.com.dbs.reports.report.domain.builders.ReportRtfPdfBlocksBuilder;
-import pl.com.dbs.reports.report.domain.builders.ReportTextBlockInflater;
 import pl.com.dbs.reports.report.domain.builders.ReportTextBlocksBuilder;
 import pl.com.dbs.reports.report.domain.builders.ReportTextPdfBlocksBuilder;
+import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflater;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 
 /**
@@ -35,7 +37,7 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
  */
 @Component
 public class ReportFactoryDefault implements ReportFactory {
-	private static final Logger logger = Logger.getLogger(ReportFactoryDefault.class);
+	//private static final Logger logger = Logger.getLogger(ReportFactoryDefault.class);
 	private ReportTextBlockInflater inflater;
 	
 	@Autowired
@@ -57,7 +59,7 @@ public class ReportFactoryDefault implements ReportFactory {
 	 * @see pl.com.dbs.reports.api.report.ReportFactory#produce(pl.com.dbs.reports.api.report.ReportProduceContext)
 	 */
 	@Override
-	public byte[] produce(final ReportProduceContext context) {
+	public ReportProduceResult produce(final ReportProduceContext context) {
 		ReportPattern pattern = (ReportPattern)(((ReportProduceContextDefault)context).getPattern());
 		ReportType format = ((ReportProduceContextDefault)context).getFormat();
 		Map<String, String> params = ((ReportProduceContextDefault)context).getParameters();
@@ -66,20 +68,25 @@ public class ReportFactoryDefault implements ReportFactory {
 		PatternTransformate transformate = pattern.getTransformate(format);
 		Validate.notNull(transformate, "Transformate is no more!");
 		
-		logger.debug("Input parameters:");
-		for (Map.Entry<String, String> entry : params.entrySet()) logger.debug(entry.getKey()+":"+entry.getValue());
-		
 		//..resolve builder for blocks..
-		ReportBlocksBuilder blocksbuilder = resolveBlocksBuilder(transformate, params);
+		final ReportBlocksBuilder blocksbuilder = resolveBlocksBuilder(transformate, params);
 		Validate.notNull(blocksbuilder, "Blocks builder is no more!");
 		
-		//..report builder..
-//		Profile profile = profileDao.find(SessionContext.getProfile().getId());
-//		ReportBuilder reportbuilder = new ReportBuilder(pattern, profile, format, name, params);
-		
 		//.inflate blocks tree..
-		return blocksbuilder.build().getContent();
-		//return reportbuilder.build().getReport().content(blocksbuilder.getContent());
+		blocksbuilder.build();
+		
+		//..construct result..
+		return new ReportProduceResult() {
+			@Override
+			public byte[] getContent() {
+				return blocksbuilder.getContent();
+			}
+
+			@Override
+			public List<ReportLog> getLogs() {
+				return blocksbuilder.getLogs();
+			}
+		};
 	}
 	
 	

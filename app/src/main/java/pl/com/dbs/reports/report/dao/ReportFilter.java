@@ -34,6 +34,10 @@ public class ReportFilter extends AFilter<Report> {
 	private List<ReportPhaseStatus> phases = new ArrayList<ReportPhaseStatus>();
 	private List<ReportStatus> statuses = new ArrayList<ReportStatus>();
 	
+	public ReportFilter(Integer limit) {
+		if (limit != null) getPager().setDataSize(limit);
+	}
+	
 	public ReportFilter() {
 		Profile profile = SessionContext.getProfile();
 		Validate.notNull(profile, "Profile is no more!");

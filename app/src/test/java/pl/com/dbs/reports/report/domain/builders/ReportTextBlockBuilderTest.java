@@ -35,7 +35,6 @@ import pl.com.dbs.reports.api.report.pattern.PatternValidator;
 import pl.com.dbs.reports.profile.dao.ProfileDao;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.ReportFactoryDefaultTest;
-import pl.com.dbs.reports.report.domain.ReportBlockException;
 import pl.com.dbs.reports.report.domain.ReportFactoryDefault;
 import pl.com.dbs.reports.report.pattern.domain.PatternFactoryDefault;
 import pl.com.dbs.reports.report.pattern.domain.PatternProduceContextDefault;

@@ -3,8 +3,10 @@
  */
 package pl.com.dbs.reports.report.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Basic;
@@ -22,7 +24,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.MapKeyColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -100,6 +104,11 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 	
     @Embedded
     private ReportPhase phase;	
+    
+    @OrderBy
+	@OneToMany(mappedBy="report", orphanRemoval=true)
+    private List<ReportLog> logs = new ArrayList<ReportLog>();    
+	    
 
 //recznie obsluguj usuwanie ReportOrder bo powinien byc usuwany tylko jesli wszystkie raporty sa usuniete..    
 //    @ManyToOne(fetch=FetchType.LAZY)//, cascade={CascadeType.REMOVE})
@@ -146,25 +155,41 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     	return this;
     }    
     
-    public Report ready(byte[] content) {
+    public Report ready(byte[] content, List<ReportLog> logs) {
     	if (!this.phase.is(ReportPhaseStatus.START))
     		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for ready!");
     		
     	this.phase.rephase(ReportPhaseStatus.READY);
-    	this.content = content;
+    	this.content = content!=null&&content.length<=0?null:content;
+    	this.logs = logs;
+    	for (ReportLog log : logs) log.setReport(this);
     	return this;
     }   
     
-    public Report failure(Exception e) {
+    public Report failure(ReportLog log) {
     	if (this.phase.is(ReportPhaseStatus.READY)
     		||this.phase.is(ReportPhaseStatus.TRANSIENT))
     		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for failure!");
     	
     	this.phase.rephase(ReportPhaseStatus.READY);
-    	this.content = e.toString().getBytes();
+    	log.setReport(this);
+    	this.logs.add(log);
     	this.status = ReportStatus.FAILED;
     	return this;
     }
+    
+    public Report timeout(ReportLog log) {
+    	if (this.phase.is(ReportPhaseStatus.READY)
+    		||this.phase.is(ReportPhaseStatus.TRANSIENT))
+    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for failure!");
+    	
+    	this.phase.rephase(ReportPhaseStatus.READY);
+    	this.content = null;
+    	log.setReport(this);
+    	this.logs.add(log);
+    	this.status = ReportStatus.FAILED;
+    	return this;
+    }    
     
     public Report confirm() {
     	if (!this.phase.is(ReportPhaseStatus.READY))
@@ -222,6 +247,16 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 	public byte[] getContent() {
 		return content;
 	}
+	
+	public String getContentAsString() {
+		return content!=null?new String(content):"";
+	}
+	
+	public boolean isDownloadable() {
+		return ReportStatus.OK.equals(status)
+				&&phase.isFinishedUnarchived()
+				&&(content!=null&&content.length>0);
+	}
 
 	@Override
 	public ReportType getFormat() {
@@ -239,6 +274,11 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     
     public ReportPhase getPhase() {
 		return phase;
+	}
+
+
+	public List<ReportLog> getLogs() {
+		return logs;
 	}
 
 

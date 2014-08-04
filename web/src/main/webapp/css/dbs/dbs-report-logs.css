@@ -1,0 +1,59 @@
+/**
+ * (c) dbs-reports
+ */
+
+.label.report-phase-label {
+    display: inline-block;
+    padding:4px;
+    width:100px;
+}
+
+
+.pop-dialog.pop-dialog-log {
+    width: 500px;
+    position: absolute;
+    left: 20px;
+    top: 30px;
+    display: none;
+}
+
+a.pop-dialog-log-trigger:hover,
+a.pop-dialog-log-trigger:active {
+    cursor: pointer;
+    text-decoration: none;
+}
+.log a.close-icon {
+    float: right;
+    text-decoration: none;
+}
+
+.pop-dialog-log .item {
+    padding:8px;
+}
+
+.pop-dialog-log .item.grey {
+    background-color: #eee;
+}
+
+.pop-dialog-log .item .time {
+    font-size: 80%;
+    font-weight: bold;
+    float: right;
+}
+
+.pop-dialog-log .item .title {
+    font-size: 80%;
+    font-weight: bold;
+}
+
+.pop-dialog-log .item .title.WARNING {
+    color: #f0ad4e;
+}
+
+.pop-dialog-log .item .title.ERROR {
+    color: #d9534f;
+}
+
+.pop-dialog-log .item .msg {
+    font-size: 90%;
+}

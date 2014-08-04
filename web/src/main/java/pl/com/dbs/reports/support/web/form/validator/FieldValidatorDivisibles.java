@@ -48,7 +48,7 @@ public class FieldValidatorDivisibles extends AFieldValidator {
 
 	@Override
 	public void init(AField<?> field, LinkedList<AField<?>> fields) {
-		this.description = new FieldValidatorDescription("errors.required");
+		this.description = new FieldValidatorDescription("errors.divisibles");
 	}	
 	
 }

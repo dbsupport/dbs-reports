@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import pl.com.dbs.reports.report.domain.builders.ReportBlockException;
+import pl.com.dbs.reports.report.domain.builders.ReportBlockInflationException;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuilder;
 
 /**

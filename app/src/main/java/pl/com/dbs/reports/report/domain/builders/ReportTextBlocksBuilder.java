@@ -4,6 +4,7 @@
 package pl.com.dbs.reports.report.domain.builders;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +13,11 @@ import java.util.regex.Matcher;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import pl.com.dbs.reports.api.report.ReportLog;
+import pl.com.dbs.reports.api.report.ReportLogType;
 import pl.com.dbs.reports.api.report.pattern.PatternInflater;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
-import pl.com.dbs.reports.report.domain.ReportBlockException;
+import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflater;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -40,11 +43,14 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	protected ReportTextBlock root;
 	private ReportTextBlockInflater inflater;
 	private List<ReportBlockInflation> inflations;
-	private Map<String, String> parameters;		
+	private Map<String, String> parameters;
+	private List<ReportLog> logs = new ArrayList<ReportLog>();
+	private StringBuilder sb;
 	
 	public ReportTextBlocksBuilder(final PatternTransformate transformate) {
 		content = transformate.getContent();
 		parameters = new HashMap<String, String>();
+		sb = new StringBuilder();
 		resolveInflations(transformate);
 		resolveInput();
 	}
@@ -77,6 +83,10 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	@Override
 	public byte[] getContent() {
 		return content;
+	}
+
+	public List<ReportLog> getLogs() {
+		return logs;
 	}
 
 	ReportTextBlock getRootBlock() {
@@ -135,15 +145,51 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	public ReportTextBlocksBuilder build() throws ReportBlockException {
 		//..deconstruct first...
 		deconstruct();
-		
+		//..add parameters log..
+		resolveParamsLog();
+		//..build context..
+		ReportBlocksBuildContext context = new ReportBlocksBuildContext(root, parameters, logs, sb);
 		//..inflate...
 		if (inflater!=null) {
-			StringBuilder sb = new StringBuilder();
-			inflater.inflate(root, parameters, sb);
-			content = sb.toString().getBytes();
+			try {
+				inflater.inflate(context);
+			} catch (ReportBlocksBuildTerminationException e) {
+				logger.info("Building terminated!", e);
+			}
 		}
 		
+		content = sb!=null?sb.toString().getBytes():null;
 		return this;
+	}
+	
+	/**
+	 * If has any parameter add log entry..
+	 */
+	private void resolveParamsLog() {
+		if (parameters.isEmpty()) return;
+
+		final StringBuilder sb = new StringBuilder();
+		for (Map.Entry<String, String> param : parameters.entrySet()) {
+			if (!StringUtils.isBlank(param.getValue())) {
+				String value = param.getValue().length()>255?(param.getValue().substring(0, 255)+".."):param.getValue();
+				sb.append(param.getKey()).append("=").append(value).append(System.getProperty("line.separator"));
+			}
+		}
+		
+		logs.add(new ReportLog() {
+			@Override
+			public Date getDate() {
+				return new Date();
+			}
+			@Override
+			public ReportLogType getType() {
+				return ReportLogType.INFO;
+			}
+			@Override
+			public String getMsg() {
+				return sb.toString();
+			}
+		});
 	}
 
 	private void deconstruct() {
@@ -154,10 +200,6 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 		this.root.print();
 	}
 	
-	String getContentAsString() {
-		return new String(content);
-	}
-
 	/**
 	 * Breakes content into blocks.
 	 * All in memory - sic!

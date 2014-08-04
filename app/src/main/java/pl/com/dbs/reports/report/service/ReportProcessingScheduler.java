@@ -3,15 +3,19 @@
  */
 package pl.com.dbs.reports.report.service;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import pl.com.dbs.reports.report.dao.ReportDao;
+import pl.com.dbs.reports.report.domain.Report;
 
 /**
  * Reports generation scheduler.
+ * Generates if sth stucked.
  * 
  * http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/scheduling.html
  *
@@ -24,76 +28,63 @@ public class ReportProcessingScheduler {
 	@Autowired private ReportDao reportDao;
 	@Autowired private ReportProcessingService reportProcessingService;
 	@Autowired private ReportOrderService reportOrderService;
+	@Autowired private ReportProcessingAsynchService reportProcessingAsynchService;
+
 	
 	/**
 	 * ..process reports from INIT state...
 	 */
-	@Scheduled(fixedRate=20000)// (cron="0 */1 * * * ?")
+	@Scheduled(cron="* */15 * * * ?")//(fixedRate=20000)
 	public void generate() {
-		/**
-		 * ..find oldest generation to process..
-		 */
-		
-		Long id = reportDao.findAwaiting();
-		if (id != null) {
-			process(id);
-
-		}
+		List<Report> awaiting = reportDao.findAwaiting(null);
+		reportProcessingAsynchService.generate(awaiting);
 	}
 	
-	
-	
-	//@Scheduled(cron="0 */2 * * * ?")
 	/**
 	 * Try to clean START'ed reports that stucked...
 	 */
+	@Scheduled(cron="* */20 * * * ?")
 	public void regenerate() {
-		/**
-		 * ..find oldest generation to process..
-		 */
-		
-		Long id = reportDao.findLost();
-		if (id != null) {
-			reprocess(id);
+		List<Report> lost = reportDao.findLost(null);
+		for (Report report : lost) {
+			logger.debug("Report re-processing:"+report.getId());
+			reportProcessingService.restart(report.getId());
 		}
 	}	
 	
 	/**
-	 * ..make some notification if reports are ready..
+	 * find broken ones.. 
 	 */
-	//@Scheduled(cron="0 */1 * * * ?")
-	public void notification() {
-		reportOrderService.ready();
+	@Scheduled(cron="0 */25 * * * ?")
+	public void cleanup() {
+		List<Report> broken = reportDao.findBroken(null);
+		for (Report report : broken) {
+			logger.debug("Report timeouted:"+report.getId());
+			reportProcessingService.timeout(report.getId());
+		}
 	}		
-
 	
 	/**
-	 * ..cleanup orders..
+	 * ..make some notification if reports are ready..
+	 * Normally it is done on demand (see public void ready(long id))
+	 * but this cron cleans failed tries.. 
 	 */
-	@Scheduled(fixedRate=30000)
+	@Scheduled(cron="0 */5 * * * ?")
+	public void notification() {
+		reportProcessingService.ready();
+	}		
+	
+	/**
+	 * ..cleanup orders that have all reports done.
+	 * Normally it is done on demand (see public void cleanupConfirmed(Report report))
+	 * but this cron cleans failed tries..
+	 * public void cleanupConfirmed(Report report) {
+	 */
+	//@Scheduled(fixedRate=30000)
+	@Scheduled(cron="0 */10 * * * ?")
 	public void orders() {
 		reportOrderService.cleanupConfirmed();
 	}
 	
-	
-	
-	
-	
-	
-	
-	private void reprocess(final long id) {
-		logger.debug("Report re-processing: "+id);
-		reportProcessingService.restart(id);
-		reportProcessingService.generate(id);
-		reportOrderService.ready(id);
-	}
-	
-	private void process(final long id) {
-		logger.debug("Report processing: "+id);
-		reportProcessingService.start(id);
-		reportProcessingService.generate(id);
-		reportOrderService.ready(id);
-		
-	}
 	
 }

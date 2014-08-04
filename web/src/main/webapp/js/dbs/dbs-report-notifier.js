@@ -39,32 +39,10 @@ $(function () {
     		/**
     		 * audio
     		 */
-    		if (data.brandnew>0) $('#new-reports #audio')[0].play();    		
+    		if (data.brandnew>0) {
+    			$('#new-reports #audio')[0].play();   
+    		}
 	   };
-	   
-//   	/**
-//   	 * confirmation
-//   	 */
-//		$('#new-reports a.trigger').click(function () {
-//			var url = 'reports/seen/';
-//			var ids = [];
-//   			$('#new-reports .pop-dialog .body .notifications a.item').each(function(idx) {
-//   				ids[ids.length] = $(this).attr('data-id');
-//   			});
-//   			if (ids.length>0) {
-//	   			$.ajax({
-//	   	    	    url: 'reports/seen/'+ids, 
-//	   	    	    timeout: 10000,
-//	   	    	    type: "GET",
-//	   	    	    success: function(data) {
-//	   	    	    },
-//	   	    	    error: function(data) {
-//	   	    	    },
-//	   	    	    complete: function() {
-//	   	    	    }
-//	   	    	  });	    			
-//			}
-//		});	  	   
 	   
 	   (function worker() {
 	 	  $.ajax({
@@ -73,7 +51,13 @@ $(function () {
 	  	    type: "GET",
 	  	    success: function(data) {
 	  	    	$.setupNotifications(data); 
-	  	    	setTimeout(worker, 5000);
+	  	    	setTimeout(worker, 10000);
+	    		if (data.brandnew>0) {
+	    			$.event.trigger({
+	    				type: "notification-brandnew",
+	    				time: new Date()
+	    			});
+	    		}	  	    	
 	  	    },
 	  	    error: function(data) {
 	  	    },

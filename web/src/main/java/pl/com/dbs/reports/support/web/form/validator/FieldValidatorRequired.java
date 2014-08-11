@@ -22,6 +22,8 @@ import pl.com.dbs.reports.support.web.form.field.AField;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("required")
 public class FieldValidatorRequired extends AFieldValidator {
+	private static final long serialVersionUID = -5390528193564687086L;
+
 	public FieldValidatorRequired() {
 		super();
 	}

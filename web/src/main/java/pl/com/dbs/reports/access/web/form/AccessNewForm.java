@@ -15,6 +15,7 @@ import pl.com.dbs.reports.support.web.form.AForm;
  * @coptyright (c) 2013
  */
 public class AccessNewForm extends AForm implements AccessCreation {
+	private static final long serialVersionUID = 481960559409383168L;
 	public static final String KEY = "accessNewForm";
 	private String name;
 	private String description;

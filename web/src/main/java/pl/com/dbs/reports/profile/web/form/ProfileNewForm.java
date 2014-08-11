@@ -4,6 +4,7 @@
 package pl.com.dbs.reports.profile.web.form;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,9 @@ import pl.com.dbs.reports.support.web.form.AForm;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class ProfileNewForm extends AForm implements ProfileCreation {
+public class ProfileNewForm extends AForm implements ProfileCreation, Serializable {
+	private static final long serialVersionUID = -3562062478732925527L;
+
 	public static final String KEY = "profileNewForm";
 	
 	private String login;

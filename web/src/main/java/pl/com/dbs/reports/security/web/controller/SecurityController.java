@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import pl.com.dbs.reports.parameter.service.ParameterService;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.service.ProfileService;
 import pl.com.dbs.reports.profile.web.ProfileSession;
@@ -34,6 +35,7 @@ public class SecurityController {
 	private static final Logger logger = Logger.getLogger(SecurityController.class);
 	@Autowired private Alerts alerts;
 	@Autowired private ProfileService profileService;
+	@Autowired private ParameterService parameterService;
 	
 	@RequestMapping(value="/security/login", method = RequestMethod.GET)
     public String login(RedirectAttributes ra) {
@@ -58,6 +60,7 @@ public class SecurityController {
     public String entrypoint(ModelMap model, HttpServletRequest request) {
 		Profile profile = profileService.findCurrent();
 		ProfileSession.update(profile, request);
+		ProfileSession.update(parameterService.find(ParameterService.APP_HELP_FILE), request);
 		return "redirect:/profile";
 	}
 	

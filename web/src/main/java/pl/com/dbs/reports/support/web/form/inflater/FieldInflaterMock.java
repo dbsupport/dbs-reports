@@ -16,6 +16,7 @@ import pl.com.dbs.reports.support.web.form.option.FieldOption;
  */
 
 public class FieldInflaterMock implements FieldInflater {
+	private static final long serialVersionUID = 6234769191289150550L;
 	private static final String[] LABELS = new String[] {"Jest li w istocie", "szlachetniejsza rzeczą", "Znosić pociski zawistnego losu", "Czy też", "stawiwszy czoło morzu nędzy", "Przez opór wybrnąc z niego?"};
 	
 	@Override

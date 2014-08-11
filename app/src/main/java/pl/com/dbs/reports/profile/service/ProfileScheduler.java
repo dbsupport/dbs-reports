@@ -49,8 +49,8 @@ public class ProfileScheduler {
 	 * Temp. For tests.
 	 */
 	public List<ClientProfile> findClientProfiles(ClientProfilesFilter filter) {
-		parameterService.edit("client.db.encoding", filter.getInEncoding());
-		parameterService.edit("local.db.encoding", filter.getOutEncoding());
+		parameterService.edit("client.db.encoding", filter.getInEncoding()!=null?filter.getInEncoding().getBytes():null, null);
+		parameterService.edit("local.db.encoding", filter.getOutEncoding()!=null?filter.getOutEncoding().getBytes():null, null);
 		
 		try {
 			return encode(clientProfileService.find(filter));

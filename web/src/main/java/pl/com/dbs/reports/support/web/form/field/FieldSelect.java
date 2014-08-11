@@ -31,6 +31,7 @@ import com.google.common.collect.Iterables;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("select")
 public class FieldSelect extends AField<String> implements IFieldInflatable, IFieldSelectable {
+	private static final long serialVersionUID = -606676031675990235L;
 	@XmlAttribute(name="value")
 	protected String value;		
 	@XmlElement(name="option", namespace = "http://www.dbs.com.pl/reports/1.0/form")

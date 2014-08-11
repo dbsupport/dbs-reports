@@ -3,6 +3,7 @@
  */
 package pl.com.dbs.reports.support.web.form.validator;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,7 +29,8 @@ import com.google.common.collect.Iterables;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorNode("@type")
-public abstract class AFieldValidator {
+public abstract class AFieldValidator implements Serializable {
+	private static final long serialVersionUID = -2500079204810428025L;
 	@XmlAttribute(name="type", required = true)
 	protected String type;
 	@XmlAttribute(name="stop")

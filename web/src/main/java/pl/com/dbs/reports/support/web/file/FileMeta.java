@@ -6,6 +6,7 @@ package pl.com.dbs.reports.support.web.file;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.springframework.util.FileCopyUtils;
@@ -20,7 +21,9 @@ import com.google.common.io.Files;
  * @coptyright (c) 2013
  */
 @JsonIgnoreProperties({"content", "file"})
-public class FileMeta {
+public class FileMeta implements Serializable {
+	private static final long serialVersionUID = -1978428468004824529L;
+	
 	private String name;
 	private long size;
 	private String type;

@@ -21,6 +21,9 @@ import com.google.inject.internal.Lists;
  * @coptyright (c) 2014
  */
 public class FieldValidatorDivisibles extends AFieldValidator {
+	private static final long serialVersionUID = 4246536321789298943L;
+
+
 	public FieldValidatorDivisibles() {
 		super();
 	}

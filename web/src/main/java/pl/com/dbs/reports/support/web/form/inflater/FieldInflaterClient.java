@@ -20,13 +20,15 @@ import pl.com.dbs.reports.support.web.form.field.IFieldInflatable;
 import pl.com.dbs.reports.support.web.form.option.FieldOption;
 
 /**
- * TODO
+ * Inflates with data from CLIENT db.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2014
  */
 @Service
 public class FieldInflaterClient implements FieldInflater {
+	private static final long serialVersionUID = 6452625040017425916L;
+
 	private static final Logger logger = Logger.getLogger(FieldInflaterClient.class);
 	
 	private static final String PREFIX = "CLIENT:";

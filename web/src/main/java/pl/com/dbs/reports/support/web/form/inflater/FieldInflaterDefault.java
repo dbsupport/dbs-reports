@@ -23,6 +23,7 @@ import pl.com.dbs.reports.support.web.form.option.FieldOption;
  */
 @Service
 public class FieldInflaterDefault implements FieldInflater {
+	private static final long serialVersionUID = -8831200374583186953L;
 	private static final Logger logger = Logger.getLogger(FieldInflaterDefault.class);
 	private static final String LOCAL = "LOCAL:";
 	private static final Pattern LOCAL_PATTERN = Pattern.compile("^"+LOCAL, Pattern.CASE_INSENSITIVE);

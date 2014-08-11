@@ -151,7 +151,7 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     	if (!this.phase.is(ReportPhaseStatus.START))
     		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for restart!");
     	
-    	this.phase.rephase(ReportPhaseStatus.START);
+    	this.phase.rephase(ReportPhaseStatus.INIT);
     	return this;
     }    
     

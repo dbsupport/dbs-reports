@@ -15,6 +15,7 @@ import pl.com.dbs.reports.support.web.form.AForm;
  * @coptyright (c) 2013
  */
 public class PatternListForm extends AForm {
+	private static final long serialVersionUID = -4503613041279207128L;
 	public static final String KEY = "patternListForm";
 	private String name;
 	private String version;

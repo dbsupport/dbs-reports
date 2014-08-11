@@ -64,7 +64,7 @@
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-access-list')}">active</c:if>" href="access/list">Uprawnienia raportowe</a></li>
                 	<li>&nbsp;</li>
                 	<sec:authorize access="hasAnyRole('Admin')">
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-parameter-edit')}">active</c:if>" href="param/edit">Parametry bazy danych</a></li>
+                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-parameter-edit')}">active</c:if>" href="param/edit">Parametry<br/>aplikacji</a></li>
                     </sec:authorize>
                 </ul>
             </li>            

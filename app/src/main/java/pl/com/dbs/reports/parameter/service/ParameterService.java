@@ -33,6 +33,8 @@ public class ParameterService {
 	private static final String DB_PASSWD = "client.db.passwd";
 	private static final String DB_IENCODING = "client.db.encoding";
 	private static final String DB_OENCODING = "local.db.encoding";
+	
+	public static final String APP_HELP_FILE = "app.help.file";
 
 	/** 
 	 * ! w obecnej wersji nie wymagane !
@@ -51,10 +53,10 @@ public class ParameterService {
 	@Autowired private ParameterDao parameterDao;
 
 	/**
-	 * Get all.
+	 * Get params.
 	 */
-	public List<Parameter> find()  {
-		return parameterDao.find(new ParameterFilter());
+	public List<Parameter> find(ParameterFilter filter)  {
+		return parameterDao.find(filter);
 	}
 	
 	public Parameter find(final String key)  {
@@ -66,12 +68,13 @@ public class ParameterService {
 	 * Save..
 	 */
 	@Transactional
-	public boolean edit(final String key, final String value) {
+	public boolean edit(final String key, final byte[] value, final String desc) {
 		Validate.notNull(key, "Key is no more!");
 		Parameter parameter = parameterDao.find(key);
 		Validate.notNull(parameter, "No such parameter!");
 		boolean result = !parameter.isSame(value);
 		parameter.changeValue(value);
+		parameter.changeDesc(desc);
 		return result;
 	}
 	
@@ -83,12 +86,12 @@ public class ParameterService {
 
 			@Override
 			public String getInEncoding() {
-				return in.toString();
+				return in.getValueAsString();
 			}
 
 			@Override
 			public String getOutEncoding() {
-				return out.toString();
+				return out.getValueAsString();
 			}
 			
 		};
@@ -120,32 +123,32 @@ public class ParameterService {
 		return new ConnectionContext() {
 			@Override
 			public String getUser() {
-				return user.toString();
+				return user.getValueAsString();
 			}
 			
 			@Override
 			public String getUrl() {
-				return "jdbc:oracle:thin:@"+ip+":"+port+":"+name;
+				return "jdbc:oracle:thin:@"+ip.getValueAsString()+":"+port.getValueAsString()+":"+name.getValueAsString();
 			}
 			
 			@Override
 			public String getSchema() {
-				return schema.toString();
+				return schema.getValueAsString();
 			}
 			
 			@Override
 			public String getPassword() {
-				return passwd.toString();
+				return passwd.getValueAsString();
 			}
 			
 			@Override
 			public String getName() {
-				return name.toString();
+				return name.getValueAsString();
 			}
 			
 			@Override
 			public String getDriver() {
-				return driver.toString();
+				return driver.getValueAsString();
 			}
 		};
 	}

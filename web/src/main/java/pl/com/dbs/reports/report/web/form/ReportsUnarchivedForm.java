@@ -3,6 +3,7 @@
  */
 package pl.com.dbs.reports.report.web.form;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,9 @@ import com.google.common.collect.Lists;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2014
  */
-public class ReportsUnarchivedForm {
+public class ReportsUnarchivedForm implements Serializable {
+	private static final long serialVersionUID = 4623000408765111363L;
+
 	public static final String KEY = "reportsunarchivedform";
 	
 	private List<Long> id;

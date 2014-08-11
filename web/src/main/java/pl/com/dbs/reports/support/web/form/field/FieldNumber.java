@@ -21,6 +21,7 @@ import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorValue;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("number")
 public class FieldNumber extends AField<Number> {
+	private static final long serialVersionUID = 5947743292253042822L;
 	//FIXME: private T value; nie dziala...
 	@XmlAttribute(name="value")
 	protected Number value;	

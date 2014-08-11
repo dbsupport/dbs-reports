@@ -24,6 +24,7 @@ import pl.com.dbs.reports.support.web.form.DForm;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "form", namespace = "http://www.dbs.com.pl/reports/1.0/form")
 public class ReportGenerationForm extends DForm implements ReportGenerationContext {
+	private static final long serialVersionUID = -5420902467886273804L;
 	public static final String KEY = "reportGenerationForm";
 	private Long pattern;
 	private String name;

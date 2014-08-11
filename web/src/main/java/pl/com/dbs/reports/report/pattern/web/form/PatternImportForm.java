@@ -17,6 +17,7 @@ import pl.com.dbs.reports.support.web.form.AForm;
  * @coptyright (c) 2013
  */
 public class PatternImportForm extends AForm {
+	private static final long serialVersionUID = 1911733990433293245L;
 	public static final String KEY = "patternImportForm";
 	private MultipartFile  file;
 	/**

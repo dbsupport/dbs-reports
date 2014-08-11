@@ -34,16 +34,20 @@ public class ReportProcessingScheduler {
 	/**
 	 * ..process reports from INIT state...
 	 */
-	@Scheduled(cron="* */15 * * * ?")//(fixedRate=20000)
+	@Scheduled(cron="* */10 * * * ?")
 	public void generate() {
 		List<Report> awaiting = reportDao.findAwaiting(null);
+		for (Report report : awaiting) {
+			logger.debug("Report processing:"+report.getId());
+			reportProcessingService.start(report.getId());
+		}		
 		reportProcessingAsynchService.generate(awaiting);
 	}
 	
 	/**
 	 * Try to clean START'ed reports that stucked...
 	 */
-	@Scheduled(cron="* */20 * * * ?")
+	@Scheduled(cron="* */15 * * * ?")
 	public void regenerate() {
 		List<Report> lost = reportDao.findLost(null);
 		for (Report report : lost) {
@@ -55,7 +59,7 @@ public class ReportProcessingScheduler {
 	/**
 	 * find broken ones.. 
 	 */
-	@Scheduled(cron="0 */25 * * * ?")
+	@Scheduled(cron="* */25 * * * ?")
 	public void cleanup() {
 		List<Report> broken = reportDao.findBroken(null);
 		for (Report report : broken) {
@@ -69,7 +73,7 @@ public class ReportProcessingScheduler {
 	 * Normally it is done on demand (see public void ready(long id))
 	 * but this cron cleans failed tries.. 
 	 */
-	@Scheduled(cron="0 */5 * * * ?")
+	@Scheduled(cron="* */5 * * * ?")
 	public void notification() {
 		reportProcessingService.ready();
 	}		
@@ -81,7 +85,7 @@ public class ReportProcessingScheduler {
 	 * public void cleanupConfirmed(Report report) {
 	 */
 	//@Scheduled(fixedRate=30000)
-	@Scheduled(cron="0 */10 * * * ?")
+	@Scheduled(cron="* */10 * * * ?")
 	public void orders() {
 		reportOrderService.cleanupConfirmed();
 	}

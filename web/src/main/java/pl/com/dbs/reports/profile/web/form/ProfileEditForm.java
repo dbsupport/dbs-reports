@@ -4,6 +4,7 @@
 package pl.com.dbs.reports.profile.web.form;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 import pl.com.dbs.reports.access.domain.Access;
@@ -20,7 +21,9 @@ import pl.com.dbs.reports.support.web.file.FileMeta;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class ProfileEditForm extends ProfileNewForm implements ProfileModification {
+public class ProfileEditForm extends ProfileNewForm implements ProfileModification, Serializable {
+	private static final long serialVersionUID = -7023050729373559447L;
+	
 	public static final String KEY = "profileEditForm";
 	private Long id;
 	private boolean save;

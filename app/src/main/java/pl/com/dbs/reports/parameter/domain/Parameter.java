@@ -3,11 +3,14 @@
  */
 package pl.com.dbs.reports.parameter.domain;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.StringUtils;
@@ -32,12 +35,21 @@ public class Parameter implements IEntity {
 	@Column(name = "key")
 	private String key;
 	
+	@Lob
 	@Column(name = "value")
-	private String value;
+	@Basic(fetch = FetchType.LAZY)
+	private byte[] value;
+	
+	@Column(name = "description")
+	private String desc;
 	
 	@Column(name = "type")
 	@Enumerated(EnumType.STRING)
 	private ParameterType type;
+	
+	@Column(name = "scope")
+	@Enumerated(EnumType.STRING)
+	private ParameterScope scope;
 	
 	public Parameter() {}
 
@@ -49,26 +61,42 @@ public class Parameter implements IEntity {
 		return type;
 	}
 
-	public void changeValue(String value) {
-		this.value = value; 
+	public ParameterScope getScope() {
+		return scope;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+	
+	public void changeDesc(String desc) {
+		this.desc = desc; 
+	}	
+
+	public void changeValue(byte[] value) {
+		this.value = value!=null&&value.length>0?value:null; 
 	}	
 	
+	public byte[] getValue() {
+		return value;
+	}
+
 	public Integer getValueAsInteger() {
 		try {
-			return Integer.valueOf(value);
+			return Integer.valueOf(getValueAsString());
 		} catch (NumberFormatException e) {}
 		return null;
 	}
 	
-	@Override
-	public String toString() {
-		return StringUtils.isNotBlank(value)?value:null;
+	public String getValueAsString() {
+		return value!=null?new String(value):"";
 	}
 	
-	public boolean isSame(final String value) {
-		return 
-		((StringUtils.isBlank(this.value)&&StringUtils.isBlank(value))
-		||(StringUtils.isNotBlank(this.value)&&this.value.equals(value)));
+	public boolean isSame(final byte[] value) {
+		String str = getValueAsString();
+		String val = value!=null?new String(value):"";
+		return ((StringUtils.isBlank(str)&&StringUtils.isBlank(val))
+				||(StringUtils.isNotBlank(str)&&str.equals(val)));
 	}
 
 }

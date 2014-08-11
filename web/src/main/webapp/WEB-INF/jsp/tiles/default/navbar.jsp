@@ -86,6 +86,13 @@
                     </sec:authorize>
                 </ul>
             </li>
+            <c:if test="${helpfile eq true}">
+            <li class="settings hidden-xs hidden-sm">
+                <a href="profile/help" role="button">
+                    <i class="icon-info-sign"></i>
+                </a>
+            </li>
+            </c:if>
             <li class="settings hidden-xs hidden-sm">
                 <a href="security/logout" role="button">
                     <i class="icon-share-alt"></i>

@@ -43,6 +43,8 @@ import com.google.common.collect.Iterables;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("multiselect")
 public class FieldMultiSelect  extends AField<List<String>> implements IFieldInflatable, IFieldSelectable, IFieldDivisible {
+	private static final long serialVersionUID = -5990002806441623716L;
+
 	//FIXME: private T value; nie dziala...
 	@XmlAttribute(name="value")	
 	private List<String> value;

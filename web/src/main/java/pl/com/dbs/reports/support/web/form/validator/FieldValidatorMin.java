@@ -28,6 +28,8 @@ import pl.com.dbs.reports.support.web.form.field.FieldText;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("min")
 public class FieldValidatorMin extends AFieldValidator {
+	private static final long serialVersionUID = 5447642679865505766L;
+
 	public FieldValidatorMin() {
 		super();
 	}

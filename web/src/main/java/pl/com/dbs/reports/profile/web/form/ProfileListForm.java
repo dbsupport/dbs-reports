@@ -3,6 +3,8 @@
  */
 package pl.com.dbs.reports.profile.web.form;
 
+import java.io.Serializable;
+
 import pl.com.dbs.reports.profile.dao.ProfilesFilter;
 
 /**
@@ -11,7 +13,8 @@ import pl.com.dbs.reports.profile.dao.ProfilesFilter;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class ProfileListForm {
+public class ProfileListForm implements Serializable {
+	private static final long serialVersionUID = 622395683103389027L;
 	public static final String KEY = "profileListForm";
 	private String name;
 	private boolean accepted = true;

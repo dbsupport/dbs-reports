@@ -39,6 +39,8 @@ import com.google.inject.internal.Maps;
 @XmlAccessorType(XmlAccessType.FIELD)
 //@XmlRootElement(name = "form", namespace = "http://www.dbs.com.pl/reports/1.0/form")
 public abstract class DForm extends AForm {
+	private static final long serialVersionUID = -8413242846104561845L;
+
 	@XmlElement(name="field", namespace = "http://www.dbs.com.pl/reports/1.0/form")
 	@XmlElementWrapper(name="fields", namespace = "http://www.dbs.com.pl/reports/1.0/form")
 	protected LinkedList<AField<?>> fields;
@@ -122,7 +124,13 @@ public abstract class DForm extends AForm {
 	     */
 	    for (IFieldInflatable field : getInflatables()) {
 	    	FieldInflater inflater = resolveInflater(inflaters, field);
-	    	if (inflater!=null) inflater.inflate(field);
+	    	if (inflater!=null) {
+	    		try {
+	    			inflater.inflate(field);
+	    		} catch (Exception e) {
+	    			//field.getOptions().add(new FieldOption(null, e.getMessage().substring(0, 100)));
+	    		}
+	    	}
 	    }
 	    return this;
 	}	

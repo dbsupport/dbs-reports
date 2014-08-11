@@ -7,11 +7,11 @@ package pl.com.dbs.reports.parameter.domain;
 
 
 /**
- * Available parameter types.
+ * Available parameter scopes.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @coptyright (c) 2014
  */
-public enum ParameterType {
-	TEXT, PASSWD, FILE;
+public enum ParameterScope {
+	DB, APP;
 }

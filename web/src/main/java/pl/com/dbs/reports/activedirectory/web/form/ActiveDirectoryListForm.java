@@ -3,6 +3,7 @@
  */
 package pl.com.dbs.reports.activedirectory.web.form;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,8 @@ import pl.com.dbs.reports.activedirectory.dao.ActiveDirectoryFilter;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2014
  */
-public class ActiveDirectoryListForm {
+public class ActiveDirectoryListForm implements Serializable {
+	private static final long serialVersionUID = -2230069191958150689L;
 	public static final String KEY = "activeDirectoryListForm";
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	

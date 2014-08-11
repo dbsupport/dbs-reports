@@ -15,6 +15,7 @@ import pl.com.dbs.reports.access.domain.AccessModification;
  * @coptyright (c) 2013
  */
 public class AccessEditForm extends AccessNewForm implements AccessModification {
+	private static final long serialVersionUID = 6010224550653219106L;
 	public static final String KEY = "accessEditForm";
 	private Long id;
 

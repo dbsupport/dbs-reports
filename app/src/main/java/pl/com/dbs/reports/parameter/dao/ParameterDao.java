@@ -51,7 +51,12 @@ public class ParameterDao extends ADao<Parameter, Long> {
 	public List<Parameter> find(ParameterFilter filter) {
 		IContextDao<Parameter> c = new ContextDao<Parameter>(em, Parameter.class, filter);
 
-	    Predicate p = c.getBuilder().conjunction();
+		Predicate p = c.getBuilder().conjunction();
+		
+		if (filter.getScope()!=null) {
+			p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Parameter_.scope), filter.getScope()));
+		}
+
 	    c.getCriteria().where(p);
 		return executeQuery(c);
 	}

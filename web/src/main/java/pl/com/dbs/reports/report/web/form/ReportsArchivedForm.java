@@ -15,6 +15,7 @@ import pl.com.dbs.reports.support.web.form.AForm;
  * @coptyright (c) 2013
  */
 public class ReportsArchivedForm extends AForm {
+	private static final long serialVersionUID = 2768961218389914470L;
 	public static final String KEY = "reportArchivesForm";
 	private String name;
 	private ReportFilter filter;

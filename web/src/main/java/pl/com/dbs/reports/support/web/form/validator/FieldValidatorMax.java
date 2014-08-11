@@ -27,7 +27,8 @@ import pl.com.dbs.reports.support.web.form.field.FieldText;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("max")
 public class FieldValidatorMax extends AFieldValidator {
-	
+	private static final long serialVersionUID = -5393897459296190151L;
+
 	public FieldValidatorMax() {
 		super();
 	}

@@ -3,6 +3,7 @@
  */
 package pl.com.dbs.reports.profile.web.form;
 
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,7 +23,8 @@ import pl.com.dbs.reports.support.utils.separator.Separator;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class ProfileEncodingForm {
+public class ProfileEncodingForm implements Serializable {
+	private static final long serialVersionUID = 3932537932219148748L;
 	public static final String KEY = "profileEncodingForm";
 	private static final String DELIM = ";";
 	private String inencodings = "UTF-8";

@@ -3,6 +3,8 @@
  */
 package pl.com.dbs.reports.access.web.form;
 
+import java.io.Serializable;
+
 import pl.com.dbs.reports.access.dao.AccessFilter;
 
 /**
@@ -11,7 +13,8 @@ import pl.com.dbs.reports.access.dao.AccessFilter;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @coptyright (c) 2013
  */
-public class AccessListForm {
+public class AccessListForm implements Serializable {
+	private static final long serialVersionUID = 7305640384457352435L;
 	public static final String KEY = "accessListForm";
 	private String name;
 	private AccessFilter filter = new AccessFilter();

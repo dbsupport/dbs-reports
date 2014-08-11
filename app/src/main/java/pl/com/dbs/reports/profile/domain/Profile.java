@@ -3,6 +3,7 @@
  */
 package pl.com.dbs.reports.profile.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ import com.google.common.collect.Iterables;
  */
 @Entity
 @Table(name = "tpr_profile")
-public class Profile extends AEntity {
+public class Profile extends AEntity implements Serializable {
 	private static final long serialVersionUID = 301060274149701349L;
 	public static final String PARAMETER_PROFILE = "IN_PROFILE";
 	public static final String PARAMETER_USER = "IN_USER";

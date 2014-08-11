@@ -3,6 +3,7 @@
  */
 package pl.com.dbs.reports.support.web.form.field;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,7 +27,9 @@ import pl.com.dbs.reports.support.web.form.validator.FieldValidatorException;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorNode("@type")
-public abstract class AField<T> {
+public abstract class AField<T> implements Serializable {
+	private static final long serialVersionUID = -4992550698813523287L;
+	
 	//@XmlTransient
 	@XmlAttribute(name="type", required = true)
 	private String type;	

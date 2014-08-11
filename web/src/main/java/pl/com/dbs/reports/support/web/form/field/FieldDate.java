@@ -28,6 +28,7 @@ import org.joda.time.format.DateTimeFormat;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("date")
 public class FieldDate  extends AField<Date> {
+	private static final long serialVersionUID = -276858441021133707L;
 	private static final Pattern TIME_PATTERN = Pattern.compile("hh|HH|HH24|hh24", Pattern.CASE_INSENSITIVE);
 	private static final Pattern NOW_PATTERN = Pattern.compile("now|teraz", Pattern.CASE_INSENSITIVE);
 	

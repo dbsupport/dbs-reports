@@ -4,6 +4,7 @@
 package pl.com.dbs.reports.parameter.dao;
 
 import pl.com.dbs.reports.parameter.domain.Parameter;
+import pl.com.dbs.reports.parameter.domain.ParameterScope;
 import pl.com.dbs.reports.support.db.dao.AFilter;
 
 /**
@@ -13,10 +14,19 @@ import pl.com.dbs.reports.support.db.dao.AFilter;
  * @coptyright (c) 2013
  */
 public class ParameterFilter extends AFilter<Parameter> {
+	private ParameterScope scope;
 	
 	public ParameterFilter() {
 		getSorter().add("key", true);
 	}
 	
+	public ParameterFilter scope(ParameterScope scope) {
+		this.scope = scope;
+		return this;
+	}
+
+	public ParameterScope getScope() {
+		return scope;
+	}
 	
 }

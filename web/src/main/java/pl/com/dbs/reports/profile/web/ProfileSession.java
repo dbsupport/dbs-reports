@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import pl.com.dbs.reports.parameter.domain.Parameter;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.security.domain.AuthenticationToken;
 import pl.com.dbs.reports.security.domain.SessionContext;
@@ -19,6 +20,7 @@ import pl.com.dbs.reports.security.domain.SessionContext;
  */
 public class ProfileSession {
 	public static final String CURRENT_PROFILE = "currentprofile";
+	public static final String HELP_FILE = "helpfile";
 
 	/**
 	 * Puts profile into spring session context 
@@ -30,5 +32,9 @@ public class ProfileSession {
 			SecurityContextHolder.getContext().setAuthentication(new AuthenticationToken(profile, "UNDEFINED"));
 			request.getSession().setAttribute(CURRENT_PROFILE, profile);
 		}
+	}
+	
+	public static void update(Parameter helpfile, HttpServletRequest request) {
+		request.getSession().setAttribute(HELP_FILE, helpfile!=null&&helpfile.getValue()!=null);
 	}
 }

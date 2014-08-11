@@ -3,10 +3,17 @@
  */
 package pl.com.dbs.reports.parameter.web.form;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import pl.com.dbs.reports.parameter.dao.ParameterFilter;
 import pl.com.dbs.reports.parameter.domain.Parameter;
+import pl.com.dbs.reports.parameter.domain.ParameterScope;
 import pl.com.dbs.reports.parameter.domain.ParameterType;
 import pl.com.dbs.reports.support.web.form.AForm;
 
@@ -19,11 +26,16 @@ import pl.com.dbs.reports.support.web.form.AForm;
  * @coptyright (c) 2013
  */
 public class ParameterEditForm extends AForm {
-	public static final String KEY = "paramEditForm";
+	private static final long serialVersionUID = 3152234608866799682L;
+	
 	private List<Param> params = new ArrayList<Param>();
-
-	public ParameterEditForm() {
+	private ParameterFilter filter;
+	
+	public ParameterEditForm() {}
+	
+	public ParameterEditForm(ParameterScope scope) {
 		super();
+		this.filter = new ParameterFilter().scope(scope);
 	}
 	
 	public void reset(List<Parameter> params) {
@@ -39,16 +51,37 @@ public class ParameterEditForm extends AForm {
 
 	public void setParams(List<Param> params) {
 		this.params = params;
-	}	
+	}
+	
+//	public void setFile(FileMeta file, String key) {
+//		for (Param param : params) {
+//			if (param.getKey().equals(key)) {
+//				param.file = file;
+//			}
+//		}
+//	}	
 
-	public class Param { 
+	public class Param implements Serializable { 
+		private static final long serialVersionUID = -2450459252544068342L;
+		
 		private String key;
 		private String value;
+		private String desc;
+		private MultipartFile file;
 		private ParameterType type;
 		
 		Param(Parameter param) {
 			this.key = param.getKey();
-			this.value = param.toString();
+			if (!ParameterType.FILE.equals(param.getType())) {
+				this.value = param.getValueAsString();
+			} else if (param.getValue()!=null) {
+				this.desc = param.getDesc();
+//				try {
+//
+//					this.file = new CommonsMultipartFile(); 
+//							FileMeta.bytesToFile(param.getDesc(), param.getValue());
+//				} catch (IOException e) {}
+			}
 			this.type = param.getType();
 		}
 
@@ -59,10 +92,18 @@ public class ParameterEditForm extends AForm {
 		public String getValue() {
 			return value;
 		}
-
-		public void setKey(String key) {
-			this.key = key;
+		
+		public byte[] getValueAsBytes() {
+			if (!ParameterType.FILE.equals(type)) {
+				return this.value!=null?this.value.getBytes():null;
+			} else if (file!=null) {
+				try {
+					return file.getBytes();
+				} catch (IOException e) {}
+			}
+			return null;
 		}
+		
 
 		public void setValue(String value) {
 			this.value = value;
@@ -71,6 +112,29 @@ public class ParameterEditForm extends AForm {
 		public ParameterType getType() {
 			return type;
 		}
+
+		public MultipartFile getFile() {
+			return file;
+		}
+		
+		public void setFile(MultipartFile file) {
+			this.file = file;
+			this.desc = file!=null?file.getOriginalFilename():null;
+		}
+
+		public boolean isValued() {
+			if (!ParameterType.FILE.equals(type)) 
+				return !StringUtils.isBlank(this.value);
+			return !StringUtils.isBlank(this.desc);
+		}
+		
+		public String getDesc() {
+			return this.desc;
+		}
+	}
+
+	public ParameterFilter getFilter() {
+		return filter;
 	}
 	
 }

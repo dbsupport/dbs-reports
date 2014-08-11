@@ -3,6 +3,8 @@
  */
 package pl.com.dbs.reports.support.web.form.option;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -21,7 +23,9 @@ import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorValue;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("option")
-public class FieldOption {
+public class FieldOption implements Serializable {
+	private static final long serialVersionUID = -4566295727688032403L;
+	
 	@XmlAttribute(name="value", required = false)
 	private String value;	
 	@XmlValue

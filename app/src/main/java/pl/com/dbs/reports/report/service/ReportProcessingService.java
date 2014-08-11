@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,6 +73,8 @@ public class ReportProcessingService {
 				};
 			ReportProduceResult result = factory.produce(context);				
 			report.ready(result.getContent(), createLogs(result));
+		} catch (DataAccessException e) {
+			logger.warn("Database access error! Report: "+id+" postponed!");
 		} catch (Exception e) {
 			ReportLog log = new ReportLog(e.toString()+": "+e.getMessage(), ReportLogType.ERROR);
 			reportLogDao.create(log);

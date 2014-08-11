@@ -142,7 +142,7 @@ public class ReportDao extends ADao<Report, Long> {
 	}	
 
 	/**
-	 * ..find oldest with START/OK phase more than 24h.. 
+	 * ..find reports with START/OK phase older than 6h.. 
 	 */
 	public List<Report> findLost(Integer limit) {
 		ReportFilter filter = new ReportFilter(limit);
@@ -152,7 +152,7 @@ public class ReportDao extends ADao<Report, Long> {
 		
 		List<ReportPhaseStatus> phases = Lists.newArrayList(ReportPhaseStatus.START);
 		List<ReportStatus> statuses = Lists.newArrayList(ReportStatus.OK);
-		Date date = DateTime.now().minusSeconds(60*60*24).toDate();
+		Date date = DateTime.now().minusSeconds(60*60*6).toDate();
 		
 	    Predicate p = c.getBuilder().conjunction();
 	    p = c.getBuilder().and(p, c.getRoot().get(Report_.phase).get(ReportPhase_.status).in(phases));
@@ -169,7 +169,7 @@ public class ReportDao extends ADao<Report, Long> {
 	}
 	
 	/**
-	 * find oldest with START/OK phase more than 48h.. 
+	 * find reports with START/OK phase older than 24h.. 
 	 */
 	public List<Report> findBroken(Integer limit) {
 		ReportFilter filter = new ReportFilter(limit);
@@ -179,11 +179,11 @@ public class ReportDao extends ADao<Report, Long> {
 		
 		List<ReportPhaseStatus> phases = Lists.newArrayList(ReportPhaseStatus.START);
 		List<ReportStatus> statuses = Lists.newArrayList(ReportStatus.OK);
-		Date date = DateTime.now().minusSeconds(60*60*24*2).toDate();
+		Date date = DateTime.now().minusSeconds(60*60*24).toDate();
 		
 	    Predicate p = c.getBuilder().conjunction();
 	    p = c.getBuilder().and(p, c.getRoot().get(Report_.phase).get(ReportPhase_.status).in(phases));
-	    p = c.getBuilder().and(p, c.getBuilder().greaterThan(c.getRoot().get(Report_.phase).get(ReportPhase_.date), date));
+	    p = c.getBuilder().and(p, c.getBuilder().lessThan(c.getRoot().get(Report_.phase).get(ReportPhase_.date), date));
 	    p = c.getBuilder().and(p, c.getRoot().get(Report_.status).in(statuses));
 
 //		List<Order> orders = Lists.newArrayList();

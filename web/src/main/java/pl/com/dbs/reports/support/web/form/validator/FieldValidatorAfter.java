@@ -29,6 +29,8 @@ import pl.com.dbs.reports.support.web.form.field.FieldNumber;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("after")
 public class FieldValidatorAfter<T> extends AFieldValidator {
+	private static final long serialVersionUID = -680834683013882813L;
+	
 	private static final DateFormat DATEFORMAT_DEFAULT = new SimpleDateFormat("yyyy-MM-dd");
 	private static final String NOW = "now";
 	

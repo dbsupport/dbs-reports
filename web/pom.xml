@@ -7,7 +7,7 @@
     <parent>
         <groupId>pl.com.dbs</groupId>
         <artifactId>dbs-reports</artifactId>
-        <version>1.3.0-SNAPSHOT</version>
+        <version>1.3.0</version>
     </parent>
     
     <artifactId>dbs-reports-web</artifactId>
@@ -218,6 +218,8 @@
                         </webResources>
                         <warSourceExcludes>html/**</warSourceExcludes>
                         <warName>${project.artifactId}-${project.version}-${dbs.reports.client.version}</warName>
+						<finalName>${project.artifactId}-${project.version}-${dbs.reports.client.version}</finalName>
+						<appendAssemblyId>false</appendAssemblyId>                        
                     </configuration>
                 </plugin>
             </plugins>

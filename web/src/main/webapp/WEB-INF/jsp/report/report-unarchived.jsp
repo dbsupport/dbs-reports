@@ -30,7 +30,6 @@ $(document).ready(function() {
 
     $("input[type=checkbox].report").click(function() {
         var checked = $(this).is(':checked');
-        //alert($(this).val());
         if (checked) {
         	$("a#report"+$(this).val()).addClass("ready2download");
         } else {

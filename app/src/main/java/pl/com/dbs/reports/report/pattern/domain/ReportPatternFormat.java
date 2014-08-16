@@ -41,6 +41,12 @@ public class ReportPatternFormat implements PatternFormat {
 		this.patternExtension = resolveExt(filename);
 	}
 	
+	public ReportPatternFormat(ReportType type, String rext, String pext) {
+		this.type = type;
+		this.reportExtension = rext;
+		this.patternExtension = pext;
+	}
+	
 	/**
 	 * Default is TXT
 	 */

@@ -33,6 +33,7 @@ public class ParameterService {
 	private static final String DB_PASSWD = "client.db.passwd";
 	private static final String DB_IENCODING = "client.db.encoding";
 	private static final String DB_OENCODING = "local.db.encoding";
+	private static final String DB_MAXACTIVE = "client.db.max.active";
 	
 	public static final String APP_HELP_FILE = "app.help.file";
 
@@ -119,6 +120,7 @@ public class ParameterService {
 		final Parameter schema = parameterDao.find(DB_SCHEMA);
 		final Parameter user = parameterDao.find(DB_USER);
 		final Parameter passwd = parameterDao.find(DB_PASSWD);
+		final Parameter maxactive = parameterDao.find(DB_MAXACTIVE);
 		
 		return new ConnectionContext() {
 			@Override
@@ -149,6 +151,11 @@ public class ParameterService {
 			@Override
 			public String getDriver() {
 				return driver.getValueAsString();
+			}
+
+			@Override
+			public Integer getMaxActive() {
+				return maxactive.getValueAsInteger();
 			}
 		};
 	}

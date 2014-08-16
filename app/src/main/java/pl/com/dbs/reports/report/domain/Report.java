@@ -34,11 +34,12 @@ import javax.persistence.TemporalType;
 
 import org.apache.commons.lang.Validate;
 
-import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
+import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.domain.ReportPhase.ReportPhaseStatus;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
+import pl.com.dbs.reports.report.pattern.domain.ReportPatternFormat;
 import pl.com.dbs.reports.support.db.domain.AEntity;
 
 
@@ -75,9 +76,8 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "format")
-	@Enumerated(EnumType.STRING)
-	private ReportType format;	
+	@Embedded
+	private ReportPatternFormat format;	
 	
     @ElementCollection
     @MapKeyColumn(name="name")
@@ -166,14 +166,16 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     	return this;
     }   
     
-    public Report failure(ReportLog log) {
+    public Report failure(List<ReportLog> logs) {
     	if (this.phase.is(ReportPhaseStatus.READY)
     		||this.phase.is(ReportPhaseStatus.TRANSIENT))
     		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for failure!");
     	
     	this.phase.rephase(ReportPhaseStatus.READY);
-    	log.setReport(this);
-    	this.logs.add(log);
+    	for (ReportLog log : logs) {
+    		log.setReport(this);
+    		this.logs.add(log);
+    	}
     	this.status = ReportStatus.FAILED;
     	return this;
     }
@@ -208,8 +210,8 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     	return this;
     }      
     
-    public Report format(ReportType format) {
-    	this.format = format;
+    public Report format(PatternFormat format) {
+    	this.format = new ReportPatternFormat(format.getReportType(), format.getReportExtension(), format.getPatternExtension());
     	return this;
     }
     
@@ -259,7 +261,7 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 	}
 
 	@Override
-	public ReportType getFormat() {
+	public PatternFormat getFormat() {
 		return format;
 	}
 	

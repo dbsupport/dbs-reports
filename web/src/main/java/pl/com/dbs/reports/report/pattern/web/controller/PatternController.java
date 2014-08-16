@@ -48,8 +48,8 @@ public class PatternController {
 	
 	@ModelAttribute(ReportGenerationForm.KEY)
     public ReportGenerationForm createForm(@PathVariable("id") Long id) {
-		//..build test form only for form mapping..
-		return reportGenerationHelper.constructMockForm(id);
+		//..build form..
+		return reportGenerationHelper.constructFullForm(id);
     }		
 
 	@RequestMapping(value="/report/pattern/details/{id}", method = RequestMethod.GET)

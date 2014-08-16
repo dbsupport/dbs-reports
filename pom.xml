@@ -490,7 +490,7 @@
 			</activation>
 			<properties>
 				<envir>dev</envir>
-				<dbs.reports.client.version>auchan-1.1.0-SNAPSHOT</dbs.reports.client.version>
+				<dbs.reports.client.version>auchan-1.1.1</dbs.reports.client.version>
 			</properties>
 		</profile>
 		<profile>
@@ -509,7 +509,7 @@
 			<id>pro</id>
 			<properties>
 				<envir>pro</envir>
-				<dbs.reports.client.version>auchan-1.1.0</dbs.reports.client.version>
+				<dbs.reports.client.version>auchan-1.1.1</dbs.reports.client.version>
 			</properties>
 		</profile>
 	</profiles>

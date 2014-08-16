@@ -17,7 +17,8 @@ import pl.com.dbs.reports.api.report.ReportFactory;
 import pl.com.dbs.reports.api.report.ReportLog;
 import pl.com.dbs.reports.api.report.ReportProduceContext;
 import pl.com.dbs.reports.api.report.ReportProduceResult;
-import pl.com.dbs.reports.api.report.ReportType;
+import pl.com.dbs.reports.api.report.ReportProduceStatus;
+import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuilder;
 import pl.com.dbs.reports.report.domain.builders.ReportRtfPdfBlocksBuilder;
@@ -61,7 +62,7 @@ public class ReportFactoryDefault implements ReportFactory {
 	@Override
 	public ReportProduceResult produce(final ReportProduceContext context) {
 		ReportPattern pattern = (ReportPattern)(((ReportProduceContextDefault)context).getPattern());
-		ReportType format = ((ReportProduceContextDefault)context).getFormat();
+		PatternFormat format = ((ReportProduceContextDefault)context).getFormat();
 		Map<String, String> params = ((ReportProduceContextDefault)context).getParameters();
 		
 		//..find transformate..
@@ -85,6 +86,11 @@ public class ReportFactoryDefault implements ReportFactory {
 			@Override
 			public List<ReportLog> getLogs() {
 				return blocksbuilder.getLogs();
+			}
+
+			@Override
+			public ReportProduceStatus getStatus() {
+				return ReportProduceStatus.OK;
 			}
 		};
 	}

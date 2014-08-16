@@ -59,10 +59,6 @@ public class ReportTextBlockInflaterQuery extends ReportTextBlockInflater {
 	 */
 	@Override
 	public void inflate(final ReportBlocksBuildContext context) throws ReportBlockException {
-//		try {
-//			Thread.sleep(5000);
-//		} catch (InterruptedException e) {}
-		
 		EncodingContext encodingContext = encodingService.getEncodingContext();
 		for (ReportTextBlock block : context.getBlocks()) {
 			try {
@@ -121,6 +117,10 @@ public class ReportTextBlockInflaterQuery extends ReportTextBlockInflater {
 						.mapping(new RowMapper<Map<String, String>>() {
 						@Override
 						public Map<String, String> mapRow(ResultSet rs, int rowNum) throws SQLException {
+//							try {
+//								Thread.sleep(5000);
+//							} catch (InterruptedException e) {}
+							
 							Map<String, String> params = new HashMap<String, String>();
 							ResultSetMetaData metaData = rs.getMetaData();
 							for (int i=1; i<=metaData.getColumnCount(); i++) {

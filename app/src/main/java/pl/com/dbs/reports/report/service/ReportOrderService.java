@@ -185,7 +185,7 @@ public class ReportOrderService {
 			fullname += "."+abbreviate(format.getReportExtension(), MAX_EXT_LENGTH);
 			
 			this.report = new Report(pattern, fullname, profile)
-					.format(format.getReportType())
+					.format(format)
 					.parameters(inparams);
 					
 			return this;

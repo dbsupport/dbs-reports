@@ -84,7 +84,6 @@ public class ReportProcessingScheduler {
 	 * but this cron cleans failed tries..
 	 * public void cleanupConfirmed(Report report) {
 	 */
-	//@Scheduled(fixedRate=30000)
 	@Scheduled(cron="* */10 * * * ?")
 	public void orders() {
 		reportOrderService.cleanupConfirmed();

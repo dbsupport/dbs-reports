@@ -59,8 +59,8 @@ public class PatternImportController {
 	
 	@ModelAttribute(ReportGenerationForm.KEY)
     public ReportGenerationForm createForm(@ModelAttribute(PatternImportForm.KEY) final PatternImportForm form) {
-		//..build test form only for form mapping..
-		return reportGenerationHelper.constructMockForm(form.retrievePattern());
+		//..build form..
+		return reportGenerationHelper.constructFullForm(form.retrievePattern());
     }		
 	
 	@RequestMapping(value="/report/pattern/import", method = RequestMethod.GET)

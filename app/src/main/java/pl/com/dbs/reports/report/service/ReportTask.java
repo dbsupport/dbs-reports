@@ -5,6 +5,7 @@ package pl.com.dbs.reports.report.service;
 
 import java.util.concurrent.Callable;
 
+import pl.com.dbs.reports.api.report.ReportProduceResult;
 import pl.com.dbs.reports.report.domain.Report;
 
 /**
@@ -24,7 +25,8 @@ public class ReportTask implements Callable<Report> {
 	
 	@Override
 	public Report call() throws Exception {
-		reportProcessingService.generate(report);
+		ReportProduceResult result = reportProcessingService.generate(report);
+		if (result!=null) reportProcessingService.save(result, report);
 		return reportProcessingService.ready(report);
 	}
 

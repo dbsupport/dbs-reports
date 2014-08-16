@@ -3,7 +3,7 @@
 
 <tiles:insertDefinition name="tiles-wizard" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-parameter-edit</tiles:putAttribute>
-<tiles:putAttribute name="title" type="string">Edycja parametrów bazy danych</tiles:putAttribute>
+<tiles:putAttribute name="title" type="string">Edycja parametrów aplikacji</tiles:putAttribute>
 <tiles:putAttribute name="css" type="string">
 <link rel="stylesheet" href="css/compiled/new-user.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/compiled/form-wizard.css" type="text/css" media="screen" />
@@ -15,15 +15,14 @@
 
 <tiles:putAttribute name="content" type="string">
 
-                        <h4>Parametry bazy danych</h4>
-                        <br/>
-
+                    <div class="col-md-8 column">
+						<h4>Parametry bazy danych</h4>
+						<br/><br/> 
                     	<form:form method="post" modelAttribute="parametersdbeditform" action="param/edit/db" class="dbs-form" enctype="multipart/form-data">
-                            
 							<c:forEach items="${parametersdbeditform.params}" var="param" varStatus="rstatus"> 
 		                    	<spring:bind path="params[${rstatus.index}]">
 		                    	<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
-								<div class="field-box ${classes}">
+		                    	<div class="field-box ${classes}">
 			                        <label>${parametersdbeditform.params[rstatus.index].key}</label>
 			                        <c:choose>
 			                        <c:when test="${parametersdbeditform.params[rstatus.index].type eq 'PASSWD'}">
@@ -46,12 +45,14 @@
                             	<button type="submit" class="btn-glow success btn-finish" style="display: inline-block;">Zapisz i testuj!</button><span>&nbsp;</span>
                             </div>
                         </form:form>
+                    </div>
                         
-                        <br/>
-                        <h4>Parametry aplikacyjne</h4>
-                        
-                        <form:form method="post" modelAttribute="parametersappeditform" action="param/edit/app" class="dbs-form" enctype="multipart/form-data">
-
+                    <div class="col-md-8 column">                     
+						<br/><br/><br/><br/><br/>   
+						<h4>Parametry aplikacyjne</h4>
+						<br/><br/>                     
+                        <form:form method="post" modelAttribute="parametersappeditform" action="param/edit/app" class="" enctype="multipart/form-data">
+                            
                             <c:forEach items="${parametersappeditform.params}" var="param" varStatus="rstatus"> 
                                 <spring:bind path="params[${rstatus.index}]">
                                 <c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
@@ -78,6 +79,6 @@
                                 <button type="submit" class="btn-glow success btn-finish" style="display: inline-block;">Zapisz!</button><span>&nbsp;</span>
                             </div>
                         </form:form>                        
-        
+                    </div>
 </tiles:putAttribute>
 </tiles:insertDefinition>        

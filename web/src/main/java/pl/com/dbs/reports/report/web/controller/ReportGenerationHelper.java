@@ -4,7 +4,6 @@
 package pl.com.dbs.reports.report.web.controller;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -24,7 +23,6 @@ import pl.com.dbs.reports.report.web.form.ReportGenerationForm;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 import pl.com.dbs.reports.support.web.form.DFormBuilder;
 import pl.com.dbs.reports.support.web.form.inflater.FieldInflater;
-import pl.com.dbs.reports.support.web.form.inflater.FieldInflaterMock;
 
 /**
  * Generate dynamic form... 
@@ -40,46 +38,53 @@ public class ReportGenerationHelper {
 	@Autowired private Alerts alerts;
 	@Autowired private MessageSource messageSource;
 	
-	public ReportGenerationForm constructMockForm(Long id) {
-		return constructMockForm(patternService.find(id));
-	}
-	
-	/**
-	 * Generate without inflations..
-	 */
-	public ReportGenerationForm constructMockForm(ReportPattern pattern) {
-		ReportGenerationForm result = new ReportGenerationForm();
-		if (pattern==null) return null;
-		
-		ReportPatternForm form = pattern.getForm();
-		if (form!=null) {
-			try {
-				Set<FieldInflater> inflaters = new HashSet<FieldInflater>();
-				inflaters.add(new FieldInflaterMock());
-				DFormBuilder<ReportGenerationForm> builder = new DFormBuilder<ReportGenerationForm>(form.getContent(), ReportGenerationForm.class).add(inflaters);
-				
-				result = builder.build().getForm();
-				
-				result.reset(pattern);
-			} catch (Exception e) {
-				throw new ReportGenerationException(e);
-			}
-			
-		} else {
-			logger.warn("No form found for dynamic form generation!");
-		}
-		return result;		
-	}
+//	public ReportGenerationForm constructMockForm(Long id) {
+//		return constructMockForm(patternService.find(id));
+//	}
+//	
+//	/**
+//	 * Generate without inflations..
+//	 */
+//	public ReportGenerationForm constructMockForm(ReportPattern pattern) {
+//		ReportGenerationForm result = new ReportGenerationForm();
+//		if (pattern==null) return null;
+//		
+//		ReportPatternForm form = pattern.getForm();
+//		if (form!=null) {
+//			try {
+//				Set<FieldInflater> inflaters = new HashSet<FieldInflater>();
+//				inflaters.add(new FieldInflaterMock());
+//				DFormBuilder<ReportGenerationForm> builder = new DFormBuilder<ReportGenerationForm>(form.getContent(), ReportGenerationForm.class).add(inflaters);
+//				
+//				result = builder.build().getForm();
+//				
+//				result.reset(pattern);
+//			} catch (Exception e) {
+//				throw new ReportGenerationException(e);
+//			}
+//			
+//		} else {
+//			logger.warn("No form found for dynamic form generation!");
+//		}
+//		return result;		
+//	}
 	
 	/**
 	 * with inflating data..
 	 */
 	public ReportGenerationForm constructFullForm(long id) {
+		ReportPattern pattern = patternService.find(id);
+		return constructFullForm(pattern);
+	}
+	
+	/**
+	 * generate with inflater..
+	 */
+	public ReportGenerationForm constructFullForm(ReportPattern pattern) {
+		if (pattern==null) return null;
 		ReportGenerationForm result = new ReportGenerationForm();
 		
-		ReportPattern pattern = patternService.find(id);
-		
-		//FIXME: only one form allowed..
+		//..only one form allowed..
 		ReportPatternForm form = pattern.getForm();
 		if (form!=null) {
 			try {
@@ -93,10 +98,10 @@ public class ReportGenerationHelper {
 			}
 			
 		} else {
-			logger.warn("No pattern found for dynamic form generation for:"+id);
+			logger.warn("No pattern found for dynamic form generation!");
 		}
 		return result;
-	}
+	}	
 	
 	/**
 	 * 

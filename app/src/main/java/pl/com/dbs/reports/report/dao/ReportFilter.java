@@ -92,6 +92,11 @@ public class ReportFilter extends AFilter<Report> {
 		return this;
 	}	
 	
+	public ReportFilter forAnyone() {
+		this.profileId = null;
+		return this;
+	}
+	
 	public ReportFilter onlyFor(Profile profile) {
 		this.profileId = profile.getId();
 		return this;

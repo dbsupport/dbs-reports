@@ -79,11 +79,11 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="profile">Twój profil</a></li>
-                    <li><a href="report/archived/current">Twoje archiwum</a></li>
                     <li><a href="report/unarchived">Twoje raporty</a></li>
                     <sec:authorize access="hasAnyRole('Admin')">
                     <li><a href="report/pattern/list/current">Twoje definicje</a></li>
                     </sec:authorize>
+                    <li><a href="report/archived/current">Twoje archiwum</a></li>
                 </ul>
             </li>
             <c:if test="${helpfile eq true}">

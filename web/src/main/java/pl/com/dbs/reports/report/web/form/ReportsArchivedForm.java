@@ -31,7 +31,7 @@ public class ReportsArchivedForm extends AForm {
 	
 	public void reset() {
 		super.reset();
-		this.filter = new ReportFilter().archived();
+		this.filter = new ReportFilter().archived().forAnyone();
 	}
 
 	public void reset(Profile profile) {

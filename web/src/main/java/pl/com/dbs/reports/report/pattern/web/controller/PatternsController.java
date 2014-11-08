@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import pl.com.dbs.reports.access.service.AccessService;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.report.pattern.service.PatternService;
 import pl.com.dbs.reports.report.pattern.web.form.PatternListForm;
@@ -36,14 +38,15 @@ import pl.com.dbs.reports.support.web.controller.DownloadController;
  * Lista dostepnych raportow dla profilu.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Controller
 @SessionAttributes({PatternListForm.KEY})
 public class PatternsController {
-	private static final Logger logger = Logger.getLogger(PatternsController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PatternsController.class);
 	@Autowired private Alerts alerts;
 	@Autowired private PatternService patternService;
+	@Autowired private AccessService accessService;
 	
 	@ModelAttribute(PatternListForm.KEY)
     public PatternListForm createForm() {
@@ -61,6 +64,7 @@ public class PatternsController {
     public String patterns(Model model, @Valid @ModelAttribute(PatternListForm.KEY) final PatternListForm form, HttpServletRequest request) {
 		model.addAttribute("patterns", patternService.find(form.getFilter()));
 		model.addAttribute("current", SessionContext.getProfile().getId().equals(form.getFilter().getProfileId()));
+		model.addAttribute("accesses", accessService.find());
 		return "report/pattern/pattern-list";
     }
 	

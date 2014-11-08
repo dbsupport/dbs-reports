@@ -6,7 +6,7 @@ import pl.com.dbs.reports.api.security.SecurityContext;
  * Default security context implementation.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class SecurityContextDefault implements SecurityContext {
 	private String login;

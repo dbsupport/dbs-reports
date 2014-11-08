@@ -17,7 +17,8 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pl.com.dbs.reports.api.report.pattern.PatternManifest;
 import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
@@ -26,10 +27,10 @@ import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
  * Manifest builder. Extracts manifest file from zip file.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 final class PatternManifestBuilder {
-	private static final Logger logger = Logger.getLogger(PatternManifestBuilder.class);
+	private static final Logger logger = LoggerFactory.getLogger(PatternManifestBuilder.class);
 	private static byte[] ZIP_CHUNK = { 'P', 'K', 0x3, 0x4 };
 
 	private byte[] content;	

@@ -19,7 +19,8 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
@@ -30,10 +31,10 @@ import pl.com.dbs.reports.profile.domain.Profile;
  * Pattern builder.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 final class PatternBuilder {
-	private static final Logger logger = Logger.getLogger(PatternBuilder.class);
+	private static final Logger logger = LoggerFactory.getLogger(PatternBuilder.class);
 	
 	private String filename;
 	private byte[] content;	

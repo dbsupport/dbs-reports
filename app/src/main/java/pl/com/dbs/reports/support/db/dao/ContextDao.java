@@ -15,7 +15,7 @@ import pl.com.dbs.reports.support.filter.Filter;
  * Context for DAO.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ContextDao<T extends IEntity> implements IContextDao<T> {
 	private CriteriaBuilder cb;

@@ -10,7 +10,7 @@ import java.util.List;
  * Sth wrong with profile.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ProfileException extends Exception {
 	private static final long serialVersionUID = 1068361460625579431L;

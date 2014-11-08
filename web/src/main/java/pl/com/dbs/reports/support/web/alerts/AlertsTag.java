@@ -18,7 +18,7 @@ import com.google.inject.internal.Lists;
  * Renders all alerts..
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class AlertsTag extends RequestContextAwareTag {
 	private static final long serialVersionUID = -5594388951260185733L;

@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,12 @@ import pl.com.dbs.reports.support.web.form.option.FieldOption;
  * Inflates for form fields that operates on local db.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Service
 public class FieldInflaterDefault implements FieldInflater {
 	private static final long serialVersionUID = -8831200374583186953L;
-	private static final Logger logger = Logger.getLogger(FieldInflaterDefault.class);
+	private static final Logger logger = LoggerFactory.getLogger(FieldInflaterDefault.class);
 	private static final String LOCAL = "LOCAL:";
 	private static final Pattern LOCAL_PATTERN = Pattern.compile("^"+LOCAL, Pattern.CASE_INSENSITIVE);
 	@Autowired private Dao dao;

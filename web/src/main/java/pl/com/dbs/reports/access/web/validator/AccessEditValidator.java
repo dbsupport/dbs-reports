@@ -16,7 +16,7 @@ import pl.com.dbs.reports.access.web.form.AccessEditForm;
  * Access edition validatior.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class AccessEditValidator extends AccessNewValidator implements Validator {
 	public AccessEditValidator() {}

@@ -17,7 +17,7 @@ import pl.com.dbs.reports.profile.web.form.ProfileNewForm;
  * New profile validation.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ProfileNewValidator implements Validator {
 	static final java.util.regex.Pattern LOGIN_PATTERN = java.util.regex.Pattern.compile("^[a-zA-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ0-9\\._\\-]+$",  java.util.regex.Pattern.CASE_INSENSITIVE);

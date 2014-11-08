@@ -418,7 +418,7 @@ input.search {
   min-height: 620px;
   margin-bottom: 100px;
   padding-bottom: 50px;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   background: #fff;
   margin-left: 177px;

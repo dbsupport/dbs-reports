@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Sorted field.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class SorterField implements Serializable {
 	private static final long serialVersionUID = 3230903885321779745L;

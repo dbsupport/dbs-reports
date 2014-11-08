@@ -16,7 +16,7 @@ import pl.com.dbs.reports.support.db.dao.ADao;
  * Report pattern transformates CRUD.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Repository
 public class PatternTransformateDao extends ADao<ReportPatternTransformate, Long> {

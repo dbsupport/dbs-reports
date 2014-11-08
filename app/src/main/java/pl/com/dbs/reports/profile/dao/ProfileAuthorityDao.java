@@ -18,7 +18,7 @@ import pl.com.dbs.reports.support.db.dao.ContextDao;
  * Profile Authority CRUD
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Repository
 public class ProfileAuthorityDao extends ADao<Authority, Long> {

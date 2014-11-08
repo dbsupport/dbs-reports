@@ -11,7 +11,7 @@ import pl.com.dbs.reports.api.activedirectory.ClientActiveDirectoryProfile;
  * AD profile.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class ActiveDirectoryProfile {
 	/**

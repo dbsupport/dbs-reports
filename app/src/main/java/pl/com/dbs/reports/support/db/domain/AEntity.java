@@ -15,7 +15,7 @@ import javax.persistence.Version;
  * Obsluguje pre- i post- by aktualizowac pola techniczne (Attributes)
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @MappedSuperclass
 public abstract class AEntity implements IEntity {

@@ -20,7 +20,7 @@ import pl.com.dbs.reports.support.web.form.AForm;
  * New profile form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ProfileNewForm extends AForm implements ProfileCreation, Serializable {
 	private static final long serialVersionUID = -3562062478732925527L;

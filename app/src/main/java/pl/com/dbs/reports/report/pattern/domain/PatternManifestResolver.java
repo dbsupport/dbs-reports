@@ -7,8 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +23,11 @@ import com.google.common.collect.Iterables;
  * Bootstrap logic for Manifest.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Component
 public class PatternManifestResolver {
-	private static final Log logger = LogFactory.getLog(PatternManifestResolver.class);
+	private static final Logger logger = LoggerFactory.getLogger(PatternManifestResolver.class);
 	@Autowired private List<PatternFactory> factories;
 
 	/**

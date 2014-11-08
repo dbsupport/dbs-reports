@@ -18,7 +18,7 @@ import com.google.common.io.Files;
  * File upload class.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @JsonIgnoreProperties({"content", "file"})
 public class FileMeta implements Serializable {

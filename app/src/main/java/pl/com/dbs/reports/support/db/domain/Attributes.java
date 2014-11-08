@@ -8,21 +8,21 @@ import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Entities technical data.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Embeddable
 public class Attributes implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private static final Log logger = LogFactory.getLog(Attributes.class);
+	private static final Logger logger = LoggerFactory.getLogger(Attributes.class);
 	
 	private static final String UNDEFINED = "undefined";
 	

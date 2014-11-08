@@ -12,7 +12,7 @@ import pl.com.dbs.reports.report.domain.Report;
  * Report generation task.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class ReportTask implements Callable<Report> {
 	private long report;

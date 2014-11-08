@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.context.MessageSource;
@@ -49,12 +50,12 @@ import pl.com.dbs.reports.support.web.file.FileMeta;
  * Profil - edycja.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Controller
 @SessionAttributes({ProfileEditForm.KEY})
 public class ProfileEditController {
-	private static final Logger logger = Logger.getLogger(ProfileEditController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProfileEditController.class);
 	@Autowired private Alerts alerts;
 	@Autowired private MessageSource messageSource;
 	@Autowired private ProfileService profileService;

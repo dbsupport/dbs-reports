@@ -11,9 +11,11 @@ import pl.com.dbs.reports.support.db.dao.AFilter;
  * Profiles filter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ProfilesFilter extends AFilter<Profile> {
+	private static final long serialVersionUID = 6376772608639843273L;
+	
 	private static final int DEFAULT_PAGER_SIZE = 10;
 	private String name;
 	private boolean accepted = true;

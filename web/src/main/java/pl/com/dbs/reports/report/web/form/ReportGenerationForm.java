@@ -19,7 +19,7 @@ import pl.com.dbs.reports.support.web.form.DForm;
  * Report generation form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "form", namespace = "http://www.dbs.com.pl/reports/1.0/form")

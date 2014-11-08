@@ -13,7 +13,7 @@ import pl.com.dbs.reports.profile.domain.ProfilePhoto;
  * Profile photo service.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Service("profile.photo.service")
 public class ProfilePhotoService {

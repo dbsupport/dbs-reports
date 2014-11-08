@@ -9,7 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pl.com.dbs.reports.report.domain.rules.ReportBlockReplaceRule;
 import pl.com.dbs.reports.report.domain.rules.ReportBlockRule;
@@ -20,10 +21,10 @@ import pl.com.dbs.reports.support.utils.separator.Separator;
  * A block of paterrn data.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ReportTextBlock {
-	private static final Logger logger = Logger.getLogger(ReportTextBlock.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReportTextBlock.class);
 	/**
 	 * Parent block
 	 */

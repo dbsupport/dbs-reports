@@ -6,7 +6,8 @@ package pl.com.dbs.reports.activedirectory.service;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +27,11 @@ import com.google.common.collect.Lists;
  * AD services.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Service("active.directory.service")
 public class ActiveDirectoryService {
-	private static final Logger logger = Logger.getLogger(ActiveDirectoryService.class);
+	private static final Logger logger = LoggerFactory.getLogger(ActiveDirectoryService.class);
 	@Autowired private ClientActiveDirectoryService clientActiveDirectoryService;
 	@Autowired private EncodingService encodingService;
 

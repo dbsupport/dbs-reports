@@ -17,7 +17,7 @@ import pl.com.dbs.reports.activedirectory.dao.ActiveDirectoryFilter;
  * AD listing/updating form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class ActiveDirectoryListForm implements Serializable {
 	private static final long serialVersionUID = -2230069191958150689L;

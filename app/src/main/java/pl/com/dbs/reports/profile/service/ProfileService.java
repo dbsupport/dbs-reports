@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,11 +38,11 @@ import pl.com.dbs.reports.security.domain.SessionContext;
  * Profiles services.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Service("profile.service")
 public class ProfileService {
-	private static final Logger logger = Logger.getLogger(ProfileService.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProfileService.class);
 	@Autowired private ProfileAddressDao profileAddressDao;
 	@Autowired private ProfileDao profileDao;
 	@Autowired private AccessDao profileAccessDao;

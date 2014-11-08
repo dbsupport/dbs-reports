@@ -26,7 +26,7 @@ import pl.com.dbs.reports.support.filter.SorterField;
  * Base CRUD.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,IDaoWriter<T, K> ,IDaoEraser<T, K> {
 

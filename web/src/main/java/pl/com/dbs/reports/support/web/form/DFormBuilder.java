@@ -38,7 +38,7 @@ import com.google.common.collect.Sets;
  * Reads *.xml (based on form-schema.xsd) to construct form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class DFormBuilder<T extends DForm> {
 //	private static final Log logger = LogFactory.getLog(DFormBuilder.class);

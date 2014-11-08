@@ -1,0 +1,4 @@
+-Ddbs.reports.processing.threads.max=30
+-XX:+CMSClassUnloadingEnabled
+-XX:+CMSPermGenSweepingEnabled
+-XX:MaxPermSize=128M

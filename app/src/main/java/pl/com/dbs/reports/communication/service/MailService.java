@@ -3,7 +3,8 @@
  */
 package pl.com.dbs.reports.communication.service;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 
@@ -12,11 +13,11 @@ import org.springframework.mail.javamail.JavaMailSender;
  * Sends mails..
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 //@Service("communication.mail.service")
 public class MailService {
-	private static final Logger logger = Logger.getLogger(MailService.class);
+	private static final Logger logger = LoggerFactory.getLogger(MailService.class);
     @Autowired private JavaMailSender  sender;
 	
 	public void send() {

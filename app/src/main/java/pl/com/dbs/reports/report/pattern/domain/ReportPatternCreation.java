@@ -12,7 +12,7 @@ import pl.com.dbs.reports.profile.domain.Profile;
  * Creation interface.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public interface ReportPatternCreation {
 	String getFilename();

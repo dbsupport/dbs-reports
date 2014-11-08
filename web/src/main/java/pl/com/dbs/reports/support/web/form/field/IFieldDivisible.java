@@ -12,7 +12,7 @@ import java.util.List;
  * i.e. if checked - many reports will be generated if many values were provided.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public interface IFieldDivisible {
 

@@ -20,7 +20,7 @@ import pl.com.dbs.reports.support.encoding.EncodingContext;
  * Simple parameters.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Service("parameter.service")
 public class ParameterService {

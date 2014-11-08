@@ -12,16 +12,13 @@ import pl.com.dbs.reports.support.web.form.AForm;
  * Report patterns form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class PatternListForm extends AForm {
 	private static final long serialVersionUID = -4503613041279207128L;
 	public static final String KEY = "patternListForm";
-	private String name;
-	private String version;
-	private String uploadDate;
-	private String author;
-	private String creator;	
+	private String value;
+	private String access;
 	
 	private PatternFilter filter = new PatternFilter();
 	
@@ -35,53 +32,27 @@ public class PatternListForm extends AForm {
 	
 	public void reset(Profile profile) {
 		super.reset();
-		filter = new PatternFilter();
-		filter.putProfileId(profile.getId());
+		filter = new PatternFilter().forProfile(profile.getId());
 	}
 
 	public PatternFilter getFilter() {
 		return filter;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getValue() {
+		return value;
 	}
 
-	public void setVersion(String version) {
-		this.version = version;
+	public void setValue(String value) {
+		this.value = value;
 	}
 
-	public void setUploadDate(String uploadDate) {
-		this.uploadDate = uploadDate;
-		
+	public String getAccess() {
+		return access;
 	}
 
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getVersion() {
-		return version;
-	}
-
-	public String getUploadDate() {
-		return uploadDate;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public String getCreator() {
-		return creator;
+	public void setAccess(String access) {
+		this.access = access;
 	}
 	
 }

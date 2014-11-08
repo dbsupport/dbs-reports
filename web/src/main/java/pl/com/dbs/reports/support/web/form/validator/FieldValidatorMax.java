@@ -22,7 +22,7 @@ import pl.com.dbs.reports.support.web.form.field.FieldText;
  * If not throw exception!
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("max")

@@ -10,7 +10,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +32,11 @@ import pl.com.dbs.reports.security.domain.SessionContext;
  * Reports orders management.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Service
 public class ReportOrderService {
-	private static final Logger logger = Logger.getLogger(ReportOrderService.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReportOrderService.class);
 	@Autowired private ReportDao reportDao;
 	@Autowired private ReportOrderDao reportOrderDao;
 	@Autowired private ProfileDao profileDao;
@@ -125,7 +126,7 @@ public class ReportOrderService {
 	 * Report builder.
 	 *
 	 * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
-	 * @coptyright (c) 2013
+	 * @copyright (c) 2013
 	 */
 	public final class ReportBuilder {
 		private static final int MAX_SUFFIX_LENGTH = 10;

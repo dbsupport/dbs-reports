@@ -3,6 +3,7 @@
  */
 package pl.com.dbs.reports.support.db.dao;
 
+import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -13,10 +14,11 @@ import pl.com.dbs.reports.support.filter.Filter;
  * Base abstract db filter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
-public abstract class AFilter<T extends IEntity> extends Filter {
-	
+public abstract class AFilter<T extends IEntity> extends Filter implements Serializable {
+	private static final long serialVersionUID = 3744924326805811415L;
+
 	public AFilter() {
 		super();
 	}

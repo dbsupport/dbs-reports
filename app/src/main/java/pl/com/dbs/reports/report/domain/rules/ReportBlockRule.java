@@ -13,7 +13,7 @@ import pl.com.dbs.reports.report.domain.builders.ReportBlockException;
  * Rule to apply while inflating a block.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public interface ReportBlockRule extends Ordered {
 	StringBuilder apply(final StringBuilder content, final Map<String, String> params) throws ReportBlockException;

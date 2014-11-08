@@ -3,18 +3,18 @@ package pl.com.dbs.reports.support.filter;
 import java.io.Serializable;
 
 import org.apache.commons.lang.Validate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Pager implementation.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class Pager implements Serializable{
 	private static final long serialVersionUID = 1L;
-	private final transient Log log = LogFactory.getLog(getClass());
+	private final transient Logger log = LoggerFactory.getLogger(getClass());
 	public static final int NO_LIMIT = -1;
 
     private int pageSize = NO_LIMIT;

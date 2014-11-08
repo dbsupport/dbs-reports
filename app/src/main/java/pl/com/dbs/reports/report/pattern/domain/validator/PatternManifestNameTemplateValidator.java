@@ -21,7 +21,7 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
  * Validate report template name variables.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 
 @Order(2)

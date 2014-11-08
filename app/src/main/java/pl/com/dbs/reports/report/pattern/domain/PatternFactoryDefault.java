@@ -8,8 +8,8 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,11 +28,11 @@ import pl.com.dbs.reports.security.domain.SessionContext;
  * 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Component
 public final class PatternFactoryDefault implements PatternFactory {
-	private static final Log logger = LogFactory.getLog(PatternFactoryDefault.class);
+	private static final Logger logger = LoggerFactory.getLogger(PatternFactoryDefault.class);
 	
 	private List<PatternValidator> validators;
 	private ProfileDao profileDao;

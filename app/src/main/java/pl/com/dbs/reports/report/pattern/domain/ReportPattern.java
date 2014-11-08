@@ -58,7 +58,7 @@ import com.google.common.collect.Ordering;
  * 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Entity
 @Table(name = "tre_pattern")

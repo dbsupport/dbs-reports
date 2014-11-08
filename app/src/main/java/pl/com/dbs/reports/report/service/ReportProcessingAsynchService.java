@@ -10,7 +10,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,11 @@ import pl.com.dbs.reports.report.domain.Report;
  * Set -Ddbs.reports.processing.threads.max=... to set threads quantity.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Service
 public class ReportProcessingAsynchService {
-	private static final Logger logger = Logger.getLogger(ReportProcessingAsynchService.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReportProcessingAsynchService.class);
 	private static final int MAX_THREADS_DEFAULT = 10;
 	private ExecutorService executors;
 	

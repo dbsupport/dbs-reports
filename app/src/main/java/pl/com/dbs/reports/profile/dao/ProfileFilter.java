@@ -10,9 +10,11 @@ import pl.com.dbs.reports.support.db.dao.AFilter;
  * Profile filter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ProfileFilter extends AFilter<Profile> {
+	private static final long serialVersionUID = -8697585651148607505L;
+	
 	private String login;
 	private String passwd;
 	private Boolean accepted;

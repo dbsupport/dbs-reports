@@ -14,7 +14,7 @@ import pl.com.dbs.reports.support.web.form.AForm;
  * Contains INSIDE form of imported pattern (for preview)
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class PatternImportForm extends AForm {
 	private static final long serialVersionUID = 1911733990433293245L;

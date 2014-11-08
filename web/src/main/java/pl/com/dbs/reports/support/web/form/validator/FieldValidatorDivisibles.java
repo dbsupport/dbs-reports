@@ -18,7 +18,7 @@ import com.google.inject.internal.Lists;
  * ..disallow more than one divisible field that has many values!
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class FieldValidatorDivisibles extends AFieldValidator {
 	private static final long serialVersionUID = 4246536321789298943L;

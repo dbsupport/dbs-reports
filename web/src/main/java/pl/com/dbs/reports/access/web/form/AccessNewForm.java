@@ -12,7 +12,7 @@ import pl.com.dbs.reports.support.web.form.AForm;
  * Access add new form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class AccessNewForm extends AForm implements AccessCreation {
 	private static final long serialVersionUID = 481960559409383168L;

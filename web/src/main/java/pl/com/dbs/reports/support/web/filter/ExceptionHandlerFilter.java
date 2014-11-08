@@ -11,18 +11,19 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Filtr przechwytujacy wyjatki - w przypadku ich wystapienia przekierowyje na strone z bledem. 
  * Kazdemu wyjatkowi przypisany jest ID.
  * 
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ExceptionHandlerFilter implements Filter {
 	private String errorPath;
-	private Logger log = Logger.getLogger(ExceptionHandlerFilter.class);
+	private Logger log = LoggerFactory.getLogger(ExceptionHandlerFilter.class);
 	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {

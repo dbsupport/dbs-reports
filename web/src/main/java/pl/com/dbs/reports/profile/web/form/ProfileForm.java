@@ -11,7 +11,7 @@ import pl.com.dbs.reports.profile.domain.Profile;
  * Profile form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ProfileForm implements Serializable {
 	private static final long serialVersionUID = 4747270807190829517L;

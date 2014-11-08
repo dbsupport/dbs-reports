@@ -17,7 +17,7 @@ import com.google.common.collect.Lists;
  * 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class ReportsUnarchivedForm implements Serializable {
 	private static final long serialVersionUID = 4623000408765111363L;

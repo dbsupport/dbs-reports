@@ -19,7 +19,7 @@ import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorValue;
  * Available field value.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("option")

@@ -27,7 +27,7 @@ import com.google.common.collect.Iterables;
  * Validate extensions map.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Order(7)
 @Component

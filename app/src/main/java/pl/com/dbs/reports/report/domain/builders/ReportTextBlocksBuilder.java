@@ -4,17 +4,15 @@
 package pl.com.dbs.reports.report.domain.builders;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
-import pl.com.dbs.reports.api.report.ReportLog;
-import pl.com.dbs.reports.api.report.ReportLogType;
+import org.apache.commons.lang.StringUtils;
+
 import pl.com.dbs.reports.api.report.pattern.PatternInflater;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflater;
@@ -27,10 +25,10 @@ import com.google.common.collect.Iterables;
  * 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
+@Slf4j
 public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
-	private static final Logger logger = Logger.getLogger(ReportTextBlocksBuilder.class);
 	private static final String BLOCK_START_PATTERN = "[BLOCK";
 	private static final String BLOCK_END_PATTERN = "BLOCK]";
 	private static final java.util.regex.Pattern BLOCK_LABEL_PATTERN = java.util.regex.Pattern.compile("^\\[BLOCK\\(([\\w\\d_]+)\\)[\\s\\S]*",  java.util.regex.Pattern.CASE_INSENSITIVE);
@@ -44,7 +42,6 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	private ReportTextBlockInflater inflater;
 	private List<ReportBlockInflation> inflations;
 	private Map<String, String> parameters;
-	private List<ReportLog> logs = new ArrayList<ReportLog>();
 	private StringBuilder sb;
 	
 	public ReportTextBlocksBuilder(final PatternTransformate transformate) {
@@ -85,10 +82,6 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 		return content;
 	}
 
-	public List<ReportLog> getLogs() {
-		return logs;
-	}
-
 	ReportTextBlock getRootBlock() {
 		return root;
 	}	
@@ -111,13 +104,13 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	 * -- sql: SELECT INTO OUT_VARIABLE1, OUT_VARIABLE2 FROM TABLE WHERE ID=^$IN_VARIABLE1^ AND DATE<^$IN_VARIABLE2^;
 	 */
 	private void resolveInflations(String content) {
-		logger.debug("Resolving inflations..");
+		log.debug("Resolving inflations..");
 		Matcher inflations = INFLATER_PATTERN.matcher(content);
 	    while (inflations.find()) {
 	    	String label = StringUtils.trim(inflations.group(1));
 	    	String sql = StringUtils.trim(inflations.group(2));
 	    	ReportBlockInflation inflation = new ReportBlockInflation(label, sql);
-	    	logger.debug("Inflation found: "+inflation);
+	    	log.debug("Inflation found: "+inflation);
 	    	this.inflations.add(inflation);
 	    }
 	}	
@@ -129,11 +122,11 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	 */
 	private void resolveInput() {
 		for (ReportBlockInflation inflater : this.inflations) {
-			logger.debug("Resolving input variables of "+inflater.getLabel());
+			log.debug("Resolving input variables of "+inflater.getLabel());
 			Matcher variables = IN_VARIABLE_PATTERN.matcher(inflater.getSql());
 		    while (variables.find()) {
 		    	String variable = StringUtils.trim(variables.group(1));
-		    	logger.debug("Input variable found: "+variable);
+		    	log.debug("Input variable found: "+variable);
 		    	inflater.addInput(variable);
 		    }
 		}
@@ -145,51 +138,21 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	public ReportTextBlocksBuilder build() throws ReportBlockException {
 		//..deconstruct first...
 		deconstruct();
-		//..add parameters log..
-		resolveParamsLog();
+		
 		//..build context..
-		ReportBlocksBuildContext context = new ReportBlocksBuildContext(root, parameters, logs, sb);
+		ReportBlocksBuildContext context = new ReportBlocksBuildContext(root, parameters, sb);
+		
 		//..inflate...
 		if (inflater!=null) {
 			try {
 				inflater.inflate(context);
 			} catch (ReportBlocksBuildTerminationException e) {
-				logger.info("Building terminated!", e);
+				log.info("Building terminated!", e);
 			}
 		}
 		
 		content = sb!=null?sb.toString().getBytes():null;
 		return this;
-	}
-	
-	/**
-	 * If has any parameter add log entry..
-	 */
-	private void resolveParamsLog() {
-		if (parameters.isEmpty()) return;
-
-		final StringBuilder sb = new StringBuilder();
-		for (Map.Entry<String, String> param : parameters.entrySet()) {
-			if (!StringUtils.isBlank(param.getValue())) {
-				String value = param.getValue().length()>255?(param.getValue().substring(0, 255)+".."):param.getValue();
-				sb.append(param.getKey()).append("=").append(value).append(System.getProperty("line.separator"));
-			}
-		}
-		
-		logs.add(new ReportLog() {
-			@Override
-			public Date getDate() {
-				return new Date();
-			}
-			@Override
-			public ReportLogType getType() {
-				return ReportLogType.INFO;
-			}
-			@Override
-			public String getMsg() {
-				return sb.toString();
-			}
-		});
 	}
 
 	private void deconstruct() {
@@ -253,11 +216,11 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	}	
 	
 	private void resolveInput(String content) {
-		logger.debug("Resolving input variables..");
+		log.debug("Resolving input variables..");
 		Matcher variables = IN_VARIABLE_PATTERN.matcher(content);
 	    while (variables.find()) {
 	    	String variable = StringUtils.trim(variables.group(1));
-	    	logger.debug("Input variable found: "+variable);
+	    	log.debug("Input variable found: "+variable);
 	    	root.addParameter(variable);
 	    }
 	}

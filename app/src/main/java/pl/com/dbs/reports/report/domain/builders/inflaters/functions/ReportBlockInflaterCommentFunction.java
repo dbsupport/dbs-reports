@@ -6,10 +6,12 @@ package pl.com.dbs.reports.report.domain.builders.inflaters.functions;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
-import pl.com.dbs.reports.api.report.ReportLogType;
+import pl.com.dbs.reports.api.report.ReportLoggings;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuildContext;
 
 
@@ -17,9 +19,10 @@ import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuildContext;
  * Puts msg into log if result = 1
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Component
+@Slf4j
 public class ReportBlockInflaterCommentFunction implements ReportBlockInflaterFunction {
 	private static final String NAME = "OUT_COMMENT";
 	private static final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile("^result:([0-9]{1})\\|msg:(.*)$",  java.util.regex.Pattern.CASE_INSENSITIVE|java.util.regex.Pattern.DOTALL);
@@ -34,8 +37,7 @@ public class ReportBlockInflaterCommentFunction implements ReportBlockInflaterFu
 	
 	public void apply(final ReportBlocksBuildContext context, final Entry<String, String> param) {
 		if (isComment(param)) {
-			final String msg = getMsg(param);
-			context.addLog(ReportLogType.INFO, msg);
+			log.info(ReportLoggings.MRK_USER, getMsg(param));
 		}
 	}
 

@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.core.io.FileSystemResource;
@@ -45,12 +46,12 @@ import pl.com.dbs.reports.support.web.file.FileMeta;
  * Profiles actions..
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Controller
 @SessionAttributes({ProfileListForm.KEY, ProfileForm.KEY})
 public class ProfileController {
-	private static final Logger logger = Logger.getLogger(ProfileController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 	@Autowired private Alerts alerts;
 	@Autowired private MessageSource messageSource;
 	@Autowired private ProfileService profileService;

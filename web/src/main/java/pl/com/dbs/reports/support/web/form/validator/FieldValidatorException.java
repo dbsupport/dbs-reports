@@ -13,7 +13,7 @@ import pl.com.dbs.reports.support.web.form.field.AField;
  * Field error data.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class FieldValidatorException extends Exception {
 	private static final long serialVersionUID = 1L;

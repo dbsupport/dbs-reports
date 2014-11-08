@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
  * For any query.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Repository
 public class Dao {

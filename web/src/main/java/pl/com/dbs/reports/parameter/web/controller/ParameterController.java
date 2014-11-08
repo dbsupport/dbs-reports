@@ -7,7 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -31,12 +32,12 @@ import pl.com.dbs.reports.support.web.alerts.Alerts;
 /**
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Controller
 @SessionAttributes({ParameterController.FORM_DB_KEY, ParameterController.FORM_APP_KEY})
 public class ParameterController {
-	private static final Logger logger = Logger.getLogger(ParameterController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ParameterController.class);
 	static final String FORM_DB_KEY = "parametersdbeditform";
 	static final String FORM_APP_KEY = "parametersappeditform";
 	

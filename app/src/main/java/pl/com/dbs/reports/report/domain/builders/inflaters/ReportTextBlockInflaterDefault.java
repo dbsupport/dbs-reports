@@ -18,7 +18,7 @@ import pl.com.dbs.reports.report.domain.builders.ReportTextBlock;
  * All parameters should be provided!
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Component("report.block.inflater.default")
 public class ReportTextBlockInflaterDefault extends ReportTextBlockInflater {

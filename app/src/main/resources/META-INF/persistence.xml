@@ -10,13 +10,16 @@
 		
 		<!-- class>pl.com.dbs.reports.support.db.domain.AEntity</class-->
 		
+		<class>pl.com.dbs.reports.logging.domain.LoggingEvent</class>
+		<class>pl.com.dbs.reports.logging.domain.LoggingEventProperty</class>
+		<class>pl.com.dbs.reports.logging.domain.LoggingEventException</class>
+		
 		<class>pl.com.dbs.reports.report.pattern.domain.ReportPattern</class>
 		<class>pl.com.dbs.reports.report.pattern.domain.ReportPatternTransformate</class>
 		<class>pl.com.dbs.reports.report.pattern.domain.ReportPatternInflater</class>
 		<class>pl.com.dbs.reports.report.pattern.domain.ReportPatternForm</class>
 		
 		<class>pl.com.dbs.reports.report.domain.Report</class>
-		<class>pl.com.dbs.reports.report.domain.ReportLog</class>
 		<class>pl.com.dbs.reports.report.domain.Report.ReportPhase</class>
 		<class>pl.com.dbs.reports.report.domain.ReportOrder</class>
 		
@@ -37,6 +40,10 @@
 			<property name="eclipselink.cache.shared.default" value="false" />
 			<property name="eclipselink.cache.size.default" value="0" />
 			<property name="eclipselink.cache.type.default" value="None" />
+			<property name="eclipselink.logging.level" value="OFF"/>
+			<property name="eclipselink.logging.level.sql" value="OFF"/>
+			<property name="eclipselink.logging.parameters" value="true"/>
+			<property name="eclipselink.logging.logger" value="JavaLogger"/>
 		</properties>
 
 	</persistence-unit>

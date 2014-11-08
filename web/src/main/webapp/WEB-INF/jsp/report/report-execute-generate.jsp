@@ -54,7 +54,7 @@
                     		
                             <div class="wizard-actions">
                             	<button type="button" class="btn-glow primary btn-prev" onclick="location.href='report/execute/form'"><i class="icon-chevron-left"></i>&nbsp;Popraw</button><span>&nbsp;</span>
-		                        <button type="submit" class="btn-glow success btn-finish" style="display: inline-block;">Generuj!</button><span>&nbsp;</span>
+		                        <button type="submit" class="btn-glow success btn-finish" style="display: inline-block;"><i class="icon-cogs"></i>&nbsp;Generuj</button><span>&nbsp;</span>
                             </div>
                         </form:form>
         

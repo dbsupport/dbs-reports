@@ -12,7 +12,7 @@ import pl.com.dbs.reports.support.web.form.option.FieldOption;
  * Inflates form fields with faken values.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 
 public class FieldInflaterMock implements FieldInflater {

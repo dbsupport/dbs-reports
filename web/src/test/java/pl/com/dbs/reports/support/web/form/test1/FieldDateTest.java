@@ -20,7 +20,7 @@ import org.junit.Test;
  * Tests.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class FieldDateTest {
 

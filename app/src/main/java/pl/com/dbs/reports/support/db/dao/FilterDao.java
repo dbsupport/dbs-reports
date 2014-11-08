@@ -16,7 +16,7 @@ import pl.com.dbs.reports.support.db.domain.IEntity;
 /**
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class FilterDao<T extends IEntity> {
 	protected AFilter<T> filter;

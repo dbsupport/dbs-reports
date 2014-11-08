@@ -12,7 +12,7 @@ import pl.com.dbs.reports.profile.web.form.ProfileForm;
  * Profile data.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ProfileValidator implements Validator {
 	private static final int NOTE_MAX = 2000;

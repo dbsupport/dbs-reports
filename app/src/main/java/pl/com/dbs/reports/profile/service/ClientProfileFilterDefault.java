@@ -9,7 +9,7 @@ import pl.com.dbs.reports.api.profile.ClientProfileFilter;
  * Implementation of client side filter for querying profiles.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ClientProfileFilterDefault implements ClientProfileFilter {
 	private int max = 10;

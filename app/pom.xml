@@ -20,6 +20,12 @@
         <dependency>
             <groupId>pl.com.dbs</groupId>
             <artifactId>dbs-reports-api</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<artifactId>spring-tx</artifactId>
+            		<groupId>org.springframework</groupId>
+            	</exclusion>
+            </exclusions>
         </dependency>   		
 		<dependency>
 			<groupId>pl.com.dbs</groupId>
@@ -33,14 +39,28 @@
 		</dependency>        
 	
 		<!-- Commons -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>		
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-log4j12</artifactId>
-		</dependency>
+		<!-- https://parleys.com/play/514892260364bc17fc56be83/chapter21/about -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+        <!-- dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>log4j-over-slf4j</artifactId>
+          <version></version>
+        </dependency-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>      
+        
+        
+        <!-- dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>jcl-over-slf4j</artifactId>
+        </dependency-->
+        
+                   
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
@@ -109,6 +129,16 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-openid</artifactId>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>spring-tx</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<!-- Spring -->
@@ -128,17 +158,26 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+		
 
-
+        <!-- Spring AOP + AspectJ -->
         <!-- dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
-        </dependency>
+        </dependency-->   
         <dependency>
             <groupId>aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-        </dependency>	
-		<dependency>
+        </dependency>                 
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
+		<!-- dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-instrument</artifactId>
 		</dependency-->

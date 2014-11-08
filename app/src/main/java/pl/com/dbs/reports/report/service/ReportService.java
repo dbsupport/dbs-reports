@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pl.com.dbs.reports.logging.service.LoggingService;
 import pl.com.dbs.reports.report.dao.ReportDao;
 import pl.com.dbs.reports.report.dao.ReportFilter;
 import pl.com.dbs.reports.report.dao.ReportOrderDao;
@@ -21,7 +22,7 @@ import pl.com.dbs.reports.report.domain.ReportOrder;
  * Reports management.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Service
 public class ReportService {
@@ -32,6 +33,7 @@ public class ReportService {
 	@Autowired private ReportOrderService reportOrderService;
 	@Autowired private ReportProcessingService reportProcessingService;
 	@Autowired private ReportProcessingAsynchService reportProcessingAsynchService;
+	@Autowired private LoggingService loggingService;
 
 	
 	/**
@@ -63,6 +65,11 @@ public class ReportService {
 		 * ..remove order if all reports are TRANSIENT/PERSIST...
 		 */
 		reportOrderService.cleanupConfirmed(report);
+
+		/**
+		 * remove all logs for given raport.
+		 */
+		loggingService.delog(id);
 		
 		return report;
 	}
@@ -90,6 +97,10 @@ public class ReportService {
 		}
 		reportDao.erase(report);
 		
+		/**
+		 * remove all logs for given raport.
+		 */
+		loggingService.delog(id);
 	}	
 	
 	/**

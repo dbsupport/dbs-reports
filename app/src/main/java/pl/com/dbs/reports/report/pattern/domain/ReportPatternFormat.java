@@ -19,7 +19,7 @@ import pl.com.dbs.reports.api.report.pattern.PatternFormat;
  * What extension pattern it is?
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Embeddable
 public class ReportPatternFormat implements PatternFormat {

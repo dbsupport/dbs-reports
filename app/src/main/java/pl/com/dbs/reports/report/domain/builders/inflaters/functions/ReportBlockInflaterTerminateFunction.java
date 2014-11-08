@@ -6,10 +6,12 @@ package pl.com.dbs.reports.report.domain.builders.inflaters.functions;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
-import pl.com.dbs.reports.api.report.ReportLogType;
+import pl.com.dbs.reports.api.report.ReportLoggings;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuildContext;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuildTerminationException;
 
@@ -18,8 +20,9 @@ import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuildTerminationExc
  * Terminates generation if parameters result is 1.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
+@Slf4j
 @Component
 public class ReportBlockInflaterTerminateFunction implements ReportBlockInflaterFunction {
 	private static final String NAME = "OUT_TERMINATE";
@@ -36,7 +39,7 @@ public class ReportBlockInflaterTerminateFunction implements ReportBlockInflater
 	public void apply(final ReportBlocksBuildContext context, final Entry<String, String> param) {
 		if (isStop(param)) {
 			String msg = getMsg(param);
-			context.addLog(ReportLogType.INFO, msg);
+			log.info(ReportLoggings.MRK_USER, msg);
 			context.getContent().delete(0, context.getContent().length());
 			throw new ReportBlocksBuildTerminationException(msg);
 		}

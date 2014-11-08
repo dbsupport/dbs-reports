@@ -23,9 +23,11 @@ import com.google.inject.internal.Lists;
  * Report filter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ReportFilter extends AFilter<Report> {
+	private static final long serialVersionUID = -6561674834966022844L;
+	
 	private static final int DEFAULT_PAGER_SIZE = 10;
 	private List<Long> id;
 	private String name;

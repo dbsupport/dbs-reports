@@ -13,7 +13,7 @@ import pl.com.dbs.reports.report.web.form.ReportsUnarchivedForm;
  * Archives listing validator.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Component
 public class ReportsUnarchivedValidator implements Validator {

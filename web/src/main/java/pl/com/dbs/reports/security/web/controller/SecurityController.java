@@ -7,7 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,18 +29,18 @@ import pl.com.dbs.reports.support.web.alerts.Alerts;
  * Security entrypoints.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Controller
 public class SecurityController {
-	private static final Logger logger = Logger.getLogger(SecurityController.class);
+	private static final Logger logger = LoggerFactory.getLogger(SecurityController.class);
 	@Autowired private Alerts alerts;
 	@Autowired private ProfileService profileService;
 	@Autowired private ParameterService parameterService;
 	
 	@RequestMapping(value="/security/login", method = RequestMethod.GET)
     public String login(RedirectAttributes ra) {
-		logger.debug("OS:"+System.getProperty("os.name").toLowerCase());
+		logger.info("OS:"+System.getProperty("os.name").toLowerCase());
 		return "security/login";
     }
 	

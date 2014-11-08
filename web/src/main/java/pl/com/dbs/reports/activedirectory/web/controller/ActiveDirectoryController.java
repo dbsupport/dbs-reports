@@ -27,7 +27,7 @@ import pl.com.dbs.reports.support.web.alerts.Alerts;
  * AD actions..
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Controller
 @SessionAttributes({ActiveDirectoryListForm.KEY})

@@ -15,7 +15,8 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.validation.SchemaFactory;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.xml.sax.ErrorHandler;
@@ -43,12 +44,12 @@ import com.google.common.io.Resources;
  * http://stackoverflow.com/questions/7113219/saxparseexception-in-xsd-validation-does-not-give-element-name
  * 
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Order(6)
 @Component
 public class PatternContentFormValidator implements PatternValidator, ErrorHandler {
-	private static final Logger logger = Logger.getLogger(PatternContentFormValidator.class);
+	private static final Logger logger = LoggerFactory.getLogger(PatternContentFormValidator.class);
 	private static final String SCHEMA = "/pl/com/dbs/reports/form-schema-1.0.0.xsd";
 	
 	@Override

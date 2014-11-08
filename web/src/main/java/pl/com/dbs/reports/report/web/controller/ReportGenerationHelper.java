@@ -9,7 +9,8 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -28,11 +29,11 @@ import pl.com.dbs.reports.support.web.form.inflater.FieldInflater;
  * Generate dynamic form... 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Component
 public class ReportGenerationHelper {
-	private static final Logger logger = Logger.getLogger(ReportGenerationHelper.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReportGenerationHelper.class);
 	@Autowired private PatternService patternService;
 	@Autowired private Set<FieldInflater> inflaters;
 	@Autowired private Alerts alerts;

@@ -51,8 +51,8 @@
 		<prop key="javax.persistence.transactionType">RESOURCE_LOCAL</prop>
 		<prop key="eclipselink.target-server">None</prop>
 		<prop key="eclipselink.weaving">static</prop>
-		<prop key="eclipselink.logging.logger">org.eclipse.persistence.logging.CommonsLoggingSessionLog</prop>
-		<prop key="eclipselink.logging.parameters">true</prop>
+		<!-- prop key="eclipselink.logging.logger">org.eclipse.persistence.logging.CommonsLoggingSessionLog</prop-->
+		<!-- prop key="eclipselink.logging.parameters">true</prop-->
 	</util:properties>
 
 </beans>

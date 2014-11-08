@@ -8,12 +8,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,11 +38,11 @@ import com.google.inject.internal.Lists;
 /**
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Controller
 public class ReportsStatusController {
-	private static final Logger logger = Logger.getLogger(ReportsStatusController.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReportsStatusController.class);
 	private static final PeriodFormatter FORMAT = new PeriodFormatterBuilder()
 																			.printZeroAlways()
 																			.minimumPrintedDigits(2)

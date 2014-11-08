@@ -16,7 +16,7 @@ import pl.com.dbs.reports.security.domain.SessionContext;
  * Takes care of holding profile into session and spring context;
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class ProfileSession {
 	public static final String CURRENT_PROFILE = "currentprofile";

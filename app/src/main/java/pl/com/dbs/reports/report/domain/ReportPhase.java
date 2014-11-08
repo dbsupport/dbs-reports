@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
  * report phase embedable.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Embeddable
 public class ReportPhase {

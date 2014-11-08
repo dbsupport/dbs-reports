@@ -35,7 +35,7 @@ import pl.com.dbs.reports.support.db.domain.IEntity;
  * Stay alive as long as has any report and at least one report is not PERSISTED.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Entity
 @Table(name = "tre_order")

@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -34,11 +35,11 @@ import com.google.common.collect.Lists;
  * Tasks to synchronize profiles between CLIENT db and local db.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Service("profile.scheduler")
 public class ProfileScheduler {
-	private static final Logger logger = Logger.getLogger(ProfileScheduler.class);
+	private static final Logger logger = LoggerFactory.getLogger(ProfileScheduler.class);
 	@Autowired(required=false) private ClientProfileService clientProfileService;
 	@Autowired private ProfileService profileService;
 	@Autowired private AuthorityDao authorityDao;

@@ -15,7 +15,7 @@ import pl.com.dbs.reports.api.report.pattern.PatternFormat;
  * 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class ReportGenerationContextDefault implements ReportGenerationContext, Serializable {
 	private static final long serialVersionUID = -6908861084907040852L;

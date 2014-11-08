@@ -18,7 +18,7 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPatternManifest;
  * Validate manifest section required fields.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Order(1)
 @Component

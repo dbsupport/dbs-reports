@@ -3,7 +3,6 @@
  */
 package pl.com.dbs.reports.report.domain;
 
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import pl.com.dbs.reports.api.report.ReportFactory;
-import pl.com.dbs.reports.api.report.ReportLog;
 import pl.com.dbs.reports.api.report.ReportProduceContext;
 import pl.com.dbs.reports.api.report.ReportProduceResult;
 import pl.com.dbs.reports.api.report.ReportProduceStatus;
@@ -34,7 +32,7 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
  * and merge back (construct) into content.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Component
 public class ReportFactoryDefault implements ReportFactory {
@@ -81,11 +79,6 @@ public class ReportFactoryDefault implements ReportFactory {
 			@Override
 			public byte[] getContent() {
 				return blocksbuilder.getContent();
-			}
-
-			@Override
-			public List<ReportLog> getLogs() {
-				return blocksbuilder.getLogs();
 			}
 
 			@Override

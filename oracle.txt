@@ -5,6 +5,10 @@ Odblokowanie HR/zmiana hasla:
 - alter user hr account unlock;
 - alter user hr identified by NEW_PASSWORD;
 
+Albo:
+Oracle -> Run SQL command
+- connect hr.. poprosi o zmiane hasla..
+
 Reset hasla do apex:
 - uruchom SQL Plus
 - @C:\oraclexe\app\oracle\product\11.2.0\server\apex\apxxepwd NEW_PASSWORD;

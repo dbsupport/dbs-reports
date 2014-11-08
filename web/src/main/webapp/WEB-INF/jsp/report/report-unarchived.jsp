@@ -190,13 +190,13 @@ $(document).ready(function() {
                                 <c:when test="${report.phase.status == 'READY'}">
                                     <div class="col-md-4 log">
                                     <a class="pop-dialog-log-trigger"><span class="label label-info report-phase-label">gotowy</span></a>
-                                    <%@ include file="/WEB-INF/jsp/report/report-logs.jsp" %> 
+                                    <%@ include file="/WEB-INF/jsp/report/report-logs.jsp" %>
                                     </div>
                                 </c:when>
                                 <c:otherwise>
                                     <div class="col-md-4 log">
                                     <a class="pop-dialog-log-trigger"><span class="label label-success report-phase-label">niezarchiwizowany</span></a>
-                                    <%@ include file="/WEB-INF/jsp/report/report-logs.jsp" %> 
+                                    <%@ include file="/WEB-INF/jsp/report/report-logs.jsp" %>
                                     </div>                                
                                 </c:otherwise>
                                 </c:choose>

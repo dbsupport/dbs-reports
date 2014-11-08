@@ -30,7 +30,7 @@ import pl.com.dbs.reports.security.domain.SessionContext;
  * Rules tests base.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(SessionContext.class)

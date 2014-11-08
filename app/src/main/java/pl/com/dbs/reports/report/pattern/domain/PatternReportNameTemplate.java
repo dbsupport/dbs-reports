@@ -8,7 +8,7 @@ package pl.com.dbs.reports.report.pattern.domain;
  * @see Manifest ATTRIBUTE_NAME_TEMPLATE
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public enum PatternReportNameTemplate {
 	FILENAME(1, "filename"), DATE_TIME(2, "date-time"), DATE(3, "date");

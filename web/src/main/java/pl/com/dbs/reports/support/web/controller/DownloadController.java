@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * http://stackoverflow.com/questions/6293893/how-to-force-pdf-files-to-open-in-browser
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class DownloadController {
 

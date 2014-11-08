@@ -21,7 +21,7 @@ import pl.com.dbs.reports.communication.domain.SenderContext;
  * Proxy JavaMailSender.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 //@Component(value=SenderContext.SENDER)
 public class MailSender implements JavaMailSender {

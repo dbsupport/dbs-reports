@@ -3,36 +3,43 @@
  */
 package pl.com.dbs.reports.report.domain.builders;
 
-import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang.StringUtils;
 
-import pl.com.dbs.reports.api.report.ReportLog;
-import pl.com.dbs.reports.api.report.ReportLogType;
+import pl.com.dbs.reports.api.report.ReportLoggings;
 
 /**
  * Inflater context .
  * After inflation returns content and logs;
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
+@Slf4j
 public class ReportBlocksBuildContext {
 	private Map<String, String> params;
 	private StringBuilder sb;
 	private LinkedList<ReportTextBlock> blocks;
-	private List<ReportLog> logs;
 	
 	
-	public ReportBlocksBuildContext(ReportTextBlock root, Map<String, String> params, List<ReportLog> logs, StringBuilder sb) {
+	public ReportBlocksBuildContext(ReportTextBlock root, Map<String, String> params, StringBuilder sb) {
 		this.blocks = root.getBlocks();
 		this.params = params;
-		this.logs = logs;
 		this.sb = sb;
+		//..add parameters log..
+		final StringBuilder lsb = new StringBuilder();
+		for (Map.Entry<String, String> param : params.entrySet()) {
+			if (!StringUtils.isBlank(param.getValue())) {
+				String value = param.getValue().length()>255?(param.getValue().substring(0, 255)+".."):param.getValue();
+				lsb.append(param.getKey()).append("=").append(value).append(System.getProperty("line.separator"));
+			}
+		}
+		log.info(ReportLoggings.MRK_USER, lsb.toString());		
 	}
 	
 	public LinkedList<ReportTextBlock> getBlocks() {
@@ -51,24 +58,6 @@ public class ReportBlocksBuildContext {
 		if (params.containsKey(key)) params.remove(key);
 		//if (encodingContext!=null) params.put(key, encodingService.encode(value, encodingContext)); else 
 		params.put(key, param.getValue());
-		return this;
-	}
-	
-	public ReportBlocksBuildContext addLog(final ReportLogType type, final String msg) {
-		logs.add(new ReportLog() {
-			@Override
-			public ReportLogType getType() {
-				return type;
-			}
-			@Override
-			public String getMsg() {
-				return msg;
-			}
-			@Override
-			public Date getDate() {
-				return new Date();
-			}
-		});
 		return this;
 	}
 	

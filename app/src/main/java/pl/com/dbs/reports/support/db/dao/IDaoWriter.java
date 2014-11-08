@@ -9,7 +9,7 @@ import pl.com.dbs.reports.support.db.domain.IEntity;
  * DAO interface of writing.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public interface IDaoWriter<T extends IEntity, K> {
 	/**

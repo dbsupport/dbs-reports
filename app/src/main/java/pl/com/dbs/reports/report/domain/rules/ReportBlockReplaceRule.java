@@ -16,7 +16,7 @@ import pl.com.dbs.reports.report.domain.builders.ReportBlockException;
  * Replaces variables with their values.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class ReportBlockReplaceRule implements ReportBlockRule {
 	private static int VALVE = 100;

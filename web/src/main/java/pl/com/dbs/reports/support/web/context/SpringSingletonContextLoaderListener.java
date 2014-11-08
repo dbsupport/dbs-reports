@@ -10,7 +10,7 @@ import org.springframework.web.context.ContextLoaderListener;
  * Default Sprong context listener.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class SpringSingletonContextLoaderListener extends ContextLoaderListener {
     protected ContextLoader createContextLoader() {

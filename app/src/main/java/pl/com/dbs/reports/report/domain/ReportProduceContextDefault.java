@@ -13,7 +13,7 @@ import pl.com.dbs.reports.api.report.pattern.PatternFormat;
  * Default report context production. 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public interface ReportProduceContextDefault extends ReportProduceContext {
 	Pattern getPattern();

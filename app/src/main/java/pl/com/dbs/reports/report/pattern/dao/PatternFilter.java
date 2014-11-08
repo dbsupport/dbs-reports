@@ -4,9 +4,9 @@
 package pl.com.dbs.reports.report.pattern.dao;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 
 import pl.com.dbs.reports.access.domain.Access;
@@ -20,30 +20,25 @@ import pl.com.dbs.reports.support.db.dao.AFilter;
  * Report pattern filter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class PatternFilter extends AFilter<ReportPattern> {
+	private static final long serialVersionUID = 4271784642529890380L;
+	
 	private static final int DEFAULT_PAGER_SIZE = 10;
 	private Long id;
 	private String name;
 	private String version;
-	private Date uploadDate;
-	private String author;
-	private String creator;
 	private Long profileId;
 	
 	private String factory;
 	private List<String> accesses = new ArrayList<String>();
 
 	public PatternFilter() {
-		Profile profile = SessionContext.getProfile();
-		Validate.notNull(profile, "Profile is no more!");
-		this.accesses = new ArrayList<String>();
-		for (Access access : profile.getAccesses())
-			this.accesses.add(access.getName());
+		resetAccesses();
 		getPager().setPageSize(DEFAULT_PAGER_SIZE);
-		getSorter().add(ReportPattern_.uploadDate.getName(), false);
 		getSorter().add(ReportPattern_.name.getName(), true);
+		//getSorter().add(ReportPattern_.uploadDate.getName(), false);
 	}
 	
 	public PatternFilter(long id) {
@@ -61,29 +56,27 @@ public class PatternFilter extends AFilter<ReportPattern> {
 	public PatternFilter(Access access) {
 		this.accesses.add(access.getName());
 	}
+	
+	public PatternFilter forAccess(String access) {
+		if (!StringUtils.isBlank(access)) {
+			Profile profile = SessionContext.getProfile();
+			if (profile.hasAccess(access)) {
+				this.accesses = new ArrayList<String>();
+				this.accesses.add(access);
+			}
+		} else resetAccesses();
+		return this;
+	}
+	
 
-	public void putName(String name) {
+	public PatternFilter forName(String name) {
 		this.name = name;
+		return this;
 	}
 	
-	public void putVersion(String version) {
-		this.version = version;
-	}
-	
-	public void putUploadDate(Date date) {
-		this.uploadDate = date;
-	}
-	
-	public void putAuthor(String author) {
-		this.author = author;
-	}
-	
-	public void putCreator(String creator) {
-		this.creator = creator;
-	}
-	
-	public void putProfileId(Long id) {
+	public PatternFilter forProfile(Long id) {
 		this.profileId = id;
+		return this;
 	}
 	
 	
@@ -110,19 +103,20 @@ public class PatternFilter extends AFilter<ReportPattern> {
 		return factory;
 	}
 
-	public Date getUploadDate() {
-		return uploadDate;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public String getCreator() {
-		return creator;
-	}
-
 	public Long getProfileId() {
 		return profileId;
 	}
+	
+	private void resetAccesses() {
+		Profile profile = SessionContext.getProfile();
+		Validate.notNull(profile, "Profile is no more!");
+		
+		this.accesses = new ArrayList<String>();
+		/**
+		 * ..all profile accesses..
+		 */
+		for (Access access : profile.getAccesses())
+			this.accesses.add(access.getName());		
+	}
+	
 }

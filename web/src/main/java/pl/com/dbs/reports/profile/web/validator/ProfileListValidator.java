@@ -12,7 +12,7 @@ import pl.com.dbs.reports.profile.web.form.ProfileListForm;
  * Profiles validation.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ProfileListValidator implements Validator {
 	public ProfileListValidator() {}

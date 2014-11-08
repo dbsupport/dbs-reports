@@ -7,7 +7,7 @@ package pl.com.dbs.reports.support.utils.exception;
  * Utils...
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class Exceptions {
 	private static int MAX = 1024;

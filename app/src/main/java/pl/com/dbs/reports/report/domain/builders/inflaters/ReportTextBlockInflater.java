@@ -18,7 +18,7 @@ import pl.com.dbs.reports.report.domain.builders.inflaters.functions.ReportBlock
  * Result is appened to content.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public abstract class ReportTextBlockInflater {
 	@Autowired private List<ReportBlockInflaterFunction> functions;

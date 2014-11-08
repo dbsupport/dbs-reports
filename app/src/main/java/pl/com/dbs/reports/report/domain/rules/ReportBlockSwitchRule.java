@@ -18,7 +18,7 @@ import pl.com.dbs.reports.report.domain.builders.ReportBlockException;
  * PS. Option value cant have: ()
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class ReportBlockSwitchRule implements ReportBlockRule {
 	private static int VALVE = 100;

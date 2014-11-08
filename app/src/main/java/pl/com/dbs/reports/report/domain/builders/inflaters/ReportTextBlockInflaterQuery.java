@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -36,11 +37,11 @@ import pl.com.dbs.reports.support.encoding.EncodingService;
  * Queries BD during inflation for parameters.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
+@Slf4j
 @Component("report.block.inflater.query")
 public class ReportTextBlockInflaterQuery extends ReportTextBlockInflater {
-	private static final Logger logger = Logger.getLogger(ReportTextBlockInflaterQuery.class);
 	/**
 	 * Inflation executing endpoint.
 	 */
@@ -64,7 +65,7 @@ public class ReportTextBlockInflaterQuery extends ReportTextBlockInflater {
 			try {
 				inflateBlock(block, context, encodingContext);
 			} catch (ReportBlockInflationException e) {
-				logger.error("Error inflating block:"+block.getLabel(), e);
+				log.error("Error inflating block:"+block.getLabel(), e);
 				throw new ReportBlockException(e);
 			}
 		}
@@ -132,7 +133,7 @@ public class ReportTextBlockInflaterQuery extends ReportTextBlockInflater {
 						}
 				}));				
 		} else if (block.isInflateable()) {
-			logger.error("Block("+block.getLabel()+") requires inflation but cant find one!");
+			log.error("Block("+block.getLabel()+") requires inflation but cant find one!");
 			throw new IllegalStateException("Block("+block.getLabel()+") requires inflation but cant find one!");
 		}
 

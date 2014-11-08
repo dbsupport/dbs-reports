@@ -37,7 +37,7 @@ import com.google.common.collect.Iterables;
   </select>
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 
 @XmlAccessorType(XmlAccessType.FIELD)

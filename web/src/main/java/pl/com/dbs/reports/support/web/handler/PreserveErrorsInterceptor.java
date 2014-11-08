@@ -32,7 +32,7 @@ import com.google.inject.internal.Lists;
  * http://stackoverflow.com/questions/9329741/preserving-model-state-with-post-redirect-get-pattern/11610179#11610179
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Component("preserve.errors.interceptor")
 public class PreserveErrorsInterceptor extends ResourceExcludingHandlerInterceptorAdapter {

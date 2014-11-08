@@ -10,7 +10,7 @@ import java.util.Map;
  * A Sorter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class Sorter implements Serializable{
 	private static final long serialVersionUID = 6439216307578778627L;

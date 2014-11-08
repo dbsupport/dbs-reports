@@ -13,7 +13,7 @@ import pl.com.dbs.reports.profile.domain.Profile;
  * Application session context to retrieve profile from Spring Security context.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class SessionContext {
 	public static final String ROLE_ADMIN = "Admin";

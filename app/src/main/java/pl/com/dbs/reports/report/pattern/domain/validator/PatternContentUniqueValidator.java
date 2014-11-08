@@ -20,7 +20,7 @@ import pl.com.dbs.reports.report.pattern.dao.PatternFilter;
  * Is there already active pattern with that name/version/factory values? 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Order(4)
 @Component

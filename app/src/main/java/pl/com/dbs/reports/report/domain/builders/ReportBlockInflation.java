@@ -10,7 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pl.com.dbs.reports.support.utils.separator.Separator;
 
@@ -19,10 +20,10 @@ import pl.com.dbs.reports.support.utils.separator.Separator;
  * Needs to be inflated mostly by some data.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ReportBlockInflation {
-	private static final Logger logger = Logger.getLogger(ReportBlockInflation.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReportBlockInflation.class);
 	private String label;
 	private String sql;
 	

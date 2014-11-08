@@ -9,8 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
+import lombok.extern.slf4j.Slf4j;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflater;
 
@@ -23,10 +22,10 @@ import com.lowagie.text.pdf.PdfWriter;
  * Report blocks builder for text formats converted into pdf.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
+@Slf4j
 public final class ReportTextPdfBlocksBuilder extends ReportTextBlocksBuilder {
-	private static final Logger logger = Logger.getLogger(ReportTextPdfBlocksBuilder.class);
 	
 	public ReportTextPdfBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflater inflater, final Map<String, String> params) {
 		super(transformate, inflater, params);
@@ -56,10 +55,10 @@ public final class ReportTextPdfBlocksBuilder extends ReportTextBlocksBuilder {
 				document.add(new Paragraph(br.readLine()));
 			}
 			document.close();
-			logger.debug("Pdf document closed");
+			log.debug("Pdf document closed");
 			content = os.toByteArray();
 		} catch (Exception e) {
-			logger.error("Error converting into pdf." + e.getMessage());
+			log.error("Error converting into pdf." + e.getMessage());
 		}
 	}
 }

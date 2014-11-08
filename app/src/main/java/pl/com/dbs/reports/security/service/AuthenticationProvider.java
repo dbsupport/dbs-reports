@@ -1,7 +1,8 @@
 package pl.com.dbs.reports.security.service;
 
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,11 +27,11 @@ import pl.com.dbs.reports.security.domain.SecurityContextDefault;
  * - if global user authenticates in CLIENT db
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Component(value="authentication.provider")
 public class AuthenticationProvider implements org.springframework.security.authentication.AuthenticationProvider {
-	private static final Logger logger = Logger.getLogger(AuthenticationProvider.class);
+	private static final Logger logger = LoggerFactory.getLogger(AuthenticationProvider.class);
 	private ProfileService profileService;
 	private SecurityService securityService;
 	

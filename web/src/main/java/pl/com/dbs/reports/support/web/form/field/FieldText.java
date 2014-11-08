@@ -15,7 +15,7 @@ import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorValue;
  * Default text field.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorValue("text")

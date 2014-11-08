@@ -25,7 +25,7 @@ import com.google.common.collect.Iterables;
  * Abstract field validator definition.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorNode("@type")
@@ -81,7 +81,8 @@ public abstract class AFieldValidator implements Serializable {
 	 */
 	public abstract void init(AField<?> field, LinkedList<AField<?>> fields);
 	
-	public class FieldValidatorDescription {
+	public class FieldValidatorDescription implements Serializable {
+		private static final long serialVersionUID = 4544445699282512210L;
 		private String code;
 		private String args="";
 		FieldValidatorDescription(String code) {

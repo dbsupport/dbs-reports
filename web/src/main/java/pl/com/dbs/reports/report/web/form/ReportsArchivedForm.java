@@ -12,7 +12,7 @@ import pl.com.dbs.reports.support.web.form.AForm;
  * Report archives form.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ReportsArchivedForm extends AForm {
 	private static final long serialVersionUID = 2768961218389914470L;

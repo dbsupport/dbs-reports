@@ -12,7 +12,7 @@ import pl.com.dbs.reports.profile.domain.Profile;
  * Extra custom data for Spring user.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class AuthenticationToken extends UsernamePasswordAuthenticationToken {
 	private static final long serialVersionUID = -8551936501903237500L;

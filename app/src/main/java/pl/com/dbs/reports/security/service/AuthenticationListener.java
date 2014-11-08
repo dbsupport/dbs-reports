@@ -1,6 +1,7 @@
 package pl.com.dbs.reports.security.service;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.event.AbstractAuthenticationEvent;
@@ -13,12 +14,12 @@ import org.springframework.stereotype.Component;
  * Authentication events listener. 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Component(value="authentication.listener")
 public class AuthenticationListener implements ApplicationListener<AbstractAuthenticationEvent> {
 
-	final static Logger log = Logger.getLogger(AuthenticationListener.class);
+	final static Logger log = LoggerFactory.getLogger(AuthenticationListener.class);
 	
 	public void onApplicationEvent(AbstractAuthenticationEvent event) {
 		UsernamePasswordAuthenticationToken source = (UsernamePasswordAuthenticationToken) event.getSource();

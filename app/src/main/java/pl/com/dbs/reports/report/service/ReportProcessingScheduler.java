@@ -5,7 +5,8 @@ package pl.com.dbs.reports.report.service;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -20,11 +21,11 @@ import pl.com.dbs.reports.report.domain.Report;
  * http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/scheduling.html
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Service
 public class ReportProcessingScheduler {
-	private static final Logger logger = Logger.getLogger(ReportProcessingScheduler.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReportProcessingScheduler.class);
 	@Autowired private ReportDao reportDao;
 	@Autowired private ReportProcessingService reportProcessingService;
 	@Autowired private ReportOrderService reportOrderService;

@@ -19,7 +19,7 @@ import pl.com.dbs.reports.api.report.pattern.PatternValidator;
  * There is allowed only one transformate with given extension.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Order(8)
 @Component

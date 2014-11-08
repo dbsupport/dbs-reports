@@ -18,7 +18,7 @@ import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuilder;
  * REPLACE tests
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class ReportBlockReplaceRuleTest extends ReportBlockRuleTest {
 	static final String V_0 = "Whether 'tis nobler in the mind to suffer";

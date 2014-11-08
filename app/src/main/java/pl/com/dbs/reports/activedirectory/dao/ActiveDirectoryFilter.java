@@ -12,7 +12,7 @@ import pl.com.dbs.reports.support.filter.Filter;
  * AD filter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public class ActiveDirectoryFilter extends Filter {
 	private static final int DEFAULT_PAGER_SIZE = 10;

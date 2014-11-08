@@ -8,8 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
+import lombok.extern.slf4j.Slf4j;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflater;
 
@@ -23,10 +22,10 @@ import com.lowagie.text.rtf.parser.RtfParser;
  * Report blocks builder for rtf formats converted into pdf.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
+@Slf4j
 public final class ReportRtfPdfBlocksBuilder extends ReportTextBlocksBuilder {
-	private static final Logger logger = Logger.getLogger(ReportRtfPdfBlocksBuilder.class);
 	
 	public ReportRtfPdfBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflater inflater, final Map<String, String> params) {
 		super(transformate, inflater, params);
@@ -55,12 +54,12 @@ public final class ReportRtfPdfBlocksBuilder extends ReportTextBlocksBuilder {
 			RtfParser parser = new RtfParser(null);
 			parser.convertRtfDocument(new ByteArrayInputStream(content), document);
 			document.close();
-			logger.debug("Pdf document closed");
+			log.debug("Pdf document closed");
 			content = os.toByteArray();			
 		 } catch (DocumentException e) {
-			 logger.error("Error converting rtf into pdf." + e.getMessage());
+			 log.error("Error converting rtf into pdf." + e.getMessage());
 		 } catch (IOException e) {
-			 logger.error("Error converting rtf into pdf (content not found)." + e.getMessage());
+			 log.error("Error converting rtf into pdf (content not found)." + e.getMessage());
 		 }
 	}
 }

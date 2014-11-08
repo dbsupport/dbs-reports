@@ -13,7 +13,7 @@ import pl.com.dbs.reports.report.web.form.ReportGenerationForm;
  * Dynamic report form validator.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ReportGenerationValidator implements Validator {
 	public ReportGenerationValidator() {}

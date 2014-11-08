@@ -5,7 +5,8 @@ package pl.com.dbs.reports.report.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,11 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
  * Error marshaling..
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @ControllerAdvice
 public class ReportGenerationHandler {
-	private static final Logger logger = Logger.getLogger(ReportGenerationHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReportGenerationHandler.class);
 	@Autowired private ReportGenerationHelper reportGenerationHelper;
 	
 	@ExceptionHandler(ReportGenerationException.class)

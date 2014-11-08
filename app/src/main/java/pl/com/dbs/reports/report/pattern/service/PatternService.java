@@ -7,7 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,11 +33,11 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPatternTransformate;
  * Report patterns services.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 @Service("report.pattern.service")
 public class PatternService {
-	private static final Logger logger = Logger.getLogger(PatternService.class);
+	private static final Logger logger = LoggerFactory.getLogger(PatternService.class);
 	@Autowired private PatternManifestResolver manifestResolver;
 	@Autowired private PatternDao patternDao;
 	@Autowired private ReportDao reportDao;

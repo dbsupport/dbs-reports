@@ -12,7 +12,7 @@ import pl.com.dbs.reports.support.web.form.field.IFieldInflatable;
  * Dynamic form field inflater.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public interface FieldInflater extends Serializable {
 	static final Pattern PREFIX_PATTERN = Pattern.compile("^[a-zA-Z]+:", Pattern.CASE_INSENSITIVE);

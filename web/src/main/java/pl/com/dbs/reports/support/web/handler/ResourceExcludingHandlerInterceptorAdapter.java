@@ -15,7 +15,7 @@ import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
  * W tym celu jest ten abstrakt.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 public abstract class ResourceExcludingHandlerInterceptorAdapter implements HandlerInterceptor {
 	private static final String METHOD_GET = "GET";

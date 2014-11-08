@@ -16,7 +16,8 @@ import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pl.com.dbs.reports.api.report.pattern.PatternManifest;
 
@@ -24,11 +25,11 @@ import pl.com.dbs.reports.api.report.pattern.PatternManifest;
  * Report pattern manifest entity.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ReportPatternManifest extends Manifest implements PatternManifest, Serializable {
 	private static final long serialVersionUID = 1469586204373265839L;
-	private static final Logger logger = Logger.getLogger(ReportPatternManifest.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReportPatternManifest.class);
 	
 	public static final String ATTRIBUTE_SECTION = "Database-Support-Reports";
 	public static final String ATTRIBUTE_PATTERN_NAME = "Reports-Pattern-Name";

@@ -19,7 +19,7 @@ import pl.com.dbs.reports.support.web.file.FileMeta;
  * Contains profile id.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class ProfileEditForm extends ProfileNewForm implements ProfileModification, Serializable {
 	private static final long serialVersionUID = -7023050729373559447L;

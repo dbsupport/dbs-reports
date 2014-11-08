@@ -12,7 +12,7 @@ import java.util.Properties;
  * To setup Mail Sender properties at runtime.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public interface SenderContext {
 	static final String SENDER = "communication.mail.sender";

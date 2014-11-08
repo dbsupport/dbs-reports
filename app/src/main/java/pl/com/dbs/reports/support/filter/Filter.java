@@ -9,7 +9,7 @@ import org.apache.commons.lang.Validate;
  * A filter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 public class Filter {
 	private Pager	pager = new Pager();

@@ -13,7 +13,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
@@ -26,12 +27,12 @@ import com.google.common.collect.Sets;
  * Serialize object using JAXB.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2013
+ * @copyright (c) 2013
  */
 //@Converter(autoApply=true)
 @Deprecated
 public class ReportGenerationContextConverter implements AttributeConverter<ReportGenerationContext, String> {
-	private static final Logger logger = Logger.getLogger(ReportGenerationContextConverter.class);
+	private static final Logger logger = LoggerFactory.getLogger(ReportGenerationContextConverter.class);
 	private static Set<Class<?>> classes = Sets.<Class<?>>newHashSet(
 																	PatternFormat.class,
 																	ReportType.class,

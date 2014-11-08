@@ -32,7 +32,7 @@ import com.google.common.collect.Lists;
  * Reports orders CRUD.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @coptyright (c) 2014
+ * @copyright (c) 2014
  */
 @Repository
 public class ReportOrderDao extends ADao<ReportOrder, Long> {

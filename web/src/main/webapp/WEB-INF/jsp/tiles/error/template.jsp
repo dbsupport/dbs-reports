@@ -41,7 +41,7 @@
     <!-- navbar -->
     <header class="navbar navbar-inverse" role="banner">
         <div class="navbar-header">
-            <a class="navbar-brand" href="profile"><img src="img/dbs/logo.png" alt="<spring:message code="project.version"/>" title="<spring:message code="project.version"/>"></a>            
+            <a class="navbar-brand" href="profile"><%@ include file="/WEB-INF/jsp/tiles/common/navbar-brand.jsp" %></a>            
         </div>
     </header>
     <!-- end navbar -->

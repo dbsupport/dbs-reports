@@ -20,7 +20,19 @@
             <rtexprvalue>true</rtexprvalue>
             <type>boolean</type>
         </attribute>		
-	</tag>	
+	</tag>
+	
+    <tag>
+        <description></description>
+        <name>client</name>
+        <tag-class>pl.com.dbs.reports.support.web.client.ClientTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>names</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>        
+    </tag>		
 			
 </taglib>
     

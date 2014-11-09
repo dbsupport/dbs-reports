@@ -69,25 +69,26 @@
                 </ul>
             </li>            
             </sec:authorize>
-            <sec:authorize access="hasAnyRole('Real')">
-            <li>
-                <c:if test="${fn:startsWith(id, 'dbs-page-activedirectory')}">
-                <div class="pointer">
-                    <div class="arrow"></div>
-                    <div class="arrow_border"></div>
-                </div>
-                </c:if>            
-                <a class="dropdown-toggle" href="#">
-                    <i class="icon-user-md"></i>
-                    <span>Real</span>
-                    <i class="icon-chevron-down"></i>
-                </a>
-                <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-activedirectory')}">active</c:if>">
-                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-activedirectory-list')}">active</c:if>" href="activedirectory/list/init">Active Directory</a></li>
-                </ul>
-            </li>            
-            </sec:authorize>
-            
+            <dbs:client names="auchan">
+	            <sec:authorize access="hasAnyRole('Real')">
+	            <li>
+	                <c:if test="${fn:startsWith(id, 'dbs-page-activedirectory')}">
+	                <div class="pointer">
+	                    <div class="arrow"></div>
+	                    <div class="arrow_border"></div>
+	                </div>
+	                </c:if>            
+	                <a class="dropdown-toggle" href="#">
+	                    <i class="icon-user-md"></i>
+	                    <span>Real</span>
+	                    <i class="icon-chevron-down"></i>
+	                </a>
+	                <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-activedirectory')}">active</c:if>">
+	                    <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-activedirectory-list')}">active</c:if>" href="activedirectory/list/init">Active Directory</a></li>
+	                </ul>
+	            </li>            
+	            </sec:authorize>
+            </dbs:client>
             
         </ul>
     </div>

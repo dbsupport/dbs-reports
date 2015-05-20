@@ -3,6 +3,8 @@
  */
 package pl.com.dbs.reports.report.pattern.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
@@ -22,7 +24,9 @@ import pl.com.dbs.reports.api.report.pattern.PatternFormat;
  * @copyright (c) 2014
  */
 @Embeddable
-public class ReportPatternFormat implements PatternFormat {
+public class ReportPatternFormat implements PatternFormat, Serializable {
+	private static final long serialVersionUID = 2076292064487730444L;
+
 	@Column(name = "type")
 	@Enumerated(EnumType.STRING)
 	private ReportType type;

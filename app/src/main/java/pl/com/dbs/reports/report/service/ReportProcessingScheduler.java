@@ -35,7 +35,7 @@ public class ReportProcessingScheduler {
 	/**
 	 * ..process reports from INIT state...
 	 */
-	@Scheduled(cron="* */10 * * * ?")
+	@Scheduled(cron="0 */10 * * * ?")
 	public void generate() {
 		List<Report> awaiting = reportDao.findAwaiting(null);
 		for (Report report : awaiting) {
@@ -48,7 +48,7 @@ public class ReportProcessingScheduler {
 	/**
 	 * Try to clean START'ed reports that stucked...
 	 */
-	@Scheduled(cron="* */15 * * * ?")
+	@Scheduled(cron="0 */15 * * * ?")
 	public void regenerate() {
 		List<Report> lost = reportDao.findLost(null);
 		for (Report report : lost) {
@@ -60,7 +60,7 @@ public class ReportProcessingScheduler {
 	/**
 	 * find broken ones.. 
 	 */
-	@Scheduled(cron="* */25 * * * ?")
+	@Scheduled(cron="0 */25 * * * ?")
 	public void cleanup() {
 		List<Report> broken = reportDao.findBroken(null);
 		for (Report report : broken) {
@@ -74,7 +74,7 @@ public class ReportProcessingScheduler {
 	 * Normally it is done on demand (see public void ready(long id))
 	 * but this cron cleans failed tries.. 
 	 */
-	@Scheduled(cron="* */5 * * * ?")
+	@Scheduled(cron="0 */5 * * * ?")
 	public void notification() {
 		reportProcessingService.ready();
 	}		
@@ -85,7 +85,7 @@ public class ReportProcessingScheduler {
 	 * but this cron cleans failed tries..
 	 * public void cleanupConfirmed(Report report) {
 	 */
-	@Scheduled(cron="* */10 * * * ?")
+	@Scheduled(cron="0 */10 * * * ?")
 	public void orders() {
 		reportOrderService.cleanupConfirmed();
 	}

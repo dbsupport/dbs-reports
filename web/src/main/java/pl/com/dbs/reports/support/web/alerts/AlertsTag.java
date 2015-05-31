@@ -89,32 +89,32 @@ public class AlertsTag extends RequestContextAwareTag {
 	
 	private void renderError(String msg) throws IOException {
 		JspWriter out = pageContext.getOut();
-		out.println("<div class=\"alert alert-danger\">");
-		out.println("<i class=\"icon-remove-sign\"></i>");
+        out.println("<div class=\"item alert-danger\">");
+		out.println("<i class=\"alerts-icon icon-remove-sign\"></i>");
 		out.println(msg);
 		out.println("</div>");		
 	}
 	
 	private void renderWarning(String msg) throws IOException {
 		JspWriter out = pageContext.getOut();
-		out.println("<div class=\"alert alert-warning\">");
-		out.println("<i class=\"icon-warning-sign\"></i>");
+		out.println("<div class=\"item alert-warning\">");
+		out.println("<i class=\"alerts-icon icon-warning-sign\"></i>");
 		out.println(msg);
 		out.println("</div>");		
 	}
 	
 	private void renderInfo(String msg) throws IOException {
 		JspWriter out = pageContext.getOut();
-		out.println("<div class=\"alert alert-info\">");
-		out.println("<i class=\"icon-exclamation-sign\"></i>");
+		out.println("<div class=\"item alert-info\">");
+		out.println("<i class=\"alerts-icon icon-exclamation-sign\"></i>");
 		out.println(msg);
 		out.println("</div>");		
 	}		
 	
 	private void renderSuccess(String msg) throws IOException {
 		JspWriter out = pageContext.getOut();
-		out.println("<div class=\"alert alert-success\">");
-		out.println("<i class=\"icon-ok-sign\"></i>");
+		out.println("<div class=\"item alert-success\">");
+		out.println("<i class=\"alerts-icon icon-ok-sign\"></i>");
 		out.println(msg);
 		out.println("</div>");		
 	}			

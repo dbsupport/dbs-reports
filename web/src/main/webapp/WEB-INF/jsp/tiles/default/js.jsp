@@ -7,4 +7,5 @@
     <script src="js/theme.js"></script>
     <script src="js/dbs/dbs-loading.js"></script>
     <script src="js/dbs/dbs-report-notifier.js"></script>
+    <script src="js/dbs/dbs-alerts.js"></script>
     <tiles:insertAttribute name="js"/>

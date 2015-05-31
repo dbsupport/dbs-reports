@@ -3,33 +3,8 @@
  */
 package pl.com.dbs.reports.report.domain;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.persistence.Basic;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.MapKeyColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.Validate;
-
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.profile.domain.Profile;
@@ -37,6 +12,12 @@ import pl.com.dbs.reports.report.domain.ReportPhase.ReportPhaseStatus;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.report.pattern.domain.ReportPatternFormat;
 import pl.com.dbs.reports.support.db.domain.AEntity;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -56,6 +37,7 @@ import pl.com.dbs.reports.support.db.domain.AEntity;
  */
 @Entity
 @Table(name = "tre_report")
+//@SecondaryTable(name = "tre_report_content", pkJoinColumns = @PrimaryKeyJoinColumn(name = "report_id"))
 public class Report extends AEntity implements pl.com.dbs.reports.api.report.Report {
 	private static final long serialVersionUID = 391747562802238863L;
 	
@@ -81,18 +63,24 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     @CollectionTable(name="tre_report_parameter", joinColumns=@JoinColumn(name="report_id"))
     private Map<String, String> parameters = new HashMap<String, String>(); 
 	
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name="pattern_id")	
 	private ReportPattern pattern;
     
 	@OneToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="creator_id")
-    private Profile creator;    
-	
-	@Lob
-	@Column(name = "content")
-	@Basic(fetch = FetchType.LAZY)
-	private byte[] content;
+    private Profile creator;
+
+    /**
+     * http://stackoverflow.com/questions/10108533/jpa-should-i-store-a-blob-in-the-same-table-with-fetch-lazy-or-should-i-store-i
+     * http://www.hostettler.net/blog/2012/03/22/one-to-one-relations-in-jpa-2-dot-0/
+     * http://java.dzone.com/articles/jpa-lazy-loading
+     *
+     * Lazy loading is necessary coz reports can be huge.
+     * Lazy loading works (in that case) only if content is separate class AND when mapping is OneToMany.
+     */
+    @OneToMany(mappedBy="report", orphanRemoval=true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ReportContent> content;
 	
 	@Column(name = "status")
 	@Enumerated(EnumType.STRING)
@@ -128,7 +116,7 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     
     public Report start() {
     	if (!this.phase.is(ReportPhaseStatus.INIT))
-    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for start!");
+    		throw new IllegalStateException("Report "+id+" has improper phase("+phase+") for start!");
     		
     	this.phase.rephase(ReportPhaseStatus.START);
     	return this;
@@ -140,7 +128,7 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
      */
     public Report restart() {
     	if (!this.phase.is(ReportPhaseStatus.START))
-    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for restart!");
+    		throw new IllegalStateException("Report "+id+" has improper phase("+phase+") for restart!");
     	
     	this.phase.rephase(ReportPhaseStatus.INIT);
     	return this;
@@ -148,17 +136,18 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     
     public Report ready(byte[] content) {
     	if (!this.phase.is(ReportPhaseStatus.START))
-    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for ready!");
+    		throw new IllegalStateException("Report "+id+" has improper phase("+phase+") for ready!");
     		
     	this.phase.rephase(ReportPhaseStatus.READY);
-    	this.content = content!=null&&content.length<=0?null:content;
+    	//this.content = content!=null&&content.length<=0?null:content;
+        this.content = content!=null&&content.length<=0? null:Lists.newArrayList(new ReportContent(content, this));
     	return this;
     }   
     
     public Report failure() {
     	if (this.phase.is(ReportPhaseStatus.READY)
     		||this.phase.is(ReportPhaseStatus.TRANSIENT))
-    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for failure!");
+    		throw new IllegalStateException("Report "+id+" has improper phase("+phase+") for failure!");
     	
     	this.phase.rephase(ReportPhaseStatus.READY);
     	this.status = ReportStatus.FAILED;
@@ -168,7 +157,7 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     public Report timeout() {
     	if (this.phase.is(ReportPhaseStatus.READY)
     		||this.phase.is(ReportPhaseStatus.TRANSIENT))
-    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for failure!");
+    		throw new IllegalStateException("Report "+id+" has improper phase("+phase+") for failure!");
     	
     	this.phase.rephase(ReportPhaseStatus.READY);
     	this.content = null;
@@ -178,7 +167,7 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     
     public Report confirm() {
     	if (!this.phase.is(ReportPhaseStatus.READY))
-    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") for confirm!");
+    		throw new IllegalStateException("Report "+id+" has improper phase("+phase+") for confirm!");
     		
     	this.phase.rephase(ReportPhaseStatus.TRANSIENT);
     	return this;
@@ -187,7 +176,7 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     public Report archive() {
     	if (!this.phase.is(ReportPhaseStatus.TRANSIENT)
     		&&!ReportStatus.OK.equals(this.status))
-    		throw new IllegalStateException("Report "+id+" has inproper phase("+phase+") or status("+status+") for archive!");
+    		throw new IllegalStateException("Report "+id+" has improper phase("+phase+") or status("+status+") for archive!");
     		
     	this.phase.rephase(ReportPhaseStatus.PERSIST);
     	return this;
@@ -230,17 +219,18 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 
 	@Override
 	public byte[] getContent() {
-		return content;
+		return hasContent()?fetchContent().getContent():null;
 	}
 	
 	public String getContentAsString() {
-		return content!=null?new String(content):"";
+		return hasContent()?new String(fetchContent().getContent()):"";
 	}
 	
 	public boolean isDownloadable() {
 		return ReportStatus.OK.equals(status)
 				&&phase.isFinishedUnarchived()
-				&&(content!=null&&content.length>0);
+                &&(hasContent()&&fetchContent().hasContent());
+				//&&(content!=null&&content.length>0);
 	}
 
 	@Override
@@ -260,6 +250,14 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     public ReportPhase getPhase() {
 		return phase;
 	}
+
+    private boolean hasContent() {
+        return content!=null&&!content.isEmpty();
+    }
+
+    private ReportContent fetchContent() {
+        return content.get(0);
+    }
 
 	/**
      * Status.

@@ -49,6 +49,8 @@
     <%@ include file="/WEB-INF/jsp/tiles/default/sidebar.jsp" %>
     
     <%@ include file="/WEB-INF/jsp/tiles/default/loading.jsp" %>
+
+    <%@ include file="/WEB-INF/jsp/tiles/default/alerts.jsp" %>
     
     <!-- main container -->
     <div class="content" id="main-container">

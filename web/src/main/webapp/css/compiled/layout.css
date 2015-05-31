@@ -52,7 +52,7 @@ input.search {
 }
 .header h1, .header h2, .header h3, .header h4, .header h5 {
   float: left;
-  margin-top: 5px;
+  margin-top: 16px;
 }
 
 /* Custom navbar stuff */
@@ -406,7 +406,7 @@ input.search {
 
 #pad-wrapper {
   padding: 0px 50px;
-  margin-top: 55px;
+  margin-top: 0px;
 }
 #pad-wrapper h4 {
   color: #696d73;

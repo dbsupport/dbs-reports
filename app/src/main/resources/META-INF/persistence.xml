@@ -20,6 +20,7 @@
 		<class>pl.com.dbs.reports.report.pattern.domain.ReportPatternForm</class>
 		
 		<class>pl.com.dbs.reports.report.domain.Report</class>
+        <class>pl.com.dbs.reports.report.domain.ReportContent</class>
 		<class>pl.com.dbs.reports.report.domain.Report.ReportPhase</class>
 		<class>pl.com.dbs.reports.report.domain.ReportOrder</class>
 		

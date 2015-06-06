@@ -7,7 +7,7 @@
     <parent>
         <groupId>pl.com.dbs</groupId>
         <artifactId>dbs-reports</artifactId>
-        <version>1.4.0</version>
+        <version>${dbs.reports.version}</version>
     </parent>
     
     <artifactId>dbs-reports-web</artifactId>
@@ -199,7 +199,7 @@
     </dependencies>
     
     <build>
-        <finalName>${project.artifactId}-${envir}-${project.version}</finalName>
+        <finalName>${project.artifactId}</finalName>
         <filters>
             <filter>../src/main/filters/${envir}.properties</filter>
         </filters>
@@ -228,8 +228,8 @@
                         </webResources>
                         <warSourceExcludes>html/**</warSourceExcludes>
                         <warName>${project.artifactId}-${project.version}-${dbs.reports.client.version}</warName>
-						<finalName>${project.artifactId}-${project.version}-${dbs.reports.client.version}</finalName>
-						<appendAssemblyId>false</appendAssemblyId>                        
+						<!--<finalName>${project.artifactId}-${project.version}-${dbs.reports.client.version}</finalName>-->
+						<!--<appendAssemblyId>false</appendAssemblyId>                        -->
                     </configuration>
                 </plugin>
             </plugins>

@@ -16,3 +16,24 @@ Reset hasla do apex:
 
 http://oraclepitstop.wordpress.com/2008/04/16/installing-configuring-apex-application-express-htmldb-with-10gr2-on-windows-xp/
 http://blog.mclaughlinsoftware.com/2011/09/14/reset-11g-xe-apex-password/
+
+
+Zainstralowanie sterownikow do lokalnego repo mavena:
+# http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html
+# mvn install:install-file -Dfile=D:\oracle\app\oracle\product\11.2.0\server\jdbc\lib\ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0 -Dpackaging=jar
+
+To login as the DBA user:
+C:\>set ORACLE_SID=XE
+C:\>sqlplus / as sysdba
+SQL> SELECT * FROM dba_users;
+
+Login to demo accounts, say HR:
+C:\>set ORACLE_SID=XE
+C:\>sqlplus HR/HR
+
+
+To change the default port from 8080 to something else, execute:
+sqlplus '/ as sysdba'
+SQL> EXEC DBMS_XDB.SETHTTPPORT(80);
+Check if the port was changed:
+SQL> SELECT dbms_xdb.gethttpport, dbms_xdb.getftpport FROM dual;

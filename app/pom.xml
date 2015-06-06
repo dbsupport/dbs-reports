@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>pl.com.dbs</groupId>
 		<artifactId>dbs-reports</artifactId>
-		<version>1.4.0</version>
+		<version>${dbs.reports.version}</version>
 	</parent>
 
 	<artifactId>dbs-reports-app</artifactId>
@@ -304,6 +304,28 @@
 			    </dependency>
 			  </dependencies>		        
 			</plugin>
+
+            <!--<plugin>-->
+                <!--<groupId>org.liquibase</groupId>-->
+                <!--<artifactId>liquibase-maven-plugin</artifactId>-->
+                <!--<configuration>-->
+                    <!--<changeLogFile>src/main/resources/pl/com/dbs/reports/db-reports-changelog.xml</changeLogFile>-->
+                    <!--<driver>org.postgresql.Driver</driver>-->
+                    <!--<url>jdbc:postgresql://localhost:5432/reports</url>-->
+                    <!--<username>reports</username>-->
+                    <!--<password>reports</password>-->
+                    <!--<changeSetAuthor>maven</changeSetAuthor>-->
+                    <!--<changelogSchemaName>reports</changelogSchemaName>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<phase>process-resources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>update</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
 			
 		      
 			<!-- plugin>

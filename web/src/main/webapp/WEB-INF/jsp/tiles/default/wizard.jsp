@@ -49,6 +49,8 @@
     <%@ include file="/WEB-INF/jsp/tiles/default/sidebar.jsp" %>
     
      <%@ include file="/WEB-INF/jsp/tiles/default/loading.jsp" %>
+
+    <%@ include file="/WEB-INF/jsp/tiles/default/alerts.jsp" %>
     
     <!-- main container -->
     <div class="content" id="main-container">
@@ -63,17 +65,6 @@
             </a>
         </div>
         
-        <div id="alerts-wrapper">
-        <div class="section">
-        <div class="row">
-        <div class="col-md-7">
-           <dbs:alerts/>
-        </div>
-        </div>
-        </div>
-        </div>
-
-	 	
 		<div id="pad-wrapper">
             <div class="row header">
                 <div class="col-md-12">

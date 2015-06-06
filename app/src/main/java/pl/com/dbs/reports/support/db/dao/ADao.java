@@ -3,24 +3,28 @@
  */
 package pl.com.dbs.reports.support.db.dao;
 
+import org.apache.commons.lang.Validate;
+import org.eclipse.persistence.jpa.JpaQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.com.dbs.reports.support.db.domain.IEntity;
+import pl.com.dbs.reports.support.filter.Filter;
+import pl.com.dbs.reports.support.filter.Pager;
+import pl.com.dbs.reports.support.filter.SorterField;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-
-import org.apache.commons.lang.Validate;
-
-import pl.com.dbs.reports.support.db.domain.IEntity;
-import pl.com.dbs.reports.support.filter.Filter;
-import pl.com.dbs.reports.support.filter.Pager;
-import pl.com.dbs.reports.support.filter.SorterField;
 
 /**
  * Base CRUD.
@@ -29,6 +33,7 @@ import pl.com.dbs.reports.support.filter.SorterField;
  * @copyright (c) 2013
  */
 public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,IDaoWriter<T, K> ,IDaoEraser<T, K> {
+    private static final Logger logger = LoggerFactory.getLogger(ADao.class);
 
 	/**
 	 * Zwraca Entity Manager którego ma używać to DAO.
@@ -85,34 +90,58 @@ public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,ID
 	
 	@SuppressWarnings("unchecked")
 	protected List<T> executeQuery(Query query) {
-		return query.getResultList();
+        List<T> result = query.getResultList();
+        logger.debug("Executed query: "+query.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString());
+
+        return result;
 	}
 	
 	@SuppressWarnings("unchecked")
 	protected T executeSingleQuery(Query query) {
+        T result = null;
 		try {
-			return (T)query.getSingleResult();
+			result = (T)query.getSingleResult();
+
 		} catch (NoResultException e) {}
-		return null;
+
+        logger.debug("Executed query: "+query.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString());
+		return result;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected T executeSingleQuery(CriteriaQuery criteria) {
-		try {
-			Query query = getEntityManager().createQuery(criteria);
-			return (T)query.getSingleResult();
-		} catch (NoResultException e) {}
-		return null;
-	}
+//	@SuppressWarnings({ "unchecked", "rawtypes" })
+//	protected T executeSingleQuery(CriteriaQuery criteria) {
+//		try {
+//			Query query = getEntityManager().createQuery(criteria);
+//			return (T)query.getSingleResult();
+//		} catch (NoResultException e) {}
+//		return null;
+//	}
 	
 
 	protected int count(String sql) {
 		return executeQuery(sql).size();
 	}
-	
-	protected int count(CriteriaQuery<T> criteria) {
-		Query query = getEntityManager().createQuery(criteria);
-		return executeQuery(query).size();
+
+    /**
+     * http://stackoverflow.com/questions/2883887/in-jpa-2-using-a-criteriaquery-how-to-count-results
+     */
+	protected int count(IContextDao context) {
+        final CriteriaBuilder builder = context.getBuilder();
+        final Root<T> root = context.getRoot();
+        CriteriaQuery<T> criteria = context.getCriteria();
+        final CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
+
+        countQuery.select(builder.count(root));
+        if(criteria.getRestriction() != null){
+            countQuery.where(criteria.getRestriction());
+        }
+
+        CriteriaQuery<Long> query = countQuery.distinct(criteria.isDistinct());
+        TypedQuery<Long> q = getEntityManager().createQuery(query);
+        long result = q.getSingleResult();
+        logger.debug("Executed query: "+q.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString());
+        //FIXME:
+        return (int)result;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -128,7 +157,7 @@ public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,ID
 				int max = filter.getPager().getDataEnd() - filter.getPager().getDataStart() + 1;
 				query.setFirstResult(filter.getPager().getDataStart()-1);
 				query.setMaxResults(max);
-				result = query.getResultList();
+				result = executeQuery(query);
 			}
     	} else {
             result = executeQuery(sql);
@@ -176,9 +205,8 @@ public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,ID
 		CriteriaQuery<T> criteria = context.getCriteria();
 		Validate.notNull(criteria, "A criteria is null!");
 		Filter filter = context.getFilter();
-		
-		
-    	if (filter != null && filter.getSorter() != null && filter.getSorter().isOn() && context.getBuilder()!=null) {
+
+        if (filter != null && filter.getSorter() != null && filter.getSorter().isOn() && context.getBuilder()!=null) {
     		List<Order> orders = new ArrayList<Order>();
     		for (SorterField field : filter.getSorter().getFields()) {
     			orders.add(field.isAsc()?context.getBuilder().asc(context.getRoot().get(field.getName())):context.getBuilder().desc(context.getRoot().get(field.getName())));
@@ -189,14 +217,14 @@ public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,ID
     	Query query = getEntityManager().createQuery(criteria);
 
     	if (filter!=null && filter.isPaging()) {
-    		int all = count(criteria);
+    		int all = count(context);
 			filter.getPager().setDataSize(all);
 			if(all > 0) {
 				int max = filter.getPager().getDataEnd() - filter.getPager().getDataStart() + 1;
 				query.setFirstResult(filter.getPager().getDataStart()-1);
 				query.setMaxResults(max);
-				result = query.getResultList();
-			}
+				result = executeQuery(query);
+            }
     	} else {
             result = executeQuery(query);
            	//filter.getPager().setDataSize(result.size());
@@ -208,9 +236,22 @@ public abstract class ADao<T extends IEntity, K> implements IDaoReader<T, K> ,ID
 	 * Return FIRST or none.
 	 */
 	protected T executeQuerySingle(@SuppressWarnings("rawtypes") IContextDao context) {
-		List<T> result = executeQuery(context);
-    	return result.isEmpty()?null:result.get(0);
-	}		
+        Validate.notNull(context, "A contex is null!");
+        CriteriaQuery<T> criteria = context.getCriteria();
+        Validate.notNull(criteria, "A criteria is null!");
+        Filter filter = context.getFilter();
+
+        if (filter != null && filter.getSorter() != null && filter.getSorter().isOn() && context.getBuilder()!=null) {
+            List<Order> orders = new ArrayList<Order>();
+            for (SorterField field : filter.getSorter().getFields()) {
+                orders.add(field.isAsc()?context.getBuilder().asc(context.getRoot().get(field.getName())):context.getBuilder().desc(context.getRoot().get(field.getName())));
+            }
+            criteria.orderBy(orders);
+        }
+
+        Query query = getEntityManager().createQuery(criteria);
+		return executeSingleQuery(query);
+	}
 	
 //	@SuppressWarnings({"unchecked"})
 //	protected List<T> executeQuery(Query query, Filter filter) {

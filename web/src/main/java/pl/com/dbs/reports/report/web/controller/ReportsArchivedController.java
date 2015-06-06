@@ -93,10 +93,10 @@ public class ReportsArchivedController {
 	@RequestMapping(value="/report/archive/{id}/download", method = RequestMethod.GET)
     public String display(Model model, @PathVariable("id") Long id,  @ModelAttribute(ReportsArchivedForm.KEY) final ReportsArchivedForm form,
     		HttpServletRequest request, HttpSession session, HttpServletResponse response) {
-		ReportFilter filter = new ReportFilter().archived().onlyFor(id);
+		ReportFilter filter = new ReportFilter().archived().forAnyone().onlyFor(id);
 		Report report = reportService.findSingle(filter);
 		if (report==null) {
-			alerts.addError(session, "report.archives.no.report");
+			alerts.addError(session, "report.archive.no.report");
 			return "redirect:/report/archived";
 		}
 		
@@ -111,7 +111,7 @@ public class ReportsArchivedController {
     }
 	
 	
-	@RequestMapping(value="/report/archived/delete/{id}", method = RequestMethod.GET)
+	@RequestMapping(value="/report/archived/delete/{ids}", method = RequestMethod.GET)
     public String delete(Model model, @RequestParam(required=false) String site, @PathVariable("ids") Long[] ids,  HttpSession session) {
 		List<Report> reports = new ArrayList<Report>();
 		for (Long id : ids) {

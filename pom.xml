@@ -11,7 +11,8 @@
 		<name>DataBase Support</name>
 		<url>http://www.dbs.com.pl/</url>
 	</organization>
-	<version>1.4.0</version>
+
+	<version>${dbs.reports.version}</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -20,6 +21,7 @@
   </modules>
 
 	<properties>
+        <dbs.reports.version>1.4.0</dbs.reports.version>
 		<commons.version>2.3</commons.version>
 		<commons.dbcp.version>1.4</commons.dbcp.version>
 		<javax.servlet.version>3.0</javax.servlet.version>
@@ -55,7 +57,8 @@
 		<itext.version>2.1.7</itext.version>
 		<itext.rtf.version>2.1.7.1</itext.rtf.version><!-- spatchowana wersja wlasna, patrz http://itext-general.2136553.n4.nabble.com/importRtfDocument-Unknown-Source-td2151636.html -->
 		<dbs.reports.api.version>1.4.0</dbs.reports.api.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <dbs.reports.client.version>auchan-1.2.0</dbs.reports.client.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencyManagement>
@@ -96,7 +99,7 @@
 			<dependency>
 		        <groupId>org.projectlombok</groupId>
 		        <artifactId>lombok</artifactId>
-		        <version>1.14.8</version>
+		        <version>1.16.2</version>
 		        <scope>provided</scope>
             </dependency>			
 			
@@ -490,6 +493,11 @@
 						</archive>
 					</configuration>
 				</plugin>
+                <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.0.5</version>
+                </plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -503,7 +511,6 @@
 			</activation>
 			<properties>
 				<envir>dev</envir>
-				<dbs.reports.client.version>auchan-1.2.0-SNAPSHOT</dbs.reports.client.version>
 			</properties>
 		</profile>
 		<profile>
@@ -522,7 +529,6 @@
 			<id>pro</id>
 			<properties>
 				<envir>pro</envir>
-				<dbs.reports.client.version>auchan-1.2.0</dbs.reports.client.version>
 			</properties>
 		</profile>
 	</profiles>

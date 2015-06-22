@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,7 @@ import pl.com.dbs.reports.api.profile.ClientProfileService;
 import pl.com.dbs.reports.authority.dao.AuthorityDao;
 import pl.com.dbs.reports.authority.domain.Authority;
 import pl.com.dbs.reports.parameter.service.ParameterService;
-import pl.com.dbs.reports.profile.domain.ClientProfilesFilter;
-import pl.com.dbs.reports.profile.domain.Profile;
-import pl.com.dbs.reports.profile.domain.ProfileException;
-import pl.com.dbs.reports.profile.domain.ProfileGlobalCreation;
+import pl.com.dbs.reports.profile.domain.*;
 import pl.com.dbs.reports.support.encoding.EncodingContext;
 import pl.com.dbs.reports.support.encoding.EncodingService;
 
@@ -196,11 +194,16 @@ public class ProfileScheduler {
 				}
 	
 				@Override
-				public List<Access> getAccesses() {
+				public Set<Access> getAccesses() {
 					return null;
 				}
 
-				@Override
+                @Override
+                public Set<Long> getGroups() {
+                    return null;
+                }
+
+                @Override
 				public String getUuid() {
 					return clientprofile.getId();
 				}

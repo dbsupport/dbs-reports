@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/61?1">
+        <createSequence catalogName="reports" schemaName="reports" sequenceName="spr_group"/>
+    </changeSet>
+
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/61?2">
+        <createTable catalogName="reports" schemaName="reports" tableName="tpr_group">
+            <column name="id" type="INT8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(1024)"/>
+
+            <column name="_cdate" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="_cgsid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="_edate" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="_egsid" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="_stamp" type="INT8"/>
+        </createTable>
+
+        <addPrimaryKey catalogName="reports" columnNames="id" constraintName="tpr_group_pkey" schemaName="reports" tableName="tpr_group"/>
+
+        <createIndex catalogName="reports" indexName="uxpr_group_name" schemaName="reports" tableName="tpr_group" unique="true">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/61?3">
+
+        <createTable catalogName="reports" schemaName="reports" tableName="tpr_group_access">
+            <column name="group_id" type="INT8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="access_id" type="INT8">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="access_id" baseTableCatalogName="reports" baseTableName="tpr_group_access" baseTableSchemaName="reports" constraintName="FKPR_GROUP_ACCESS_ACCESS" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tac_access" referencedTableSchemaName="reports"/>
+        <addForeignKeyConstraint baseColumnNames="group_id" baseTableCatalogName="reports" baseTableName="tpr_group_access" baseTableSchemaName="reports" constraintName="FKPR_GROUP_ACCESS_GROUP" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tpr_group" referencedTableSchemaName="reports"/>
+    </changeSet>
+
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/61?4">
+
+        <createTable catalogName="reports" schemaName="reports" tableName="tpr_group_profile">
+            <column name="group_id" type="INT8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="profile_id" type="INT8">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="profile_id" baseTableCatalogName="reports" baseTableName="tpr_group_profile" baseTableSchemaName="reports" constraintName="FKPR_GROUP_PROFILE_PROFILE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tpr_profile" referencedTableSchemaName="reports"/>
+        <addForeignKeyConstraint baseColumnNames="group_id" baseTableCatalogName="reports" baseTableName="tpr_group_profile" baseTableSchemaName="reports" constraintName="FKPR_GROUP_PROFILE_GROUP" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tpr_group" referencedTableSchemaName="reports"/>
+    </changeSet>
+
+
+</databaseChangeLog>

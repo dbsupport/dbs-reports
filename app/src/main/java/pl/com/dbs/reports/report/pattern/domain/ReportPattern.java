@@ -3,36 +3,12 @@
  */
 package pl.com.dbs.reports.report.pattern.domain;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.persistence.Basic;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableSortedSet;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Ordering;
 import org.apache.commons.lang.Validate;
-
 import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
@@ -44,11 +20,8 @@ import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.db.domain.AEntity;
 import pl.com.dbs.reports.support.utils.separator.Separator;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Ordering;
+import javax.persistence.*;
+import java.util.*;
 
 /**
  * Encja z wzocem raportu.
@@ -118,9 +91,13 @@ public class ReportPattern extends AEntity implements Pattern {
 	@Column(name = "filename")
 	private String filename;	
 	
-	@Lob
-	@Column(name = "content")
-	@Basic(fetch = FetchType.LAZY)
+    /**
+     * http://stackoverflow.com/questions/10108533/jpa-should-i-store-a-blob-in-the-same-table-with-fetch-lazy-or-should-i-store-i
+     * http://www.hostettler.net/blog/2012/03/22/one-to-one-relations-in-jpa-2-dot-0/
+     */
+    @Lob
+    @Basic(optional = true, fetch = FetchType.EAGER)
+    @Column(name = "content", nullable = true)
 	private byte[] content;	
 	
 	public ReportPattern() {/* JPA */}
@@ -238,7 +215,7 @@ public class ReportPattern extends AEntity implements Pattern {
 	/**
 	 * Is pattern accessigle for given accesses collection?
 	 */
-	public boolean isAccessible(final List<Access> accesses) {
+	public boolean isAccessible(final Set<Access> accesses) {
 		for (final Access access : accesses)
 			if (Iterables.find(this.accesses, new Predicate<String>() {
 					@Override

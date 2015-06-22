@@ -3,20 +3,20 @@
  */
 package pl.com.dbs.reports.access.dao;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.Predicate;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Repository;
-
 import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.access.domain.Access_;
 import pl.com.dbs.reports.support.db.dao.ADao;
 import pl.com.dbs.reports.support.db.dao.ContextDao;
 import pl.com.dbs.reports.support.db.dao.IContextDao;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 /**
  * Access CRUD.
@@ -36,17 +36,19 @@ public class AccessDao extends ADao<Access, Long> {
 	}
 	
 	public List<Access> find(AccessFilter filter) {
-		IContextDao<Access> c = new ContextDao<Access>(em, Access.class, filter);
-
-	    Predicate p = c.getBuilder().conjunction();
+		IContextDao<Access> context = new ContextDao<Access>(em, Access.class, filter);
+        CriteriaBuilder builder = context.getBuilder();
+        Root<Access> root = context.getRoot();
+        Predicate p = builder.conjunction();
 
 	    if (!StringUtils.isBlank(filter.getName())) {
-	    	p = c.getBuilder().and(p, c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Access_.name)), "%"+filter.getName().toUpperCase()+"%"));
-	    }		
-	    
-	    c.getCriteria().where(p);
+	    	p = builder.and(p, builder.like(builder.upper(root.<String>get(Access_.name)), "%" + filter.getName().toUpperCase() + "%"));
+        }
+
+
+        context.getCriteria().where(p);
 				
-		return executeQuery(c);
+		return executeQuery(context);
 	}
 	
 }

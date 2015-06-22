@@ -49,7 +49,7 @@
             </sec:authorize>
             <sec:authorize access="hasAnyRole('Admin,Management')">
             <li>
-            	<c:if test="${fn:startsWith(id, 'dbs-page-access') or fn:startsWith(id, 'dbs-page-parameter')}">
+            	<c:if test="${fn:startsWith(id, 'dbs-page-access') or fn:startsWith(id, 'dbs-page-parameter') or fn:startsWith(id, 'dbs-page-profile-group')}">
                 <div class="pointer">
                     <div class="arrow"></div>
                     <div class="arrow_border"></div>
@@ -60,8 +60,12 @@
                     <span>Administ.</span>
                     <i class="icon-chevron-down"></i>
                 </a>
-                <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-access') or fn:startsWith(id, 'dbs-page-parameter')}">active</c:if>">
+                <ul class="submenu <c:if test="${fn:startsWith(id, 'dbs-page-access') or fn:startsWith(id, 'dbs-page-parameter') or fn:startsWith(id, 'dbs-page-profile-group')}">active</c:if>">
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-access-list')}">active</c:if>" href="access/list">Uprawnienia raportowe</a></li>
+                    <sec:authorize access="hasAnyRole('Admin')">
+                        <li>&nbsp;</li>
+                        <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-profile-group-list')}">active</c:if>" href="profile/group/list">Grupy<br/>profilowe</a></li>
+                    </sec:authorize>
                 	<li>&nbsp;</li>
                 	<sec:authorize access="hasAnyRole('Admin')">
                     <li><a class="<c:if test="${fn:startsWith(id, 'dbs-page-parameter-edit')}">active</c:if>" href="param/edit">Parametry<br/>aplikacji</a></li>

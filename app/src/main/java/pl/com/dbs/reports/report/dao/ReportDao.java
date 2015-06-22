@@ -3,22 +3,10 @@
  */
 package pl.com.dbs.reports.report.dao;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Repository;
-
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.domain.Profile_;
 import pl.com.dbs.reports.report.domain.Report;
@@ -32,7 +20,11 @@ import pl.com.dbs.reports.support.db.dao.ADao;
 import pl.com.dbs.reports.support.db.dao.ContextDao;
 import pl.com.dbs.reports.support.db.dao.IContextDao;
 
-import com.google.common.collect.Lists;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Reports CRUD.
@@ -55,64 +47,29 @@ public class ReportDao extends ADao<Report, Long> {
 	 * Counts ALL pattern reports.
 	 */
 	public long countByPattern(ReportPattern pattern) {
-		final CriteriaBuilder cb = em.getCriteriaBuilder();
-		final CriteriaQuery<Report> cq = cb.createQuery(Report.class);
-	    final Root<Report> q = cq.from(Report.class);
-	    
-	    Predicate p = cb.equal(q.get(Report_.pattern).get(ReportPattern_.id), pattern.getId());
-	    cq.where(p);
+        IContextDao<Report> context = new ContextDao<Report>(em, Report.class);
+
+		//final CriteriaBuilder cb = em.getCriteriaBuilder();
+		//final CriteriaQuery<Report> cq = cb.createQuery(Report.class);
+	    //final Root<Report> q = cq.from(Report.class);
+        final CriteriaBuilder builder = context.getBuilder();
+        final Root<Report> root = context.getRoot();
+        final CriteriaQuery<Report> criteria = context.getCriteria();
+	    Predicate p = builder.equal(root.get(Report_.pattern).get(ReportPattern_.id), pattern.getId());
+        criteria.where(p);
 		
-		return count(cq);
+		return count(context);
 	}
 	
 	public Report findSingle(ReportFilter filter) {
-		List<Report> reports = find(filter);
-		return reports!=null&&!reports.isEmpty()?reports.get(0):null;
+        IContextDao<Report> context = filter2Context(filter);
+		return executeQuerySingle(context);
 	}
 	
 	public List<Report> find(final ReportFilter filter) {
-		IContextDao<Report> c = new ContextDao<Report>(em, Report.class, filter);
-		
-	    Predicate p = c.getBuilder().conjunction();
-	    
-	    if (!filter.getPhases().isEmpty()) {
-	    	p = c.getBuilder().and(p, c.getRoot().get(Report_.phase).get(ReportPhase_.status).in(filter.getPhases()));
-	    }
-	    if (!filter.getStatuses().isEmpty()) {
-	    	p = c.getBuilder().and(p, c.getRoot().get(Report_.status).in(filter.getStatuses()));
-	    }
-	    
-	    if (!filter.getAccesses().isEmpty()) {
-	    	p = c.getBuilder().and(p, c.getRoot().get(Report_.pattern).get(ReportPattern_.accesses).in(filter.getAccesses()));
-	    } else {
-	    	p = c.getBuilder().and(p, c.getRoot().get(Report_.pattern).get(ReportPattern_.accesses).isNull());
-	    }
-	    if (!StringUtils.isBlank(filter.getName())) {
-	    	Predicate ex1 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Report_.name)), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex2 = c.getBuilder().like(c.getBuilder().upper(c.getRoot().<String>get(Report_.format.getName())), "%"+filter.getName().toUpperCase()+"%");
-	    	
-	    	Join<Report, Profile> a1 = c.getRoot().join(Report_.creator, JoinType.LEFT);
-	    	Predicate ex3 = c.getBuilder().like(c.getBuilder().upper(a1.<String>get(Profile_.firstname)), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex4 = c.getBuilder().like(c.getBuilder().upper(a1.<String>get(Profile_.lastname)), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex5 = c.getBuilder().like(c.getBuilder().upper(a1.<String>get(Profile_.description)), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex6 = c.getBuilder().like(c.getBuilder().upper(a1.<String>get(Profile_.login)), "%"+filter.getName().toUpperCase()+"%");
-	    	
-	    	Join<Report, ReportPattern> a2 = c.getRoot().join(Report_.pattern, JoinType.LEFT);
-	    	Predicate ex7 = c.getBuilder().like(c.getBuilder().upper(a2.<String>get(ReportPattern_.name)), "%"+filter.getName().toUpperCase()+"%");
-	    	Predicate ex8 = c.getBuilder().like(c.getBuilder().upper(a2.<String>get(ReportPattern_.version)), "%"+filter.getName().toUpperCase()+"%");
+		IContextDao<Report> context = filter2Context(filter);
 
-	    	p = c.getBuilder().or(ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8);	    	
-	    }	    
-	    if (filter.getId()!=null&&!filter.getId().isEmpty()) {
-	    	p = c.getBuilder().and(p, c.getRoot().get(Report_.id).in(filter.getId()));
-	    }
-	    if (filter.getProfileId()!=null) {
-	    	p = c.getBuilder().and(p, c.getBuilder().equal(c.getRoot().get(Report_.creator).get(Profile_.id), filter.getProfileId()));
-	    }
-	    
-	    c.getCriteria().where(p);
-		
-		return executeQuery(c);
+		return executeQuery(context);
 	}
 	
 	/**
@@ -194,5 +151,51 @@ public class ReportDao extends ADao<Report, Long> {
 		
 	    return (List<Report>)executeQuery(c);
 	}
+
+    private IContextDao<Report> filter2Context(final ReportFilter filter) {
+        IContextDao<Report> context = new ContextDao<Report>(em, Report.class, filter);
+        CriteriaBuilder builder = context.getBuilder();
+        Root<Report> root = context.getRoot();
+        Predicate p = builder.conjunction();
+
+        if (!filter.getPhases().isEmpty()) {
+            p = builder.and(p, root.get(Report_.phase).get(ReportPhase_.status).in(filter.getPhases()));
+        }
+        if (!filter.getStatuses().isEmpty()) {
+            p = builder.and(p, root.get(Report_.status).in(filter.getStatuses()));
+        }
+
+        if (!filter.getAccesses().isEmpty()) {
+            p = builder.and(p, root.get(Report_.pattern).get(ReportPattern_.accesses).in(filter.getAccesses()));
+        } else {
+            p = builder.and(p, root.get(Report_.pattern).get(ReportPattern_.accesses).isNull());
+        }
+        if (!StringUtils.isBlank(filter.getName())) {
+            Predicate ex1 = builder.like(builder.upper(root.<String>get(Report_.name)), "%" + filter.getName().toUpperCase()+"%");
+            Predicate ex2 = builder.like(builder.upper(root.<String>get(Report_.format.getName())), "%" + filter.getName().toUpperCase()+"%");
+
+            Join<Report, Profile> a1 = root.join(Report_.creator, JoinType.LEFT);
+            Predicate ex3 = builder.like(builder.upper(a1.<String>get(Profile_.firstname)), "%" + filter.getName().toUpperCase()+"%");
+            Predicate ex4 = builder.like(builder.upper(a1.<String>get(Profile_.lastname)), "%" + filter.getName().toUpperCase()+"%");
+            Predicate ex5 = builder.like(builder.upper(a1.<String>get(Profile_.description)), "%" + filter.getName().toUpperCase()+"%");
+            Predicate ex6 = builder.like(builder.upper(a1.<String>get(Profile_.login)), "%" + filter.getName().toUpperCase()+"%");
+
+            Join<Report, ReportPattern> a2 = root.join(Report_.pattern, JoinType.LEFT);
+            Predicate ex7 = builder.like(builder.upper(a2.<String>get(ReportPattern_.name)), "%" + filter.getName().toUpperCase()+"%");
+            Predicate ex8 = builder.like(builder.upper(a2.<String>get(ReportPattern_.version)), "%" + filter.getName().toUpperCase()+"%");
+
+            p = builder.or(ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8);
+        }
+        if (filter.getId()!=null&&!filter.getId().isEmpty()) {
+            p = builder.and(p, root.get(Report_.id).in(filter.getId()));
+        }
+        if (filter.getProfileId()!=null) {
+            p = builder.and(p, builder.equal(root.get(Report_.creator).get(Profile_.id), filter.getProfileId()));
+        }
+
+        context.getCriteria().where(p);
+
+        return context;
+    }
 
 }

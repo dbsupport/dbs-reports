@@ -167,13 +167,13 @@ public class FieldMultiSelect  extends AField<List<String>> implements IFieldInf
 	}
 	
 	private FieldOption find(final String value) {
-		return Iterables.find(this.options, new Predicate<FieldOption>() {
+		return hasOptions()?Iterables.find(this.options, new Predicate<FieldOption>() {
 			@Override
 			public boolean apply(FieldOption input) {
 				return input.isValue(value);
 			}
 			
-		}, null);
+		}, null):null;
 	}
 	
 	private String find(final FieldOption option) {

@@ -7,7 +7,7 @@
     <parent>
         <groupId>pl.com.dbs</groupId>
         <artifactId>dbs-reports</artifactId>
-        <version>1.5.0-SNAPSHOT</version>
+        <version>${dbs.reports.version}</version>
     </parent>
     
     <artifactId>dbs-reports-web</artifactId>
@@ -153,16 +153,22 @@
             	</exclusion>
             </exclusions-->
         </dependency>        
-	<!-- dependency>
-        <groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>2.2.2</version>
-    </dependency>
-    <dependency>
-        <groupId>com.sun.xml.bind</groupId>
-        <artifactId>jaxb-impl</artifactId>
-        <version>2.2.2</version>
-    </dependency-->        
+	<!--<dependency>-->
+        <!--<groupId>javax.xml.bind</groupId>-->
+        <!--<artifactId>jaxb-api</artifactId>-->
+        <!--<version>2.2.2</version>-->
+    <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>javax.xml</groupId>-->
+            <!--<artifactId>jaxb-api</artifactId>-->
+            <!--<version>2.1</version>-->
+        <!--</dependency>-->
+
+    <!--<dependency>-->
+        <!--<groupId>com.sun.xml.bind</groupId>-->
+        <!--<artifactId>jaxb-impl</artifactId>-->
+        <!--<version>2.2.2</version>-->
+    <!--</dependency>        -->
 
 		<!-- JSON -->        
 		<dependency>
@@ -199,7 +205,7 @@
     </dependencies>
     
     <build>
-        <finalName>${project.artifactId}-${envir}-${project.version}</finalName>
+        <finalName>${project.artifactId}</finalName>
         <filters>
             <filter>../src/main/filters/${envir}.properties</filter>
         </filters>
@@ -214,7 +220,7 @@
             </resource>
         </resources>
         
-        <pluginManagement>
+        <!--<pluginManagement>-->
             <plugins>
                 <plugin>
                     <artifactId>maven-war-plugin</artifactId>
@@ -227,13 +233,13 @@
                             </resource>
                         </webResources>
                         <warSourceExcludes>html/**</warSourceExcludes>
-                        <warName>${project.artifactId}-${project.version}-${dbs.reports.client.version}</warName>
-						<finalName>${project.artifactId}-${project.version}-${dbs.reports.client.version}</finalName>
-						<appendAssemblyId>false</appendAssemblyId>                        
+                        <warName>${project.artifactId}-${project.version}-${dbs.reports.client.version}-${buildNumber}</warName>
+						<!--<finalName>${project.artifactId}-${project.version}-${dbs.reports.client.version}</finalName>-->
+						<!--<appendAssemblyId>false</appendAssemblyId>                        -->
                     </configuration>
                 </plugin>
             </plugins>
-        </pluginManagement>
+        <!--</pluginManagement>-->
     </build>
 
     

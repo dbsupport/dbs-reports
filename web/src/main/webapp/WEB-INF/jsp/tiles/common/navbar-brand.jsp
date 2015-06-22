@@ -2,8 +2,8 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <dbs:client>
-<img src="img/dbs/logo.png" alt="<spring:message code="project.version"/>" title="<spring:message code="project.version"/>">
+<img src="img/dbs/logo.png" title="<spring:message code="project.version"/>.<spring:message code="app.build.number"/> <spring:message code="app.build.timestamp"/>">
 </dbs:client>
 <dbs:client names="auchan">
-<img src="img/dbs/logoauchan.png" alt="<spring:message code="project.version"/>" title="<spring:message code="project.version"/>">
+<img src="img/dbs/logoauchan.png" title="<spring:message code="project.version"/>.<spring:message code="app.build.number"/> <spring:message code="app.build.timestamp"/>">
 </dbs:client>

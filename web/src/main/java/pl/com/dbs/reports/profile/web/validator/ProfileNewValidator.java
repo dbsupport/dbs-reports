@@ -12,6 +12,7 @@ import org.springframework.validation.Validator;
 
 import pl.com.dbs.reports.profile.service.ProfileService;
 import pl.com.dbs.reports.profile.web.form.ProfileNewForm;
+import pl.com.dbs.reports.security.domain.SessionContext;
 
 /**
  * New profile validation.
@@ -36,7 +37,7 @@ public class ProfileNewValidator implements Validator {
 	static final int NAME_MIN = 1;
 	static final int NAME_MAX = 64;		
 	
-	private ProfileService profileService;
+	protected ProfileService profileService;
 	
 	public ProfileNewValidator(ProfileService profileService) {
 		this.profileService = profileService;
@@ -56,7 +57,11 @@ public class ProfileNewValidator implements Validator {
 		
 		switch (form.getPage()) {
 		case 2:
-		case 1:
+            if (form.getGroups() != null && !form.getGroups().isEmpty() && !SessionContext.hasAnyRole(SessionContext.ROLE_ADMIN)) {
+                errors.reject("profile.edit.groups.not.available");
+            }
+
+        case 1:
 			validateSyntax(target, errors);
 			
 			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "login", "errors.required");

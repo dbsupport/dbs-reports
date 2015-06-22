@@ -3,35 +3,22 @@
  */
 package pl.com.dbs.reports.profile.domain;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
-
 import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.api.profile.ClientProfileAuthority;
 import pl.com.dbs.reports.authority.domain.Authority;
 import pl.com.dbs.reports.support.db.domain.AEntity;
 import pl.com.dbs.reports.support.utils.separator.Separator;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Local profile.
@@ -102,9 +89,9 @@ public class Profile extends AEntity implements Serializable {
 	@JoinTable(name="tpr_access",
 		      joinColumns={@JoinColumn(name="profile_id", referencedColumnName="id")},
 		      inverseJoinColumns={@JoinColumn(name="access_id", referencedColumnName="id")})	
-	private List<Access> accesses = new ArrayList<Access>();
-	
-	/**
+	private Set<Access> accesses = Sets.newHashSet();
+
+    /**
 	 * Access to part of application (i.e. to import patterns).
 	 */
     @ManyToMany
@@ -170,8 +157,7 @@ public class Profile extends AEntity implements Serializable {
 	
 	public Profile addAccess(Access access) {
 		Validate.notNull(access, "Access cant be null!");
-		if (!accesses.contains(access))
-			this.accesses.add(access);
+        this.accesses.add(access);
 		return this;
 	}
 	
@@ -183,7 +169,7 @@ public class Profile extends AEntity implements Serializable {
 	}
 	
 	public Profile removeAccesses() {
-		this.accesses = new ArrayList<Access>();
+		this.accesses = Sets.newHashSet();
 		return this;
 	}
 	
@@ -283,7 +269,7 @@ public class Profile extends AEntity implements Serializable {
 	public List<Authority> getAuthorities() {
 		return authorities;
 	}
-	
+
 	public List<ClientProfileAuthority> getClientAuthorities() {
 		return hrauthorities;
 	}
@@ -299,7 +285,7 @@ public class Profile extends AEntity implements Serializable {
 		return hrauthorities!=null&&!hrauthorities.isEmpty();
 	}	
 	
-	public List<Access> getAccesses() {
+	public Set<Access> getAccesses() {
 		return accesses;
 	}
 	

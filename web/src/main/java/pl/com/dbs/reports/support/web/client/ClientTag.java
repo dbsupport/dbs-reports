@@ -3,11 +3,11 @@
  */
 package pl.com.dbs.reports.support.web.client;
 
+import org.springframework.web.servlet.tags.RequestContextAwareTag;
+
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.springframework.web.servlet.tags.RequestContextAwareTag;
 
 /**
  * What client (dbs, auchan..) is on runtime..
@@ -27,6 +27,11 @@ public class ClientTag extends RequestContextAwareTag {
 	protected int doStartTagInternal() throws Exception {
 		return isSame()?EVAL_BODY_INCLUDE:SKIP_BODY;
 	}
+
+//    private void evaluate() throws Exception {
+//        JspWriter out = pageContext.getOut();
+//        out.write("<div data-build-number=\"\" data-build-timestamp=\"\"></div>");
+//    }
 	
 	private boolean isSame() {
 		String client = retrieveClient();

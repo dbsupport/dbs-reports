@@ -2,3 +2,12 @@
 -XX:+CMSClassUnloadingEnabled
 -XX:+CMSPermGenSweepingEnabled
 -XX:MaxPermSize=128M
+
+JAXB + Tomcat
+Jesli przy generowaniu formatki leci cos ala: java.lang.NoSuchMethodError: javax.xml.bind.annotation.XmlElementType..
+
+Wymagane jest: jaxb-api-2.2.2.jar
+Pod IntelliJ jedyne rozwiazanie to umiescic jara w katalogu endorsed w katalogu Tomcata.
+Czyli jesli Tomcat: D:\Program Files\apache-tomcat-6.0.43 to: D:\Program Files\apache-tomcat-6.0.43\endorsed\jaxb-api-2.2.2.jar
+-Djava.endorsed.dirs="" - jest nadpisywane(?)
+jconsole.exe pokazuje ze ten katalog jest brany tylko pod uwage.

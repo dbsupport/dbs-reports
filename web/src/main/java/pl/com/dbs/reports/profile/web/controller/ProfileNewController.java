@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,9 +35,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import pl.com.dbs.reports.access.dao.AccessFilter;
 import pl.com.dbs.reports.access.service.AccessService;
+import pl.com.dbs.reports.profile.dao.ProfileGroupsFilter;
 import pl.com.dbs.reports.profile.domain.ProfileException;
 import pl.com.dbs.reports.profile.service.ProfileAuthorityService;
+import pl.com.dbs.reports.profile.service.ProfileGroupService;
 import pl.com.dbs.reports.profile.service.ProfileService;
 import pl.com.dbs.reports.profile.web.form.ProfileNewForm;
 import pl.com.dbs.reports.profile.web.validator.ProfileNewValidator;
@@ -56,6 +60,7 @@ public class ProfileNewController {
 	@Autowired private Alerts alerts;
 	@Autowired private MessageSource messageSource;
 	@Autowired private ProfileService profileService;
+    @Autowired private ProfileGroupService profileGroupService;
 	@Autowired private AccessService accessService;
 	@Autowired private ProfileAuthorityService profileAuthorityService;
 	
@@ -79,12 +84,14 @@ public class ProfileNewController {
 	@RequestMapping(value="/profile/new/access", method = RequestMethod.GET)
     public String access(Model model, @ModelAttribute(ProfileNewForm.KEY) final ProfileNewForm form) {
 		model.addAttribute("accesses", accessService.find());
+        model.addAttribute("groups", profileGroupService.find());
 		model.addAttribute("authorities", profileAuthorityService.find());
 		return "profile/profile-new-access";
     }
 	
 	@RequestMapping(value="/profile/new/summary", method = RequestMethod.GET)
     public String summary(Model model, @ModelAttribute(ProfileNewForm.KEY) final ProfileNewForm form) {
+        if (form.hasGroups()) model.addAttribute("groups", profileGroupService.find(new ProfileGroupsFilter().groups(form.getGroups())));
 		return "profile/profile-new-summary";
     }
 	
@@ -181,18 +188,31 @@ public class ProfileNewController {
 				return null;     
 			}
 		});
-		
-		binder.registerCustomEditor(List.class, "accesses", new CustomCollectionEditor(List.class) {
-			@Override
-			protected Object convertElement(Object element) {
-				if (element != null && element instanceof String) {
-					try {
-						long id = Long.valueOf((String)element);
-						return accessService.find(id);
-					} catch (NumberFormatException e) {}
-				}
-				return null;     
-			}
-		});		
+
+        binder.registerCustomEditor(Set.class, "accesses", new CustomCollectionEditor(Set.class) {
+            @Override
+            protected Object convertElement(Object element) {
+                if (element != null && element instanceof String) {
+                    try {
+                        long id = Long.valueOf((String)element);
+                        return accessService.find(id);
+                    } catch (NumberFormatException e) {}
+                }
+                return null;
+            }
+        });
+
+//        binder.registerCustomEditor(List.class, "groups", new CustomCollectionEditor(Set.class) {
+//            @Override
+//            protected Object convertElement(Object element) {
+//                if (element != null && element instanceof String) {
+//                    try {
+//                        long id = Long.valueOf((String)element);
+//                        return profileGroupService.findById(id);
+//                    } catch (NumberFormatException e) {}
+//                }
+//                return null;
+//            }
+//        });
 	}
 }

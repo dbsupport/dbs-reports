@@ -48,6 +48,8 @@
     <%@ include file="/WEB-INF/jsp/tiles/default/sidebar.jsp" %>
     
     <%@ include file="/WEB-INF/jsp/tiles/default/loading.jsp" %>
+
+    <%@ include file="/WEB-INF/jsp/tiles/default/alerts.jsp" %>
     
     <!-- main container -->
     <div class="content" id="main-container">
@@ -60,16 +62,6 @@
             <a href="#" class="skin second_nav" data-file="css/compiled/skins/dark.css">
                 <span class="icon"></span><span class="text">Ciemny</span>
             </a>
-        </div>
-
-        <div id="alerts-wrapper">
-        <div class="section">
-        <div class="row">
-        <div class="col-md-7">
-           <dbs:alerts/>
-        </div>
-        </div>
-        </div>
         </div>
 
 	 	

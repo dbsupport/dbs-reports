@@ -4,7 +4,7 @@
 
 #alerts-wrapper {
   padding: 0px 50px;
-  margin-top: 55px;
+
 }
 
 #security-alerts-wrapper {
@@ -19,4 +19,78 @@
   padding: 30px 0 30px;
   float: none;
   width: 400px;
+}
+
+.alerts-popup {
+    top:100px;
+    left:200px;
+    position: absolute;
+    width: 50%;
+    display: none;
+}
+
+
+.alerts-popup .settings {
+    width: auto;
+    margin: 20px -10px 0px -10px;
+    position: relative;
+}
+.alerts-popup .settings .close-icon {
+    text-decoration: none;
+    position: absolute;
+    top: -18px;
+    right: 10px;
+}
+.alerts-popup .settings .icon-remove-sign {
+    font-size: 15px;
+    color: #95a8b7;
+    cursor: pointer;
+}
+
+.alerts-popup .settings .items {
+    margin-top: 25px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+}
+
+.alerts-popup .settings .items .item {
+    padding: 16px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    font-size: 12px;
+}
+
+.alerts-popup .settings .items .alert-danger {
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    color: #b94a48;
+}
+
+.alerts-popup .settings .items .alert-warning {
+    background-color: #fcf8e3;
+    border-color: #fbeed5;
+    color: #c09853;
+}
+
+.alerts-popup .settings .items .alert-info {
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    color: #3a87ad;
+}
+
+.alerts-popup .settings .items .alert-success {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    color: #468847;
+}
+
+.alerts-popup .settings .items .alerts-icon {
+    font-size: 27px;
+    margin-right: 8px;
+}
+
+.alerts-popup .settings .items .alerts-icon.icon-remove-sign {
+    color: #d5393e;
 }

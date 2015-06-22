@@ -68,7 +68,7 @@ public class ReportOrder implements IEntity {
 	@Enumerated(EnumType.STRING)
 	private ReportOrderStatus status;		
 	
-	@OneToMany(fetch=FetchType.EAGER, orphanRemoval=false)
+	@OneToMany(fetch=FetchType.LAZY, orphanRemoval=false)
     @JoinTable(
         name="tre_order_report",
         joinColumns = @JoinColumn( name="order_id"),

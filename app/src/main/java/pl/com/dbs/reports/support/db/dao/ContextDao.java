@@ -3,13 +3,13 @@
  */
 package pl.com.dbs.reports.support.db.dao;
 
+import pl.com.dbs.reports.support.db.domain.IEntity;
+import pl.com.dbs.reports.support.filter.Filter;
+
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-
-import pl.com.dbs.reports.support.db.domain.IEntity;
-import pl.com.dbs.reports.support.filter.Filter;
 
 /**
  * Context for DAO.
@@ -82,6 +82,6 @@ public class ContextDao<T extends IEntity> implements IContextDao<T> {
 ////		throw new IllegalStateException("Klasa " + this.getClass().getName()
 ////				+ " nie dziedziczy po " + ContextDao.class.getName()
 ////				+ " odczytanie paramertu klasy (typu bazodanowego) nie jest mozliwe");
-//	}		
-	
+//	}
+
 }

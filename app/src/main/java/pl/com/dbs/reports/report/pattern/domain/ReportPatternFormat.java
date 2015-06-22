@@ -25,7 +25,7 @@ import pl.com.dbs.reports.api.report.pattern.PatternFormat;
  */
 @Embeddable
 public class ReportPatternFormat implements PatternFormat, Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2076292064487730444L;
 
 	@Column(name = "type")
 	@Enumerated(EnumType.STRING)

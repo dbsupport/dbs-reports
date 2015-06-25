@@ -233,7 +233,7 @@
                             </resource>
                         </webResources>
                         <warSourceExcludes>html/**</warSourceExcludes>
-                        <warName>${project.artifactId}-${project.version}-${dbs.reports.client.version}-${buildNumber}</warName>
+                        <warName>${project.artifactId}-${project.version}.${buildNumber}-${dbs.reports.client.version}</warName>
 						<!--<finalName>${project.artifactId}-${project.version}-${dbs.reports.client.version}</finalName>-->
 						<!--<appendAssemblyId>false</appendAssemblyId>                        -->
                     </configuration>

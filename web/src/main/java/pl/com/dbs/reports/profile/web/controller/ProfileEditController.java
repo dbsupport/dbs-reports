@@ -109,7 +109,7 @@ public class ProfileEditController {
 	
 	@RequestMapping(value="/profile/edit/summary", method = RequestMethod.GET)
     public String summary(Model model, @ModelAttribute(ProfileEditForm.KEY) final ProfileEditForm form) {
-        if (form.hasGroups()) model.addAttribute("groups", profileGroupService.find(new ProfileGroupsFilter().groups(form.getGroups())));
+        if (form.hasGroups()) model.addAttribute("groups", profileGroupService.find(new ProfileGroupsFilter().groupsInclude(form.getGroups())));
         return "profile/profile-edit-summary";
     }
 	

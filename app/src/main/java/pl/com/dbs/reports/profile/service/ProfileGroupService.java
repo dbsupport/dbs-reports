@@ -125,7 +125,7 @@ public class ProfileGroupService {
                 if (profile.getAccesses().contains(access)) {
                     ProfileGroupsFilter filter = new ProfileGroupsFilter()
                             .access(access)
-                            .gidn(group)
+                            .groupExclude(group)
                             .profile(profile);
                     if (profileGroupDao.find(filter).isEmpty()) {
                         //..this group is the only one that profile has its access..

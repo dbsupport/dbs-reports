@@ -3,19 +3,17 @@
  */
 package pl.com.dbs.reports.profile.dao;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.domain.ProfileGroup;
+import pl.com.dbs.reports.profile.domain.ProfileGroup_;
 import pl.com.dbs.reports.support.db.dao.AFilter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 /**
- * Profile groups filter.
+ * Profile groupsInclude filter.
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @copyright (c) 2015
@@ -24,12 +22,14 @@ public class ProfileGroupsFilter extends AFilter<ProfileGroup> {
 	private static final long serialVersionUID = -8697585651148607522L;
 
 	private String name;
-    private Set<Long> accesses = Sets.newHashSet();
     private Long pid;
-    private Long gidn;
-    private Set<Long> groups = Sets.newHashSet();
+    private Set<Long> accesses = Sets.newHashSet();
+    private Set<Long> groupsExclude = Sets.newHashSet();
+    private Set<Long> groupsInclude = Sets.newHashSet();
 
-    public ProfileGroupsFilter() {}
+    public ProfileGroupsFilter() {
+        getSorter().add(ProfileGroup_.name.getName(), true);
+    }
 
 
 	public ProfileGroupsFilter name(String name) {
@@ -61,13 +61,18 @@ public class ProfileGroupsFilter extends AFilter<ProfileGroup> {
         return this;
     }
 
-    public ProfileGroupsFilter gidn(ProfileGroup group) {
-        this.gidn = group!=null?group.getId():null;
+    public ProfileGroupsFilter groupsExclude(Set<Long> gids) {
+        this.groupsExclude = gids;
         return this;
     }
 
-    public ProfileGroupsFilter groups(Set<Long> groups) {
-        this.groups = groups;
+    public ProfileGroupsFilter groupExclude(ProfileGroup group) {
+        this.groupsExclude.add(group.getId());
+        return this;
+    }
+
+    public ProfileGroupsFilter groupsInclude(Set<Long> groups) {
+        this.groupsInclude = groups;
         return this;
     }
 	
@@ -83,19 +88,23 @@ public class ProfileGroupsFilter extends AFilter<ProfileGroup> {
         return accesses!=null&&!accesses.isEmpty();
     }
 
-    public boolean hasGroups() {
-        return groups!=null&&!groups.isEmpty();
+    public boolean hasGroupsInclude() {
+        return groupsInclude !=null&&!groupsInclude.isEmpty();
     }
 
     public Long getPid() {
         return pid;
     }
 
-    public Long getGidn() {
-        return gidn;
+    public Set<Long> getGroupsExclude() {
+        return groupsExclude;
     }
 
-    public Set<Long> getGroups() {
-        return groups;
+    public boolean hasGroupsExclude() {
+        return groupsExclude!=null&&!groupsExclude.isEmpty();
+    }
+
+    public Set<Long> getGroupsInclude() {
+        return groupsInclude;
     }
 }

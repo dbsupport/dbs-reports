@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,8 +20,6 @@ import pl.com.dbs.reports.profile.domain.ProfileGroup;
 import pl.com.dbs.reports.profile.service.ProfileGroupService;
 import pl.com.dbs.reports.profile.web.form.ProfileGroupListForm;
 import pl.com.dbs.reports.profile.web.validator.ProfileGroupListValidator;
-import pl.com.dbs.reports.report.domain.Report;
-import pl.com.dbs.reports.report.web.form.ReportsUnarchivedForm;
 import pl.com.dbs.reports.support.utils.exception.Exceptions;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 
@@ -40,6 +39,7 @@ import java.util.Set;
 @SessionAttributes({ProfileGroupListForm.KEY})
 public class ProfileGroupsController {
 	private static final Logger logger = LoggerFactory.getLogger(ProfileGroupsController.class);
+    @Autowired private MessageSource messageSource;
     @Autowired private Alerts alerts;
 	@Autowired private AccessService accessService;
     @Autowired private ProfileGroupService profileGroupService;
@@ -75,20 +75,25 @@ public class ProfileGroupsController {
         for (Long id : ids) {
             try {
                 ProfileGroup group = profileGroupService.findById(id);
-                profileGroupService.delete(id);
-                groups.add(group);
                 profiles += group.getProfiles().size();
+                groups.add(group);
+                profileGroupService.delete(id);
             } catch (Exception e) {
                 logger.error("profile.group.delete.error:"+ Exceptions.stack(e));
             }
         }
 
-        if (groups.size()>1&&groups.size()<5) alerts.addSuccess(session, "profile.group.multi234.delete.success", String.valueOf(groups.size()));
-        else if (groups.size()>4) alerts.addSuccess(session, "profile.group.multi5.delete.success", String.valueOf(groups.size()));
-        else if (groups.size()==1) alerts.addSuccess(session, "profile.group.delete.success", groups.get(0).getName());
-        else alerts.addError(session, "profile.group.delete.error", "");
+        StringBuilder msg = new StringBuilder();
 
-        if (profiles>0) alerts.addSuccess(session, "profile.group.edit.profiles", String.valueOf(profiles));
+        if (groups.size()>1&&groups.size()<5) msg.append(messageSource.getMessage("profile.group.multi234.delete.success", new Object[]{String.valueOf(groups.size())}, null));
+        else if (groups.size()>4) msg.append(messageSource.getMessage("profile.group.multi5.delete.success", new Object[]{String.valueOf(groups.size())}, null));
+        else if (groups.size()==1) msg.append(messageSource.getMessage("profile.group.delete.success", new Object[]{groups.get(0).getName()}, null));
+        else msg.append(messageSource.getMessage("profile.group.delete.error", null, null));
+
+        if (profiles>0) msg.append("<br/>").append(messageSource.getMessage("profile.group.edit.profiles", new Object[]{String.valueOf(profiles)}, null));
+
+        if (groups.size()>0) alerts.addSuccess(session, msg.toString());
+        else alerts.addError(session, msg.toString());
 
         return StringUtils.isBlank(site)?"redirect:/profile/group/list":"redirect:/"+site;
     }

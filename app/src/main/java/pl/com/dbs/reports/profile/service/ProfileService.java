@@ -72,24 +72,25 @@ public class ProfileService {
      * Overrides all profile accesses by those from groups.
      * Adds profile to group collection.
      */
-    private void collectAccessesFromGroups(final Profile profile, final Set<Long> groups) {
+    private void collectAccessesFromGroups(final Profile profile, final Set<Long> gids) {
         //..clean profile accesses..
         profile.removeAccesses();
 
-        //..get all groups having this profile and remove profiles from group..
-        ProfileGroupsFilter filter = new ProfileGroupsFilter().profile(profile);
-        for (ProfileGroup group : profileGroupDao.find(filter)) {
-            group.removeProfile(profile);
+        //..only foe edited profiles..
+        if (null != profile.getId()) {
+            //..get all groups having this profile and remove profiles from group..
+            ProfileGroupsFilter filter = new ProfileGroupsFilter().profile(profile);
+            for (ProfileGroup group : profileGroupDao.find(filter)) {
+                group.removeProfile(profile);
+            }
         }
 
         //...merge groups accesses..
-        for (Long gid : groups) {
-            ProfileGroup group = profileGroupDao.find(gid);
-            if (null != group) {
-                group.addProfile(profile);
-                for (Access access : group.getAccesses()) {
-                    profile.addAccess(access);
-                }
+        List<ProfileGroup> groups = profileGroupDao.find(new ProfileGroupsFilter().groupsInclude(gids));
+        for (ProfileGroup group : groups) {
+            group.addProfile(profile);
+            for (Access access : group.getAccesses()) {
+                profile.addAccess(access);
             }
         }
     }

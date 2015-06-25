@@ -78,8 +78,8 @@ public class ProfileGroupDao extends ADao<ProfileGroup, Long> {
 	    if (filter.getName()!=null) {
 	    	p = builder.and(p, builder.like(builder.upper(root.<String>get(ProfileGroup_.name)), "%" + filter.getName().toUpperCase() + "%"));
 	    }
-        if (filter.getGidn()!=null) {
-            p = builder.and(p, builder.equal(root.get(ProfileGroup_.id), filter.getGidn()).not());
+        if (filter.hasGroupsExclude()) {
+            p = builder.and(p, root.get(ProfileGroup_.id).in(filter.getGroupsExclude()).not());
         }
         if (filter.getPid()!=null) {
             ListJoin<ProfileGroup, Profile> profiles = root.join(ProfileGroup_.profiles);
@@ -89,8 +89,8 @@ public class ProfileGroupDao extends ADao<ProfileGroup, Long> {
             Join<ProfileGroup, Access> accesses =  root.join(ProfileGroup_.accesses, JoinType.LEFT);
             p = builder.and(p, accesses.get(Access_.id).in(filter.getAccesses()));
         }
-        if (filter.hasGroups()) {
-            p = builder.and(p, root.get(ProfileGroup_.id).in(filter.getGroups()));
+        if (filter.hasGroupsInclude()) {
+            p = builder.and(p, root.get(ProfileGroup_.id).in(filter.getGroupsInclude()));
         }
 
 

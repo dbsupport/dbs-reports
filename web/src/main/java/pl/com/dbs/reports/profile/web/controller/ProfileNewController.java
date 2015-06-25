@@ -3,17 +3,6 @@
  */
 package pl.com.dbs.reports.profile.web.controller;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import pl.com.dbs.reports.access.dao.AccessFilter;
 import pl.com.dbs.reports.access.service.AccessService;
 import pl.com.dbs.reports.profile.dao.ProfileGroupsFilter;
 import pl.com.dbs.reports.profile.domain.ProfileException;
@@ -46,6 +28,16 @@ import pl.com.dbs.reports.profile.web.form.ProfileNewForm;
 import pl.com.dbs.reports.profile.web.validator.ProfileNewValidator;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 import pl.com.dbs.reports.support.web.file.FileMeta;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Add new profile.
@@ -91,7 +83,7 @@ public class ProfileNewController {
 	
 	@RequestMapping(value="/profile/new/summary", method = RequestMethod.GET)
     public String summary(Model model, @ModelAttribute(ProfileNewForm.KEY) final ProfileNewForm form) {
-        if (form.hasGroups()) model.addAttribute("groups", profileGroupService.find(new ProfileGroupsFilter().groups(form.getGroups())));
+        if (form.hasGroups()) model.addAttribute("groups", profileGroupService.find(new ProfileGroupsFilter().groupsInclude(form.getGroups())));
 		return "profile/profile-new-summary";
     }
 	

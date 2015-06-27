@@ -273,7 +273,7 @@
                         <url>${dbs.server.url}</url>
                         <server>TomcatServer</server>
                         <path>/reports</path>
-                        <warFile>target/${project.build.finalName}.war</warFile>
+                        <warFile>target/${project.artifactId}-${project.version}.${buildNumber}-${dbs.reports.client.version}.war</warFile>
                     </configuration>
                 </plugin>
             </plugins>

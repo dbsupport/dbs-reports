@@ -7,7 +7,7 @@
     <parent>
         <groupId>pl.com.dbs</groupId>
         <artifactId>dbs-reports</artifactId>
-        <version>${dbs.reports.version}</version>
+        <version>1.5.0-SNAPSHOT</version>
     </parent>
     
     <artifactId>dbs-reports-web</artifactId>
@@ -205,7 +205,7 @@
     </dependencies>
     
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}-${project.version}.${buildNumber}-${dbs.reports.client.version}</finalName>
         <filters>
             <filter>../src/main/filters/${envir}.properties</filter>
         </filters>
@@ -234,19 +234,42 @@
                         </webResources>
                         <warSourceExcludes>html/**</warSourceExcludes>
                         <warName>${project.artifactId}-${project.version}.${buildNumber}-${dbs.reports.client.version}</warName>
+
 						<!--<finalName>${project.artifactId}-${project.version}-${dbs.reports.client.version}</finalName>-->
 						<!--<appendAssemblyId>false</appendAssemblyId>                        -->
                     </configuration>
                 </plugin>
 
+                <!--<plugin>-->
+                    <!--<groupId>org.codehaus.mojo</groupId>-->
+                    <!--<artifactId>properties-maven-plugin</artifactId>-->
+                    <!--<version>1.0-alpha-1</version>-->
+                    <!--<executions>-->
+                        <!--<execution>-->
+                            <!--<phase>initialize</phase>-->
+                            <!--<goals>-->
+                                <!--<goal>read-project-properties</goal>-->
+                            <!--</goals>-->
+                            <!--<configuration>-->
+                                <!--<files>-->
+                                    <!--<file>buildNumber.properties</file>-->
+                                <!--</files>-->
+                            <!--</configuration>-->
+                        <!--</execution>-->
+                    <!--</executions>-->
+                <!--</plugin>-->
+
+                <!--  http://www.avajava.com/tutorials/lessons/what-are-the-phases-of-the-maven-default-lifecycle.html -->
+                <!-- tomcat6:deploy-only -DbuildNumber=68 -->
                 <plugin>
                     <groupId>org.apache.tomcat.maven</groupId>
                     <artifactId>tomcat6-maven-plugin</artifactId>
                     <version>2.2</version>
                     <configuration>
-                        <url>http://localhost:8080/manager</url>
+                        <url>http://localhost:8080/manager/text</url>
                         <server>TomcatServer</server>
                         <path>/reports</path>
+                        <warFile>target/${project.build.finalName}.war</warFile>
                     </configuration>
                 </plugin>
             </plugins>

@@ -14,10 +14,6 @@
     <name>dbs-reports-web</name>
     <description>DataBase Support - Reports: web</description>
     <packaging>war</packaging>
-
-    <properties>
-        <dbs.server.url>http://localhost:8080/manager</dbs.server.url>
-    </properties>
     
     <dependencies>
 		<!-- Custom -->
@@ -268,12 +264,12 @@
                 <plugin>
                     <groupId>org.apache.tomcat.maven</groupId>
                     <artifactId>tomcat6-maven-plugin</artifactId>
-                    <version>2.2</version>
                     <configuration>
-                        <url>${dbs.server.url}</url>
+                        <url>http://127.0.0.1:8080/manager</url>
                         <server>TomcatServer</server>
+                        <!-- deployer/deployer -->
                         <path>/reports</path>
-                        <warFile>target/${project.artifactId}-${project.version}.${buildNumber}-${dbs.reports.client.version}.war</warFile>
+                        <!--<warFile>target/${project.artifactId}-${project.version}.${buildNumber}-${dbs.reports.client.version}.war</warFile>-->
                     </configuration>
                 </plugin>
             </plugins>

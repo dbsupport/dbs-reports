@@ -3,30 +3,28 @@
  */
 package pl.com.dbs.reports.support.web.form;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.inject.internal.Lists;
+import com.google.inject.internal.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
-
 import pl.com.dbs.reports.support.utils.separator.Separator;
 import pl.com.dbs.reports.support.web.form.field.AField;
 import pl.com.dbs.reports.support.web.form.field.IFieldDivisible;
 import pl.com.dbs.reports.support.web.form.field.IFieldInflatable;
 import pl.com.dbs.reports.support.web.form.inflater.FieldInflater;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.inject.internal.Lists;
-import com.google.inject.internal.Maps;
-
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -39,6 +37,7 @@ import com.google.inject.internal.Maps;
 @XmlAccessorType(XmlAccessType.FIELD)
 //@XmlRootElement(name = "form", namespace = "http://www.dbs.com.pl/reports/1.0/form")
 public abstract class DForm extends AForm {
+    private Logger log = LoggerFactory.getLogger(DForm.class);
 	private static final long serialVersionUID = -8413242846104561845L;
 
 	@XmlElement(name="field", namespace = "http://www.dbs.com.pl/reports/1.0/form")
@@ -128,6 +127,7 @@ public abstract class DForm extends AForm {
 	    		try {
 	    			inflater.inflate(field);
 	    		} catch (Exception e) {
+                    log.error("Error inflating filed:"+field.toString()+" with inflater:"+inflater.toString()+" Details:"+e.getMessage(), e);
 	    			//field.getOptions().add(new FieldOption(null, e.getMessage().substring(0, 100)));
 	    		}
 	    	}

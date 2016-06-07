@@ -1,5 +1,6 @@
 <%@ include file="/WEB-INF/jsp/tiles/common/taglib.jsp" %>
 <%@ page session="false" contentType="text/html; charset=UTF-8" %>
+<c:set var="env"><spring:message code="project.environment"/></c:set>
 
 <tiles:insertDefinition name="tiles-security" flush="true">
 <tiles:putAttribute name="id" type="string">dbs-page-login</tiles:putAttribute>
@@ -13,8 +14,8 @@
                 <h6>witamy w serwisie</h6>
                 <c:choose>
                 <c:when test="${env eq 'dev' or env eq 'tes'}">
-                <input name="username" class="form-control" type="text" placeholder="Login" value="adam"/>
-                <input name="password" class="form-control" type="password" placeholder="Hasło" value="adam"/>
+                <input name="username" class="form-control" type="text" placeholder="Login" value="admin"/>
+                <input name="password" class="form-control" type="password" placeholder="Hasło" value="DBSadmin"/>
                 </c:when>
                 <c:otherwise>
                 <input name="username" class="form-control" type="text" placeholder="Login" value=""/>

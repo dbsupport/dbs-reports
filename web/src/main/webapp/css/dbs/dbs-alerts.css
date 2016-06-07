@@ -8,10 +8,7 @@
 }
 
 #security-alerts-wrapper {
-  margin: 0 auto;
-  padding: 30px 0 30px;
-  float: none;
-  width: 400px;
+
 }
 
 #error-alerts-wrapper {
@@ -26,6 +23,14 @@
     left:200px;
     position: absolute;
     width: 50%;
+    display: none;
+}
+
+#security-alerts-wrapper .alerts-popup {
+    top:410px;
+    left:37%;
+    position: absolute;
+    width: 25%;
     display: none;
 }
 

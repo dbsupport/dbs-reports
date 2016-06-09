@@ -65,7 +65,6 @@
         </filter>
     </appender>    
   
-    <!-- root level="DEBUG"-->
     <root level="@t.logback.root.level@">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="ERRORS"/>

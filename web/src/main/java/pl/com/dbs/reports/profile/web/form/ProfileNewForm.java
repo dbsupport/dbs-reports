@@ -7,12 +7,15 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
 
 import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.authority.domain.Authority;
 import pl.com.dbs.reports.profile.domain.ProfileCreation;
+import pl.com.dbs.reports.profile.domain.ProfileGroup;
 import pl.com.dbs.reports.support.web.file.FileMeta;
 import pl.com.dbs.reports.support.web.form.AForm;
 
@@ -41,8 +44,9 @@ public class ProfileNewForm extends AForm implements ProfileCreation, Serializab
 	private boolean accepted = false;
 	protected boolean global = false;
 	
-	protected List<Access> accesses = new ArrayList<Access>();
+	protected Set<Access> accesses = Sets.newHashSet();
 	protected List<Authority> authorities = new ArrayList<Authority>();
+    protected Set<Long> groups = Sets.newHashSet();
 	
 	private FileMeta  photo;
 	
@@ -62,8 +66,9 @@ public class ProfileNewForm extends AForm implements ProfileCreation, Serializab
 		this.zipCode = null;
 		this.photo = null;
 		this.accepted = false;
-		this.accesses = new ArrayList<Access>();
+		this.accesses = Sets.newHashSet();
 		this.authorities = new ArrayList<Authority>();
+        this.groups = Sets.newHashSet();
 	}
 	
 
@@ -132,7 +137,7 @@ public class ProfileNewForm extends AForm implements ProfileCreation, Serializab
 	}
 
 	@Override
-	public List<Access> getAccesses() {
+	public Set<Access> getAccesses() {
 		return accesses;
 	}
 
@@ -197,7 +202,7 @@ public class ProfileNewForm extends AForm implements ProfileCreation, Serializab
 		this.passwd = passwd;
 	}
 
-	public void setAccesses(List<Access> accesses) {
+	public void setAccesses(Set<Access> accesses) {
 		this.accesses = accesses;
 	}
 
@@ -223,5 +228,19 @@ public class ProfileNewForm extends AForm implements ProfileCreation, Serializab
 
 	public boolean isGlobal() {
 		return global;
-	}	
+	}
+
+
+    @Override
+    public Set<Long> getGroups() {
+        return groups;
+    }
+
+    public boolean hasGroups() {
+        return groups!=null&&!groups.isEmpty();
+    }
+
+    public void setGroups(Set<Long> groups) {
+        this.groups = groups;
+    }
 }

@@ -6,10 +6,12 @@ package pl.com.dbs.reports.profile.web.form;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.authority.domain.Authority;
 import pl.com.dbs.reports.profile.domain.Profile;
+import pl.com.dbs.reports.profile.domain.ProfileGroup;
 import pl.com.dbs.reports.profile.domain.ProfileModification;
 import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.web.file.FileMeta;
@@ -32,13 +34,15 @@ public class ProfileEditForm extends ProfileNewForm implements ProfileModificati
 		super();
 	}
 
-	public void reset(Profile profile) {
+	public void reset(Profile profile, List<ProfileGroup> groups) {
 		if (profile==null) return;
-		
+		super.reset();
+
 		id = profile.getId();
 		global = profile.isGlobal();
 		super.setAccesses(profile.getAccesses());
 		super.setAuthorities(profile.getAuthorities());
+        for (ProfileGroup group : groups) getGroups().add(group.getId());
 		if (profile.hasAddress()) {
 			setCity(profile.getAddress().getCity());
 			setState(profile.getAddress().getState());
@@ -71,7 +75,7 @@ public class ProfileEditForm extends ProfileNewForm implements ProfileModificati
 	}
 	
 	@Override
-	public void setAccesses(List<Access> accesses) {
+	public void setAccesses(Set<Access> accesses) {
 		if (SessionContext.hasAnyRole(SessionContext.ROLE_ADMIN)) 
 			this.accesses = accesses;
 	}

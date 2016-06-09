@@ -44,7 +44,7 @@ import pl.com.dbs.reports.support.web.controller.DownloadController;
 @Controller
 public class ReportsLogsController {
 	private static final Logger logger = LoggerFactory.getLogger(ReportsLogsController.class);
-	private static final DateTimeFormatter FORMAT = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm:ss");
+	private static final DateTimeFormatter FORMAT = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm:ss.SSS");
 	private static final String SUFFIX = ".log";
 	private static final String DELIM = " ";
 	@Autowired private LoggingEventDao loggingEventDao;

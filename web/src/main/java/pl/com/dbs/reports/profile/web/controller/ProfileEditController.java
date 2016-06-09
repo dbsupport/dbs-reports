@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,9 +35,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import pl.com.dbs.reports.access.service.AccessService;
+import pl.com.dbs.reports.profile.dao.ProfileGroupsFilter;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.domain.ProfileException;
 import pl.com.dbs.reports.profile.service.ProfileAuthorityService;
+import pl.com.dbs.reports.profile.service.ProfileGroupService;
 import pl.com.dbs.reports.profile.service.ProfileService;
 import pl.com.dbs.reports.profile.web.ProfileSession;
 import pl.com.dbs.reports.profile.web.form.ProfileEditForm;
@@ -59,6 +62,7 @@ public class ProfileEditController {
 	@Autowired private Alerts alerts;
 	@Autowired private MessageSource messageSource;
 	@Autowired private ProfileService profileService;
+    @Autowired private ProfileGroupService profileGroupService;
 	@Autowired private AccessService accessService;
 	@Autowired private ProfileAuthorityService profileAuthorityService;
 	
@@ -76,7 +80,9 @@ public class ProfileEditController {
 	
 	@RequestMapping(value="/profile/edit/{id}", method = RequestMethod.GET)
     public String init(Model model, @PathVariable("id") Long id, @ModelAttribute(ProfileEditForm.KEY) final ProfileEditForm form, HttpSession session) {
-		form.reset(profileService.findById(id));
+        ProfileGroupsFilter filter = new ProfileGroupsFilter().pid(id);
+
+		form.reset(profileService.findById(id), profileGroupService.find(filter));
 		if (!form.hasProfile()) {
 			alerts.addError(session, "profile.edit.wrong.id");
 			return "redirect:/profile/list";
@@ -95,6 +101,7 @@ public class ProfileEditController {
 		if (!SessionContext.hasAnyRole(SessionContext.ROLE_ADMIN)) {
 			return "redirect:/profile/edit/summary";	
 		}
+        model.addAttribute("groups", profileGroupService.find());
 		model.addAttribute("accesses", accessService.find());
 		model.addAttribute("authorities", profileAuthorityService.find());
 		return "profile/profile-edit-access";
@@ -102,7 +109,8 @@ public class ProfileEditController {
 	
 	@RequestMapping(value="/profile/edit/summary", method = RequestMethod.GET)
     public String summary(Model model, @ModelAttribute(ProfileEditForm.KEY) final ProfileEditForm form) {
-		return "profile/profile-edit-summary";
+        if (form.hasGroups()) model.addAttribute("groups", profileGroupService.find(new ProfileGroupsFilter().groupsInclude(form.getGroups())));
+        return "profile/profile-edit-summary";
     }
 	
 	/**
@@ -211,7 +219,7 @@ public class ProfileEditController {
 			}
 		});
 		
-		binder.registerCustomEditor(List.class, "accesses", new CustomCollectionEditor(List.class) {
+		binder.registerCustomEditor(Set.class, "accesses", new CustomCollectionEditor(Set.class) {
 			@Override
 			protected Object convertElement(Object element) {
 				if (element != null && element instanceof String) {

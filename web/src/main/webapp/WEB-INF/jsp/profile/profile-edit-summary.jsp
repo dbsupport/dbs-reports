@@ -55,13 +55,26 @@
         </c:set>
        	<input class="form-control inline-input" type="text" readonly="readonly" value="${authorities}"/>
     </div>
-    <div class="field-box">
-        <label>Uprawnienia raportowania</label>
-        <c:set var="accesses">
-        <c:forEach items="${profileEditForm.accesses}" var="access" varStatus="status"><spring:message code="${access.name}" text="${access.name}"></spring:message><c:if test="${!status.last}">, </c:if></c:forEach>
-        </c:set>
-       	<input class="form-control inline-input" type="text" readonly="readonly" value="${accesses}"/>
-    </div>
+
+    <c:if test="${!empty groups}">
+        <div class="field-box">
+            <label>Grupy profilowe</label>
+            <c:forEach items="${groups}" var="group">
+                <input class="form-control inline-input" type="text" readonly="readonly" value="${group.name}: ${group.accessesAsString}"/>
+                <label>&nbsp;</label>
+            </c:forEach>
+        </div>
+    </c:if>
+
+    <c:if test="${empty groups}">
+        <div class="field-box">
+            <label>Uprawnienia raportowania</label>
+            <c:set var="accesses">
+                <c:forEach items="${profileNewForm.accesses}" var="access" varStatus="status"><spring:message code="${access.name}" text="${access.name}"></spring:message><c:if test="${!status.last}">, </c:if></c:forEach>
+            </c:set>
+            <input class="form-control inline-input" type="text" readonly="readonly" value="${accesses}"/>
+        </div>
+    </c:if>
     
 	<spring:bind path="accepted">
 	<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>

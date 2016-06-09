@@ -44,8 +44,23 @@
 		</form:select>
 		<c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
 	</div>
-	</spring:bind>                       
-   
+	</spring:bind>
+
+    <sec:authorize access="hasAnyRole('Admin')">
+        <c:if test="${!empty groups}">
+            <spring:bind path="groups">
+                <c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
+                <div class="field-box ${classes}">
+                    <label>Grupy profilowe<br/><small>Uwaga!<br/>Uprawnienia grupy nadpisują<br/>uprawnienia raportowe</small></label>
+                    <form:select multiple="multiple" path="groups" cssClass="selectpicker" data-width="400px" data-size="20" title="- wybierz -">
+                        <form:options items="${groups}" itemLabel="name" itemValue="id"/>
+                    </form:select>
+                    <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
+                </div>
+            </spring:bind>
+        </c:if>
+    </sec:authorize>
+
 	<div class="wizard-actions">
    		<button type="button" class="btn-glow primary btn-prev" onclick="location.href='profile/new/personal'"><i class="icon-chevron-left"></i>&nbsp;Powrót</button><span>&nbsp;</span>
 		<button type="submit" class="btn-glow primary btn-next" data-last="Finish">Dalej&nbsp;&nbsp;<i class="icon-chevron-right"></i></button><span>&nbsp;</span>

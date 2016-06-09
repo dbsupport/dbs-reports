@@ -42,6 +42,8 @@ xmlns="http://www.springframework.org/schema/beans"
 		<security:intercept-url pattern="/profile/edit/*" access="isFullyAuthenticated() and hasAnyRole('Admin,Management')" />
 		
 		<security:intercept-url pattern="/profile/new/*" access="isFullyAuthenticated() and hasAnyRole('Admin')" />
+
+        <security:intercept-url pattern="/profile/group/*" access="isFullyAuthenticated() and hasAnyRole('Admin')" />
 		
 		<security:intercept-url pattern="/report/pattern/details/*" access="isFullyAuthenticated() and hasAnyRole('Admin,Management,User')" />
 		

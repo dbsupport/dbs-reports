@@ -43,7 +43,7 @@
 <body id="<tiles:getAsString name="id"/>">
     <div class="header">
         <a href="">
-            <img src="img/dbs/logo.png" class="logo" alt="<spring:message code="project.version"/>" title="<spring:message code="project.version"/>"/>
+            <%@ include file="/WEB-INF/jsp/tiles/common/navbar-brand.jsp" %>
         </a>
     </div>
     
@@ -53,18 +53,15 @@
     <div id="main-container">
     
 	    <div id="security-alerts-wrapper">
-		<div class="section">
-		<div class="row">
-		    <dbs:alerts/>
+            <%@ include file="/WEB-INF/jsp/tiles/default/alerts.jsp" %>
 		</div>
-		</div>
-		</div>  
-	    
+
     <tiles:insertAttribute name="content"/>
     </div>
 	<!-- scripts -->
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/dbs/dbs-alerts.js"></script>
     <script src="js/dbs/dbs-security.js"></script>
     <!-- script src="js/theme.js"></script-->    
     <dbs:alerts clean="true"/>

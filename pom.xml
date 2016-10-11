@@ -11,7 +11,7 @@
 		<name>DataBase Support</name>
 		<url>http://www.dbs.com.pl/</url>
 	</organization>
-	<version>1.5.0-SNAPSHOT</version>
+	<version>1.5.0</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -21,7 +21,7 @@
 
 	<properties>
 	    <dbs.reports.client.version>auchan-1.2.0</dbs.reports.client.version>
-        <dbs.reports.version>1.5.0-SNAPSHOT</dbs.reports.version>
+        <dbs.reports.version>1.5.0</dbs.reports.version>
 		<commons.version>2.3</commons.version>
 		<commons.dbcp.version>1.4</commons.dbcp.version>
 		<javax.servlet.version>3.0</javax.servlet.version>
@@ -50,7 +50,7 @@
 		<javax.mail.version>1.4.3</javax.mail.version>
 	    <hibernate.validator.version>4.3.1.Final</hibernate.validator.version>
 		<postgresql.version>9.1-901.jdbc4</postgresql.version>
-        <org.liquibase.version>3.3.5</org.liquibase.version>
+        <org.liquibase.version>3.5.2</org.liquibase.version>
 		<hsqldb.version>1.8.0.10</hsqldb.version>
 		<org.mockito.version>1.9.5</org.mockito.version>
 		<junit.version>4.8.1</junit.version>
@@ -348,7 +348,6 @@
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-core</artifactId>
                 <version>${org.liquibase.version}</version>
-                <scope>test</scope>
             </dependency>
 	        
 	        <!-- Servlet -->
@@ -505,11 +504,6 @@
 						</archive>
 					</configuration>
 				</plugin>
-                <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <version>${org.liquibase.version}</version>
-                </plugin>
 
                 <!-- build timestamp plugin: http://www.mojohaus.org/buildnumber-maven-plugin -->
                 <plugin>

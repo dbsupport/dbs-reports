@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>pl.com.dbs</groupId>
 		<artifactId>dbs-reports</artifactId>
-		<version>1.5.0-SNAPSHOT</version>
+		<version>1.5.0</version>
 	</parent>
 
 	<artifactId>dbs-reports-app</artifactId>
@@ -190,6 +190,10 @@
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
     
     	<!-- Test -->
 		<dependency>
@@ -305,33 +309,6 @@
 			  </dependencies>		        
 			</plugin>
 
-            <!-- rum /app mvn liquibase:update[SQL] -->
-            <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <configuration>
-                    <!--<outputChangeLogFile>src/main/resources/pl/com/dbs/reports/changelog/db-reports-changelog-1.0.0.xml</outputChangeLogFile>-->
-                    <changeLogFile>src/main/resources/pl/com/dbs/reports/changelog/db-reports-changelog-master.xml</changeLogFile>
-                    <contexts>non-legacy</contexts>
-                    <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgresql://localhost:5432/reports</url>
-                    <username>reports</username>
-                    <password>reports</password>
-                    <changeSetAuthor>maven</changeSetAuthor>
-                    <changelogSchemaName>reports</changelogSchemaName>
-                    <defaultSchemaName>reports</defaultSchemaName>
-                </configuration>
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<phase>process-resources</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>updateSQL</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            </plugin>
-			
-		      
 			<!-- plugin>
 			    <artifactId>maven-compiler-plugin</artifactId>
 			    <configuration>

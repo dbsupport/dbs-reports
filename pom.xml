@@ -61,6 +61,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <project.build.timestamp>${maven.build.timestamp}</project.build.timestamp>
+        <tomcat6.deploy.url>http://127.0.0.1:8080/manager</tomcat6.deploy.url>
+        <buildNumber>0</buildNumber>
 	</properties>
     <scm>
         <connection>scm:git:https://github.com/dbsupport/dbs-reports</connection>

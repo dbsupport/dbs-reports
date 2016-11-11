@@ -55,6 +55,7 @@
 		<org.mockito.version>1.9.5</org.mockito.version>
 		<junit.version>4.8.1</junit.version>
 		<org.powermock.version>1.5.1</org.powermock.version>
+		<org.hamcrest.hamcrest-all>1.3</org.hamcrest.hamcrest-all>
 		<itext.version>2.1.7</itext.version>
 		<itext.rtf.version>2.1.7.1</itext.rtf.version><!-- spatchowana wersja wlasna, patrz http://itext-general.2136553.n4.nabble.com/importRtfDocument-Unknown-Source-td2151636.html -->
 		<dbs.reports.api.version>1.4.0</dbs.reports.api.version>
@@ -424,8 +425,12 @@
 		      <version>${org.powermock.version}</version>
 		      <scope>test</scope>
 		   </dependency>
-
-
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-all</artifactId>
+				<version>${org.hamcrest.hamcrest-all}</version>
+				<scope>test</scope>
+			</dependency>
         </dependencies>
 	</dependencyManagement>
 

@@ -35,8 +35,18 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	private static final java.util.regex.Pattern BLOCK_CONTENT_PATTERN = java.util.regex.Pattern.compile("\\[BLOCK\\([\\w\\d_]+\\)([\\s\\S]*)",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	private static final java.util.regex.Pattern BLOCK_REST_PATTERN = java.util.regex.Pattern.compile("^BLOCK\\]([\\s\\S]*)",  java.util.regex.Pattern.CASE_INSENSITIVE);
 	private static final java.util.regex.Pattern IN_VARIABLE_PATTERN = java.util.regex.Pattern.compile("\\^\\$([\\w\\d_]+)\\^",  java.util.regex.Pattern.CASE_INSENSITIVE);
-	private static final java.util.regex.Pattern INFLATER_PATTERN = java.util.regex.Pattern.compile("(\\w+):\\s*(SELECT\\s+.+?[FROM]{0,1}\\s+.+?);",  java.util.regex.Pattern.CASE_INSENSITIVE|java.util.regex.Pattern.DOTALL);
-	
+	/**
+	 * Inflaters file can be defined:
+	 * [word boundary]*LABEL:\n+[sgl];\s*|$
+	 *
+	 * [word boundary]* - start of file or new line ('\n'+) at least ones
+	 * LABEL - label can contain only characters ('\w'+)
+	 * :\n+ - ':' and '\n'+ must follows the label
+	 * [sql] - any string
+	 * ;\s* or ;$ - ';' and new line(s) ends inflator or end of file ($)
+	 */
+	private static final java.util.regex.Pattern INFLATER_PATTERN = java.util.regex.Pattern.compile("\\b(\\w+):\\s*\\n+(.+?)(?:(;\\s*\\n)|(;\\s*$))",  java.util.regex.Pattern.CASE_INSENSITIVE|java.util.regex.Pattern.DOTALL);
+
 	protected byte[] content;
 	protected ReportTextBlock root;
 	private ReportTextBlockInflater inflater;

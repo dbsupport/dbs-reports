@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Created-By: 1.2 (Sun Microsystems Inc.)
+
+Name: Database-Support-Reports
+Reports-Pattern-Name: Zaświadczenie MOPS
+Reports-Pattern-Version: 0.0.4
+Reports-Pattern-Author: DBS
+Reports-Accesses: Place
+Reports-Extension-Map: mops_wz.rtf=txt|rtf
+Reports-Init-Sql: init.sql
+Reports-Name-Template: mops-${date-time}
+Reports-Form-Filename: form.xml

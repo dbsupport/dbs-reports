@@ -410,7 +410,6 @@ public class ReportTextBlockBuilderTest {
 		assertTrue(block2_1.getInflation().input.contains("IN_MIES"));
 		assertTrue(block2_1.getInflation().input.contains("IN_FIRM"));
 		assertTrue(block2_1.getInflation().input.contains("IN_IMIE"));
-System.out.println(block2_1.getInflation().getSql());
 		assertTrue(IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace(
 				"SELECT\n" +
 						" NVL('^$IN_FIRM^','AUCHAN') INFIRMA, \n" +
@@ -451,6 +450,282 @@ System.out.println(block2_1.getInflation().getSql());
 						" SUBSTR('^$PV_MIES^',1,4)||'-'||SUBSTR('^$PV_MIES^',5,2) V_MIES,\n" +
 						" TOMEK.GENRAP_DDL('DECLARE A NUMBER; BEGIN A:=TOMEK.FRAP121_ALL('||SUBSTR('^$PV_MIES^',1,4)||','||SUBSTR('^$PV_MIES^',5,2)||','||'''^$IN_FIRM^'''||'); END;') wyniki")
 				.matches(block4_1.getInflation().getSql()));
+	}
+
+	@Test
+	public void mops_struktura_blokow() throws PatternValidationException, ReportBlockException {
+		File file = read("pl/com/dbs/reports/domain/builders/test/mops/mops_004.zip");
+		PatternProduceContextDefault pcontext = mock(PatternProduceContextDefault.class);
+		when(pcontext.getFile()).thenReturn(file);
+		ReportPattern pattern = (ReportPattern) pfactory.produce(pcontext);
+
+		PatternFormat format = new ReportPatternFormat(ReportType.TXT, "rtf", "rtf");
+
+		ReportTextBlocksBuilder builder = new ReportTextBlocksBuilder(pattern.getTransformate(format));
+		ReportTextBlock root = builder.build().getRootBlock();
+
+		//..first level..
+		LinkedList<ReportTextBlock> level1 = root.getBlocks();
+		assertNotNull(level1);
+		assertTrue(level1.size() == 9);
+
+		ReportTextBlock block1_1 = level1.get(0);
+		assertNotNull(block1_1);
+		assertNull(block1_1.getLabel());
+		assertTrue(block1_1.hasContent());
+		assertTrue(block1_1.getContent().startsWith("{\\rtf1\\adeflang1025\\ansi\\ansicpg1250\\uc1\\adeff0\\deff0\\stshfdbch0"));
+		assertNull(block1_1.getInflation());
+
+
+		ReportTextBlock block2_1 = level1.get(1);
+		assertTrue(block2_1.getLabel().equalsIgnoreCase("INIT"));
+		assertNotNull(block2_1.getInflation());
+		assertTrue(block2_1.getInflation().getLabel().equalsIgnoreCase("INIT"));
+		assertTrue(block2_1.getInflation().input.size() == 7);
+		assertTrue(block2_1.getInflation().input.contains("IN_FIRM"));
+		assertTrue(block2_1.getInflation().input.contains("IN_LOKAL"));
+		assertTrue(block2_1.getInflation().input.contains("IN_NR_EW"));
+		assertTrue(block2_1.getInflation().input.contains("IN_DATA_W"));
+		assertTrue(block2_1.getInflation().input.contains("IN_ROKMIES"));
+		assertTrue(block2_1.getInflation().input.contains("IN_PROFILE"));
+		assertTrue(block2_1.getInflation().input.contains("IN_USER"));
+		assertTrue(IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace(
+				"SELECT\n" +
+				"  NVL('^$IN_FIRM^', 'AUCHAN') V_FIRMA,\n" +
+				"  NVL(SUBSTR('^$IN_LOKAL^', 1, 6),'%') V_LOKAL,\n" +
+				"  NVL('^$IN_NR_EW^','%') V_NR_EW,    \n" +
+				"  NVL('^$IN_DATA_W^',TO_CHAR(SYSDATE,'YYYY-MM-DD')) DATA_W,\n" +
+				"  NVL('^$IN_ROKMIES^','299912') P_ROKMIES,\n" +
+				"  NVL(''||'^$IN_PROFILE^'||'','SELECT NUDOSS FROM ZA00') P_PROFILE,\n" +
+				"  '^$IN_USER^' P_USER,\n" +
+				"  0 VROW\n" +
+				"FROM DUAL")
+				.matches(block2_1.getInflation().getSql()));
+		assertTrue(block2_1.getBlocks().size() == 1);
+
+
+		ReportTextBlock block4_1 = level1.get(3);
+		assertNotNull(block4_1);
+		assertTrue(block4_1.getLabel().equalsIgnoreCase("FIRMA"));
+		assertNotNull(block4_1.getInflation());
+		assertTrue(block4_1.getInflation().getLabel().equalsIgnoreCase("FIRMA"));
+		assertTrue(block4_1.getInflation().input.size()==1);
+		assertTrue(block4_1.getInflation().input.contains("V_FIRMA"));
+		assertFalse(block4_1.hasContent());
+		assertTrue(IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace(
+				"SELECT\n" +
+						"  NIP F_NIP,\n" +
+						"  REGON F_REGON,\n" +
+						"  NAZWA_PIT F_NAZWA_FIRMY,\n" +
+						"  KRAJ F_KRAJ,\n" +
+						"  WOJEWODZTWO F_WOJEWODZTWO,\n" +
+						"  POWIAT F_POWIAT,\n" +
+						"  GMINA F_GMINA,\n" +
+						"  ULICA F_ULICA,\n" +
+						"  NR_DOMU F_NR_DOMU,\n" +
+						"  NR_LOKALU F_NR_LOKALU,\n" +
+						"  MIEJSCOWOSC F_MIEJSCOWOSC,\n" +
+						"  KOD_POCZTOWY F_KOD_POCZTOWY,\n" +
+						"  POCZTA F_POCZTA,\n" +
+						"  PKD V_PKD\n" +
+						"FROM TOMEK.FIRMY\n" +
+						"WHERE FIRMA = '^$V_FIRMA^'")
+				.matches(block4_1.getInflation().getSql()));
+		assertTrue(block4_1.getBlocks().size() == 1);
+
+		ReportTextBlock block6_1 = level1.get(5);
+		assertNotNull(block6_1);
+		assertTrue(block6_1.getLabel().equalsIgnoreCase("PRACOWNIK"));
+		assertNotNull(block6_1.getInflation());
+		assertTrue(block6_1.getInflation().getLabel().equalsIgnoreCase("PRACOWNIK"));
+		assertTrue(block6_1.getInflation().input.size()==5);
+		assertTrue(block6_1.getInflation().input.contains("DATA_W"));
+		assertTrue(block6_1.getInflation().input.contains("V_NR_EW"));
+		assertTrue(block6_1.getInflation().input.contains("V_FIRMA"));
+		assertTrue(block6_1.getInflation().input.contains("V_LOKAL"));
+		assertTrue(block6_1.getInflation().input.contains("P_PROFILE"));
+		assertFalse(block6_1.hasContent());
+		assertTrue(IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace(
+				"SELECT ROWNUM VROW,\n" +
+						"    A.NUDOSS ZA00_NUDOSS,\n" +
+						"\tA.SOCDOS V_SOCDOS,\n" +
+						"\tA.MATCLE P_NR_EW,\n" +
+						"    TRIM(B.NOMUSU) P_NAZWISKO,\n" +
+						"    TRIM(B.PRENOM) P_IMIE,\n" +
+						"\tDECODE(B.QUALIT,'1', 'Pan', '2', 'Pani', '3', 'Pani', 'osoba') P_PLEC,\n" +
+						"    TRIM(D.NUMERO) P_PESEL,\n" +
+						"    NVL(TRIM(E.NOMVOI),' ') P_ULICA,\n" +
+						"    TRIM(E.NOVOIE)||DECODE(TRIM(E.PORTEX),NULL,'','/'||TRIM(E.PORTEX)) P_NR_DOMU,\n" +
+						"    DECODE(TRIM(E.COMMUN), TRIM(E.VILLEX),TRIM(E.VILLEX),TRIM(E.VILLEX)||', '||TRIM(E.COMMUN)) P_MIEJSCOWOSC,\n" +
+						"    TRIM(E.CODPOS) P_KOD_MSC,\n" +
+						"    TO_CHAR(H.DATENT, 'YYYY-MM-DD') P_DATA_OD,\n" +
+						"    TRIM((SELECT Z.LIBLON  FROM ZAKA X, ZD00 Y, ZD01 Z \n" +
+						"\t              WHERE X.NUDOSS = A.NUDOSS AND TO_DATE('^$DATA_W^','YYYY-MM-DD') BETWEEN X.DATAOD AND X.DATADO\n" +
+						"\t\t\t\t    AND X.RODZUM = Y.CDCODE AND Y.SOCDOS = DECODE(A.SOCDOS,'POL','PPL','REL','PRL') AND Y.CDREGL = DECODE(A.SOCDOS,'POL','PPL','REL','PRL') AND Y.CDSTCO = 'LAW' AND Y.NUDOSS = Z.NUDOSS)) P_R_UMOWA,\n" +
+						"    F.DIVUPP ||'/'||F.DIVLOW P_WYM_ET\n" +
+						"FROM ZA00 A, ZA05 B, ZANA C, ZANT D, ZAKO E, ZAKN F, ZAES H, ZAZZ I, TOMEK.LOKALIZACJE L\n" +
+						"WHERE A.MATCLE LIKE '^$V_NR_EW^'\n" +
+						"  AND A.NUDOSS IN (^$P_PROFILE^)\n" +
+						"  AND A.NUDOSS = I.NUDOSS\n" +
+						"  AND A.NUDOSS = B.NUDOSS\n" +
+						"  AND A.NUDOSS = C.NUDOSS\n" +
+						"  AND A.NUDOSS = D.NUDOSS\n" +
+						"  AND A.NUDOSS = E.NUDOSS\n" +
+						"  AND E.FLAG01 = 'X'\n" +
+						"  AND A.NUDOSS = F.NUDOSS\n" +
+						"  AND TO_DATE('^$DATA_W^','YYYY-MM-DD') BETWEEN F.DATEFF AND F.DATXXX\n" +
+						"  AND A.NUDOSS = H.NUDOSS\n" +
+						"  AND TO_DATE('^$DATA_W^','YYYY-MM-DD') BETWEEN H.DATENT AND H.DATSOR\n" +
+						"  AND L.FIRMA = '^$V_FIRMA^'\n" +
+						"  AND L.LOKALIZACJA LIKE '^$V_LOKAL^'\n" +
+						"  AND TRIM(I.CENPAI) = L.LOKALIZACJA\n" +
+						"  ORDER BY A.MATCLE")
+				.matches(block6_1.getInflation().getSql()));
+		assertTrue(block6_1.getBlocks().size() == 6);
+
+		ReportTextBlock block7_1 = level1.get(6);
+		assertNotNull(block7_1);
+		assertTrue(block7_1.getLabel().equalsIgnoreCase("COMMENT"));
+		assertNotNull(block7_1.getInflation());
+		assertTrue(block7_1.getInflation().getLabel().equalsIgnoreCase("COMMENT"));
+		assertTrue(block7_1.getInflation().input.size()==1);
+		assertTrue(block7_1.getInflation().input.contains("VROW"));
+		assertFalse(block7_1.hasContent());
+		assertTrue(IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace(
+				"SELECT 'result:1|msg:ZNALEZIENI PRACOWNICY: ^$VROW^' OUT_COMMENT FROM DUAL")
+				.matches(block7_1.getInflation().getSql()));
+		assertTrue(block7_1.getBlocks().size() == 0);
+
+		ReportTextBlock block8_1 = level1.get(7);
+		assertNotNull(block8_1);
+		assertTrue(block8_1.getLabel().equalsIgnoreCase("STOP"));
+		assertNotNull(block8_1.getInflation());
+		assertTrue(block8_1.getInflation().getLabel().equalsIgnoreCase("STOP"));
+		assertTrue(block8_1.getInflation().input.size()==1);
+		assertTrue(block8_1.getInflation().input.contains("VROW"));
+		assertFalse(block8_1.hasContent());
+		assertTrue(IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace(
+				"SELECT 'result:1|msg:PLIK NIE ZOSTA� UTWORZONY' OUT_TERMINATE FROM DUAL WHERE '^$VROW^' = 0")
+				.matches(block8_1.getInflation().getSql()));
+		assertTrue(block8_1.getBlocks().size() == 0);
+
+		//..second level..
+		LinkedList<ReportTextBlock> level2 = block6_1.getBlocks();
+		assertNotNull(level2);
+		assertTrue(level2.size() == 6);
+
+		ReportTextBlock block1_2 = level2.get(0);
+		assertNotNull(block1_2);
+		assertTrue(block1_2.getLabel().equalsIgnoreCase("DATA1"));
+		assertNotNull(block1_2.getInflation());
+		assertTrue(block1_2.getInflation().getLabel().equalsIgnoreCase("DATA1"));
+		assertTrue(block1_2.getInflation().input.size()==2);
+		assertTrue(block1_2.getInflation().input.contains("P_ROKMIES"));
+		assertTrue(block1_2.getInflation().input.contains("ZA00_NUDOSS"));
+		assertFalse(block1_2.hasContent());
+		assertTrue(IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace(
+				"SELECT\n" +
+						"    DECODE('^$P_ROKMIES^','299912',NVL((SELECT TRIM(MAX(Z.PERPAI)) FROM ZX00 Z WHERE Z.NUGEST = ^$ZA00_NUDOSS^),TO_CHAR(SYSDATE,'YYYYMM')),'^$P_ROKMIES^') V_PM1\n" +
+						"FROM DUAL")
+				.matches(block1_2.getInflation().getSql()));
+		assertTrue(block1_2.getBlocks().size() == 1);
+
+
+		ReportTextBlock block3_2 = level2.get(2);
+		assertNotNull(block3_2);
+		assertTrue(block3_2.getLabel().equalsIgnoreCase("DATY"));
+		assertNotNull(block3_2.getInflation());
+		assertTrue(block3_2.getInflation().getLabel().equalsIgnoreCase("DATY"));
+		assertTrue(block3_2.getInflation().input.size()==2);
+		assertTrue(block3_2.getInflation().input.contains("V_PM1"));
+		assertTrue(block3_2.getInflation().input.contains("ZA00_NUDOSS"));
+		assertFalse(block3_2.hasContent());
+		assertTrue(IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace(
+				"SELECT\n" +
+						"    NVL(TO_CHAR(ADD_MONTHS(  TO_DATE('^$V_PM1^','YYYYMM'),-1),'YYYYMM'),TO_CHAR(ADD_MONTHS(  TO_DATE((SELECT TRIM(MAX(Z.PERPAI)) FROM ZX00 Z WHERE Z.NUGEST = ^$ZA00_NUDOSS^),'YYYYMM'), -1),'YYYYMM')) V_PM2,\n" +
+						"    NVL(TO_CHAR(ADD_MONTHS(  TO_DATE('^$V_PM1^','YYYYMM'),-2),'YYYYMM'),TO_CHAR(ADD_MONTHS(  TO_DATE((SELECT TRIM(MAX(Z.PERPAI)) FROM ZX00 Z WHERE Z.NUGEST = ^$ZA00_NUDOSS^),'YYYYMM'), -2),'YYYYMM')) V_PM3\n" +
+						"FROM DUAL")
+				.matches(block3_2.getInflation().getSql()));
+		assertTrue(block3_2.getBlocks().size() == 1);
+
+		ReportTextBlock block5_2 = level2.get(4);
+		assertNotNull(block5_2);
+		assertTrue(block5_2.getLabel().equalsIgnoreCase("DANE"));
+		assertNotNull(block5_2.getInflation());
+		assertTrue(block5_2.getInflation().getLabel().equalsIgnoreCase("DANE"));
+		assertTrue(block5_2.getInflation().input.size()==4);
+		assertTrue(block5_2.getInflation().input.contains("V_PM1"));
+		assertTrue(block5_2.getInflation().input.contains("V_PM2"));
+		assertTrue(block5_2.getInflation().input.contains("V_PM3"));
+		assertTrue(block5_2.getInflation().input.contains("ZA00_NUDOSS"));
+		assertFalse(block5_2.hasContent());
+		assertTrue(IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace(
+				"SELECT\n" +
+						"    TO_CHAR(-1 * TOMEK.PIT_WAROSC_ZX8K_NUDOSS('ZZZ', '^$V_PM1^', ^$ZA00_NUDOSS^),'FM9999999990.00') PZZZ_1, \n" +
+						"\tTO_CHAR(-1 * TOMEK.PIT_WAROSC_ZX8K_NUDOSS('ZZZ', '^$V_PM2^', ^$ZA00_NUDOSS^),'FM9999999990.00') PZZZ_2, \n" +
+						"\tTO_CHAR(-1 * TOMEK.PIT_WAROSC_ZX8K_NUDOSS('ZZZ', '^$V_PM3^', ^$ZA00_NUDOSS^),'FM9999999990.00') PZZZ_3,\n" +
+						"\n" +
+						"    TO_CHAR(-1 * TOMEK.PIT_WAROSC_ZX8K_NUDOSS('POD', '^$V_PM1^', ^$ZA00_NUDOSS^),'FM9999999990.00') PPOD_1,\n" +
+						"\tTO_CHAR(-1 * TOMEK.PIT_WAROSC_ZX8K_NUDOSS('POD', '^$V_PM2^', ^$ZA00_NUDOSS^),'FM9999999990.00') PPOD_2,  \n" +
+						"    TO_CHAR(-1 * TOMEK.PIT_WAROSC_ZX8K_NUDOSS('POD', '^$V_PM3^', ^$ZA00_NUDOSS^),'FM9999999990.00') PPOD_3,\n" +
+						" \n" +
+						"    TO_CHAR(TOMEK.PIT_WAROSC_ZX8K_NUDOSS('A30', '^$V_PM1^', ^$ZA00_NUDOSS^),'FM9999999990.00') PA30_1, \n" +
+						"\tTO_CHAR(TOMEK.PIT_WAROSC_ZX8K_NUDOSS('A30', '^$V_PM2^', ^$ZA00_NUDOSS^),'FM9999999990.00') PA30_2, \n" +
+						"\tTO_CHAR(TOMEK.PIT_WAROSC_ZX8K_NUDOSS('A30', '^$V_PM3^', ^$ZA00_NUDOSS^),'FM9999999990.00') PA30_3,\n" +
+						"\n" +
+						"    TO_CHAR(TOMEK.PIT_WAROSC_ZX8K_NUDOSS('KPR', '^$V_PM1^', ^$ZA00_NUDOSS^),'FM9999999990.00') PKPR_1,\n" +
+						"\tTO_CHAR(TOMEK.PIT_WAROSC_ZX8K_NUDOSS('KPR', '^$V_PM2^', ^$ZA00_NUDOSS^),'FM9999999990.00') PKPR_2,  \n" +
+						"    TO_CHAR(TOMEK.PIT_WAROSC_ZX8K_NUDOSS('KPR', '^$V_PM3^', ^$ZA00_NUDOSS^),'FM9999999990.00') PKPR_3,\n" +
+						"\n" +
+						"    TO_CHAR(-1 * (\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('ZEM', '^$V_PM1^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('ZRE', '^$V_PM1^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('ZCH', '^$V_PM1^', ^$ZA00_NUDOSS^)),'FM9999999990.00') PZUS_1,\n" +
+						"\tTO_CHAR(-1 * (\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('ZEM', '^$V_PM2^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('ZRE', '^$V_PM2^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('ZCH', '^$V_PM2^', ^$ZA00_NUDOSS^)),'FM9999999990.00') PZUS_2,\n" +
+						"    TO_CHAR(-1 * (\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('ZEM', '^$V_PM3^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('ZRE', '^$V_PM3^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('ZCH', '^$V_PM3^', ^$ZA00_NUDOSS^)),'FM9999999990.00') PZUS_3,\n" +
+						"\t\n" +
+						"    TO_CHAR(TOMEK.PIT_WAROSC_ZX8K_NUDOSS('A60', '^$V_PM1^', ^$ZA00_NUDOSS^),'FM9999999990.00') PA60_1, \n" +
+						"\tTO_CHAR(TOMEK.PIT_WAROSC_ZX8K_NUDOSS('A60', '^$V_PM2^', ^$ZA00_NUDOSS^),'FM9999999990.00') PA60_2, \n" +
+						"\tTO_CHAR(TOMEK.PIT_WAROSC_ZX8K_NUDOSS('A60', '^$V_PM3^', ^$ZA00_NUDOSS^),'FM9999999990.00') PA60_3,\n" +
+						"\t\n" +
+						"    TO_CHAR(TOMEK.PIT_WAROSC_ZX8K_NUDOSS('S02', '^$V_PM1^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S05', '^$V_PM1^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S07', '^$V_PM1^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S10', '^$V_PM1^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S11', '^$V_PM1^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S13', '^$V_PM1^', ^$ZA00_NUDOSS^) -\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('SPP', '^$V_PM1^', ^$ZA00_NUDOSS^)\n" +
+						"\t\t\t,'FM9999999990.00') PINNE_1,\n" +
+						"\tTO_CHAR(TOMEK.PIT_WAROSC_ZX8K_NUDOSS('S02', '^$V_PM2^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S05', '^$V_PM2^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S07', '^$V_PM2^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S10', '^$V_PM2^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S11', '^$V_PM2^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S13', '^$V_PM2^', ^$ZA00_NUDOSS^) -\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('SPP', '^$V_PM2^', ^$ZA00_NUDOSS^)\n" +
+						"\t\t\t,'FM9999999990.00') PINNE_2,\n" +
+						"    TO_CHAR(TOMEK.PIT_WAROSC_ZX8K_NUDOSS('S02', '^$V_PM3^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S05', '^$V_PM3^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S07', '^$V_PM3^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S10', '^$V_PM3^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S11', '^$V_PM3^', ^$ZA00_NUDOSS^) +\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('S13', '^$V_PM3^', ^$ZA00_NUDOSS^) -\n" +
+						"\t\t\tTOMEK.PIT_WAROSC_ZX8K_NUDOSS('SPP', '^$V_PM3^', ^$ZA00_NUDOSS^)\n" +
+						"\t\t\t,'FM9999999990.00') PINNE_3,\n" +
+						"\t\n" +
+						"    TO_CHAR(ADD_MONTHS(TO_DATE('^$V_PM1^','YYYYMM'),1),'YYYY-MM') PMIES_1,\n" +
+						"\tTO_CHAR(ADD_MONTHS(TO_DATE('^$V_PM2^','YYYYMM'),1),'YYYY-MM') PMIES_2,\n" +
+						"\tTO_CHAR(ADD_MONTHS(TO_DATE('^$V_PM3^','YYYYMM'),1),'YYYY-MM') PMIES_3\n" +
+						"\t\n" +
+						"FROM DUAL")
+				.matches(block5_2.getInflation().getSql()));
+		assertTrue(block5_2.getBlocks().size() == 1);
 	}
 
 

@@ -3,21 +3,6 @@
  */
 package pl.com.dbs.reports.report.domain.builders;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.text.IsEqualIgnoringWhiteSpace;
 import org.junit.After;
@@ -28,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
+import org.slf4j.LoggerFactory;
 import pl.com.dbs.reports.api.report.ReportType;
 import pl.com.dbs.reports.api.report.pattern.PatternFactory;
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
@@ -44,6 +29,19 @@ import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.report.pattern.domain.ReportPatternFormat;
 import pl.com.dbs.reports.security.domain.SessionContext;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+
 /**
  * Raport generation tests.
  *
@@ -51,7 +49,7 @@ import pl.com.dbs.reports.security.domain.SessionContext;
  * @copyright (c) 2013
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(SessionContext.class)
+@PrepareForTest({SessionContext.class,LoggerFactory.class})
 public class ReportTextBlockBuilderTest {
 	private ProfileDao profileDao;
 	private ReportFactoryDefault rfactory;
@@ -66,13 +64,12 @@ public class ReportTextBlockBuilderTest {
 		when(profile.isGlobal()).thenReturn(true);
 		when(profile.getUuid()).thenReturn("1");
 		
-		PowerMockito.mockStatic(SessionContext.class);
+		mockStatic(SessionContext.class);
 	    PowerMockito.when(SessionContext.getProfile()).thenReturn(profile);		
 		
 		pfactory = new PatternFactoryDefault(profileDao, rfactory, Collections.<PatternValidator>emptyList());
 		
 		when(profileDao.find(anyLong())).thenReturn(profile);
-		
 	}
 	
 	@After  
@@ -235,7 +232,7 @@ public class ReportTextBlockBuilderTest {
 
 	@Test
 	public void stan_zatr_struktura_blokow() throws PatternValidationException, ReportBlockException {
-		File file = read("pl/com/dbs/reports/domain/builders/test/StanZatr001/STAN_ZATR_001.ZIP");
+		File file = read("pl/com/dbs/reports/domain/builders/test/StanZatr001/StanZatr001.zip");
 		PatternProduceContextDefault pcontext = mock(PatternProduceContextDefault.class);
 		when(pcontext.getFile()).thenReturn(file);
 		ReportPattern pattern = (ReportPattern)pfactory.produce(pcontext);
@@ -269,7 +266,7 @@ public class ReportTextBlockBuilderTest {
 		assertTrue(block2_1.getInflation().input.contains("IN_IMIE"));
 		assertTrue(IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace(
 				"SELECT  NVL('^$IN_FIRM^','AUCHAN') INFIRMA, " +
-				"NVL('^$IN_MIES^',TO_CHAR(SYSDATE,'RRRRMM')) PV_MIES,  NVL('^$IN_IMIE^','Jarosław') PV_IMIE,  " +
+				"NVL('^$IN_MIES^',TO_CHAR(SYSDATE,'RRRRMM')) PV_MIES,  NVL('^$IN_IMIE^','Jaroslaw') PV_IMIE,  " +
 				"NVL('^$IN_NAZWISKO^','Kowalczyk') PV_NAZWISKO,  TO_CHAR(SYSDATE,'YYYY-MM-DD') V_DATA_W,  " +
 				"'<TD>0.000</TD><TD>0.000</TD>' C_POL258,  '<td><b>0.000</b></td><td><b>0.000</b></td>'  SUM_POL258 FROM DUAL")
 			.matches(block2_1.getInflation().getSql()));
@@ -413,11 +410,12 @@ public class ReportTextBlockBuilderTest {
 		assertTrue(block2_1.getInflation().input.contains("IN_MIES"));
 		assertTrue(block2_1.getInflation().input.contains("IN_FIRM"));
 		assertTrue(block2_1.getInflation().input.contains("IN_IMIE"));
+System.out.println(block2_1.getInflation().getSql());
 		assertTrue(IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace(
 				"SELECT\n" +
 						" NVL('^$IN_FIRM^','AUCHAN') INFIRMA, \n" +
 						" NVL('^$IN_MIES^',TO_CHAR(SYSDATE,'RRRRMM')) PV_MIES,\n" +
-						" NVL('^$IN_IMIE^','Jarosław') PV_IMIE,\n" +
+						" NVL('^$IN_IMIE^','Jaroslaw') PV_IMIE,\n" +
 						" NVL('^$IN_NAZWISKO^','Kowalczyk') PV_NAZWISKO,\n" +
 						" TO_CHAR(SYSDATE,'YYYY-MM-DD') V_DATA_W,\n" +
 						" '<TD>0.000</TD><TD>0.000</TD>' C_POL258,\n" +

@@ -58,7 +58,7 @@
     <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
         <property name="dataSource" ref="dataSource" />
         <property name="changeLog" value="classpath:pl/com/dbs/reports/changelog/db-reports-changelog-master.xml" />
-        <property name="contexts" value="non-legacy" />
+        <property name="contexts" value="non-legacy,${project.environment}" />
     </bean>
 
 </beans>

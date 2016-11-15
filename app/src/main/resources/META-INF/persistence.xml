@@ -28,7 +28,8 @@
 		<class>pl.com.dbs.reports.profile.domain.ProfileAddress</class>
 		<class>pl.com.dbs.reports.profile.domain.ProfilePhoto</class>
 		<class>pl.com.dbs.reports.profile.domain.ProfileNote</class>
-		
+        <class>pl.com.dbs.reports.profile.domain.ProfileGroup</class>
+
 		<class>pl.com.dbs.reports.parameter.domain.Parameter</class>
 		
 		<class>pl.com.dbs.reports.authority.domain.Authority</class>

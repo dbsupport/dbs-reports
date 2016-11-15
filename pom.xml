@@ -11,8 +11,7 @@
 		<name>DataBase Support</name>
 		<url>http://www.dbs.com.pl/</url>
 	</organization>
-
-	<version>${dbs.reports.version}</version>
+	<version>1.5.1</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -21,7 +20,8 @@
   </modules>
 
 	<properties>
-        <dbs.reports.version>1.4.0</dbs.reports.version>
+	    <dbs.reports.client.version>auchan-1.2.0</dbs.reports.client.version>
+        <dbs.reports.version>1.5.1</dbs.reports.version>
 		<commons.version>2.3</commons.version>
 		<commons.dbcp.version>1.4</commons.dbcp.version>
 		<javax.servlet.version>3.0</javax.servlet.version>
@@ -50,16 +50,27 @@
 		<javax.mail.version>1.4.3</javax.mail.version>
 	    <hibernate.validator.version>4.3.1.Final</hibernate.validator.version>
 		<postgresql.version>9.1-901.jdbc4</postgresql.version>
+        <org.liquibase.version>3.5.2</org.liquibase.version>
 		<hsqldb.version>1.8.0.10</hsqldb.version>
 		<org.mockito.version>1.9.5</org.mockito.version>
-		<junit.version>4.8.1</junit.version>
+		<junit.version>4.9</junit.version>
 		<org.powermock.version>1.5.1</org.powermock.version>
+		<org.hamcrest.hamcrest-all>1.3</org.hamcrest.hamcrest-all>
 		<itext.version>2.1.7</itext.version>
 		<itext.rtf.version>2.1.7.1</itext.rtf.version><!-- spatchowana wersja wlasna, patrz http://itext-general.2136553.n4.nabble.com/importRtfDocument-Unknown-Source-td2151636.html -->
 		<dbs.reports.api.version>1.4.0</dbs.reports.api.version>
-        <dbs.reports.client.version>auchan-1.2.0</dbs.reports.client.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+        <project.build.timestamp>${maven.build.timestamp}</project.build.timestamp>
+        <tomcat6.deploy.url>http://127.0.0.1:8080/manager</tomcat6.deploy.url>
+        <buildNumber>0</buildNumber>
 	</properties>
+    <scm>
+        <connection>scm:git:https://github.com/dbsupport/dbs-reports</connection>
+        <developerConnection>scm:git:https://github.com/dbsupport/dbs-reports</developerConnection>
+        <tag>HEAD</tag>
+        <url>http://localhost:8080/reports</url>
+    </scm>
 
 	<dependencyManagement>
 		<dependencies>
@@ -99,7 +110,7 @@
 			<dependency>
 		        <groupId>org.projectlombok</groupId>
 		        <artifactId>lombok</artifactId>
-		        <version>1.16.2</version>
+		        <version>1.16.8</version>
 		        <scope>provided</scope>
             </dependency>			
 			
@@ -336,7 +347,11 @@
 	            <artifactId>postgresql</artifactId>
 	            <version>${postgresql.version}</version>
 	        </dependency>
-            	        
+            <dependency>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-core</artifactId>
+                <version>${org.liquibase.version}</version>
+            </dependency>
 	        
 	        <!-- Servlet -->
 			<dependency>
@@ -371,10 +386,8 @@
 				<artifactId>jackson-core-asl</artifactId>
 				<version>${json.version}</version>
 			</dependency>
-			
 
-            			
-			
+
 			<!-- Tests -->
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -411,9 +424,14 @@
 		      <artifactId>powermock-api-mockito</artifactId>
 		      <version>${org.powermock.version}</version>
 		      <scope>test</scope>
-		   </dependency>	
-
-		</dependencies>
+		   </dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-all</artifactId>
+				<version>${org.hamcrest.hamcrest-all}</version>
+				<scope>test</scope>
+			</dependency>
+        </dependencies>
 	</dependencyManagement>
 
 	<build>
@@ -493,13 +511,53 @@
 						</archive>
 					</configuration>
 				</plugin>
+
+                <!-- build timestamp plugin: http://www.mojohaus.org/buildnumber-maven-plugin -->
                 <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <version>3.0.5</version>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>1.3</version>
                 </plugin>
+
+                <!--<plugin>-->
+                    <!--<groupId>org.codehaus.mojo</groupId>-->
+                    <!--<artifactId>properties-maven-plugin</artifactId>-->
+                    <!--<version>1.0-alpha-1</version>-->
+                <!--</plugin>-->
+
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat6-maven-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+
+
 			</plugins>
 		</pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <configuration>
+                    <doCheck>true</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <format>{0,number}</format>
+                    <items>
+                        <item>buildNumber</item>
+                    </items>
+                    <revisionOnScmFailure>#</revisionOnScmFailure>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
 	</build>
 
 	<profiles>

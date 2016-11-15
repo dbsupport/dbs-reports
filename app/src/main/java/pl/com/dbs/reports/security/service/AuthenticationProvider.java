@@ -35,10 +35,15 @@ public class AuthenticationProvider implements org.springframework.security.auth
 	private ProfileService profileService;
 	private SecurityService securityService;
 	
-	@Autowired 
+	@Autowired(required=false)
 	public AuthenticationProvider(ProfileService profileService, SecurityService securityService) {
-		this.profileService = profileService;
+		this(profileService);
 		this.securityService = securityService;
+	}
+	
+	@Autowired(required=false)
+	public AuthenticationProvider(ProfileService profileService) {
+		this.profileService = profileService;
 	}
 	
 	@Override
@@ -66,7 +71,11 @@ public class AuthenticationProvider implements org.springframework.security.auth
 				throw new BadCredentialsException("authenticate.bad.credentials");
 			} catch (DataAccessException e) {
 				throw new AuthenticationConnectionException(e.getMessage());
+			} catch (RuntimeException e) {
+				logger.error("Error authenticating globally!", e);
+				throw new BadCredentialsException("authenticate.bad.credentials");
 			}
+			
 			if (user == null) throw new BadCredentialsException("authenticate.bad.credentials");
 			if (!user.getId().equals(profile.getUuid())) throw new BadCredentialsException("authenticate.bad.credentials");
 			

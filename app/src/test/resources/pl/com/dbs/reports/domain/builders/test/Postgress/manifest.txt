@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Created-By: 1.2 (Sun Microsystems Inc.)
+Comment: Stan Postgresu
+
+Name: Database-Support-Reports
+Reports-Pattern-Name: POSTGRESS
+Reports-Pattern-Version: 0.0.1
+Reports-Pattern-Author: DBS
+Reports-Accesses: GUS
+Reports-Extension-Map: postgress.txt=txt|htm;
+Reports-Init-Sql: init.sql
+Reports-Name-Template: postgress-${date-time}
+Reports-Form-Filename: form.xml

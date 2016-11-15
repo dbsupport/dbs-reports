@@ -24,6 +24,8 @@
 	 -->
 	<!-- context:load-time-weaver/-->
 
+    <jee:jndi-lookup id="dataSource" jndi-name="reports/jdbc/DataSource" />
+
 	<bean id="transactionManager"
 		class="org.springframework.orm.jpa.JpaTransactionManager"
 		p:entityManagerFactory-ref="entityManagerFactory"/>
@@ -37,13 +39,11 @@
 
 	<bean id="persistenceUnitManager" class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager"
 		p:persistenceXmlLocation="classpath*:META-INF/persistence.xml"
-		p:dataSources-ref="jpaDataSources" />
+        p:dataSources-ref="jpaDataSources" />
 
-	<util:map id="jpaDataSources">
-		<entry key="nonJtaDataSource">
-			<jee:jndi-lookup jndi-name="reports/jdbc/DataSource" />
-		</entry>
-	</util:map>
+    <util:map id="jpaDataSources">
+        <entry key="nonJtaDataSource" value-ref="dataSource"/>
+    </util:map>
 
 	<bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter" p:showSql="true" />
 
@@ -54,5 +54,11 @@
 		<!-- prop key="eclipselink.logging.logger">org.eclipse.persistence.logging.CommonsLoggingSessionLog</prop-->
 		<!-- prop key="eclipselink.logging.parameters">true</prop-->
 	</util:properties>
+
+    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
+        <property name="dataSource" ref="dataSource" />
+        <property name="changeLog" value="classpath:pl/com/dbs/reports/changelog/db-reports-changelog-master.xml" />
+        <property name="contexts" value="non-legacy,${project.environment}" />
+    </bean>
 
 </beans>

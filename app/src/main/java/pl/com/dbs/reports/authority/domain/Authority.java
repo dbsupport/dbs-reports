@@ -70,6 +70,10 @@ public class Authority implements IEntity, GrantedAuthority {
 		            append(name).
 		            append(id).
 		            toHashCode();
-	}	
+	}
+
+    public boolean isSame(String name) {
+        return this.name.equals(name);
+    }
 	
 }

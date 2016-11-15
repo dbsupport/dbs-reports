@@ -215,7 +215,7 @@ public class ReportPattern extends AEntity implements Pattern {
 	/**
 	 * Is pattern accessigle for given accesses collection?
 	 */
-	public boolean isAccessible(final List<Access> accesses) {
+	public boolean isAccessible(final Set<Access> accesses) {
 		for (final Access access : accesses)
 			if (Iterables.find(this.accesses, new Predicate<String>() {
 					@Override

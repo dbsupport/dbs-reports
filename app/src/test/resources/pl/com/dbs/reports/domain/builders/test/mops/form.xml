@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form stop="false" xsi:schemaLocation="http://www.dbs.com.pl/reports/1.0/form file:///C:/workspace/dbs-reports/app/src/main/resources/pl/com/dbs/reports/form-schema-1.0.0.xsd" xmlns="http://www.dbs.com.pl/reports/1.0/form" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<fields>
+		
+		<field type="select" name="IN_FIRM" label="Wybierz firme" tooltip="Wybierz firme" 
+			   source="CLIENT:SELECT FIRMA FROM TOMEK.FIRMY ORDER BY FIRMA" value="AUCHAN">
+		</field>
+		<field type="multiselect" name="IN_LOKAL" label="Lokalizacje: " tooltip="Wybierz lokalizacje aby wygenerować osobne pliki" 
+			   source="CLIENT:SELECT TRIM(LOKALIZACJA)||' '||FIRMA FROM TOMEK.LOKALIZACJE ORDER BY FIRMA, LOKALIZACJA" value="%">
+		</field>
+		<field type="text" name="IN_NR_EW" label="Numer ewidencyjny" tooltip="POLxxxxxxx" value="%">
+			<validator type="max">10</validator>			
+		</field>	
+		<field type="date" name="IN_DATA_W" label="Data wypełnienia" tooltip="Data bieżąca yyyy-mm-dd" format="yyyy-mm-dd" value="now">
+		</field>
+		<field type="date" name="IN_ROKMIES" label="Ostatni zamknięty miesiąc listy płac" format="yyyymm" tooltip="Bieżący miesiąc RRRRMM" value="now"> 
+			<validator type="required" stop="true"></validator>
+		</field>
+	</fields>
+</form>

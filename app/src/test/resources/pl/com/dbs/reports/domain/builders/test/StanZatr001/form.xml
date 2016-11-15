@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<form stop="false" xsi:schemaLocation="http://www.dbs.com.pl/reports/1.0/form file:///C:/workspace/dbs-reports/app/src/main/resources/pl/com/dbs/reports/form-schema-1.0.0.xsd" xmlns="http://www.dbs.com.pl/reports/1.0/form" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<fields>
+	    <field type="multiselect" name="IN_FIRM" label="Firma" tooltip="Wybierz firmę aby wygenerować osobne pliki" 
+		       source="CLIENT:SELECT FIRMA FROM TOMEK.FIRMY ORDER BY 1" value="AUCHAN">
+		</field>
+		<field type="date" name="IN_MIES" label="Miesiąc" format="yyyymm" tooltip="Przeciętne zatrudnienie w miesiącu RRRRMM" value="now">
+			<validator type="required" stop="true"></validator>
+		</field>
+		<field type="text" name="IN_IMIE" label="Imię" tooltip="Imię osoby wypełniającej" value="Jarosław">
+		</field>
+		<field type="text" name="IN_NAZWISKO" label="Nazwisko" tooltip="Nazwisko osoby wypełniającej" value="Kowalczyk">
+		</field>		
+	</fields>
+</form>

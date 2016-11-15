@@ -32,7 +32,7 @@ import com.google.common.collect.Lists;
 @Service("active.directory.service")
 public class ActiveDirectoryService {
 	private static final Logger logger = LoggerFactory.getLogger(ActiveDirectoryService.class);
-	@Autowired private ClientActiveDirectoryService clientActiveDirectoryService;
+	@Autowired(required=false) private ClientActiveDirectoryService clientActiveDirectoryService;
 	@Autowired private EncodingService encodingService;
 
 	/**

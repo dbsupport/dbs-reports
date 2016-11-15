@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>pl.com.dbs</groupId>
 		<artifactId>dbs-reports</artifactId>
-		<version>${dbs.reports.version}</version>
+		<version>1.5.1</version>
 	</parent>
 
 	<artifactId>dbs-reports-app</artifactId>
@@ -190,6 +190,10 @@
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
     
     	<!-- Test -->
 		<dependency>
@@ -216,7 +220,12 @@
 	      <groupId>org.powermock</groupId>
 	      <artifactId>powermock-api-mockito</artifactId>
 	      <scope>test</scope>
-	   </dependency>			
+	   </dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -305,29 +314,6 @@
 			  </dependencies>		        
 			</plugin>
 
-            <!--<plugin>-->
-                <!--<groupId>org.liquibase</groupId>-->
-                <!--<artifactId>liquibase-maven-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<changeLogFile>src/main/resources/pl/com/dbs/reports/db-reports-changelog.xml</changeLogFile>-->
-                    <!--<driver>org.postgresql.Driver</driver>-->
-                    <!--<url>jdbc:postgresql://localhost:5432/reports</url>-->
-                    <!--<username>reports</username>-->
-                    <!--<password>reports</password>-->
-                    <!--<changeSetAuthor>maven</changeSetAuthor>-->
-                    <!--<changelogSchemaName>reports</changelogSchemaName>-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<phase>process-resources</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>update</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
-			
-		      
 			<!-- plugin>
 			    <artifactId>maven-compiler-plugin</artifactId>
 			    <configuration>
@@ -367,7 +353,7 @@
 	          </execution>
 	        </executions>
 	      </plugin-->
-	      
+
 	      
 	    </plugins>
 	    

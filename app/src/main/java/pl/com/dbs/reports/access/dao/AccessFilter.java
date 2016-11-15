@@ -19,6 +19,7 @@ public class AccessFilter extends AFilter<Access> {
 	private static final int DEFAULT_PAGER_SIZE = 10;
 	private String name;
 	private String description;
+
 	
 	public AccessFilter() {
 		getPager().setPageSize(DEFAULT_PAGER_SIZE);
@@ -32,13 +33,12 @@ public class AccessFilter extends AFilter<Access> {
 		this.name = name;
 	}
 	
-	public void putDescription(String desc) {
+	public AccessFilter putDescription(String desc) {
 		this.description = desc;
-	}	
+        return this;
+	}
 
 	public String getDescription() {
 		return description;
 	}
-
-	
 }

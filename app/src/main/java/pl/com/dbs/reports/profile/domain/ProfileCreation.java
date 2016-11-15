@@ -3,11 +3,12 @@
  */
 package pl.com.dbs.reports.profile.domain;
 
-import java.io.File;
-import java.util.List;
-
 import pl.com.dbs.reports.access.domain.Access;
 import pl.com.dbs.reports.authority.domain.Authority;
+
+import java.io.File;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Locally creation profile data.
@@ -27,7 +28,8 @@ public interface ProfileCreation {
 	boolean isAccepted();
 	
 	List<Authority> getAuthorities();
-	List<Access> getAccesses();
+	Set<Access> getAccesses();
+    Set<Long> getGroups();
 	
 	interface Address {
 		String getStreet();

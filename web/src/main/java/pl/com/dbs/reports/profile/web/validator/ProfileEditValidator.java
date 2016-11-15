@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.profile.service.ProfileService;
 import pl.com.dbs.reports.profile.web.form.ProfileEditForm;
 import pl.com.dbs.reports.security.domain.SessionContext;
@@ -44,6 +45,9 @@ public class ProfileEditValidator extends ProfileNewValidator implements Validat
 				errors.rejectValue("accepted", "profile.edit.unaccept.session.profile");
 			}
 		case 2:
+            if (form.getGroups() != null && !form.getGroups().isEmpty() && !SessionContext.hasAnyRole(SessionContext.ROLE_ADMIN)) {
+                errors.reject("profile.edit.groups.not.available");
+            }
 		case 1:
 			validateSyntax(target, errors);
 	

@@ -144,11 +144,11 @@ public class AccessController {
     public String add(@Valid @ModelAttribute(AccessNewForm.KEY) final AccessNewForm form, BindingResult results, HttpSession session) {
 		if (results.hasErrors()) return "access/access-new";
 		
-		Access access = accessService.add(form);
 		try {
+		    Access access = accessService.add(form);
 			alerts.addSuccess(session, "access.new.added", access.getName());
 		} catch (Exception e) {
-			alerts.addError(session, "access.new.error", access.getName(), e.getMessage());
+			alerts.addError(session, "access.new.error", form.getName(), e.getMessage());
 			logger.error("access.new.error:"+e.getMessage());			
 		}
 		return "redirect:/access/list";

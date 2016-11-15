@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,12 +32,12 @@ import com.google.common.collect.Iterables;
 public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	private static final String BLOCK_START_PATTERN = "[BLOCK";
 	private static final String BLOCK_END_PATTERN = "BLOCK]";
-	private static final java.util.regex.Pattern BLOCK_LABEL_PATTERN = java.util.regex.Pattern.compile("^\\[BLOCK\\(([\\w\\d_]+)\\)[\\s\\S]*",  java.util.regex.Pattern.CASE_INSENSITIVE);
-	private static final java.util.regex.Pattern BLOCK_CONTENT_PATTERN = java.util.regex.Pattern.compile("\\[BLOCK\\([\\w\\d_]+\\)([\\s\\S]*)",  java.util.regex.Pattern.CASE_INSENSITIVE);
-	private static final java.util.regex.Pattern BLOCK_REST_PATTERN = java.util.regex.Pattern.compile("^BLOCK\\]([\\s\\S]*)",  java.util.regex.Pattern.CASE_INSENSITIVE);
-	private static final java.util.regex.Pattern IN_VARIABLE_PATTERN = java.util.regex.Pattern.compile("\\^\\$([\\w\\d_]+)\\^",  java.util.regex.Pattern.CASE_INSENSITIVE);
-	private static final java.util.regex.Pattern INFLATER_PATTERN = java.util.regex.Pattern.compile("(\\w+):\\s*(SELECT\\s+.+?[FROM]{0,1}\\s+.+?);",  java.util.regex.Pattern.CASE_INSENSITIVE|java.util.regex.Pattern.DOTALL);
-	
+	private static final Pattern BLOCK_LABEL_PATTERN = Pattern.compile("^\\[BLOCK\\(([\\w\\d_]+)\\)[\\s\\S]*",  Pattern.CASE_INSENSITIVE);
+	private static final Pattern BLOCK_CONTENT_PATTERN = Pattern.compile("\\[BLOCK\\([\\w\\d_]+\\)([\\s\\S]*)",  Pattern.CASE_INSENSITIVE);
+	private static final Pattern BLOCK_REST_PATTERN = Pattern.compile("^BLOCK\\]([\\s\\S]*)",  Pattern.CASE_INSENSITIVE);
+	private static final Pattern IN_VARIABLE_PATTERN = Pattern.compile("\\^\\$([\\w\\d_]+)\\^",  Pattern.CASE_INSENSITIVE);
+	private static final Pattern INFLATER_PATTERN = Pattern.compile("(?:^|\\r{0,1}\\n)(\\w+):\\s*(?:\\r{0,1}\\n)+(.+?)(?=;\\s*\\r{0,1}\\n|;\\s*$)", Pattern.CASE_INSENSITIVE|Pattern.DOTALL);
+
 	protected byte[] content;
 	protected ReportTextBlock root;
 	private ReportTextBlockInflater inflater;

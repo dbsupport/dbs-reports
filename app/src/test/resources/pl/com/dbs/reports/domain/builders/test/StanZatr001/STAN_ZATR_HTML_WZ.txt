@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=windows-1250">
+  <title>STAN_ZATR /  STAN ZATRUDNIENIE W MIESIĄCU</title>
+</head>
+<body bgcolor="#FFFFFF">
+[BLOCK(INIT) BLOCK]
+[BLOCK(FIRMA) BLOCK]
+[BLOCK(ALL_LOKAL)
+<table width="945" border="1" cellspacing="0" cellpadding="0" style="margin-left:10pt;font-family: Arial; font-size: 9pt">
+<tr><td><b>^$F_NAZWA_FIRMY^</b> </td><td align="left"><b>DANE DO PFRON</b></td> </tr>
+<tr><td><b>^$F_ULICA^ ^$F_NR_DOMU^ </b> </td><td>&nbsp;</td></tr>
+<tr><td><b>^$F_KOD_POCZTOWY^ ^$F_MIEJSCOWOSC^</b> </td><td><b>Raport wykonany przez:  ^$PV_IMIE^ ^$PV_NAZWISKO^ w dniu: ^$V_DATA_W^</b> </td> </tr>
+</table>
+<br>
+<table width="945" border="1" cellspacing="0" cellpadding="0" style="margin-left:10pt;font-family: Arial; font-size: 9pt">
+<tr><th> STAN_ZATR / STAN ZATRUDNIENIE W M-CU: ^$V_MIES^ </th></tr>
+</table> 
+<br>
+<table width="945" border="1" cellspacing="0" cellpadding="0" style="margin-left:10pt;font-family: Arial; font-size: 12pt">
+<TR bgcolor="silver" align="center"><TH ROWSPAN=2>DZIEŃ</TH><TH COLSPAN=2>^$V_LOKAL^</TH></TR>
+<TR bgcolor="silver" align="center" ><td><b>ETATY</b></td><td><b>OSOBY</b></td></tr>
+  [BLOCK(DZIEN) [BLOCK(LOKAL_DAT) ^$C_LOKAL_DAT^ BLOCK] BLOCK]
+  [BLOCK(LOKAL_DAT_AVG) <TR bgcolor="silver" align="center">^$SUM_LOKAL^</tr> BLOCK]
+</table>
+<br>
+<br>  
+BLOCK]
+[BLOCK(AUCHAN_AVG) 
+<table width="945" border="1" cellspacing="0" cellpadding="0" style="margin-left:10pt;font-family: Arial; font-size: 9pt">
+<tr><td><b>^$F_NAZWA_FIRMY^</b> </td><td align="left"><b>DANE DO PFRON</b></td> </tr>
+<tr colspan=2><td><b>^$F_ULICA^ ^$F_NR_DOMU^ </b> </td><td>&nbsp;</td></tr>
+<tr><td><b>^$F_KOD_POCZTOWY^ ^$F_MIEJSCOWOSC^</b> </td><td><b>Raport wykonany przez:  ^$PV_IMIE^ ^$PV_NAZWISKO^ w dniu: ^$V_DATA_W^</b> </td> </tr>
+</table>
+<br>
+<table width="945" border="1" cellspacing="0" cellpadding="0" style="margin-left:10pt;font-family: Arial; font-size: 9pt">
+<tr><th>  STAN_ZATR / STAN ZATRUDNIENIE W M-CU: ^$V_MIES^ </th></tr>
+</table> 
+<br>
+<table width="945" border="1" cellspacing="0" cellpadding="0" style="margin-left:10pt;font-family: Arial; font-size: 12pt">
+<tr><th align="center" ROWSPAN=3 >STAN ZATRUDNIENIE W MIESIĄCU: ^$PV_MIES^</th><th align="center" COLSPAN=2 ><b>^$F_NAZWA_FIRMY^</b></th></tr>
+<tr align="center" ><td><b>ETATY</b></td><td><b>OSOBY</b></td></tr>
+<tr align="center" >^$SUM_AUCHAN^</tr>
+</table>
+BLOCK]
+<a href="http://www.dbs.com.pl" title="http://www.dbs.com.pl">Create by DBS sp. z o.o.</a>
+</body>
+</html>

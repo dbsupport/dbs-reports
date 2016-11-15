@@ -32,7 +32,7 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 	static final String I_2 = "I_2";
 	static final String I_3 = "I_3";
 	static final String SENTENCE = "Kto postepuje godniej: ten, kto biernie ";
-	static final String EOF = "\n";//System.getProperty("line.separator");
+	static final String EOF = System.getProperty("line.separator");
 	
 	
 	@Before

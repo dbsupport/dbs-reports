@@ -11,7 +11,7 @@
 		<name>DataBase Support</name>
 		<url>http://www.dbs.com.pl/</url>
 	</organization>
-	<version>1.5.1</version>
+	<version>1.6.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -21,7 +21,7 @@
 
 	<properties>
 	    <dbs.reports.client.version>auchan-1.2.0</dbs.reports.client.version>
-        <dbs.reports.version>1.5.1</dbs.reports.version>
+        <dbs.reports.version>1.6.0-SNAPSHOT</dbs.reports.version>
 		<commons.version>2.3</commons.version>
 		<commons.dbcp.version>1.4</commons.dbcp.version>
 		<javax.servlet.version>3.0</javax.servlet.version>

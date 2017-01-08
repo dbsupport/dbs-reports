@@ -1,4 +1,0 @@
-Jesli nie buduje sie metamodel:
-# wymagane jest by eclipse mial podpieta jdk, a nie jre > installed JRE (?)
-
-org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor

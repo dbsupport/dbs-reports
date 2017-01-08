@@ -22,8 +22,11 @@
     <aop:aspectj-autoproxy>
         <aop:include name="report\.processing\.service\.aspect"/>
     </aop:aspectj-autoproxy>
-    
-    
+
+    <bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:app.properties">
+        </property>
+    </bean>
     <!-- task:annotation-driven executor="tasks.executor" scheduler="tasks.scheduler"/>
     
     <task:executor id="tasks.executor" pool-size="5" rejection-policy="CALLER_RUNS"/>

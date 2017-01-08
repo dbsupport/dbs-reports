@@ -67,9 +67,23 @@
         <addForeignKeyConstraint baseColumnNames="group_id" baseTableCatalogName="reports" baseTableName="tpr_group_profile" baseTableSchemaName="reports" constraintName="FKPR_GROUP_PROFILE_GROUP" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tpr_group" referencedTableSchemaName="reports"/>
     </changeSet>
 
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/71-dev" context="dev">
+        <preConditions onFail="CONTINUE">
+            <sqlCheck expectedResult="0">select count(*) from reports.TPA_PARAMETER where ID = 111</sqlCheck>
+        </preConditions>
+        <comment>client.db.url parameter at TPA_PARAMETER already exists.</comment>
+
+        <insert catalogName="reports" schemaName="reports" tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="111"/>
+            <column name="key" type="varchar(64)" value="client.db.url"/>
+            <column name="value" type="bytea" value="jdbc:postgresql://localhost:5432/test"/>
+            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="scope" type="varchar(64)" value="DB"/>
+        </insert>
+    </changeSet>
+
     <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/71" context="tes">
-        <insert catalogName="reports"
-                tableName="tpa_parameter">
+        <insert catalogName="reports" schemaName="reports" tableName="tpa_parameter">
             <column name="id" type="bigint" valueNumeric="111"/>
             <column name="key" type="varchar(64)" value="client.db.url"/>
             <column name="value" type="bytea" value="jdbc:oracle:thin:@10.131.44.1:1521:LPHR"/>
@@ -79,8 +93,7 @@
     </changeSet>
 
     <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/71" context="prd">
-        <insert catalogName="reports"
-                tableName="tpa_parameter">
+        <insert catalogName="reports" schemaName="reports" tableName="tpa_parameter">
             <column name="id" type="bigint" valueNumeric="111"/>
             <column name="key" type="varchar(64)" value="client.db.url"/>
             <column name="value" type="bytea" value="jdbc:oracle:thin:@131.202.240.15:1521:LPHR"/>

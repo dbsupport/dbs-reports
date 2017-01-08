@@ -1,45 +1,125 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
-    <changeSet author="maven" id="1434627168633-1" context="legacy">
+
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports-issues/issues/79-0">
+        <preConditions onFail="CONTINUE">
+            <sqlCheck expectedResult="0">SELECT count(schema_name) FROM information_schema.schemata WHERE schema_name = 'reports'</sqlCheck>
+        </preConditions>
+        <comment>Schema REPORTS already exists.</comment>
+        <sql dbms="postgresql" endDelimiter=";">CREATE SCHEMA reports</sql>
+    </changeSet>
+
+
+    <changeSet author="maven" id="1434627168633-1" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="sac_access" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SAC_ACCESS already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="sac_access"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-2" context="legacy">
+    <changeSet author="maven" id="1434627168633-2" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="sre_pattern" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SRE_PATTERN already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="sre_pattern"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-3" context="legacy">
+    <changeSet author="maven" id="1434627168633-3" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="sre_report" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SRE_REPORT already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="sre_report"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-4" context="legacy">
+    <changeSet author="maven" id="1434627168633-4" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="sre_pattern_inflater" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SRE_PATTERN_INFLATER already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="sre_pattern_inflater"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-5" context="legacy">
+    <changeSet author="maven" id="1434627168633-5" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="spr_photo" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SPR_PHOTO already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="spr_photo"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-6" context="legacy">
+    <changeSet author="maven" id="1434627168633-6" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="sre_order" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SRE_ORDER already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="sre_order"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-7" context="legacy">
+    <changeSet author="maven" id="1434627168633-7" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="sre_report_extended" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SRE_REPORT_EXTENDED already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="sre_report_extended"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-8" context="legacy">
+    <changeSet author="maven" id="1434627168633-8" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="spr_profile" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SPR_PROFILE already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="spr_profile"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-9" context="legacy">
+    <changeSet author="maven" id="1434627168633-9" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="sre_report_extended_group" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SRE_REPORT_EXTENDED_GROUP already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="sre_report_extended_group"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-10" context="legacy">
+    <changeSet author="maven" id="1434627168633-10" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="sre_pattern_form" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SRE_PATTERN_FORM already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="sre_pattern_form"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-11" context="legacy">
+    <changeSet author="maven" id="1434627168633-11" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="spr_address" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SPR_ADDRESS already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="spr_address"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-12" context="legacy">
+    <changeSet author="maven" id="1434627168633-12" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="sre_pattern_transformate" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SRE_PATTERN_TRANSFORMATE already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="sre_pattern_transformate"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-13" context="legacy">
+    <changeSet author="maven" id="1434627168633-13" context="">
+        <preConditions onFail="CONTINUE">
+            <not><sequenceExists sequenceName="spr_note" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Sequence SPR_NOTE already exists.</comment>
+
         <createSequence catalogName="reports" schemaName="reports" sequenceName="spr_note"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-14" context="legacy">
+    <changeSet author="maven" id="1434627168633-14" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tpr_access" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table TPR_ACCESS already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tpr_access">
             <column name="profile_id" type="INT8">
                 <constraints nullable="false"/>
@@ -49,7 +129,12 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-15" context="legacy">
+    <changeSet author="maven" id="1434627168633-15" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tpr_profile" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table TPR_PROFILE already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tpr_profile">
             <column name="id" type="INT8">
                 <constraints nullable="false"/>
@@ -92,7 +177,12 @@
             <column name="note_id" type="INT8"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-16" context="legacy">
+    <changeSet author="maven" id="1434627168633-16" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tre_report_parameter" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tre_report_parameter already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tre_report_parameter">
             <column name="report_id" type="INT8"/>
             <column name="name" type="VARCHAR(255)">
@@ -103,7 +193,12 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-17" context="legacy">
+    <changeSet author="maven" id="1434627168633-17" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tpr_address" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tpr_address already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tpr_address">
             <column name="id" type="INT8">
                 <constraints nullable="false"/>
@@ -116,7 +211,12 @@
             <column name="zipcode" type="VARCHAR(6)"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-18" context="legacy">
+    <changeSet author="maven" id="1434627168633-18" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tpr_authority" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table TPR_AUTHORITY already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tpr_authority">
             <column name="authority_id" type="INT8">
                 <constraints nullable="false"/>
@@ -126,7 +226,12 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-19" context="legacy">
+    <changeSet author="maven" id="1434627168633-19" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tac_access" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table TAC_ACCESS already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tac_access">
             <column name="id" type="INT8">
                 <constraints nullable="false"/>
@@ -150,7 +255,12 @@
             <column name="_stamp" type="INT8"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-20" context="legacy">
+    <changeSet author="maven" id="1434627168633-20" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tpr_photo" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table TPR_PHOTO already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tpr_photo">
             <column name="id" type="INT8">
                 <constraints nullable="false"/>
@@ -161,7 +271,12 @@
             <column name="content" type="BYTEA"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-21" context="legacy">
+    <changeSet author="maven" id="1434627168633-21" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tre_pattern" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table TRE_PATTERN already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tre_pattern">
             <column name="id" type="INT8">
                 <constraints nullable="false"/>
@@ -205,7 +320,12 @@
             <column name="_stamp" type="INT8"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-22" context="legacy">
+    <changeSet author="maven" id="1434627168633-22" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tpa_parameter" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table TPA_PARAMETER already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tpa_parameter">
             <column name="id" type="INT8">
                 <constraints nullable="false"/>
@@ -223,7 +343,12 @@
             <column name="description" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-23" context="legacy">
+    <changeSet author="maven" id="1434627168633-23" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tau_authority" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tau_authority already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tau_authority">
             <column name="id" type="INT8">
                 <constraints nullable="false"/>
@@ -234,7 +359,12 @@
             <column name="description" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-24" context="legacy">
+    <changeSet author="maven" id="1434627168633-24" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="logging_event_property" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table logging_event_property already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="logging_event_property">
             <column name="event_id" type="INT8">
                 <constraints nullable="false"/>
@@ -245,7 +375,12 @@
             <column name="mapped_value" type="VARCHAR(1024)"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-25" context="legacy">
+    <changeSet author="maven" id="1434627168633-25" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tre_pattern_transformate" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tre_pattern_transformate already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tre_pattern_transformate">
             <column name="id" type="INT8">
                 <constraints nullable="false"/>
@@ -268,7 +403,12 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-26" context="legacy">
+    <changeSet author="maven" id="1434627168633-26" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tre_order" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tre_order already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tre_order">
             <column name="id" type="INT8">
                 <constraints nullable="false"/>
@@ -288,7 +428,12 @@
             <column name="end_date" type="TIMESTAMPTZ"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-27" context="legacy">
+    <changeSet author="maven" id="1434627168633-27" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tre_pattern_trainf" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tre_pattern_trainf already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tre_pattern_trainf">
             <column name="transformate_id" type="INT8">
                 <constraints nullable="false"/>
@@ -298,7 +443,12 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-28" context="legacy">
+    <changeSet author="maven" id="1434627168633-28" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tpr_note" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tpr_note already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tpr_note">
             <column name="id" type="INT8">
                 <constraints nullable="false"/>
@@ -312,7 +462,12 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-29" context="legacy">
+    <changeSet author="maven" id="1434627168633-29" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="logging_event" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table logging_event already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="logging_event">
             <column name="timestmp" type="INT8">
                 <constraints nullable="false"/>
@@ -349,7 +504,12 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-30" context="legacy">
+    <changeSet author="maven" id="1434627168633-30" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tre_order_report" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tre_order_report already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tre_order_report">
             <column name="order_id" type="INT8">
                 <constraints nullable="false"/>
@@ -359,7 +519,12 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-31" context="legacy">
+    <changeSet author="maven" id="1434627168633-31" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tre_pattern_form" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tre_pattern_form already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tre_pattern_form">
             <column name="id" type="INT8">
                 <constraints nullable="false"/>
@@ -369,7 +534,12 @@
             <column name="content" type="BYTEA"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-32" context="legacy">
+    <changeSet author="maven" id="1434627168633-32" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tre_pattern_access" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tre_pattern_access already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tre_pattern_access">
             <column name="pattern_id" type="INT8">
                 <constraints nullable="false"/>
@@ -377,7 +547,12 @@
             <column name="name" type="VARCHAR(64)"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-33" context="legacy">
+    <changeSet author="maven" id="1434627168633-33" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tre_report_content" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tre_report_content already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tre_report_content">
             <column name="report_id" type="INT8">
                 <constraints nullable="false"/>
@@ -385,7 +560,12 @@
             <column name="content" type="BYTEA"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-34" context="legacy">
+    <changeSet author="maven" id="1434627168633-34" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="logging_event_exception" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table logging_event_exception already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="logging_event_exception">
             <column name="event_id" type="INT8">
                 <constraints nullable="false"/>
@@ -398,7 +578,12 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-35" context="legacy">
+    <changeSet author="maven" id="1434627168633-35" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tre_pattern_inflater" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tre_pattern_inflater already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tre_pattern_inflater">
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -411,7 +596,12 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-36" context="legacy">
+    <changeSet author="maven" id="1434627168633-36" context="">
+        <preConditions onFail="CONTINUE">
+            <not><tableExists tableName="tre_report" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Table tre_report already exists.</comment>
+
         <createTable catalogName="reports" schemaName="reports" tableName="tre_report">
             <column name="id" type="INT8">
                 <constraints nullable="false"/>
@@ -456,130 +646,561 @@
             <column name="pattern_extension" type="VARCHAR(16)"/>
         </createTable>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-37" context="legacy">
+    <changeSet author="maven" id="1434627168633-37" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="PKRE_PATTERN" tableName="tre_pattern" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key PKRE_PATTERN already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="PKRE_PATTERN" schemaName="reports" tableName="tre_pattern"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-38" context="legacy">
+    <changeSet author="maven" id="1434627168633-38" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="tre_order_pkey" tableName="tre_order" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key TRE_ORDER_PKEY already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="tre_order_pkey" schemaName="reports" tableName="tre_order"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-39" context="legacy">
+    <changeSet author="maven" id="1434627168633-39" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="logging_event_exception_pkey" tableName="logging_event_exception" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key LOGGING_EVENT_EXCEPTION_PKEY already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="event_id, i" constraintName="logging_event_exception_pkey" schemaName="reports" tableName="logging_event_exception"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-40" context="legacy">
+    <changeSet author="maven" id="1434627168633-40" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="tre_pattern_transformate_pkey" tableName="tre_pattern_transformate" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key tre_pattern_transformate_pkey already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="tre_pattern_transformate_pkey" schemaName="reports" tableName="tre_pattern_transformate"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-41" context="legacy">
+    <changeSet author="maven" id="1434627168633-41" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="logging_event_property_pkey" tableName="logging_event_property" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key LOGGING_EVENT_PROPERTY_PKEY already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="event_id, mapped_key" constraintName="logging_event_property_pkey" schemaName="reports" tableName="logging_event_property"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-42" context="legacy">
+    <changeSet author="maven" id="1434627168633-42" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="tre_pattern_inflater_pkey" tableName="tre_pattern_inflater" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key TRE_PATTERN_INFLATER_PKEY already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="tre_pattern_inflater_pkey" schemaName="reports" tableName="tre_pattern_inflater"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-43" context="legacy">
+    <changeSet author="maven" id="1434627168633-43" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="tpr_profile_pkey" tableName="tpr_profile" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key TPR_PROFILE_PKEY already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="tpr_profile_pkey" schemaName="reports" tableName="tpr_profile"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-44" context="legacy">
+    <changeSet author="maven" id="1434627168633-44" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="pkpr_address" tableName="tpr_address" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key PKPR_ADDRESS already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="pkpr_address" schemaName="reports" tableName="tpr_address"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-45" context="legacy">
+    <changeSet author="maven" id="1434627168633-45" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="PKAC_ACCESS" tableName="tac_access" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key PKAC_ACCESS already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="PKAC_ACCESS" schemaName="reports" tableName="tac_access"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-46" context="legacy">
+    <changeSet author="maven" id="1434627168633-46" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="tre_pattern_form_pkey" tableName="tre_pattern_form" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key TRE_PATTERN_FORM_PKEY already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="tre_pattern_form_pkey" schemaName="reports" tableName="tre_pattern_form"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-47" context="legacy">
+    <changeSet author="maven" id="1434627168633-47" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="tpr_note_pkey" tableName="tpr_note" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key TPR_NOTE_PKEY already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="tpr_note_pkey" schemaName="reports" tableName="tpr_note"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-48" context="legacy">
+    <changeSet author="maven" id="1434627168633-48" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="PKAU_AUTHORITY" tableName="tau_authority" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key PKAU_AUTHORITY already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="PKAU_AUTHORITY" schemaName="reports" tableName="tau_authority"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-49" context="legacy">
+    <changeSet author="maven" id="1434627168633-49" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="tre_report_pkey" tableName="tre_report" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key TRE_REPORT_PKEY already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="tre_report_pkey" schemaName="reports" tableName="tre_report"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-50" context="legacy">
+    <changeSet author="maven" id="1434627168633-50" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="pkpr_photo" tableName="tpr_photo" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key PKPR_PHOTO already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="pkpr_photo" schemaName="reports" tableName="tpr_photo"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-51" context="legacy">
+    <changeSet author="maven" id="1434627168633-51" context="">
+        <preConditions onFail="CONTINUE">
+            <not><primaryKeyExists primaryKeyName="tpa_parameter_pkey" tableName="tpa_parameter" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Primary key TPA_PARAMETER_PKEY already exists.</comment>
+
         <addPrimaryKey catalogName="reports" columnNames="id" constraintName="tpa_parameter_pkey" schemaName="reports" tableName="tpa_parameter"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-52" context="legacy">
+    <changeSet author="maven" id="1434627168633-52" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKPR_NOTE_EDITOR"  schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKPR_NOTE_EDITOR already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="editor_id" baseTableCatalogName="reports" baseTableName="tpr_note" baseTableSchemaName="reports" constraintName="FKPR_NOTE_EDITOR" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tpr_profile" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-53" context="legacy">
+    <changeSet author="maven" id="1434627168633-53" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKPR_AUTHORITY_AUTHORITY" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKPR_AUTHORITY_AUTHORITY already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="authority_id" baseTableCatalogName="reports" baseTableName="tpr_authority" baseTableSchemaName="reports" constraintName="FKPR_AUTHORITY_AUTHORITY" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tau_authority" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-54" context="legacy">
+    <changeSet author="maven" id="1434627168633-54" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_PATTERN_TRAINF_INF" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_PATTERN_TRAINF_INF already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="inflater_id" baseTableCatalogName="reports" baseTableName="tre_pattern_trainf" baseTableSchemaName="reports" constraintName="FKRE_PATTERN_TRAINF_INF" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tre_pattern_inflater" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-55" context="legacy">
+    <changeSet author="maven" id="1434627168633-55" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_PATTERN_ACCESS_PATTERN" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_PATTERN_ACCESS_PATTERN already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="pattern_id" baseTableCatalogName="reports" baseTableName="tre_pattern_access" baseTableSchemaName="reports" constraintName="FKRE_PATTERN_ACCESS_PATTERN" deferrable="true" initiallyDeferred="true" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tre_pattern" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-56" context="legacy">
+    <changeSet author="maven" id="1434627168633-56" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_ORDER_ORDER" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_ORDER_ORDER already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="order_id" baseTableCatalogName="reports" baseTableName="tre_order_report" baseTableSchemaName="reports" constraintName="FKRE_ORDER_ORDER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tre_order" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-57" context="legacy">
+    <changeSet author="maven" id="1434627168633-57" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_REPPARAM_REPORT" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_REPPARAM_REPORT already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="report_id" baseTableCatalogName="reports" baseTableName="tre_report_parameter" baseTableSchemaName="reports" constraintName="FKRE_REPPARAM_REPORT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tre_report" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-58" context="legacy">
+    <changeSet author="maven" id="1434627168633-58" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_REPORT_CONTENT_REPORT" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_REPORT_CONTENT_REPORT already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="report_id" baseTableCatalogName="reports" baseTableName="tre_report_content" baseTableSchemaName="reports" constraintName="FKRE_REPORT_CONTENT_REPORT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tre_report" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-59" context="legacy">
+    <changeSet author="maven" id="1434627168633-59" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_PATTERN_PROFILE" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_PATTERN_PROFILE already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="creator_id" baseTableCatalogName="reports" baseTableName="tre_pattern" baseTableSchemaName="reports" constraintName="FKRE_PATTERN_PROFILE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tpr_profile" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-60" context="legacy">
+    <changeSet author="maven" id="1434627168633-60" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKPR_AUTHORITY_PROFILE" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKPR_AUTHORITY_PROFILE already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="profile_id" baseTableCatalogName="reports" baseTableName="tpr_authority" baseTableSchemaName="reports" constraintName="FKPR_AUTHORITY_PROFILE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tpr_profile" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-61" context="legacy">
+    <changeSet author="maven" id="1434627168633-61" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_ORDER_REPORT" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_ORDER_REPORT already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="report_id" baseTableCatalogName="reports" baseTableName="tre_order_report" baseTableSchemaName="reports" constraintName="FKRE_ORDER_REPORT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tre_report" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-62" context="legacy">
+    <changeSet author="maven" id="1434627168633-62" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_PATTERN_FORM_PATTERN" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_PATTERN_FORM_PATTERN already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="pattern_id" baseTableCatalogName="reports" baseTableName="tre_pattern_form" baseTableSchemaName="reports" constraintName="FKRE_PATTERN_FORM_PATTERN" deferrable="true" initiallyDeferred="true" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tre_pattern" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-63" context="legacy">
+    <changeSet author="maven" id="1434627168633-63" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_PATTERN_TRAINF_TRA" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_PATTERN_TRAINF_TRA already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="transformate_id" baseTableCatalogName="reports" baseTableName="tre_pattern_trainf" baseTableSchemaName="reports" constraintName="FKRE_PATTERN_TRAINF_TRA" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tre_pattern_transformate" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-64" context="legacy">
+    <changeSet author="maven" id="1434627168633-64" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_PATTERN_TRANS_PATTERN" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_PATTERN_TRANS_PATTERN already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="pattern_id" baseTableCatalogName="reports" baseTableName="tre_pattern_transformate" baseTableSchemaName="reports" constraintName="FKRE_PATTERN_TRANS_PATTERN" deferrable="true" initiallyDeferred="true" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tre_pattern" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-65" context="legacy">
+    <changeSet author="maven" id="1434627168633-65" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_ORDER_PROFILE" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_ORDER_PROFILE already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="creator_id" baseTableCatalogName="reports" baseTableName="tre_order" baseTableSchemaName="reports" constraintName="FKRE_ORDER_PROFILE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tpr_profile" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-66" context="legacy">
+    <changeSet author="maven" id="1434627168633-66" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKPR_ACCESS_ACCESS" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKPR_ACCESS_ACCESS already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="access_id" baseTableCatalogName="reports" baseTableName="tpr_access" baseTableSchemaName="reports" constraintName="FKPR_ACCESS_ACCESS" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tac_access" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-67" context="legacy">
+    <changeSet author="maven" id="1434627168633-67" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_REPORT_CREATOR" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_REPORT_CREATOR already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="creator_id" baseTableCatalogName="reports" baseTableName="tre_report" baseTableSchemaName="reports" constraintName="FKRE_REPORT_CREATOR" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tpr_profile" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-68" context="legacy">
+    <changeSet author="maven" id="1434627168633-68" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKPR_PROFILE_PHOTO" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKPR_PROFILE_PHOTO already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="photo_id" baseTableCatalogName="reports" baseTableName="tpr_profile" baseTableSchemaName="reports" constraintName="FKPR_PROFILE_PHOTO" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tpr_photo" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-69" context="legacy">
+    <changeSet author="maven" id="1434627168633-69" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKRE_REPORT_PATTERN" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKRE_REPORT_PATTERN already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="pattern_id" baseTableCatalogName="reports" baseTableName="tre_report" baseTableSchemaName="reports" constraintName="FKRE_REPORT_PATTERN" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tre_pattern" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-70" context="legacy">
+    <changeSet author="maven" id="1434627168633-70" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKPR_ACCESS_PROFILE" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKPR_ACCESS_PROFILE already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="profile_id" baseTableCatalogName="reports" baseTableName="tpr_access" baseTableSchemaName="reports" constraintName="FKPR_ACCESS_PROFILE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tpr_profile" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-71" context="legacy">
+    <changeSet author="maven" id="1434627168633-71" context="">
+        <preConditions onFail="CONTINUE">
+            <not><foreignKeyConstraintExists foreignKeyName="FKPR_PROFILE_ADDRESS" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Foreign key FKPR_PROFILE_ADDRESS already exists.</comment>
+
         <addForeignKeyConstraint baseColumnNames="address_id" baseTableCatalogName="reports" baseTableName="tpr_profile" baseTableSchemaName="reports" constraintName="FKPR_PROFILE_ADDRESS" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableCatalogName="reports" referencedTableName="tpr_address" referencedTableSchemaName="reports"/>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-72" context="legacy">
+    <changeSet author="maven" id="1434627168633-72" context="">
+        <preConditions onFail="CONTINUE">
+            <not><indexExists indexName="uxpr_profile_access" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Index uxpr_profile_access already exists.</comment>
+
         <createIndex catalogName="reports" indexName="uxpr_profile_access" schemaName="reports" tableName="tpr_access" unique="true">
             <column name="access_id"/>
             <column name="profile_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-73" context="legacy">
+    <changeSet author="maven" id="1434627168633-73" context="">
+        <preConditions onFail="CONTINUE">
+            <not><indexExists indexName="tre_report_content_report_id_key" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Index tre_report_content_report_id_key already exists.</comment>
+
         <createIndex catalogName="reports" indexName="tre_report_content_report_id_key" schemaName="reports" tableName="tre_report_content" unique="true">
             <column name="report_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-74" context="legacy">
+    <changeSet author="maven" id="1434627168633-74" context="">
+        <preConditions onFail="CONTINUE">
+            <not><indexExists indexName="uxpr_access_name" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Index uxpr_access_name already exists.</comment>
+
         <createIndex catalogName="reports" indexName="uxpr_access_name" schemaName="reports" tableName="tac_access" unique="true">
             <column name="name"/>
         </createIndex>
     </changeSet>
-    <changeSet author="maven" id="1434627168633-75" context="legacy">
+    <changeSet author="maven" id="1434627168633-75" context="">
+        <preConditions onFail="CONTINUE">
+            <not><indexExists indexName="uxpa_parameter" schemaName="reports"/></not>
+        </preConditions>
+        <comment>Index uxpa_parameter already exists.</comment>
+
         <createIndex catalogName="reports" indexName="uxpa_parameter" schemaName="reports" tableName="tpa_parameter" unique="true">
             <column name="key"/>
         </createIndex>
     </changeSet>
+
+    <!-- Default set of accesses -->
+    <!--<changeSet id="https://github.com/dbsupport/dbs-reports-issues/issues/79-1" author="KKA" context="">-->
+        <!--<preConditions onFail="CONTINUE">-->
+            <!--<sqlCheck expectedResult="0">select count(*) from reports.TAC_ACCESS</sqlCheck>-->
+        <!--</preConditions>-->
+        <!--<comment>Accesses at TAC_ACCESS already exist.</comment>-->
+
+        <!--<insert tableName="TAC_ACCESS" catalogName="reports" schemaName="reports">-->
+            <!--<column name="ID" valueComputed="NEXTVAL('reports.SAC_ACCESS')"/>-->
+            <!--<column name="NAME" value="Raporty-ZUS-ROZ"/>-->
+            <!--<column name="DESCRIPTION" value="Dostep do generowania raportow rozliczeniowych ZUS"/>-->
+            <!--<column name="_cdate" valueDate="CURRENT_TIMESTAMP"/>-->
+            <!--<column name="_cgsid" value="undefined"/>-->
+            <!--<column name="_edate" valueDate="CURRENT_TIMESTAMP"/>-->
+            <!--<column name="_egsid" value="undefined"/>-->
+            <!--<column name="_stamp" value="1"/>-->
+        <!--</insert>-->
+        <!--<insert tableName="TAC_ACCESS" catalogName="reports" schemaName="reports">-->
+            <!--<column name="ID" valueComputed="NEXTVAL('reports.SAC_ACCESS')" />-->
+            <!--<column name="NAME" value="Raporty-ZUS-ZGL"/>-->
+            <!--<column name="DESCRIPTION" value="Dostep do generowania raportow zgloszeniowych ZUS"/>-->
+            <!--<column name="_cdate" valueDate="CURRENT_TIMESTAMP"/>-->
+            <!--<column name="_cgsid" value="undefined"/>-->
+            <!--<column name="_edate" valueDate="CURRENT_TIMESTAMP"/>-->
+            <!--<column name="_egsid" value="undefined"/>-->
+            <!--<column name="_stamp" value="1"/>-->
+        <!--</insert>-->
+        <!--<insert tableName="TAC_ACCESS" catalogName="reports" schemaName="reports">-->
+            <!--<column name="ID" valueComputed="NEXTVAL('reports.SAC_ACCESS')" />-->
+            <!--<column name="NAME" value="Raporty-PIT"/>-->
+            <!--<column name="DESCRIPTION" value="Dostep do generowania raportow PIT"/>-->
+            <!--<column name="_cdate" valueDate="CURRENT_TIMESTAMP"/>-->
+            <!--<column name="_cgsid" value="undefined"/>-->
+            <!--<column name="_edate" valueDate="CURRENT_TIMESTAMP"/>-->
+            <!--<column name="_egsid" value="undefined"/>-->
+            <!--<column name="_stamp" value="1"/>-->
+        <!--</insert>-->
+        <!--<insert tableName="TAC_ACCESS" catalogName="reports" schemaName="reports">-->
+            <!--<column name="ID" valueComputed="NEXTVAL('reports.SAC_ACCESS')" />-->
+            <!--<column name="NAME" value="Raporty-GUS"/>-->
+            <!--<column name="DESCRIPTION" value="Dostep do generowania raportow GUS"/>-->
+            <!--<column name="_cdate" valueDate="CURRENT_TIMESTAMP"/>-->
+            <!--<column name="_cgsid" value="undefined"/>-->
+            <!--<column name="_edate" valueDate="CURRENT_TIMESTAMP"/>-->
+            <!--<column name="_egsid" value="undefined"/>-->
+            <!--<column name="_stamp" value="1"/>-->
+        <!--</insert>-->
+        <!--<insert tableName="TAC_ACCESS" catalogName="reports" schemaName="reports">-->
+            <!--<column name="ID" valueComputed="NEXTVAL('reports.SAC_ACCESS')" />-->
+            <!--<column name="NAME" value="Raporty-Testowe"/>-->
+            <!--<column name="DESCRIPTION" value="Dostep do generowania raportow testowych"/>-->
+            <!--<column name="_cdate" valueDate="CURRENT_TIMESTAMP"/>-->
+            <!--<column name="_cgsid" value="undefined"/>-->
+            <!--<column name="_edate" valueDate="CURRENT_TIMESTAMP"/>-->
+            <!--<column name="_egsid" value="undefined"/>-->
+            <!--<column name="_stamp" value="1"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+
+    <!-- authority -->
+    <changeSet id="https://github.com/dbsupport/dbs-reports-issues/issues/79-2" author="KKA" context="">
+    <preConditions onFail="CONTINUE">
+        <sqlCheck expectedResult="0">select count(*) from reports.TAU_AUTHORITY</sqlCheck>
+    </preConditions>
+    <comment>Authorities at TAU_AUTHORITY already exists.</comment>
+        <insert tableName="TAU_AUTHORITY" catalogName="reports" schemaName="reports">
+            <column name="ID" value="100" />
+            <column name="NAME" value="Admin" />
+            <column name="DESCRIPTION" value="Uzytkownik z prawami administracyjnymi." />
+        </insert>
+        <insert tableName="TAU_AUTHORITY" catalogName="reports" schemaName="reports">
+            <column name="ID" value="200" />
+            <column name="NAME" value="Management" />
+            <column name="DESCRIPTION" value="Uzytkownik z prawami do raportow." />
+        </insert>
+        <insert tableName="TAU_AUTHORITY" catalogName="reports" schemaName="reports">
+            <column name="ID" value="300" />
+            <column name="NAME" value="User" />
+            <column name="DESCRIPTION" value="Uzytkownik z prawami do odczytu." />
+        </insert>
+        <!--<insert tableName="TAU_AUTHORITY" catalogName="reports" schemaName="reports">-->
+            <!--<column name="ID" value="400" />-->
+            <!--<column name="NAME" value="Real" />-->
+            <!--<column name="DESCRIPTION" value="Uzytkownik z prawami AD." />-->
+        <!--</insert>-->
+    </changeSet>
+
+    <!-- parameters -->
+    <changeSet id="https://github.com/dbsupport/dbs-reports-issues/issues/79-3" author="KKA" context="">
+        <preConditions onFail="CONTINUE">
+            <sqlCheck expectedResult="0">select count(*) from reports.TPA_PARAMETER</sqlCheck>
+        </preConditions>
+        <comment>Parameters at TPA_PARAMETER already exist.</comment>
+        <insert tableName="TPA_PARAMETER" catalogName="reports" schemaName="reports">
+            <column name="ID" value="100" />
+            <column name="KEY" value="client.db.driver" />
+            <column name="VALUE" value="org.postgresql.Driver" />
+            <column name="TYPE" value="TEXT" />
+            <column name="SCOPE" value="DB" />
+            <column name="DESCRIPTION" value="" />
+        </insert>
+        <insert tableName="TPA_PARAMETER" catalogName="reports" schemaName="reports">
+            <column name="ID" value="101" />
+            <column name="KEY" value="client.db.ip" />
+            <column name="VALUE" value="localhost" />
+            <column name="TYPE" value="TEXT" />
+            <column name="SCOPE" value="DB" />
+            <column name="DESCRIPTION" value="" />
+        </insert>
+        <insert tableName="TPA_PARAMETER" catalogName="reports" schemaName="reports">
+            <column name="ID" value="102" />
+            <column name="KEY" value="client.db.port" />
+            <column name="VALUE" value="5432" />
+            <column name="TYPE" value="TEXT" />
+            <column name="SCOPE" value="DB" />
+            <column name="DESCRIPTION" value="" />
+        </insert>
+        <insert tableName="TPA_PARAMETER" catalogName="reports" schemaName="reports">
+            <column name="ID" value="103" />
+            <column name="KEY" value="client.db.name" />
+            <column name="VALUE" value="test" />
+            <column name="TYPE" value="TEXT" />
+            <column name="SCOPE" value="DB" />
+            <column name="DESCRIPTION" value="" />
+        </insert>
+        <insert tableName="TPA_PARAMETER" catalogName="reports" schemaName="reports">
+            <column name="ID" value="104" />
+            <column name="KEY" value="client.db.user" />
+            <column name="VALUE" value="test" />
+            <column name="TYPE" value="TEXT" />
+            <column name="SCOPE" value="DB" />
+            <column name="DESCRIPTION" value="" />
+        </insert>
+        <insert tableName="TPA_PARAMETER" catalogName="reports" schemaName="reports">
+            <column name="ID" value="105" />
+            <column name="KEY" value="client.db.passwd" />
+            <column name="VALUE" value="test" />
+            <column name="TYPE" value="PASSWD" />
+            <column name="SCOPE" value="DB" />
+            <column name="DESCRIPTION" value="" />
+        </insert>
+        <insert tableName="TPA_PARAMETER" catalogName="reports" schemaName="reports">
+            <column name="ID" value="106" />
+            <column name="KEY" value="client.db.schema" />
+            <column name="VALUE" value="test" />
+            <column name="TYPE" value="TEXT" />
+            <column name="SCOPE" value="DB" />
+            <column name="DESCRIPTION" value="" />
+        </insert>
+        <insert tableName="TPA_PARAMETER" catalogName="reports" schemaName="reports">
+            <column name="ID" value="107" />
+            <column name="KEY" value="client.db.encoding" />
+            <column name="VALUE" value="ISO-8859-1" />
+            <column name="TYPE" value="TEXT" />
+            <column name="SCOPE" value="DB" />
+            <column name="DESCRIPTION" value="" />
+        </insert>
+        <insert tableName="TPA_PARAMETER" catalogName="reports" schemaName="reports">
+            <column name="ID" value="108" />
+            <column name="KEY" value="local.db.encoding" />
+            <column name="VALUE" value="windows-1250" />
+            <column name="TYPE" value="TEXT" />
+            <column name="SCOPE" value="DB" />
+            <column name="DESCRIPTION" value="" />
+        </insert>
+        <insert tableName="TPA_PARAMETER" catalogName="reports" schemaName="reports">
+            <column name="ID" value="109" />
+            <column name="KEY" value="app.help.file" />
+            <column name="VALUE" value="" />
+            <column name="TYPE" value="FILE" />
+            <column name="SCOPE" value="APP" />
+            <column name="DESCRIPTION" value="mała-książeczka (sql_qref).pdf"/>
+        </insert>
+        <insert tableName="TPA_PARAMETER" catalogName="reports" schemaName="reports">
+            <column name="ID" value="110" />
+            <column name="KEY" value="client.db.max.active" />
+            <column name="VALUE" value="50" />
+            <column name="TYPE" value="TEXT" />
+            <column name="SCOPE" value="DB" />
+            <column name="DESCRIPTION" value="" />
+        </insert>
+
+    </changeSet>
+
+    <!-- Administrator -->
+    <changeSet id="https://github.com/dbsupport/dbs-reports-issues/issues/79-4" author="KKA" context="">
+        <preConditions onFail="CONTINUE">
+            <sqlCheck expectedResult="0">select count(*) from reports.TPR_PROFILE</sqlCheck>
+        </preConditions>
+        <comment>Profiles at TPR_PROFILE already exist.</comment>
+
+        <insert tableName="TPR_PROFILE" catalogName="reports" schemaName="reports">
+            <column name="ID" value="1" />
+            <column name="firstname" value="Administrator" />
+            <column name="lastname" value="DBS" />
+            <column name="active" value="true" />
+            <column name="accepted" value="true" />
+            <column name="login" value="admin" />
+            <column name="passwd" value="DBSadmin" />
+            <column name="_cdate" valueDate="CURRENT_TIMESTAMP" />
+            <column name="_cgsid" value="undefined" />
+            <column name="_edate" valueDate="CURRENT_TIMESTAMP" />
+            <column name="_egsid" value="undefined" />
+            <column name="_stamp" value="0" />
+        </insert>
+
+        <dropSequence catalogName="reports" schemaName="reports" sequenceName="SPR_PROFILE"/>
+        <createSequence catalogName="reports" schemaName="reports" sequenceName="spr_profile" startValue="2"/>
+    </changeSet>
+
+    <changeSet id="https://github.com/dbsupport/dbs-reports-issues/issues/79-5" author="KKA" context="">
+        <preConditions onFail="CONTINUE">
+            <sqlCheck expectedResult="0">select count(*) from reports.TPR_AUTHORITY where PROFILE_ID = 1</sqlCheck>
+        </preConditions>
+        <comment>Admin profile authorities at TPR_AUTHORITY already exist.</comment>
+
+        <insert tableName="TPR_AUTHORITY" catalogName="reports" schemaName="reports">
+            <column name="PROFILE_ID" value="1" />
+            <column name="AUTHORITY_ID" value="100" />
+        </insert>
+        <insert tableName="TPR_AUTHORITY" catalogName="reports" schemaName="reports">
+            <column name="PROFILE_ID" value="1" />
+            <column name="AUTHORITY_ID" value="200" />
+        </insert>
+        <insert tableName="TPR_AUTHORITY" catalogName="reports" schemaName="reports">
+            <column name="PROFILE_ID" value="1" />
+            <column name="AUTHORITY_ID" value="300" />
+        </insert>
+        <!--<insert tableName="TPR_AUTHORITY" catalogName="reports" schemaName="reports">-->
+            <!--<column name="PROFILE_ID" value="1" />-->
+            <!--<column name="AUTHORITY_ID" value="400" />-->
+        <!--</insert>-->
+    </changeSet>
+
+
 </databaseChangeLog>

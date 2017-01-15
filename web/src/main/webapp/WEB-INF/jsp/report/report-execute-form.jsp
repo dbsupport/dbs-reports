@@ -28,7 +28,7 @@
 </tiles:putAttribute>
 <tiles:putAttribute name="content" type="string">
 
-                    	<form:form method="post" modelAttribute="reportGenerationForm" action="report/execute/form" class="dbs-form">
+                    	<form:form method="post" modelAttribute="reportGenerationForm" action="report/execute/form" class="dbs-form" enctype="multipart/form-data">
                     		<input type="hidden" name="page" value="1">
                             <div class="field-box">
                             	<label>Definicja</label>

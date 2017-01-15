@@ -98,7 +98,9 @@
     
     <definition name="tiles-field-multiselect" template="/WEB-INF/jsp/tiles/default/field/field-multiselect.jsp" extends="tiles-field">
         <put-attribute name="inputclass" type="string" value="selectpicker"/>    
-    </definition>        
-    
-    
+    </definition>
+
+    <definition name="tiles-field-file" template="/WEB-INF/jsp/tiles/default/field/field-file.jsp" extends="tiles-field">
+    </definition>
+
 </tiles-definitions>

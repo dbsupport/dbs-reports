@@ -20,7 +20,7 @@
 
 <tiles:putAttribute name="content" type="string">
 
-                    	<form:form method="post" modelAttribute="reportGenerationForm" action="report/execute/generate" class="dbs-form">
+                    	<form:form method="post" modelAttribute="reportGenerationForm" action="report/execute/generate" class="dbs-form"  enctype="multipart/form-data">
                     		<input type="hidden" name="page" value="2">
                     		
                             <div class="field-box">

@@ -18,11 +18,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.springframework.dao.DataAccessException;
 
-import pl.com.dbs.reports.support.web.form.field.FieldDate;
-import pl.com.dbs.reports.support.web.form.field.FieldMultiSelect;
-import pl.com.dbs.reports.support.web.form.field.FieldNumber;
-import pl.com.dbs.reports.support.web.form.field.FieldSelect;
-import pl.com.dbs.reports.support.web.form.field.FieldText;
+import pl.com.dbs.reports.support.web.form.field.*;
 import pl.com.dbs.reports.support.web.form.inflater.FieldInflater;
 import pl.com.dbs.reports.support.web.form.option.FieldOption;
 import pl.com.dbs.reports.support.web.form.validator.FieldValidatorAfter;
@@ -107,6 +103,7 @@ public class DFormBuilder<T extends DForm> {
 				FieldNumber.class,
 				FieldSelect.class,
 				FieldMultiSelect.class,
+				FieldFile.class,
 				
 				FieldOption.class,
 				

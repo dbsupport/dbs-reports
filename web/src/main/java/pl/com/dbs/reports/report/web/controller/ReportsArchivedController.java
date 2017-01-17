@@ -80,6 +80,8 @@ public class ReportsArchivedController {
 	
 	@RequestMapping(value="/report/archived", method = RequestMethod.GET)
     public String archives(Model model, @ModelAttribute(ReportsArchivedForm.KEY) final ReportsArchivedForm form) {
+		//FIXME: temporary archived reports available only for users..
+		form.getFilter().onlyFor(SessionContext.getProfile());
 		model.addAttribute("reports", reportService.find(form.getFilter()));
 		model.addAttribute("current", SessionContext.getProfile().getId().equals(form.getFilter().getProfileId()));
 		return "report/report-archived";
@@ -93,7 +95,10 @@ public class ReportsArchivedController {
 	@RequestMapping(value="/report/archive/{id}/download", method = RequestMethod.GET)
     public String display(Model model, @PathVariable("id") Long id,  @ModelAttribute(ReportsArchivedForm.KEY) final ReportsArchivedForm form,
     		HttpServletRequest request, HttpSession session, HttpServletResponse response) {
-		ReportFilter filter = new ReportFilter().archived().forAnyone().onlyFor(id);
+		//FIXME: temporary archived reports available only for users..
+		//ReportFilter filter = new ReportFilter().archived().forAnyone().onlyFor(id);
+		ReportFilter filter = new ReportFilter().archived().onlyFor(SessionContext.getProfile()).onlyFor(id);
+
 		Report report = reportService.findSingle(filter);
 		if (report==null) {
 			alerts.addError(session, "report.archive.no.report");
@@ -116,7 +121,9 @@ public class ReportsArchivedController {
 		List<Report> reports = new ArrayList<Report>();
 		for (Long id : ids) {
 			try {
-				ReportFilter filter = new ReportFilter().archived().onlyFor(id);
+				//FIXME: temporary archived reports available only for users..
+				//ReportFilter filter = new ReportFilter().archived().onlyFor(id);
+				ReportFilter filter = new ReportFilter().archived().onlyFor(SessionContext.getProfile()).onlyFor(id);
 				Report report = reportService.findSingle(filter);
 				if (report != null) {
 					reportService.delete(id);

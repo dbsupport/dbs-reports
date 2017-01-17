@@ -33,6 +33,7 @@ import pl.com.dbs.reports.report.service.ReportService;
 import pl.com.dbs.reports.report.web.form.ReportsUnarchivedForm;
 import pl.com.dbs.reports.report.web.form.ReportsUnarchivedForm.Action;
 import pl.com.dbs.reports.report.web.validator.ReportsUnarchivedValidator;
+import pl.com.dbs.reports.security.domain.SessionContext;
 import pl.com.dbs.reports.support.utils.exception.Exceptions;
 import pl.com.dbs.reports.support.web.alerts.Alerts;
 import pl.com.dbs.reports.support.web.controller.DownloadController;
@@ -128,7 +129,9 @@ public class ReportsUnarchivedController {
 		List<Report> reports = new ArrayList<Report>();
 		for (Long id : ids) {
 			try {
-				ReportFilter filter = new ReportFilter().onlyFor(id);//unarchived()
+				//FIXME: temporary archived reports available only for users..
+				//ReportFilter filter = new ReportFilter().onlyFor(id);//unarchived()
+				ReportFilter filter = new ReportFilter().onlyFor(id).onlyFor(SessionContext.getProfile());
 				Report report = reportService.findSingle(filter);
 				if (report!=null) {
 					reports.add(report);
@@ -174,7 +177,10 @@ public class ReportsUnarchivedController {
     		HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 
 		try {
-			ReportFilter filter = new ReportFilter().unarchived().onlyFor(id).fine();
+			//FIXME: temporary archived reports available only for users..
+			//ReportFilter filter = new ReportFilter().unarchived().onlyFor(id).fine();
+			ReportFilter filter = new ReportFilter().unarchived().onlyFor(id).onlyFor(SessionContext.getProfile()).fine();
+
 			Report report = reportService.findSingle(filter);
 			if (report==null||!report.isDownloadable()) {
 				alerts.addError(session, "report.unarchived.no.report");

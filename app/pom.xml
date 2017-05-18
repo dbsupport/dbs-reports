@@ -36,8 +36,13 @@
 					<groupId>pl.com.dbs</groupId>
 				</exclusion>
 			</exclusions>
-		</dependency>        
-	
+		</dependency>
+
+		<!--<dependency>-->
+			<!--<groupId>net.sf.opencsv</groupId>-->
+			<!--<artifactId>opencsv</artifactId>-->
+		<!--</dependency>-->
+
 		<!-- Commons -->
 		<!-- https://parleys.com/play/514892260364bc17fc56be83/chapter21/about -->
         <dependency>

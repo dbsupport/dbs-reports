@@ -28,7 +28,12 @@ import com.google.common.collect.Iterables;
 @Component
 public class PatternManifestResolver {
 	private static final Logger logger = LoggerFactory.getLogger(PatternManifestResolver.class);
-	@Autowired private List<PatternFactory> factories;
+	private List<PatternFactory> factories;
+
+	@Autowired
+	public PatternManifestResolver(List<PatternFactory> factories) {
+		this.factories = factories;
+	}
 
 	/**
 	 * Get manifest from zip file and according 
@@ -47,8 +52,9 @@ public class PatternManifestResolver {
 	 */
 	public PatternFactory resolveFactory(final String factory) throws PatternFactoryNotFoundException {
 		PatternFactory result = Iterables.find(factories, new Predicate<PatternFactory>() {  
-				public boolean apply(PatternFactory f) {  
-					return f.getName().equals(factory);
+				public boolean apply(PatternFactory f) {
+					String fname = f.getName();
+					return fname.equals(factory) || fname.endsWith(factory);
 				}  
 			}, null);  
 		

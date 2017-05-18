@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * Tests.
  *
@@ -49,5 +51,31 @@ public class DynamicFormTest5 extends DynamicFormTest {
 			System.out.println("error: "+e);
 		}
 		
-	}		
+	}
+
+
+	@Test
+	public void test_single_validator() throws JAXBException, IOException {
+		File file = read("pl/com/dbs/reports/support/web/form/test5/form-single-validator.xml");
+
+		DFormBuilder<TestDynamicForm> builder = new DFormBuilder<TestDynamicForm>(file, TestDynamicForm.class);
+
+		TestDynamicForm form = builder.build().getForm();
+
+		Assert.assertNotNull(form);
+
+		System.out.println(form);
+
+		Errors errors = new MapBindingResult(new HashMap<Object, Object>(), "test");
+		form.validate(errors);
+
+		assertTrue(errors.hasErrors());
+		assertTrue(errors.getFieldErrorCount() == 2);
+
+		for (ObjectError e : errors.getAllErrors()) {
+			System.out.println("error: "+e);
+		}
+
+	}
+
 }

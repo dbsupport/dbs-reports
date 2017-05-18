@@ -21,11 +21,7 @@ import org.springframework.dao.DataAccessException;
 import pl.com.dbs.reports.support.web.form.field.*;
 import pl.com.dbs.reports.support.web.form.inflater.FieldInflater;
 import pl.com.dbs.reports.support.web.form.option.FieldOption;
-import pl.com.dbs.reports.support.web.form.validator.FieldValidatorAfter;
-import pl.com.dbs.reports.support.web.form.validator.FieldValidatorBefore;
-import pl.com.dbs.reports.support.web.form.validator.FieldValidatorMax;
-import pl.com.dbs.reports.support.web.form.validator.FieldValidatorMin;
-import pl.com.dbs.reports.support.web.form.validator.FieldValidatorRequired;
+import pl.com.dbs.reports.support.web.form.validator.*;
 
 import com.google.common.collect.Sets;
 
@@ -111,7 +107,8 @@ public class DFormBuilder<T extends DForm> {
 				FieldValidatorMin.class,
 				FieldValidatorMax.class,
 				FieldValidatorBefore.class,
-				FieldValidatorAfter.class
+				FieldValidatorAfter.class,
+				FieldValidatorSingle.class
 		);		
 	}
 

@@ -13,9 +13,12 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
 
 import pl.com.dbs.reports.support.utils.separator.Separator;
+import pl.com.dbs.reports.support.web.form.DForm;
 import pl.com.dbs.reports.support.web.form.validator.AFieldValidator;
 import pl.com.dbs.reports.support.web.form.validator.FieldValidatorException;
 
@@ -28,6 +31,7 @@ import pl.com.dbs.reports.support.web.form.validator.FieldValidatorException;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlDiscriminatorNode("@type")
 public abstract class AField<T> implements Serializable {
+	Logger log = LoggerFactory.getLogger(AField.class);
 	private static final long serialVersionUID = -4992550698813523287L;
 	
 	//@XmlTransient
@@ -97,7 +101,12 @@ public abstract class AField<T> implements Serializable {
 	 */
 	public String getTile() {
 		return "tiles-field-text";
-	}	
+	}
+
+
+	public String getType() {
+		return type;
+	}
 	
 	public LinkedList<AFieldValidator> getValidators() {
 		return validators;
@@ -152,4 +161,5 @@ public abstract class AField<T> implements Serializable {
 	private boolean isValidated() {
 		return this.validators!=null&&!this.validators.isEmpty();
 	}
+
 }

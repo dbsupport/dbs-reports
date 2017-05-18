@@ -1,47 +1,42 @@
 /**
  * 
  */
-package pl.com.dbs.reports.report.pattern.domain;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+package pl.com.dbs.reports.absence.pattern.domain;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import pl.com.dbs.reports.absence.domain.AbsenceReportFactory;
 import pl.com.dbs.reports.api.report.ReportFactory;
-import pl.com.dbs.reports.api.report.pattern.Pattern;
-import pl.com.dbs.reports.api.report.pattern.PatternFactory;
-import pl.com.dbs.reports.api.report.pattern.PatternProduceContext;
-import pl.com.dbs.reports.api.report.pattern.PatternValidationException;
-import pl.com.dbs.reports.api.report.pattern.PatternValidator;
+import pl.com.dbs.reports.api.report.pattern.*;
 import pl.com.dbs.reports.profile.dao.ProfileDao;
-import pl.com.dbs.reports.report.domain.ReportFactoryDefault;
+import pl.com.dbs.reports.report.pattern.domain.PatternBuilder;
+import pl.com.dbs.reports.report.pattern.domain.PatternProduceContextDefault;
 import pl.com.dbs.reports.security.domain.SessionContext;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 /**
- * Domyslna obsluga paczek z wzorcami (definicjami) raportow.
- * 
  *
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
- * @copyright (c) 2013
+ * @copyright (c) 2017
  */
 @Component
-public final class PatternFactoryDefault implements PatternFactory {
-	private static final Logger logger = LoggerFactory.getLogger(PatternFactoryDefault.class);
-	
+public final class AbsencePatternFactory implements PatternFactory {
+	private static final Logger logger = LoggerFactory.getLogger(AbsencePatternFactory.class);
+
 	private List<PatternValidator> validators;
 	private ProfileDao profileDao;
-	private ReportFactoryDefault factory;
+	private AbsenceReportFactory factory;
 
-	public PatternFactoryDefault() {}
+	public AbsencePatternFactory() {}
 
 	@Autowired
-	public PatternFactoryDefault(ProfileDao profileDao, ReportFactoryDefault factory, List<PatternValidator> validators) {
+	public AbsencePatternFactory(ProfileDao profileDao, AbsenceReportFactory factory, List<PatternValidator> validators) {
 		this.profileDao = profileDao;
 		this.factory = factory;
 		this.validators = validators;
@@ -76,7 +71,7 @@ public final class PatternFactoryDefault implements PatternFactory {
 	 */
 	@Override
 	public String getName() {
-		return PatternFactoryDefault.class.getCanonicalName();
+		return AbsencePatternFactory.class.getCanonicalName();
 	}
 	
 	/* (non-Javadoc)

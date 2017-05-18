@@ -33,7 +33,7 @@ import pl.com.dbs.reports.profile.domain.Profile;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @copyright (c) 2013
  */
-final class PatternBuilder {
+public final class PatternBuilder {
 	private static final Logger logger = LoggerFactory.getLogger(PatternBuilder.class);
 	
 	private String filename;

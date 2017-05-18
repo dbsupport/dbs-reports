@@ -3,17 +3,15 @@
  */
 package pl.com.dbs.reports.report.domain.builders;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import pl.com.dbs.reports.support.utils.KeyValueReplacer;
 import pl.com.dbs.reports.support.utils.separator.Separator;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This is SQL with unresolved parameters.  
@@ -84,21 +82,12 @@ public class ReportBlockInflation {
 			for (String key : input) {
 				String value = params.get(key);
 				if (value==null) throw new ReportBlockInflationException("Inflation("+label+") requires value for parameter: "+key+" but cant find one!");
-				result = replace(result, key, value);
+				result = KeyValueReplacer.replace(result, key, value);
 			}
 		}
 		
 		logger.debug("SQL builded "+label+":"+result);
 		return result.toString();
-	}
-	
-	private StringBuffer replace(StringBuffer sb, String key, String value) {
-		Matcher m = Pattern.compile("\\^\\$"+key+"\\^", Pattern.CASE_INSENSITIVE).matcher(sb);
-		if (m.find()) {
-			//String buf = result.substring(m.start(), m.end()).toUpperCase();
-			return replace(sb.replace(m.start(), m.end(), value), key, value);
-		}					
-		return sb;
 	}
 	
 	/**

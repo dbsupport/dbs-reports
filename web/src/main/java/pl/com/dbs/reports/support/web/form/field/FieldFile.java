@@ -6,16 +6,19 @@ package pl.com.dbs.reports.support.web.form.field;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.persistence.oxm.annotations.XmlDiscriminatorValue;
 import org.springframework.web.multipart.MultipartFile;
 import pl.com.dbs.reports.support.utils.separator.Separator;
 import pl.com.dbs.reports.support.web.form.option.FieldOption;
+import sun.nio.cs.StandardCharsets;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,10 +47,19 @@ public class FieldFile extends AField<String> {
 	public String getValue() {
 		return this.value;
 	}
-	
+
+
 	@Override
 	public String getValueAsString() {
-		return hasValue()?file.getName():"";
+		String value = "";
+		if (hasValue()) {
+			try {
+				value = new String(file.getBytes(), "UTF-8");
+			} catch (IOException e) {
+				log.error("Error converting file content to string!", e);
+			}
+		}
+		return value;
 	}
 	
 	public String getValueAsLabel() {

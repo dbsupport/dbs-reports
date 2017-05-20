@@ -18,6 +18,10 @@ public class AbsenceValidationException extends Exception {
 		super(msg);
 	}
 
+	public AbsenceValidationException(String msg, Exception e) {
+		super(msg, e);
+	}
+
 	public AbsenceValidationException(String msg, Absence absence) {
 		this(msg);
 		this.absence = absence;

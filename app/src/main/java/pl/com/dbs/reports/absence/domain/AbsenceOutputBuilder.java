@@ -27,8 +27,6 @@ public class AbsenceOutputBuilder {
 	private Date dateFrom;
 	private Date dateTo;
 	private Date date;
-	private Date wholeAbsenceDateFrom;
-	private Date wholeAbsenceDateTo;
 
 	private String sicknessCode;
 	private String motifa;
@@ -117,16 +115,6 @@ public class AbsenceOutputBuilder {
 		return this;
 	}
 
-	public AbsenceOutputBuilder wholeAbsenceDateFrom(Date wholeAbsenceDateFrom) {
-		this.wholeAbsenceDateFrom = wholeAbsenceDateFrom;
-		return this;
-	}
-
-	public AbsenceOutputBuilder wholeAbsenceDateTo(Date wholeAbsenceDateTo) {
-		this.wholeAbsenceDateTo = wholeAbsenceDateTo;
-		return this;
-	}
-
 	public AbsenceOutputBuilder hospital(boolean hospital) {
 		this.hospital = hospital;
 		return this;
@@ -146,8 +134,6 @@ public class AbsenceOutputBuilder {
 		absence.dateFrom = dateFrom;
 		absence.dateTo = dateTo;
 		absence.date = date;
-//		absence.wholeAbsenceDateFrom = wholeAbsenceDateFrom;
-//		absence.wholeAbsenceDateTo = wholeAbsenceDateTo;
 
 		absence.sicknessCode = AbsenceHospitalCodeResolver.resolve(sicknessCode, hospital);
 		absence.motifa = motifa;

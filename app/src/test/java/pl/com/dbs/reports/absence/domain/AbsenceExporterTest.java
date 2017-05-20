@@ -36,7 +36,7 @@ import static org.mockito.Mockito.when;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @copyright (c) 2017
  */
-public class AbsenceProcessorTest {
+public class AbsenceExporterTest {
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	private static final String PATH = "pl/com/dbs/reports/absence/reader/test/";
 
@@ -85,17 +85,18 @@ public class AbsenceProcessorTest {
 		splitter = new AbsenceInputSplitter();
 	}
 
+
 	@Test
-	public void should_return_no_absences_dates_missing() {
+	public void should_return_no_absences_dates_missing() throws IOException {
 		setEmploymentQueryResult(1);
 
-		AbsenceProcessor processor = new AbsenceProcessor(executor, validatorProcessor, splitter);
+		AbsenceExporter exporter = new AbsenceExporter(executor, validatorProcessor, splitter);
 
 		List<AbsenceInput> inputs = Lists.newArrayList();
 		AbsenceInputTestBuilder builder = AbsenceInputTestBuilder.builder();
 		inputs.add(builder.pesel("123").build());
 
-		AbsenceResult result = processor.process(inputs);
+		AbsenceResult result = exporter.export(inputs);
 
 		assertNotNull(result);
 		assertFalse(result.hasAbsences());
@@ -105,10 +106,10 @@ public class AbsenceProcessorTest {
 	}
 
 	@Test
-	public void should_return_no_absences_not_employed() {
+	public void should_return_no_absences_not_employed() throws IOException {
 		setEmploymentQueryResult(0);
 
-		AbsenceProcessor processor = new AbsenceProcessor(executor, validatorProcessor, splitter);
+		AbsenceExporter exporter = new AbsenceExporter(executor, validatorProcessor, splitter);
 
 		List<AbsenceInput> inputs = Lists.newArrayList();
 		AbsenceInputTestBuilder builder = AbsenceInputTestBuilder.builder();
@@ -120,7 +121,7 @@ public class AbsenceProcessorTest {
 				.dateTo("2017-05-10")
 				.build());
 
-		AbsenceResult result = processor.process(inputs);
+		AbsenceResult result = exporter.export(inputs);
 
 		assertNotNull(result);
 		assertFalse(result.hasAbsences());
@@ -130,12 +131,12 @@ public class AbsenceProcessorTest {
 	}
 
 	@Test
-	public void should_return_1_absence() {
+	public void should_return_1_absence() throws IOException {
 		setEmploymentQueryResult(1);
 		setEmployedLastDateQueryResult("2017-05-01");
-		setHrDataQueryResult("nudoss", "matcle", "socdos");
+		setHrDataQueryResult();
 
-		AbsenceProcessor processor = new AbsenceProcessor(executor, validatorProcessor, splitter);
+		AbsenceExporter exporter = new AbsenceExporter(executor, validatorProcessor, splitter);
 
 		List<AbsenceInput> inputs = Lists.newArrayList();
 		AbsenceInputTestBuilder builder = AbsenceInputTestBuilder.builder();
@@ -148,7 +149,7 @@ public class AbsenceProcessorTest {
 				.dateTo("2017-05-10")
 				.build());
 
-		AbsenceResult result = processor.process(inputs);
+		AbsenceResult result = exporter.export(inputs);
 
 		assertNotNull(result);
 		assertTrue(result.hasAbsences());
@@ -160,12 +161,12 @@ public class AbsenceProcessorTest {
 	}
 
 	@Test
-	public void should_return_2_absence() {
+	public void should_return_2_absence() throws IOException {
 		setEmploymentQueryResult(1);
 		setEmployedLastDateQueryResult("2017-05-01");
-		setHrDataQueryResult("nudoss", "matcle", "socdos");
+		setHrDataQueryResult();
 
-		AbsenceProcessor processor = new AbsenceProcessor(executor, validatorProcessor, splitter);
+		AbsenceExporter exporter = new AbsenceExporter(executor, validatorProcessor, splitter);
 
 		List<AbsenceInput> inputs = Lists.newArrayList();
 		AbsenceInputTestBuilder builder = AbsenceInputTestBuilder.builder();
@@ -180,7 +181,7 @@ public class AbsenceProcessorTest {
 				.build();
 		inputs.add(i1);
 
-		AbsenceResult result = processor.process(inputs);
+		AbsenceResult result = exporter.export(inputs);
 
 		assertNotNull(result);
 		assertTrue(result.hasAbsences());
@@ -195,12 +196,12 @@ public class AbsenceProcessorTest {
 	}
 
 	@Test
-	public void should_return_3_absence() {
+	public void should_return_3_absence() throws IOException {
 		setEmploymentQueryResult(1);
 		setEmployedLastDateQueryResult("2017-05-01");
-		setHrDataQueryResult("nudoss", "matcle", "socdos");
+		setHrDataQueryResult();
 
-		AbsenceProcessor processor = new AbsenceProcessor(executor, validatorProcessor, splitter);
+		AbsenceExporter exporter = new AbsenceExporter(executor, validatorProcessor, splitter);
 
 		List<AbsenceInput> inputs = Lists.newArrayList();
 		AbsenceInputTestBuilder builder = AbsenceInputTestBuilder.builder();
@@ -215,7 +216,7 @@ public class AbsenceProcessorTest {
 				.build();
 		inputs.add(i1);
 
-		AbsenceResult result = processor.process(inputs);
+		AbsenceResult result = exporter.export(inputs);
 
 		assertNotNull(result);
 		assertTrue(result.hasAbsences());
@@ -236,18 +237,19 @@ public class AbsenceProcessorTest {
 	public void should_process_file() throws IOException {
 		setEmploymentQueryResult(1);
 		setEmployedLastDateQueryResult("2017-05-01");
-		setHrDataQueryResult("nudoss", "matcle", "socdos");
+		setHrDataQueryResult();
 		setEmployedExceptQueryResult("70120300719");
 
 		String filename = "Zaswiadczenia lekarskie ubezpieczonych platnika 05.05.2017.test_in.csv";
 
-		AbsenceImporter reader = new AbsenceImporter();
-		File file = read(PATH +filename);
+		AbsenceImporter importer = new AbsenceImporter(messageSource);
+		File file = read(PATH + filename);
 
-		List<AbsenceInput> inputs = reader.read(file);
-		AbsenceProcessor processor = new AbsenceProcessor(executor, validatorProcessor, splitter);
+		AbsenceExporter exporter = new AbsenceExporter(executor, validatorProcessor, splitter);
 
-		AbsenceResult result = processor.process(inputs);
+		List<AbsenceInput> inputs = importer.read(file);
+
+		AbsenceResult result = exporter.export(inputs);
 
 		assertNotNull(result);
 		assertTrue(result.hasAbsences());
@@ -255,6 +257,10 @@ public class AbsenceProcessorTest {
 
 		List<AbsenceOutput> absences = result.getAbsences();
 		assertTrue(absences.size() == 12);
+
+		for (AbsenceOutput a : absences) {
+			System.out.println(a);
+		}
 
 		List<AbsenceOutput> absences60040210197 = collectByPesel(absences, "60040210197");
 		assertTrue(absences60040210197.size() == 2);
@@ -351,17 +357,62 @@ public class AbsenceProcessorTest {
 		Map<String, Object> row = Maps.newHashMap();
 		row.put("DATENT", date);
 		results.add(row);
-		when(executor.query(startsWith(AbsenceProcessor.EMPLOYEE_LATEST_EMPLOYMENT_DATE_QUERY.substring(0, 30)), any(Object[].class))).thenReturn(results);
+		when(executor.query(startsWith(AbsenceExporter.EMPLOYEE_LATEST_EMPLOYMENT_DATE_QUERY.substring(0, 30)), any(Object[].class))).thenReturn(results);
 	}
 
-	private void setHrDataQueryResult(String nudoss, String matcle, String socdos) {
-		List<Map<String, Object>> results = Lists.newArrayList();
-		Map<String, Object> row = Maps.newHashMap();
-		row.put("NUDOSS", nudoss);
-		row.put("MATCLE", matcle);
-		row.put("SOCDOS", socdos);
-		results.add(row);
-		when(executor.query(startsWith(AbsenceProcessor.EMPLOYEE_QUERY.substring(0, 15)), any(Object[].class))).thenReturn(results);
+
+	private void setHrDataQueryResult() {
+		final Map<String, String> NUDOSS = Maps.newHashMap();
+		NUDOSS.put("62093000028","689872610");
+		NUDOSS.put("53092605017","689861407");
+		NUDOSS.put("56121907940","689861408");
+		NUDOSS.put("65010503688","689861410");
+		NUDOSS.put("67042809321","689861413");
+		NUDOSS.put("51030218017","689861457");
+		NUDOSS.put("60040210197","689861492");
+		NUDOSS.put("52062416116","689861494");
+
+		final Map<String, String> MATCLE = Maps.newHashMap();
+		MATCLE.put("62093000028","POL0010015");
+		MATCLE.put("53092605017","POL0010002");
+		MATCLE.put("56121907940","POL0010003");
+		MATCLE.put("65010503688","POL0010005");
+		MATCLE.put("67042809321","POL0010008");
+		MATCLE.put("51030218017","POL0010054");
+		MATCLE.put("60040210197","POL0010089");
+		MATCLE.put("52062416116","POL0010091");
+
+		final Map<String, String> SOCDOS = Maps.newHashMap();
+		SOCDOS.put("62093000028","POL");
+		SOCDOS.put("53092605017","POL");
+		SOCDOS.put("56121907940","POL");
+		SOCDOS.put("65010503688","POL");
+		SOCDOS.put("67042809321","POL");
+		SOCDOS.put("51030218017","POL");
+		SOCDOS.put("60040210197","POL");
+		SOCDOS.put("52062416116","POL");
+
+		when(executor.query(startsWith(AbsenceExporter.EMPLOYEE_QUERY.substring(0, 15)), any(Object[].class))).thenAnswer(new Answer<List<Map<String, Object>>>() {
+			@Override
+			public List<Map<String, Object>> answer(InvocationOnMock invocationOnMock) throws Throwable {
+				Object[] args = invocationOnMock.getArguments();
+				Object[] params = (Object[])args[1];
+				String pesel = (String)params[0];
+
+				List<Map<String, Object>> results = Lists.newArrayList();
+				String nudoss = NUDOSS.containsKey(pesel)? NUDOSS.get(pesel):"nudoss";
+				String matcle = MATCLE.containsKey(pesel)?MATCLE.get(pesel):"matcle";
+				String socdos = SOCDOS.containsKey(pesel)?SOCDOS.get(pesel):"socdos";
+
+				Map<String, Object> row = Maps.newHashMap();
+				row.put("nudoss", nudoss);
+				row.put("matcle", matcle);
+				row.put("socdos", socdos);
+				results.add(row);
+
+				return results;
+			}
+		});
 	}
 
 

@@ -1,6 +1,11 @@
 package pl.com.dbs.reports.absence.domain;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Absence for export.
@@ -9,6 +14,9 @@ import java.util.Date;
  * @copyright (c) 2017
  */
 public class AbsenceOutput implements Absence {
+	static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+	private static final String SEPARATOR = "\",\"";
+
 	String pesel;
 	String series;
 	String number;
@@ -57,8 +65,17 @@ public class AbsenceOutput implements Absence {
 		return matcle;
 	}
 
+	public String getMatcleOrEmpty() {
+		return !Strings.isNullOrEmpty(matcle)?matcle:"";
+	}
+
+
 	public String getSocdos() {
 		return socdos;
+	}
+
+	public String getSocdosOrEmpty() {
+		return !Strings.isNullOrEmpty(socdos)?socdos:"";
 	}
 
 	public Date getDateFrom() {
@@ -81,8 +98,16 @@ public class AbsenceOutput implements Absence {
 		return sicknessCode;
 	}
 
+	public String getSicknessCodeOrEmpty() {
+		return !Strings.isNullOrEmpty(sicknessCode)?sicknessCode:"";
+	}
+
 	public String getMotifa() {
 		return motifa;
+	}
+
+	public String getMotifaOrEmpty() {
+		return !Strings.isNullOrEmpty(motifa)?motifa:"";
 	}
 
 	public Date getProcessingDate() {
@@ -91,5 +116,28 @@ public class AbsenceOutput implements Absence {
 
 	public boolean isHospital() {
 		return hospital;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("absences.add(build(\"")
+		.append(pesel).append(SEPARATOR)
+		.append(number).append(SEPARATOR)
+		.append(series).append(SEPARATOR)
+		.append(nip).append(SEPARATOR)
+		.append(DATE_FORMAT.format(dateFrom)).append(SEPARATOR)
+		.append(DATE_FORMAT.format(dateTo)).append(SEPARATOR)
+		.append(DATE_FORMAT.format(employmentDate)).append(SEPARATOR)
+		.append(DATE_FORMAT.format(date)).append(SEPARATOR)
+		.append(nudoss).append(SEPARATOR)
+		.append(socdos).append(SEPARATOR)
+		.append(matcle).append(SEPARATOR)
+		.append(sicknessCode).append(SEPARATOR)
+		.append(motifa).append("\"));");
+
+//		.append(hospital);
+
+		return sb.toString();
 	}
 }

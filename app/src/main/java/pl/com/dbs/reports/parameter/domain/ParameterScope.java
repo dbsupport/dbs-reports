@@ -13,5 +13,5 @@ package pl.com.dbs.reports.parameter.domain;
  * @copyright (c) 2014
  */
 public enum ParameterScope {
-	DB, APP;
+	DB, APP, FTP, SSH;
 }

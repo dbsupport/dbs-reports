@@ -24,6 +24,8 @@
         <dbs.reports.version>1.6.0-SNAPSHOT</dbs.reports.version>
 		<commons.version>2.3</commons.version>
 		<commons.dbcp.version>1.4</commons.dbcp.version>
+		<commons.net.version>3.6</commons.net.version>
+		<com.jcraft.version>0.1.53</com.jcraft.version>
 		<javax.servlet.version>3.0</javax.servlet.version>
 		<javax.servlet.api.version>3.0.1</javax.servlet.api.version>
 		<javax.servlet.jsp.api.version>2.2.1</javax.servlet.jsp.api.version>
@@ -113,9 +115,18 @@
 		        <artifactId>lombok</artifactId>
 		        <version>1.16.8</version>
 		        <scope>provided</scope>
-            </dependency>			
-			
-			
+            </dependency>
+			<dependency>
+				<groupId>commons-net</groupId>
+				<artifactId>commons-net</artifactId>
+				<version>${commons.net.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jcraft</groupId>
+				<artifactId>jsch</artifactId>
+				<version>${com.jcraft.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>javax.validation</groupId>
 			   	<artifactId>validation-api</artifactId>

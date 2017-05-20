@@ -13,6 +13,12 @@ public class AbsenceResult {
 	List<AbsenceOutput> absences = Lists.newArrayList();
 	List<AbsenceError> errors = Lists.newArrayList();
 
+	public AbsenceResult addError(final Exception e) {
+		AbsenceErrorBuilder builder = AbsenceErrorBuilder.builder().description(e.getMessage());
+		this.errors.add(builder.build());
+		return this;
+	}
+
 	public AbsenceResult addError(AbsenceValidationException e) {
 		AbsenceErrorBuilder builder = AbsenceErrorBuilder.builder().description(e.getMessage());
 		if (e.hasAbsence()) {

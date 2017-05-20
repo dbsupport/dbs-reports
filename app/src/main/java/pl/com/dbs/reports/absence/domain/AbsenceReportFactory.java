@@ -4,11 +4,11 @@
 package pl.com.dbs.reports.absence.domain;
 
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import pl.com.dbs.reports.api.report.ReportFactory;
 import pl.com.dbs.reports.api.report.ReportProduceContext;
@@ -24,9 +24,10 @@ import pl.com.dbs.reports.report.domain.builders.ReportTextPdfBlocksBuilder;
 import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflater;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 
-import java.io.IOException;
+import javax.print.DocFlavor;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.List;
+import java.util.Date;
 import java.util.Map;
 import java.util.regex.Matcher;
 
@@ -35,27 +36,26 @@ import java.util.regex.Matcher;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @copyright (c) 2017
  */
+@Slf4j
 @Component
 public class AbsenceReportFactory implements ReportFactory {
-	//private static final Logger logger = Logger.getLogger(ReportFactoryDefault.class);
-	private ReportTextBlockInflater inflater;
-	private AbsenceImporter absenceImporter;
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static final String SEPARATOR = ", ";
+	private static final String EOL = "\r\n";
+	private static final String ABSENCES_PARAM = "V_ABSENCES";
+	private static final String ERRORS_PARAM = "V_ERRORS";
+	private static final String DATA_PARAM = "V_DATA";
+
 	private AbsenceProcessor absenceProcessor;
-	private MessageSource messageSource;
+	private ReportTextBlockInflater textBlockInflater;
 
 	@Autowired
-	public AbsenceReportFactory(@Qualifier("report.block.inflater.default") ReportTextBlockInflater inflater,
-								AbsenceImporter absenceImporter,
-								AbsenceProcessor absenceProcessor,
-								MessageSource messageSource) {
-		this.inflater = inflater;
-		this.absenceImporter = absenceImporter;
+	public AbsenceReportFactory(AbsenceProcessor absenceProcessor,
+								@Qualifier("report.block.inflater.default") ReportTextBlockInflater textBlockInflater) {
 		this.absenceProcessor = absenceProcessor;
-		this.messageSource = messageSource;
+		this.textBlockInflater = textBlockInflater;
 	}
-	
-	
-	
+
 	/* (non-Javadoc)
 	 * @see pl.com.dbs.reports.api.report.ReportFactory#getName()
 	 */
@@ -73,79 +73,20 @@ public class AbsenceReportFactory implements ReportFactory {
 		PatternFormat format = ((ReportProduceContextDefault)context).getFormat();
 		Map<String, String> params = ((ReportProduceContextDefault)context).getParameters();
 
-		Collection<String> values = params.values();
-
-		String content = null;
-
-		for (Map.Entry<String, String> entry : params.entrySet()) {
-			if (entry.getKey().toUpperCase().contains("FILE")) {
-				content = entry.getValue();
-				break;
-			}
-		}
-
-		if (content == null) {
-			throw new IllegalStateException("Current version requires FILE name parameter for absences reports.");
-		}
-
 		//..find transformate..
-		PatternTransformate transformate = pattern.getTransformate(format);
+		final PatternTransformate transformate = pattern.getTransformate(format);
 		Validate.notNull(transformate, "Transformate is no more!");
 
-		Map<String, String> tmp = Maps.newHashMap();
-		try {
-			List<AbsenceInput> inputs = absenceImporter.read(content);
+		Map.Entry<String, String> param = input(params);
 
-			AbsenceResult result = absenceProcessor.process(inputs);
-			String separator = "	";
-			StringBuilder sb = new StringBuilder();
-			for (AbsenceOutput output : result.getAbsences()) {
-				sb
-					.append(output.getPesel()).append(separator)
-					.append(output.getSeries()).append("/").append(output.getNumber()).append(separator)
-					.append(output.getMatcle()).append(separator)
-					.append(output.getSocdos()).append(separator)
-					.append(output.getDateFrom()).append(separator)
-					.append(output.getDateTo()).append(separator)
-					.append(output.getSicknessCode()).append(separator)
-					.append(output.getMotifa()).append("\n");
-			}
+		//..convert, validate, upload ftp and execute ssh..
+		final AbsenceResult result = absenceProcessor.process(param.getValue().getBytes(), filename(param.getKey()));//FIXME: UTF-8
 
-			tmp.put("$^ABSENCES^", sb.toString());
-
-			sb = new StringBuilder();
-			for (AbsenceError error : result.getErrors()) {
-				sb
-						.append(error.getPesel()).append(separator)
-						.append(error.getSeries()).append("/").append(error.getNumber()).append(separator)
-						.append(error.getMatcle()).append(separator)
-						.append(error.getSocdos()).append(separator)
-						.append(error.getDateFrom()).append(separator)
-						.append(error.getDateTo()).append(separator)
-						.append(error.getSicknessCode()).append(separator)
-						.append(error.getMotifa()).append(separator)
-						.append(error.getDescription()).append("\n");
-			}
-			tmp.put("$^ERRORS^", sb.toString());
-
-		} catch (IOException e) {
-			String msg = messageSource.getMessage("absence.validation.file.read.problem", null, null);
-		} catch (Exception e) {
-			throw new IllegalStateException("Error processing absences.", e);
-		}
-		
-		//..resolve builder for blocks..
-		final ReportBlocksBuilder blocksbuilder = resolveBlocksBuilder(transformate, params);
-		Validate.notNull(blocksbuilder, "Blocks builder is no more!");
-		
-		//.inflate blocks tree..
-		blocksbuilder.build();
-		
-		//..construct result..
+		//..finally procude report summary..
 		return new ReportProduceResult() {
 			@Override
 			public byte[] getContent() {
-				return blocksbuilder.getContent();
+				return produce(result, transformate);
 			}
 
 			@Override
@@ -154,18 +95,23 @@ public class AbsenceReportFactory implements ReportFactory {
 			}
 		};
 	}
-	
+
+	String filename(String key) {
+		String filename = key.replaceAll("\\.", "_").toLowerCase();
+		filename = filename.replaceAll("[^a-z0-9_]", "");
+		return filename;
+	}
 	
 	private ReportBlocksBuilder resolveBlocksBuilder(final PatternTransformate transformate, final Map<String, String> params) {
 		ReportBlocksBuilder blocksbuilder = null;
 		if (isReportExtension(transformate, "pdf")) {
 			if (isPatternExtension(transformate, "rtf")) {
-				blocksbuilder = new ReportRtfPdfBlocksBuilder(transformate, inflater, params);
+				blocksbuilder = new ReportRtfPdfBlocksBuilder(transformate, textBlockInflater, params);
 			} else { 
-				blocksbuilder = new ReportTextPdfBlocksBuilder(transformate, inflater, params);
+				blocksbuilder = new ReportTextPdfBlocksBuilder(transformate, textBlockInflater, params);
 			}
 		} else {
-			blocksbuilder = new ReportTextBlocksBuilder(transformate, inflater, params);
+			blocksbuilder = new ReportTextBlocksBuilder(transformate, textBlockInflater, params);
 		}
 		
 		return blocksbuilder;
@@ -187,5 +133,66 @@ public class AbsenceReportFactory implements ReportFactory {
 	    Matcher m = extpattern.matcher(transformate.getFormat().getPatternExtension());
 	    m.reset();
 	    return m.find();
-	}		
+	}
+
+	private Map.Entry<String, String> input(final Map<String, String> params) {
+		Collection<String> values = params.values();
+
+		Map.Entry<String, String> input = null;
+
+		for (Map.Entry<String, String> entry : params.entrySet()) {
+			if (entry.getKey().toUpperCase().contains("FILE")) {
+				input = entry;
+				break;
+			}
+		}
+
+		Validate.notNull(input, "Current version requires only FILE (one) parameter for absences reports.");
+
+		return input;
+	}
+
+	byte[] produce(final AbsenceResult result, PatternTransformate transformate) {
+		Map<String, String> params = Maps.newHashMap();
+
+		StringBuilder sb = new StringBuilder();
+		for (AbsenceOutput output : result.getAbsences()) {
+			sb
+					.append(output.getPesel()).append(SEPARATOR)
+					.append(output.getSeries()).append("/").append(output.getNumber()).append(SEPARATOR)
+					.append(output.getMatcle()).append(SEPARATOR)
+					.append(output.getSocdos()).append(SEPARATOR)
+					.append(output.getDateFrom()).append(SEPARATOR)
+					.append(output.getDateTo()).append(SEPARATOR)
+					.append(output.getSicknessCode()).append(SEPARATOR)
+					.append(output.getMotifa()).append(EOL);
+		}
+
+		params.put(ABSENCES_PARAM, sb.toString());
+
+		sb = new StringBuilder();
+		for (AbsenceError error : result.getErrors()) {
+			sb
+					.append(error.getPesel()).append(SEPARATOR)
+					.append(error.getSeries()).append("/").append(error.getNumber()).append(SEPARATOR)
+					.append(error.getMatcle()).append(SEPARATOR)
+					.append(error.getSocdos()).append(SEPARATOR)
+					.append(error.getDateFrom()).append(SEPARATOR)
+					.append(error.getDateTo()).append(SEPARATOR)
+					.append(error.getSicknessCode()).append(SEPARATOR)
+					.append(error.getMotifa()).append(SEPARATOR)
+					.append(error.getDescription()).append(EOL);
+		}
+		params.put(ERRORS_PARAM, sb.toString());
+		params.put(DATA_PARAM, DATE_FORMAT.format(new Date()));
+
+		//..resolve builder for blocks..
+		final ReportBlocksBuilder blocksbuilder = resolveBlocksBuilder(transformate, params);
+		Validate.notNull(blocksbuilder, "Blocks builder is no more!");
+
+		//.inflate blocks tree..
+		blocksbuilder.build();
+
+		return blocksbuilder.getContent();
+	}
 }

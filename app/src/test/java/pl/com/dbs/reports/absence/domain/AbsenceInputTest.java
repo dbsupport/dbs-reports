@@ -5,6 +5,8 @@ package pl.com.dbs.reports.absence.domain;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -24,4 +26,42 @@ public class AbsenceInputTest {
 		assertTrue(code!=null);
 		assertTrue(code.equals("TRUMP"));
 	}
+
+	@Test
+	public void should_have_available_code() {
+		AbsenceInput absence = new AbsenceInput();
+		absence.sicknessCode = "/-A-\\'_  $! B;'@#$%*())(^";
+
+		String code = absence.getAvailableSicknessCode();
+		assertNotNull(code);
+		assertTrue(code.equals("AB"));
+	}
+
+	@Test
+	public void should_have_unavailable_code() {
+		AbsenceInput absence = new AbsenceInput();
+		absence.sicknessCode = "/-t-\\'R_u  $! M;'@#$%p*())(^";
+
+		assertNull(absence.getAvailableSicknessCode());
+	}
+
+
+	@Test
+	public void should_have_motifa_chr() {
+		AbsenceInput absence = AbsenceInputTestBuilder.builder()
+				.relationshipCode("")
+				.build();
+
+		assertTrue(absence.getMotifa().equals(AbsenceInput.MOTIF_CHR));
+	}
+
+	@Test
+	public void should_have_motifa_odr() {
+		AbsenceInput absence = AbsenceInputTestBuilder.builder()
+				.relationshipCode("ABC")
+				.build();
+
+		assertTrue(absence.getMotifa().equals(AbsenceInput.MOTIF_ODR));
+	}
+
 }

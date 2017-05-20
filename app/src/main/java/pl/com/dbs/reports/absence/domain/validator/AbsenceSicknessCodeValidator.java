@@ -23,9 +23,7 @@ import java.util.List;
 public class AbsenceSicknessCodeValidator implements AbsenceValidator {
 	private MessageSource messageSource;
 
-	private static final List<String> SICKNESS_CODES = Lists.newArrayList(
-			"A", "B", "C", "D", "E", "AB", "AC", "AD", "AE", "BA", "BC", "BD", "BE", "CA", "CB", "CD", "CE", "DA", "DB", "DC", "DE", "EA", "EB", "EC", "ED"
-	);
+
 
 	@Autowired
 	public AbsenceSicknessCodeValidator(MessageSource messageSource) {
@@ -45,7 +43,8 @@ public class AbsenceSicknessCodeValidator implements AbsenceValidator {
 		final AbsenceInput absence = (AbsenceInput)input;
 
 		String code = absence.getSicknessCode();
-		if (!Strings.isNullOrEmpty(code) && !SICKNESS_CODES.contains(code)) {
+		String acode = absence.getAvailableSicknessCode();
+		if (!Strings.isNullOrEmpty(code) && Strings.isNullOrEmpty(acode)) {
 			String msg = messageSource.getMessage("absence.validation.sickness.code.invalid", null, null);
 			throw new AbsenceValidationException(msg, absence);
 		}

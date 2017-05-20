@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-1" context="tes">
+        <insert catalogName="reports"
+                tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="120"/>
+            <column name="key" type="varchar(64)" value="client.ftp.host"/>
+            <column name="value" type="bytea" value="10.131.44.3"/>
+            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="scope" type="varchar(64)" value="FTP"/>
+        </insert>
+    </changeSet>
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-2" context="tes">
+        <insert catalogName="reports"
+                tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="121"/>
+            <column name="key" type="varchar(64)" value="client.ftp.user"/>
+            <column name="value" type="bytea" value="lmhr"/>
+            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="scope" type="varchar(64)" value="FTP"/>
+        </insert>
+    </changeSet>
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-3" context="tes">
+        <insert catalogName="reports"
+                tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="122"/>
+            <column name="key" type="varchar(64)" value="client.ftp.passwd"/>
+            <column name="value" type="bytea" value="lmhr"/>
+            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="scope" type="varchar(64)" value="FTP"/>
+        </insert>
+    </changeSet>
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-4" context="tes">
+        <insert catalogName="reports"
+                tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="123"/>
+            <column name="key" type="varchar(64)" value="absence.ftp.path"/>
+            <column name="value" type="bytea" value="/product_p05/FTPhr/lmhr/file/L/"/>
+            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="scope" type="varchar(64)" value="FTP"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-1" context="prd">
+        <insert catalogName="reports"
+                tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="120"/>
+            <column name="key" type="varchar(64)" value="client.ftp.host"/>
+            <column name="value" type="bytea" value="10.131.44.1"/>
+            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="scope" type="varchar(64)" value="FTP"/>
+        </insert>
+    </changeSet>
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-2" context="prd">
+        <insert catalogName="reports"
+                tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="121"/>
+            <column name="key" type="varchar(64)" value="client.ftp.user"/>
+            <column name="value" type="bytea" value="hraccess"/>
+            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="scope" type="varchar(64)" value="FTP"/>
+        </insert>
+    </changeSet>
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-3" context="prd">
+        <insert catalogName="reports"
+                tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="122"/>
+            <column name="key" type="varchar(64)" value="client.ftp.passwd"/>
+            <column name="value" type="bytea" value="hr"/>
+            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="scope" type="varchar(64)" value="FTP"/>
+        </insert>
+    </changeSet>
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-4" context="prd">
+        <insert catalogName="reports"
+                tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="123"/>
+            <column name="key" type="varchar(64)" value="absence.ftp.path"/>
+            <column name="value" type="bytea" value="/product_03/LPHR/file/L/"/>
+            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="scope" type="varchar(64)" value="FTP"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>

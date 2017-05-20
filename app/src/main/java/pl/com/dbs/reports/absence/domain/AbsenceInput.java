@@ -1,12 +1,14 @@
 package pl.com.dbs.reports.absence.domain;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import liquibase.util.csv.opencsv.bean.CsvBind;
 import org.apache.commons.lang.Validate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Absence csv entity.
@@ -16,8 +18,11 @@ import java.util.Date;
  */
 public class AbsenceInput implements Absence {
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-	private String MOTIF_ODR = "ODR"; //OPIEKA NAD CZONKIEM RODZINY
-	private String MOTIF_CHR = "CHR"; //CHOROBOWE
+	static final String MOTIF_ODR = "ODR";
+	static final String MOTIF_CHR = "CHR";
+	public static final List<String> AVAILABLE_SICKNESS_CODES = Lists.newArrayList(
+			"A", "B", "C", "D", "E", "AB", "AC", "AD", "AE", "BA", "BC", "BD", "BE", "CA", "CB", "CD", "CE", "DA", "DB", "DC", "DE", "EA", "EB", "EC", "ED"
+	);
 
 	@CsvBind
 	String series;
@@ -25,10 +30,6 @@ public class AbsenceInput implements Absence {
 	String number;
 	@CsvBind
 	String pesel;
-//	@CsvBind
-//	String firstName;
-//	@CsvBind
-//	String lastName;
 	@CsvBind(required = true)
 	String dateFrom;
 	@CsvBind(required = true)
@@ -39,8 +40,8 @@ public class AbsenceInput implements Absence {
 	String sicknessCode;
 	@CsvBind
 	String nip;
-//	@CsvBind
-//	String relationshipCode;
+	@CsvBind
+	String relationshipCode;
 	@CsvBind
 	String hospitalDateFrom;
 	@CsvBind
@@ -49,6 +50,11 @@ public class AbsenceInput implements Absence {
 	public String getTrimedSicknessCode() {
 		if (Strings.isNullOrEmpty(sicknessCode)) return null;
 		return sicknessCode.toUpperCase().replaceAll("[^A-Z]", "").trim();
+	}
+
+	public String getAvailableSicknessCode() {
+		String c = getTrimedSicknessCode();
+		return (!Strings.isNullOrEmpty(c) && AVAILABLE_SICKNESS_CODES.contains(c))?c:null;
 	}
 
 	public boolean isSamePesel(String pesel) {
@@ -65,9 +71,9 @@ public class AbsenceInput implements Absence {
 		return !Strings.isNullOrEmpty(getNip());
 	}
 
-//	public boolean hasRelationshipCode() {
-//		return !Strings.isNullOrEmpty(relationshipCode);
-//	}
+	public boolean hasRelationshipCode() {
+		return !Strings.isNullOrEmpty(relationshipCode);
+	}
 
 	public boolean hasDateFrom() {
 		return getDateFromAsDate()!=null;
@@ -90,7 +96,7 @@ public class AbsenceInput implements Absence {
 	}
 
 	public String getMotifa() {
-		return hasHospitalDateFrom()?MOTIF_ODR:MOTIF_CHR;
+		return !Strings.isNullOrEmpty(relationshipCode)?MOTIF_ODR:MOTIF_CHR;
 	}
 
 	private Date parse(String value) {
@@ -115,15 +121,6 @@ public class AbsenceInput implements Absence {
 	public String getPesel() {
 		return !Strings.isNullOrEmpty(pesel)?pesel.toUpperCase():pesel;
 	}
-
-//	public String getFirstName() {
-//		return firstName;
-//	}
-//
-//	public String getLastName() {
-//		return lastName;
-//	}
-
 
 	public String getDateFrom() {
 		return dateFrom;
@@ -157,9 +154,9 @@ public class AbsenceInput implements Absence {
 		return !Strings.isNullOrEmpty(nip)?nip.toUpperCase():nip;
 	}
 
-//	public String getRelationshipCode() {
-//		return relationshipCode;
-//	}
+	public String getRelationshipCode() {
+		return relationshipCode;
+	}
 
 	public String getHospitalDateFrom() {
 		return hospitalDateFrom;
@@ -214,7 +211,6 @@ public class AbsenceInput implements Absence {
 			sb.append("seria:").append(series)
 			.append(",numer:").append(number)
 			.append(",pesel:").append(pesel)
-//			.append(",pracownik:").append(firstName).append(" ").append(lastName)
 			.append(",data od:").append(dateFrom)
 			.append(",data do:").append(dateFrom)
 			.append(",kod choroby:").append(sicknessCode)

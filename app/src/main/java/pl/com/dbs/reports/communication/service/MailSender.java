@@ -23,6 +23,7 @@ import pl.com.dbs.reports.communication.domain.SenderContext;
  * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
  * @copyright (c) 2013
  */
+@Deprecated
 //@Component(value=SenderContext.SENDER)
 public class MailSender implements JavaMailSender {
 	private JavaMailSenderImpl sender;

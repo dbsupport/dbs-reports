@@ -48,6 +48,11 @@ public class FieldFile extends AField<String> {
 		return this.value;
 	}
 
+	@Override
+	public String getName() {
+		return file!=null?file.getName():null;
+	}
+
 
 	@Override
 	public String getValueAsString() {

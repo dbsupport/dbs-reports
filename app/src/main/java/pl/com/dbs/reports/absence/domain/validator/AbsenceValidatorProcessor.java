@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.com.dbs.reports.absence.domain.Absence;
 import pl.com.dbs.reports.absence.domain.AbsenceResult;
+import pl.com.dbs.reports.api.report.ReportLoggings;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class AbsenceValidatorProcessor {
 			try {
 				validator.validate(absence, absences);
 			} catch (AbsenceValidationException e) {
+				//log.error(ReportLoggings.MRK_USER, e.getMessage());
 				result.addError(e);
 				if (e.isSkip()) skip = true;
 				if (e.isStop()) break;

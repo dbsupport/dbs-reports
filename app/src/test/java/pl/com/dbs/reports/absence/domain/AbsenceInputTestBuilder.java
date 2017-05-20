@@ -13,6 +13,7 @@ public class AbsenceInputTestBuilder {
 	private String pesel;
 	private String nip;
 	private String sicknessCode;
+	private String relationshipCode;
 	private String number;
 	private String nudoss;
 	private String date;
@@ -52,6 +53,11 @@ public class AbsenceInputTestBuilder {
 		return this;
 	}
 
+	public AbsenceInputTestBuilder relationshipCode(String relationshipCode) {
+		this.relationshipCode = relationshipCode;
+		return this;
+	}
+
 	public AbsenceInputTestBuilder dateFrom(String dateFrom) {
 		this.dateFrom = dateFrom;
 		return this;
@@ -83,6 +89,7 @@ public class AbsenceInputTestBuilder {
 		absence.pesel = pesel;
 		absence.nip = nip;
 		absence.sicknessCode = sicknessCode;
+		absence.relationshipCode = relationshipCode;
 		absence.number = number;
 		absence.dateFrom = dateFrom;
 		absence.dateTo = dateTo;

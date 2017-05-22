@@ -3,13 +3,10 @@
  */
 package pl.com.dbs.reports.report.service;
 
-import java.util.List;
-
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pl.com.dbs.reports.logging.service.LoggingService;
 import pl.com.dbs.reports.report.dao.ReportDao;
 import pl.com.dbs.reports.report.dao.ReportFilter;
@@ -17,6 +14,8 @@ import pl.com.dbs.reports.report.dao.ReportOrderDao;
 import pl.com.dbs.reports.report.domain.Report;
 import pl.com.dbs.reports.report.domain.ReportGenerationContext;
 import pl.com.dbs.reports.report.domain.ReportOrder;
+
+import java.util.List;
 
 /**
  * Reports management.

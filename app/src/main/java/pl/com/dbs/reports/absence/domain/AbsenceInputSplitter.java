@@ -44,8 +44,8 @@ public class AbsenceInputSplitter {
 		}
 
 		if (hospitalDateFrom.compareTo(dateFrom) <= 0 && hospitalDateTo.compareTo(dateTo) < 0) {
-			ranges.add(new AbsenceInput.AbsenceRange(dateFrom, addDay(hospitalDateTo, -1), hospital));
-			ranges.add(new AbsenceInput.AbsenceRange(hospitalDateTo, dateTo));
+			ranges.add(new AbsenceInput.AbsenceRange(dateFrom, hospitalDateTo, hospital));
+			ranges.add(new AbsenceInput.AbsenceRange(addDay(hospitalDateTo, 1), dateTo));
 		} else if (hospitalDateFrom.compareTo(dateFrom) <= 0 && hospitalDateTo.compareTo(dateTo) >= 0) {
 			ranges.add(new AbsenceInput.AbsenceRange(dateFrom, dateTo));
 		} else if (hospitalDateFrom.compareTo(dateFrom) > 0 && hospitalDateTo.compareTo(dateTo) < 0) {

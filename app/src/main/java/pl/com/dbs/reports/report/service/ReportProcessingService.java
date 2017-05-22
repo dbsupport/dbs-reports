@@ -13,12 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import pl.com.dbs.reports.api.report.ReportFactory;
-import pl.com.dbs.reports.api.report.ReportProduceContext;
-import pl.com.dbs.reports.api.report.ReportProduceResult;
-import pl.com.dbs.reports.api.report.ReportProduceStatus;
+import pl.com.dbs.reports.api.report.*;
 import pl.com.dbs.reports.api.report.pattern.Pattern;
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
+import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.dao.ReportDao;
 import pl.com.dbs.reports.report.dao.ReportOrderDao;
 import pl.com.dbs.reports.report.domain.Report;
@@ -62,10 +60,14 @@ public class ReportProcessingService {
 						return report.getFormat();
 					}
 					@Override
-					public Map<String, String> getParameters() {
-						return report.getParameters();
+					public List<ReportParameter> getParameters() {
+						return (List<ReportParameter>)report.getParameters();
 					}
-				};
+					@Override
+					public Profile getCreator() {
+						return report.getCreator();
+					}
+			};
 			result = factory.produce(context);				
 		} catch (Exception e) {
 			log.error(e.getMessage());

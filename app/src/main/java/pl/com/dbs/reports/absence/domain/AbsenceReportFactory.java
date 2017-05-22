@@ -3,33 +3,27 @@
  */
 package pl.com.dbs.reports.absence.domain;
 
-import com.google.common.collect.Maps;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.inject.internal.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import pl.com.dbs.reports.api.report.ReportFactory;
-import pl.com.dbs.reports.api.report.ReportProduceContext;
-import pl.com.dbs.reports.api.report.ReportProduceResult;
-import pl.com.dbs.reports.api.report.ReportProduceStatus;
+import pl.com.dbs.reports.api.report.*;
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
+import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.domain.ReportProduceContextDefault;
+import pl.com.dbs.reports.report.domain.builders.ReportBlockBuilderResolver;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuilder;
-import pl.com.dbs.reports.report.domain.builders.ReportRtfPdfBlocksBuilder;
-import pl.com.dbs.reports.report.domain.builders.ReportTextBlocksBuilder;
-import pl.com.dbs.reports.report.domain.builders.ReportTextPdfBlocksBuilder;
 import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflater;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 
-import javax.print.DocFlavor;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
-import java.util.regex.Matcher;
+import java.util.List;
 
 /**
  *
@@ -40,6 +34,7 @@ import java.util.regex.Matcher;
 @Component
 public class AbsenceReportFactory implements ReportFactory {
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static final SimpleDateFormat FLAT_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
 	private static final String SEPARATOR = ", ";
 	private static final String EOL = "\r\n";
 	private static final String ABSENCES_PARAM = "V_ABSENCES";
@@ -47,13 +42,13 @@ public class AbsenceReportFactory implements ReportFactory {
 	private static final String DATA_PARAM = "V_DATA";
 
 	private AbsenceProcessor absenceProcessor;
-	private ReportTextBlockInflater textBlockInflater;
+	private ReportBlockBuilderResolver builderResolver;
 
 	@Autowired
 	public AbsenceReportFactory(AbsenceProcessor absenceProcessor,
-								@Qualifier("report.block.inflater.default") ReportTextBlockInflater textBlockInflater) {
+								@Qualifier("report.block.inflater.default") ReportTextBlockInflater inflater) {
 		this.absenceProcessor = absenceProcessor;
-		this.textBlockInflater = textBlockInflater;
+		this.builderResolver = new ReportBlockBuilderResolver(inflater);
 	}
 
 	/* (non-Javadoc)
@@ -71,16 +66,24 @@ public class AbsenceReportFactory implements ReportFactory {
 	public ReportProduceResult produce(final ReportProduceContext context) {
 		ReportPattern pattern = (ReportPattern)(((ReportProduceContextDefault)context).getPattern());
 		PatternFormat format = ((ReportProduceContextDefault)context).getFormat();
-		Map<String, String> params = ((ReportProduceContextDefault)context).getParameters();
+		List<ReportParameter> params = (List<ReportParameter>)((ReportProduceContextDefault)context).getParameters();
+		Profile creator = ((ReportProduceContextDefault)context).getCreator();
 
 		//..find transformate..
 		final PatternTransformate transformate = pattern.getTransformate(format);
 		Validate.notNull(transformate, "Transformate is no more!");
 
-		Map.Entry<String, String> param = input(params);
+		ReportParameter param = Iterables.find(params, new Predicate<ReportParameter>() {
+			@Override
+			public boolean apply(ReportParameter input) {
+				return ReportParameterType.FILE.compareTo(input.getType()) == 0;
+			}
+		});
+
+		Validate.notNull(param, "File parameter is no more!");
 
 		//..convert, validate, upload ftp and execute ssh..
-		final AbsenceResult result = absenceProcessor.process(param.getValue().getBytes(), filename(param.getKey()));//FIXME: UTF-8
+		final AbsenceResult result = absenceProcessor.process(param.getValue().getBytes(), generateFilename(creator));
 
 		//..finally procude report summary..
 		return new ReportProduceResult() {
@@ -96,64 +99,16 @@ public class AbsenceReportFactory implements ReportFactory {
 		};
 	}
 
-	String filename(String key) {
-		String filename = key.replaceAll("\\.", "_").toLowerCase();
+	String generateFilename(Profile creator) {
+		String filename = creator.getLogin().replaceAll("\\.", "_").toLowerCase();
 		filename = filename.replaceAll("[^a-z0-9_]", "");
+		filename += "_" + FLAT_DATE_FORMAT.format(new Date());
 		return filename;
 	}
-	
-	private ReportBlocksBuilder resolveBlocksBuilder(final PatternTransformate transformate, final Map<String, String> params) {
-		ReportBlocksBuilder blocksbuilder = null;
-		if (isReportExtension(transformate, "pdf")) {
-			if (isPatternExtension(transformate, "rtf")) {
-				blocksbuilder = new ReportRtfPdfBlocksBuilder(transformate, textBlockInflater, params);
-			} else { 
-				blocksbuilder = new ReportTextPdfBlocksBuilder(transformate, textBlockInflater, params);
-			}
-		} else {
-			blocksbuilder = new ReportTextBlocksBuilder(transformate, textBlockInflater, params);
-		}
-		
-		return blocksbuilder;
-	}
-	
-	private boolean isReportExtension(final PatternTransformate transformate, String ext) {
-		if (StringUtils.isBlank(transformate.getFormat().getReportExtension())) return false;
-		
-		java.util.regex.Pattern extpattern = java.util.regex.Pattern.compile("^"+ext+"$",  java.util.regex.Pattern.CASE_INSENSITIVE);
-	    Matcher m = extpattern.matcher(transformate.getFormat().getReportExtension());
-	    m.reset();
-	    return m.find();
-	}
-	
-	private boolean isPatternExtension(final PatternTransformate transformate, String ext) {
-		if (StringUtils.isBlank(transformate.getFormat().getPatternExtension())) return false;
-		
-		java.util.regex.Pattern extpattern = java.util.regex.Pattern.compile("^"+ext+"$",  java.util.regex.Pattern.CASE_INSENSITIVE);
-	    Matcher m = extpattern.matcher(transformate.getFormat().getPatternExtension());
-	    m.reset();
-	    return m.find();
-	}
 
-	private Map.Entry<String, String> input(final Map<String, String> params) {
-		Collection<String> values = params.values();
 
-		Map.Entry<String, String> input = null;
-
-		for (Map.Entry<String, String> entry : params.entrySet()) {
-			if (entry.getKey().toUpperCase().contains("FILE")) {
-				input = entry;
-				break;
-			}
-		}
-
-		Validate.notNull(input, "Current version requires only FILE (one) parameter for absences reports.");
-
-		return input;
-	}
-
-	byte[] produce(final AbsenceResult result, PatternTransformate transformate) {
-		Map<String, String> params = Maps.newHashMap();
+	byte[] produce(final AbsenceResult result, final PatternTransformate transformate) {
+		List<ReportParameter> params = Lists.newArrayList();
 
 		StringBuilder sb = new StringBuilder();
 		for (AbsenceOutput output : result.getAbsences()) {
@@ -168,7 +123,7 @@ public class AbsenceReportFactory implements ReportFactory {
 					.append(output.getMotifa()).append(EOL);
 		}
 
-		params.put(ABSENCES_PARAM, sb.toString());
+		params.add(createParameter(ABSENCES_PARAM, sb.toString()));
 
 		sb = new StringBuilder();
 		for (AbsenceError error : result.getErrors()) {
@@ -183,16 +138,40 @@ public class AbsenceReportFactory implements ReportFactory {
 					.append(error.getMotifa()).append(SEPARATOR)
 					.append(error.getDescription()).append(EOL);
 		}
-		params.put(ERRORS_PARAM, sb.toString());
-		params.put(DATA_PARAM, DATE_FORMAT.format(new Date()));
+		params.add(createParameter(ERRORS_PARAM, sb.toString()));
+		params.add(createParameter(DATA_PARAM, DATE_FORMAT.format(new Date())));
 
 		//..resolve builder for blocks..
-		final ReportBlocksBuilder blocksbuilder = resolveBlocksBuilder(transformate, params);
+		final ReportBlocksBuilder blocksbuilder = builderResolver.resolve(transformate, params);
 		Validate.notNull(blocksbuilder, "Blocks builder is no more!");
 
 		//.inflate blocks tree..
 		blocksbuilder.build();
 
 		return blocksbuilder.getContent();
+	}
+
+	private ReportParameter createParameter(final String name, final String value) {
+		return new ReportParameter() {
+			@Override
+			public String getName() {
+				return name;
+			}
+
+			@Override
+			public String getValue() {
+				return value;
+			}
+
+			@Override
+			public String getDescription() {
+				return null;
+			}
+
+			@Override
+			public ReportParameterType getType() {
+				return ReportParameterType.TEXT;
+			}
+		};
 	}
 }

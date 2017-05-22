@@ -6,12 +6,13 @@ package pl.com.dbs.reports.support.web.form;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.inject.internal.Lists;
-import com.google.inject.internal.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
+import org.springframework.web.multipart.MultipartFile;
 import pl.com.dbs.reports.support.utils.separator.Separator;
 import pl.com.dbs.reports.support.web.form.field.AField;
+import pl.com.dbs.reports.support.web.form.field.FieldFile;
 import pl.com.dbs.reports.support.web.form.field.IFieldDivisible;
 import pl.com.dbs.reports.support.web.form.field.IFieldInflatable;
 import pl.com.dbs.reports.support.web.form.inflater.FieldInflater;
@@ -21,9 +22,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -80,8 +81,8 @@ public abstract class DForm extends AForm {
 		}
 	}
 	
-	public List<Map<String, String>> getParameters() {
-		List<Map<String, String>> result = Lists.newArrayList();
+	protected List<IFormParameters> fetchParameters() {
+		List<IFormParameters> result = Lists.newArrayList();
 		
 		List<IFieldDivisible> divisibles = getDivisibles();
 		
@@ -90,17 +91,17 @@ public abstract class DForm extends AForm {
 			 * only one divisible expected now...
 			 */
 			IFieldDivisible divisible = divisibles.get(0);
-			String name = divisible.getName();
-			for (String value : divisible.getValue()) {
-				Map<String, String> params = getNonDivisiblesAsMap();
+			final String name = divisible.getName();
+			for (final String value : divisible.getValue()) {
+				final List<IFormParameter> params = getNonDivisiblesAsList();
 				/**
 				 * FIXME: divisible ALWAYS at the END of the map!
 				 */
-				params.put(name, value);
-				result.add(params);
+				result.add(convert2Parameters(params, name, value));
 			}
 		} else {
-			result.add(getNonDivisiblesAsMap());
+			final List<IFormParameter> params = getNonDivisiblesAsList();
+			result.add(convert2Parameters(params, null, null));
 		}
 		
 		return result;
@@ -174,13 +175,70 @@ public abstract class DForm extends AForm {
 			}));
 	}	
 	
-	private Map<String, String> getNonDivisiblesAsMap() {
-		Map<String, String> parameters = Maps.newLinkedHashMap();
-		for (AField<?> field : getNonDivisibles()) {
-			//if (field.hasValue())
-				parameters.put(field.getName(), field.getValueAsString());
+	private List<IFormParameter> getNonDivisiblesAsList() {
+		List<IFormParameter> parameters = Lists.newArrayList();
+
+		for (final AField<?> field : getNonDivisibles()) {
+			parameters.add(convert2Parameter(field));
 		}
+
 		return parameters;
 	}
-	
+
+	private IFormParameter convert2Parameter(final AField field) {
+		final boolean isFile = FieldFile.class.equals(field.getClass());
+		return new IFormParameter() {
+
+			@Override
+			public String getName() {
+				return field.getName();
+			}
+
+			@Override
+			public String getValue() {
+				return !isFile ? field.getValueAsString() : null;
+			}
+
+			@Override
+			public MultipartFile getFile() {
+				return isFile ? ((FieldFile)field).getFile() : null;
+			}
+
+			@Override
+			public String getDescription() {
+				return isFile ? ((FieldFile)field).getFile().getName() : null;
+			}
+		};
+	}
+
+	private IFormParameters convert2Parameters(final List<IFormParameter> params, final String name, final String value) {
+		return new IFormParameters() {
+			public boolean isDivisibled() {
+				return name != null;
+			}
+			@Override
+			public List<IFormParameter> getParameters() {
+				return params;
+			}
+
+			@Override
+			public String getName() {
+				return name;
+			}
+
+			@Override
+			public String getValue() {
+				return name != null ? value : null;
+			}
+		};
+	}
+
+	protected String readFile(MultipartFile file) {
+		if (file == null) return null;
+		try {
+			return new String(file.getBytes(), "UTF-8");
+		} catch (IOException e) {}
+		return null;
+	}
+
 }

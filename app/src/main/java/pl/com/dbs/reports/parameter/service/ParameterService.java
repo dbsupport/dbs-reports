@@ -41,7 +41,6 @@ public class ParameterService {
 	public static final String FTP_HOST = "client.ftp.host";
 	public static final String FTP_USER = "client.ftp.user";
 	public static final String FTP_PASSWD = "client.ftp.passwd";
-	public static final String FTP_ABSENCE_PATH = "absence.ftp.path";
 
 	public static final String SSH_HOST = "client.ssh.host";
 	public static final String SSH_USER = "client.ssh.user";

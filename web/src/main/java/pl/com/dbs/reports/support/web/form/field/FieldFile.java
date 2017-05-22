@@ -49,12 +49,6 @@ public class FieldFile extends AField<String> {
 	}
 
 	@Override
-	public String getName() {
-		return file!=null?file.getName():null;
-	}
-
-
-	@Override
 	public String getValueAsString() {
 		String value = "";
 		if (hasValue()) {
@@ -109,4 +103,5 @@ public class FieldFile extends AField<String> {
 	public MultipartFile getFile() {
 		return file;
 	}
+
 }

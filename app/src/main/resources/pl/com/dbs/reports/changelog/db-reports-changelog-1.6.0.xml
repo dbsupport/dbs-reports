@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-1" context="tes">
+
+
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-1" context="!pro">
         <insert catalogName="reports"
                 tableName="tpa_parameter">
             <column name="id" type="bigint" valueNumeric="120"/>
@@ -11,7 +13,7 @@
             <column name="scope" type="varchar(64)" value="FTP"/>
         </insert>
     </changeSet>
-    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-2" context="tes">
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-2" context="!pro">
         <insert catalogName="reports"
                 tableName="tpa_parameter">
             <column name="id" type="bigint" valueNumeric="121"/>
@@ -21,28 +23,50 @@
             <column name="scope" type="varchar(64)" value="FTP"/>
         </insert>
     </changeSet>
-    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-3" context="tes">
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-3" context="!pro">
         <insert catalogName="reports"
                 tableName="tpa_parameter">
             <column name="id" type="bigint" valueNumeric="122"/>
             <column name="key" type="varchar(64)" value="client.ftp.passwd"/>
             <column name="value" type="bytea" value="lmhr"/>
-            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="type" type="varchar(64)" value="PASSWD"/>
             <column name="scope" type="varchar(64)" value="FTP"/>
         </insert>
     </changeSet>
-    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-4" context="tes">
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-5" context="!pro">
         <insert catalogName="reports"
                 tableName="tpa_parameter">
-            <column name="id" type="bigint" valueNumeric="123"/>
-            <column name="key" type="varchar(64)" value="absence.ftp.path"/>
-            <column name="value" type="bytea" value="/product_p05/FTPhr/lmhr/file/L/"/>
+            <column name="id" type="bigint" valueNumeric="125"/>
+            <column name="key" type="varchar(64)" value="client.ssh.host"/>
+            <column name="value" type="bytea" value="10.131.44.3"/>
             <column name="type" type="varchar(64)" value="TEXT"/>
-            <column name="scope" type="varchar(64)" value="FTP"/>
+            <column name="scope" type="varchar(64)" value="SSH"/>
+        </insert>
+    </changeSet>
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-6" context="!pro">
+        <insert catalogName="reports"
+                tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="126"/>
+            <column name="key" type="varchar(64)" value="client.ssh.user"/>
+            <column name="value" type="bytea" value="lmhr"/>
+            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="scope" type="varchar(64)" value="SSH"/>
+        </insert>
+    </changeSet>
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-7" context="!pro">
+        <insert catalogName="reports"
+                tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="127"/>
+            <column name="key" type="varchar(64)" value="client.ssh.passwd"/>
+            <column name="value" type="bytea" value="lmhr"/>
+            <column name="type" type="varchar(64)" value="PASSWD"/>
+            <column name="scope" type="varchar(64)" value="SSH"/>
         </insert>
     </changeSet>
 
-    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-1" context="prd">
+
+
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-1" context="pro">
         <insert catalogName="reports"
                 tableName="tpa_parameter">
             <column name="id" type="bigint" valueNumeric="120"/>
@@ -52,7 +76,7 @@
             <column name="scope" type="varchar(64)" value="FTP"/>
         </insert>
     </changeSet>
-    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-2" context="prd">
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-2" context="pro">
         <insert catalogName="reports"
                 tableName="tpa_parameter">
             <column name="id" type="bigint" valueNumeric="121"/>
@@ -62,26 +86,93 @@
             <column name="scope" type="varchar(64)" value="FTP"/>
         </insert>
     </changeSet>
-    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-3" context="prd">
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-3" context="pro">
         <insert catalogName="reports"
                 tableName="tpa_parameter">
             <column name="id" type="bigint" valueNumeric="122"/>
             <column name="key" type="varchar(64)" value="client.ftp.passwd"/>
             <column name="value" type="bytea" value="hr"/>
-            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="type" type="varchar(64)" value="PASSWD"/>
             <column name="scope" type="varchar(64)" value="FTP"/>
         </insert>
     </changeSet>
-    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-4" context="prd">
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-5" context="pro">
         <insert catalogName="reports"
                 tableName="tpa_parameter">
-            <column name="id" type="bigint" valueNumeric="123"/>
-            <column name="key" type="varchar(64)" value="absence.ftp.path"/>
-            <column name="value" type="bytea" value="/product_03/LPHR/file/L/"/>
+            <column name="id" type="bigint" valueNumeric="125"/>
+            <column name="key" type="varchar(64)" value="client.ssh.host"/>
+            <column name="value" type="bytea" value="10.131.44.1"/>
             <column name="type" type="varchar(64)" value="TEXT"/>
-            <column name="scope" type="varchar(64)" value="FTP"/>
+            <column name="scope" type="varchar(64)" value="SSH"/>
+        </insert>
+    </changeSet>
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-6" context="pro">
+        <insert catalogName="reports"
+                tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="126"/>
+            <column name="key" type="varchar(64)" value="client.ssh.user"/>
+            <column name="value" type="bytea" value="lmhr"/>
+            <column name="type" type="varchar(64)" value="TEXT"/>
+            <column name="scope" type="varchar(64)" value="SSH"/>
+        </insert>
+    </changeSet>
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-7" context="pro">
+        <insert catalogName="reports"
+                tableName="tpa_parameter">
+            <column name="id" type="bigint" valueNumeric="127"/>
+            <column name="key" type="varchar(64)" value="client.ssh.passwd"/>
+            <column name="value" type="bytea" value="lmhr"/>
+            <column name="type" type="varchar(64)" value="PASSWD"/>
+            <column name="scope" type="varchar(64)" value="SSH"/>
         </insert>
     </changeSet>
 
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-10">
+
+        <createSequence catalogName="reports"
+                        schemaName="reports"
+                        sequenceName="sre_report_parameter"
+                        incrementBy="1"
+                        minValue="1"
+                        startValue="1"/>
+
+        <addColumn catalogName="reports"
+                   tableName="tre_report_parameter">
+            <column name="content" type="BYTEA"/>
+        </addColumn>
+
+        <addColumn catalogName="reports"
+                   tableName="tre_report_parameter">
+            <column name="description" type="varchar(255)"/>
+        </addColumn>
+
+        <addColumn catalogName="reports"
+                   tableName="tre_report_parameter">
+            <column name="type" type="varchar(16)" defaultValue="TEXT"/>
+        </addColumn>
+
+        <addColumn catalogName="reports"
+                   tableName="tre_report_parameter">
+            <column name="id" type="bigint" defaultValueSequenceNext="sre_report_parameter"/>
+        </addColumn>
+
+        <addNotNullConstraint catalogName="reports"
+                              columnDataType="varchar(16)"
+                              columnName="type"
+                              tableName="tre_report_parameter"/>
+
+        <addPrimaryKey catalogName="reports"
+                       columnNames="id"
+                       constraintName="pk_tre_report_param"
+                       tableName="tre_report_parameter"/>
+
+    </changeSet>
+
+    <changeSet author="KKA" id="https://github.com/dbsupport/dbs-reports/issues/91-11">
+        <dropNotNullConstraint catalogName="reports"
+                               columnDataType="varchar(2000)"
+                               columnName="value"
+                               tableName="tre_report_parameter"/>
+    </changeSet>
 
 </databaseChangeLog>

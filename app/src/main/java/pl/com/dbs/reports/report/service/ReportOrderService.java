@@ -3,30 +3,25 @@
  */
 package pl.com.dbs.reports.report.service;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import pl.com.dbs.reports.api.report.ReportParameter;
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.profile.dao.ProfileDao;
 import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.dao.ReportDao;
 import pl.com.dbs.reports.report.dao.ReportOrderDao;
-import pl.com.dbs.reports.report.domain.Report;
-import pl.com.dbs.reports.report.domain.ReportGenerationContext;
-import pl.com.dbs.reports.report.domain.ReportOrder;
+import pl.com.dbs.reports.report.dao.ReportParameterDao;
+import pl.com.dbs.reports.report.domain.*;
 import pl.com.dbs.reports.report.pattern.dao.PatternDao;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.security.domain.SessionContext;
+
+import java.util.List;
 
 /**
  * Reports orders management.
@@ -38,6 +33,7 @@ import pl.com.dbs.reports.security.domain.SessionContext;
 public class ReportOrderService {
 	private static final Logger logger = LoggerFactory.getLogger(ReportOrderService.class);
 	@Autowired private ReportDao reportDao;
+	@Autowired private ReportParameterDao parameterDao;
 	@Autowired private ReportOrderDao reportOrderDao;
 	@Autowired private ProfileDao profileDao;
 	@Autowired private PatternDao patternDao;
@@ -107,12 +103,25 @@ public class ReportOrderService {
 		/**
 		 * ..create reports... multiselect splits..
 		 */
-		for (Map<String, String> parameters : context.getParameters()) {
-			ReportBuilder reportbuilder = new ReportBuilder(context, profile);
-			reportbuilder.parameters(parameters);
-			reportbuilder.suffix(context.getParameters().size());
-			Report report = reportbuilder.build().getReport();
-			reportDao.create(report);		
+		ReportPattern pattern = patternDao.find(context.getPattern());
+		PatternFormat format = context.getFormat();
+
+		for (List<ReportParameter> parameters : context.getParameters()) {
+			ReportParameterBuilder pbuilder = ReportParameterBuilder.builder()
+					.parameters(parameters);
+
+			Report report = ReportBuilder.builder()
+					.format(format)
+					.name(context.getName())
+					.pattern(pattern)
+					.profile(profile)
+					.suffix(pbuilder.getSuffix())
+					.parameters(pbuilder.build())
+					.build();
+
+			parameterDao.create(report.getParametersAsList());
+			reportDao.create(report);
+
 			order.add(report);
 		}
 
@@ -122,87 +131,8 @@ public class ReportOrderService {
 	
 	
 	
-	/**
-	 * Report builder.
-	 *
-	 * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
-	 * @copyright (c) 2013
-	 */
-	public final class ReportBuilder {
-		private static final int MAX_SUFFIX_LENGTH = 10;
-		private static final int MAX_NAME_LENGTH = 20;
-		private static final int MAX_EXT_LENGTH = 10;
-		
-		private ReportPattern pattern;
-		private PatternFormat format;
-		private String name;
-		private String suffix;
-		private Map<String, String> inparams;
-		private Profile profile;
-		private Report report;
-		
-		public ReportBuilder(ReportGenerationContext context, Profile profile) {
-			ReportPattern pattern = patternDao.find(context.getPattern());
-			PatternFormat format = context.getFormat();
-			String name = context.getName();			
-			
-			this.pattern = pattern;
-			this.format = format;
-			this.name = name;
-			//..store only input params ..
-			this.inparams = new LinkedHashMap<String, String>();
-			//..add parameters: profile login..
-			this.inparams.put(Profile.PARAMETER_USER, profile.getLogin());
-			//..add profile parameter (HR authorities)..
-			this.inparams.put(Profile.PARAMETER_PROFILE, SessionContext.getProfile().getClientAuthorityMetaData());
-			this.profile = profile;
-		}
-		
-		public ReportBuilder parameters(Map<String, String> parameters) {
-			this.inparams.putAll(parameters);
-			return this;
-		}
-		
-		public ReportBuilder suffix(int all) {
-			if (all>1&&this.inparams.size()>2) {
-				Iterator<Map.Entry<String,String>> iter = this.inparams.entrySet().iterator();
-				Map.Entry<String,String> entry = null;
-				while (iter.hasNext()) { entry = iter.next(); }
-				if (entry!=null) {
-					this.suffix = abbreviate(entry.getValue().replaceAll("[^A-Za-z0-9 ]", ""), MAX_SUFFIX_LENGTH); 
-				}
-			}
-			return this;
-		}
-		
-		public ReportBuilder build() {
-			for (Map.Entry<String, String> p : this.inparams.entrySet()) 
-				logger.debug(p.getKey()+":"+p.getValue());
-			
-			String fullname = abbreviate(name, MAX_NAME_LENGTH);
-			if (!StringUtils.isBlank(this.suffix)) {
-				fullname += "-"+this.suffix;
-			}
-			fullname += "."+abbreviate(format.getReportExtension(), MAX_EXT_LENGTH);
-			
-			this.report = new Report(pattern, fullname, profile)
-					.format(format)
-					.parameters(inparams);
-					
-			return this;
-		}
-		
-		public Report getReport() {
-			return report;
-		}
-		
-		private String abbreviate(String value, int length) {
-			if (value==null) return null;
-			value = value.trim();
-			if (value.length()<length) return value;
-			return value.substring(0, length);
-		}
 
-	}	
+
+
 
 }

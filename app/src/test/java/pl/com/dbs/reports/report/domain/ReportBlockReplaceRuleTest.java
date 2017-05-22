@@ -3,16 +3,14 @@
  */
 package pl.com.dbs.reports.report.domain;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-import java.util.Map;
-
 import org.junit.Test;
-
 import pl.com.dbs.reports.report.domain.builders.ReportBlockException;
 import pl.com.dbs.reports.report.domain.builders.ReportBlockInflationException;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuilder;
+
+import java.io.IOException;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * REPLACE tests
@@ -28,8 +26,10 @@ public class ReportBlockReplaceRuleTest extends ReportBlockRuleTest {
 
 	@Test
 	public void shouldnt_have_tags() throws IOException, ReportBlockInflationException, ReportBlockException {
-		params.put("V_0", V_0);
-		params.put("V_1", V_1);
+		params = ReportParameterTestBuilder.builder()
+				.with("V_0", V_0)
+				.with("V_1", V_1)
+				.build();
 
 		ReportBlocksBuilder builder = 
 				builder("pl/com/dbs/reports/domain/rule/test/test3.txt");
@@ -44,45 +44,47 @@ public class ReportBlockReplaceRuleTest extends ReportBlockRuleTest {
 	
 	@Test
 	public void check_production_pattern() throws IOException, ReportBlockInflationException, ReportBlockException {
-		params.put("INDATWYP", "INDATWYP");
-		params.put("VROW", "VROW");
-		params.put("VKOR", "VKOR");
-		params.put("VNIP", "VNIP");
-		params.put("VREG", "VREG");
-		params.put("VNAZ", "VNAZ");
-		params.put("VPES", "VPES");
-		params.put("VTYP", "VTYP");
-		params.put("VDOK", "VDOK");
-		params.put("VNAZW", "VNAZW");
-		params.put("VIMIE", "VIMIE");
-		params.put("VDATUR", "VDATUR");
-		params.put("VIMIE2", "VIMIE2");
-		params.put("VNAZW2", "VNAZW2");
-		params.put("VOBYW", "VOBYW");
-		params.put("VPLEC", "VPLEC");
-		params.put("VTYT1", "VTYT1");
-		params.put("VTYT2", "VTYT2");
-		params.put("VTYT3", "VTYT3");
-		params.put("VZUSDEB", "VZUSDEB");
-		params.put("VKASA", "VKASA");
-		params.put("VKOD", "VKOD");
-		params.put("VMIEJSC", "VMIEJSC");
-		params.put("VGMINA2", "VGMINA2");
-		params.put("VULICA", "VULICA");
-		params.put("VNRDOMU", "VNRDOMU");
-		params.put("VNRMIESZ", "VNRMIESZ");
-		params.put("VKODKRAJU", "VKODKRAJU");
-		params.put("VKODZAGR", "VKODZAGR");
-		
-		ReportBlocksBuilder builder = 
+		params = ReportParameterTestBuilder.builder()
+		.with("INDATWYP", "INDATWYP")
+		.with("VROW", "VROW")
+		.with("VKOR", "VKOR")
+		.with("VNIP", "VNIP")
+		.with("VREG", "VREG")
+		.with("VNAZ", "VNAZ")
+		.with("VPES", "VPES")
+		.with("VTYP", "VTYP")
+		.with("VDOK", "VDOK")
+		.with("VNAZW", "VNAZW")
+		.with("VIMIE", "VIMIE")
+		.with("VDATUR", "VDATUR")
+		.with("VIMIE2", "VIMIE2")
+		.with("VNAZW2", "VNAZW2")
+		.with("VOBYW", "VOBYW")
+		.with("VPLEC", "VPLEC")
+		.with("VTYT1", "VTYT1")
+		.with("VTYT2", "VTYT2")
+		.with("VTYT3", "VTYT3")
+		.with("VZUSDEB", "VZUSDEB")
+		.with("VKASA", "VKASA")
+		.with("VKOD", "VKOD")
+		.with("VMIEJSC", "VMIEJSC")
+		.with("VGMINA2", "VGMINA2")
+		.with("VULICA", "VULICA")
+		.with("VNRDOMU", "VNRDOMU")
+		.with("VNRMIESZ", "VNRMIESZ")
+		.with("VKODKRAJU", "VKODKRAJU")
+		.with("VKODZAGR", "VKODZAGR")
+		.build();
+
+		ReportBlocksBuilder builder =
 				builder("pl/com/dbs/reports/domain/rule/test/zua.txt");
 		
 		String sb = new String(builder.build().getContent());
 		
 		System.out.print(sb);
 		
-		for (Map.Entry<String, String> entry : params.entrySet()) {
-			assertTrue(!sb.toString().contains("^$"+entry.getKey()+"^"));
+		for (pl.com.dbs.reports.api.report.ReportParameter entry : params) {
+			assertTrue(!sb.toString().contains("^$"+entry.getName()+"^"));
 		}
 	}	
 }

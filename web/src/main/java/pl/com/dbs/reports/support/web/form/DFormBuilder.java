@@ -107,8 +107,7 @@ public class DFormBuilder<T extends DForm> {
 				FieldValidatorMin.class,
 				FieldValidatorMax.class,
 				FieldValidatorBefore.class,
-				FieldValidatorAfter.class,
-				FieldValidatorSingle.class
+				FieldValidatorAfter.class
 		);		
 	}
 

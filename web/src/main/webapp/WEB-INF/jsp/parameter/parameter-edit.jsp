@@ -15,70 +15,55 @@
 
 <tiles:putAttribute name="content" type="string">
 
+    <div class="row">
                     <div class="col-md-8 column">
 						<h4>Parametry bazy danych</h4>
-						<br/><br/> 
-                    	<form:form method="post" modelAttribute="parametersdbeditform" action="param/edit/db" class="dbs-form" enctype="multipart/form-data">
-							<c:forEach items="${parametersdbeditform.params}" var="param" varStatus="rstatus"> 
-		                    	<spring:bind path="params[${rstatus.index}]">
-		                    	<c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
-		                    	<div class="field-box ${classes}">
-			                        <label>${parametersdbeditform.params[rstatus.index].key}</label>
-			                        <c:choose>
-			                        <c:when test="${parametersdbeditform.params[rstatus.index].type eq 'PASSWD'}">
-			                        	<form:password path="params[${rstatus.index}].value" cssClass="form-control" showPassword="true" placeholder="Wartość"/>
-			                        </c:when>
-			                        <c:when test="${parametersdbeditform.params[rstatus.index].type eq 'FILE'}">
-                                        <input type="file" name="params[${rstatus.index}].file" class="form-control" />
-                                        <c:if test="${parametersdbeditform.params[rstatus.index].valued}"><span class="alert-msg">${parametersdbeditform.params[rstatus.index].desc}</span></c:if>
-                                    </c:when>
-			                        <c:otherwise>
-			                        	<form:input path="params[${rstatus.index}].value" cssClass="form-control" placeholder="Wartość"/>
-			                        </c:otherwise>
-			                        </c:choose>
-		                            <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
-		                        </div>
-		                        </spring:bind>
-		                    </c:forEach>
-	                        
-                            <div class="wizard-actions">
-                            	<button type="submit" class="btn-glow success btn-finish" style="display: inline-block;">Zapisz i testuj!</button><span>&nbsp;</span>
-                            </div>
-                        </form:form>
+						<br/><br/>
+
+                        <jsp:include page="parameter-edit-form.jsp" >
+                            <jsp:param name="form" value="parametersdbeditform"/>
+                            <jsp:param name="action" value="param/edit/db"/>
+                        </jsp:include>
+
                     </div>
-                        
-                    <div class="col-md-8 column">                     
-						<br/><br/><br/><br/><br/>   
-						<h4>Parametry aplikacyjne</h4>
-						<br/><br/>                     
-                        <form:form method="post" modelAttribute="parametersappeditform" action="param/edit/app" class="" enctype="multipart/form-data">
-                            
-                            <c:forEach items="${parametersappeditform.params}" var="param" varStatus="rstatus"> 
-                                <spring:bind path="params[${rstatus.index}]">
-                                <c:set var="classes"><c:choose><c:when test="${status.error}">error</c:when></c:choose></c:set>
-                                <div class="field-box ${classes}">
-                                    <label>${parametersappeditform.params[rstatus.index].key}</label>
-                                    <c:choose>
-                                    <c:when test="${parametersappeditform.params[rstatus.index].type eq 'PASSWD'}">
-                                        <form:password path="params[${rstatus.index}].value" cssClass="form-control" showPassword="true" placeholder="Wartość"/>
-                                    </c:when>
-                                    <c:when test="${parametersappeditform.params[rstatus.index].type eq 'FILE'}">
-	                                    <input type="file" name="params[${rstatus.index}].file" class="form-control" />
-	                                    <c:if test="${parametersappeditform.params[rstatus.index].valued}"><span class="alert-msg">${parametersappeditform.params[rstatus.index].desc}</span></c:if>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <form:input path="params[${rstatus.index}].value" cssClass="form-control" placeholder="Wartość"/>
-                                    </c:otherwise>
-                                    </c:choose>
-                                    <c:if test="${status.error}"><span class="alert-msg"><i class="icon-remove-sign"></i> <c:out value="${status.errorMessage}" escapeXml="false"/></span></c:if>
-                                </div>
-                                </spring:bind>
-                            </c:forEach>
-                            
-                            <div class="wizard-actions">
-                                <button type="submit" class="btn-glow success btn-finish" style="display: inline-block;">Zapisz!</button><span>&nbsp;</span>
-                            </div>
-                        </form:form>                        
+
+
+                    <div class="col-md-8 column">
+                        <br/><br/><br/><br/><br/>
+                        <h4>Parametry FTP</h4>
+                        <br/><br/>
+
+                        <jsp:include page="parameter-edit-form.jsp" >
+                            <jsp:param name="form" value="parametersftpeditform"/>
+                            <jsp:param name="action" value="param/edit/ftp"/>
+                        </jsp:include>
+
                     </div>
+    </div>
+
+                    <div class="col-md-8 column">
+                        <br/><br/><br/><br/><br/>
+                        <h4>Parametry SSH</h4>
+                        <br/><br/>
+
+                        <jsp:include page="parameter-edit-form.jsp" >
+                            <jsp:param name="form" value="parametersssheditform"/>
+                            <jsp:param name="action" value="param/edit/ssh"/>
+                        </jsp:include>
+
+                    </div>
+
+                    <div class="col-md-8 column">
+                        <br/><br/><br/><br/><br/>
+                        <h4>Parametry aplikacyjne</h4>
+                        <br/><br/>
+
+                        <jsp:include page="parameter-edit-form.jsp" >
+                            <jsp:param name="form" value="parametersappeditform"/>
+                            <jsp:param name="action" value="param/edit/app"/>
+                        </jsp:include>
+
+                    </div>
+
 </tiles:putAttribute>
 </tiles:insertDefinition>        

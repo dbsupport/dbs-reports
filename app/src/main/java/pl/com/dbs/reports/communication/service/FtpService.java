@@ -23,7 +23,8 @@ import java.io.InputStream;
 @Service
 public class FtpService {
 	private ParameterService parameterService;
-	@Value("#{new Integer.parseInt('${ftp.service.try.counter}')}")
+
+	@Value("${ftp.service.try.counter}")
 	Integer tries;
 
 	@Autowired
@@ -77,7 +78,7 @@ public class FtpService {
 	}
 
 	private void retryOrGiveUp(Context context, Exception e) throws Exception {
-		if (context.counter < tries) {
+		if (context.counter < Integer.valueOf(tries)) {
 			log.error("Failed ({}) to upload file to FTP server {}. Details: {}", context.counter, context.host, e.getMessage());
 			context.counter++;
 			return;
@@ -85,6 +86,7 @@ public class FtpService {
 
 		throw e;
 	}
+
 
 	static class Context {
 		String host;

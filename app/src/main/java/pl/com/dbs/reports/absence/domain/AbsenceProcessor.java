@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import pl.com.dbs.reports.api.report.ReportLoggings;
 import pl.com.dbs.reports.communication.service.FtpService;
 import pl.com.dbs.reports.communication.service.SshService;
-import pl.com.dbs.reports.parameter.service.ParameterService;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,24 +18,25 @@ import java.util.List;
 @Slf4j
 @Service
 public class AbsenceProcessor {
+	static final String COMMAND_FILENAME_TEMPLATE = "_filename_";
 
 	private AbsenceImporter absenceImporter;
 	private AbsenceExporter absenceExporter;
 	private FtpService ftpService;
 	private SshService sshService;
-	private ParameterService parameterService;
 
 	@Value("absence.ssh.command")
-	String command;
+	String command = "imp_zla _filename_";
+	@Value("${absence.ftp.path}")
+	String path;
 
 	@Autowired
 	public AbsenceProcessor(AbsenceImporter absenceImporter, AbsenceExporter absenceExporter, FtpService ftpService,
-							SshService sshService, ParameterService parameterService) {
+							SshService sshService) {
 		this.absenceExporter = absenceExporter;
 		this.absenceImporter = absenceImporter;
 		this.ftpService = ftpService;
 		this.sshService = sshService;
-		this.parameterService = parameterService;
 	}
 
 	public AbsenceResult process(final byte[] content, String filename) {
@@ -54,12 +54,11 @@ public class AbsenceProcessor {
 
 		try {
 			//..export to ftp..
-			String path = parameterService.find(ParameterService.FTP_ABSENCE_PATH).getValueAsString();
 			final byte[] ftpcontent = AbsenceExportBuilder.builder().with(result.getAbsences()).build();
 			ftpService.upload(ftpcontent, filename, path);
 
 			//..sexcute ssh command..
-			String cmd = command.replace("{filename}", filename);
+			String cmd = command.replace(COMMAND_FILENAME_TEMPLATE, filename);
 			sshService.execute(cmd);
 		} catch (Exception e) {
 			log.error(ReportLoggings.MDC_ID, e.getMessage());

@@ -1,7 +1,8 @@
 package pl.com.dbs.reports.absence.domain;
 
 /**
- * Created by Krzysztof Kaziura (krzysztof.kaziura@contractors.roche.com) on 2017-05-17.
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @copyright (c) 2017
  */
 public interface Absence {
 }

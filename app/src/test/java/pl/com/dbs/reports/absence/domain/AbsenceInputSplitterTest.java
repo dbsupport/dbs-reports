@@ -42,7 +42,7 @@ public class AbsenceInputSplitterTest {
 	}
 
 	@Test
-	public void should_have_one_range_too() {
+	public void should_have_one_range_also() {
 		AbsenceInput absence = AbsenceInputTestBuilder.builder()
 				.dateFrom("2017-05-01")
 				.dateTo("2017-05-10")
@@ -88,9 +88,9 @@ public class AbsenceInputSplitterTest {
 		assertNotNull(ranges);
 		assertTrue(ranges.size() == 2);
 		assertTrue(ranges.get(0).getStart().compareTo(absence.getDateFromAsDate()) == 0);
-		assertTrue(ranges.get(0).getEnd().compareTo(addDay(absence.getHospitalDateToAsDate(),-1)) == 0);
+		assertTrue(ranges.get(0).getEnd().compareTo(absence.getHospitalDateToAsDate()) == 0);
 
-		assertTrue(ranges.get(1).getStart().compareTo(absence.getHospitalDateToAsDate()) == 0);
+		assertTrue(ranges.get(1).getStart().compareTo(addDay(absence.getHospitalDateToAsDate(),1)) == 0);
 		assertTrue(ranges.get(1).getEnd().compareTo(absence.getDateToAsDate()) == 0);
 	}
 

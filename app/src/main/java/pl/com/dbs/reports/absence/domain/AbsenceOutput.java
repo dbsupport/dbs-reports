@@ -126,15 +126,15 @@ public class AbsenceOutput implements Absence {
 		.append(number).append(SEPARATOR)
 		.append(series).append(SEPARATOR)
 		.append(nip).append(SEPARATOR)
-		.append(DATE_FORMAT.format(dateFrom)).append(SEPARATOR)
-		.append(DATE_FORMAT.format(dateTo)).append(SEPARATOR)
-		.append(DATE_FORMAT.format(employmentDate)).append(SEPARATOR)
-		.append(DATE_FORMAT.format(date)).append(SEPARATOR)
-		.append(nudoss).append(SEPARATOR)
-		.append(socdos).append(SEPARATOR)
-		.append(matcle).append(SEPARATOR)
-		.append(sicknessCode).append(SEPARATOR)
-		.append(motifa).append("\"));");
+		.append(dateFrom!=null?DATE_FORMAT.format(dateFrom):"null").append(SEPARATOR)
+		.append(dateTo!=null?DATE_FORMAT.format(dateTo):"null").append(SEPARATOR)
+		.append(employmentDate!=null?DATE_FORMAT.format(employmentDate):"null").append(SEPARATOR)
+		.append(date!=null?DATE_FORMAT.format(date):"null").append(SEPARATOR)
+		.append(nudoss!=null?nudoss:"null").append(SEPARATOR)
+		.append(socdos!=null?socdos:"null").append(SEPARATOR)
+		.append(matcle!=null?matcle:"null").append(SEPARATOR)
+		.append(sicknessCode!=null?sicknessCode:"null").append(SEPARATOR)
+		.append(motifa!=null?motifa:"null").append("\"));");
 
 //		.append(hospital);
 

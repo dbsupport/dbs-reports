@@ -7,9 +7,11 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
+import pl.com.dbs.reports.api.report.ReportParameter;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflater;
 
@@ -27,7 +29,7 @@ import com.lowagie.text.pdf.PdfWriter;
 @Slf4j
 public final class ReportTextPdfBlocksBuilder extends ReportTextBlocksBuilder {
 	
-	public ReportTextPdfBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflater inflater, final Map<String, String> params) {
+	public ReportTextPdfBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflater inflater, final List<ReportParameter> params) {
 		super(transformate, inflater, params);
 	}
 	

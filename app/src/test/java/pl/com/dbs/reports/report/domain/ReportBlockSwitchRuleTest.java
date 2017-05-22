@@ -38,18 +38,21 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 	@Before
 	public void doBeforeEachTestCase() {
 		super.doBeforeEachTestCase();
-		
-		params.put(I_DEFAULT, "The slings and arrows of outrageous fortune");
-		params.put(I_0, "Stoi pod gradem zajadlych strzal losu");
-		params.put(I_1, "znosic ostre ciosy niesprawiedliwej fortuny");
-		params.put(I_2, "Znosic pociski zawsitnego losu");
-		params.put(I_3, "strzaly i razy nieprzytomne");		
+		params = ReportParameterTestBuilder.builder()
+		.with(I_DEFAULT, "The slings and arrows of outrageous fortune")
+		.with(I_0, "Stoi pod gradem zajadlych strzal losu")
+		.with(I_1, "znosic ostre ciosy niesprawiedliwej fortuny")
+		.with(I_2, "Znosic pociski zawsitnego losu")
+		.with(I_3, "strzaly i razy nieprzytomne")
+		.build();
 	}
 	
 
 	@Test
 	public void should_split_1() throws IOException, ReportBlockException {
-		params.put("V_0", "");
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "")
+				.build();
 		
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test0.txt");
 		
@@ -63,8 +66,10 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 	
 	@Test
 	public void should_split_2() throws IOException, ReportBlockException {
-		params.put("V_0", "0");
-		
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "0")
+				.build();
+
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test0.txt");
 		
 		String sb = new String(builder.build().getContent());
@@ -77,8 +82,10 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 
 	@Test
 	public void should_split_3() throws IOException, ReportBlockException {
-		params.put("V_0", "1");
-		
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "1")
+				.build();
+
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test0.txt");
 		
 		String sb = new String(builder.build().getContent());
@@ -90,8 +97,10 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 	
 	@Test
 	public void should_split_4() throws IOException, ReportBlockException {
-		params.put("V_0", "2");
-		
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "2")
+				.build();
+
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test0.txt");
 		
 		String sb = new String(builder.build().getContent());
@@ -103,8 +112,10 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 	
 	@Test
 	public void should_split_5() throws IOException, ReportBlockException {
-		params.put("V_0", "3");
-		
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "3")
+				.build();
+
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test0.txt");
 		
 		String sb = new String(builder.build().getContent());
@@ -116,8 +127,10 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 	
 	@Test
 	public void should_split_6() throws IOException, ReportBlockException {
-		params.put("V_0", "_123_- !@#$%^&*");
-		
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "_123_- !@#$%^&*")
+				.build();
+
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test0.txt");
 		
 		String sb = new String(builder.build().getContent());
@@ -129,8 +142,10 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 	
 	@Test
 	public void should_split_7() throws IOException, ReportBlockException {
-		params.put("V_0", "4");
-		
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "4")
+				.build();
+
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test0.txt");
 		
 		String sb = new String(builder.build().getContent());
@@ -142,11 +157,13 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 	
 	@Test
 	public void shouldnt_have_any_tags() throws IOException, ReportBlockException {
-		params.put("V_0", "");
-		params.put("V_1", "");
-		params.put("V_2", "");
-		params.put("V_3", "");
-		
+		params = ReportParameterTestBuilder.builder(params)
+			.with("V_0", "")
+			.with("V_1", "")
+			.with("V_2", "")
+			.with("V_3", "")
+			.build();
+
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test1.txt");
 		
 		String sb = new String(builder.build().getContent());
@@ -167,7 +184,9 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 	
 	@Test
 	public void should_be_null_variant() throws IOException, ReportBlockException {
-		params.put("V_0", "");
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "")
+				.build();
 		
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test2.txt");
 		
@@ -180,7 +199,9 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 	
 	@Test
 	public void should_be_default_variant() throws IOException, ReportBlockException {
-		params.put("V_0", "nonabove");
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "nonabove")
+				.build();
 		
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test2.txt");
 		
@@ -188,12 +209,14 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 		
 		System.out.print(sb);			
 		
-		assertTrue(sb.equals(SENTENCE+params.get(I_DEFAULT)+EOF));
+		assertTrue(sb.equals(SENTENCE+findParamByName(I_DEFAULT)+EOF));
 	}	
 	
 	@Test
 	public void should_be_a_variant_1() throws IOException, ReportBlockException {
-		params.put("V_0", "0");
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "0")
+				.build();
 		
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test2.txt");
 		
@@ -202,12 +225,14 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 		System.out.print(sb);
 		
 		
-		assertTrue(sb.equals(SENTENCE+params.get(I_0)));
+		assertTrue(sb.equals(SENTENCE+findParamByName(I_0)));
 	}
 		
 	@Test
 	public void should_be_a_variant_2() throws IOException, ReportBlockException {
-		params.put("V_0", "1");
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "1")
+				.build();
 		
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test2.txt");
 		
@@ -215,36 +240,42 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 		
 		System.out.print(sb);
 		
-		assertTrue(sb.equals(SENTENCE+params.get(I_1)));
+		assertTrue(sb.equals(SENTENCE+findParamByName(I_1)));
 	}
 		
 	@Test
 	public void should_be_a_variant_3() throws IOException, ReportBlockException {
-		params.put("V_0", "2");
-		
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "2")
+				.build();
+
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test2.txt");
 		
 		String sb = new String(builder.build().getContent());
 		
 		System.out.print(sb);
-		assertTrue(sb.equals(SENTENCE+params.get(I_2)));
+		assertTrue(sb.equals(SENTENCE+findParamByName(I_2)));
 	}
 
 	@Test
 	public void should_be_a_variant_4() throws IOException, ReportBlockException {
-		params.put("V_0", "3");
+		params = ReportParameterTestBuilder.builder(params)
+				.with("V_0", "3")
+				.build();
 		
 		ReportBlocksBuilder builder = builder("pl/com/dbs/reports/domain/rule/test/test2.txt");
 		
 		String sb = new String(builder.build().getContent());
 		
 		System.out.print(sb);		
-		assertTrue(sb.equals(SENTENCE+params.get(I_3)));			
+		assertTrue(sb.equals(SENTENCE+findParamByName(I_3)));
 	}	
 	
 	@Test
 	public void should_choose_space() throws IOException, ReportBlockException {
-		params.put("INTEXT", " ");
+		params = ReportParameterTestBuilder.builder(params)
+				.with("INTEXT", " ")
+				.build();
 
 		ReportBlocksBuilder builder = builderContent("[BLOCK(INIT)BLOCK][SWITCH(^$INTEXT^)#CASE( )spacja #CASE()pusty #CASE(aa)aa #CASE($)inny SWITCH]");
 		
@@ -256,7 +287,9 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 	
 	@Test
 	public void should_choose_empty() throws IOException, ReportBlockException {
-		params.put("INTEXT", "");
+		params = ReportParameterTestBuilder.builder(params)
+				.with("INTEXT", "")
+				.build();
 
 		ReportBlocksBuilder builder = builderContent("[BLOCK(INIT)BLOCK][SWITCH(^$INTEXT^)#CASE( )spacja #CASE()pusty #CASE(aa)aa #CASE($)inny SWITCH]");
 		
@@ -268,7 +301,9 @@ public class ReportBlockSwitchRuleTest extends ReportBlockRuleTest {
 	
 	@Test
 	public void should_choose_otherwise() throws IOException, ReportBlockException {
-		params.put("INTEXT", "bum tralalala chlupie fala");
+		params = ReportParameterTestBuilder.builder(params)
+				.with("INTEXT", "bum tralalala chlupie fala")
+				.build();
 
 		ReportBlocksBuilder builder = builderContent("[BLOCK(INIT)BLOCK][SWITCH(^$INTEXT^)#CASE( )spacja #CASE()pusty #CASE(aa)aa #CASE($)inny SWITCH]");
 		

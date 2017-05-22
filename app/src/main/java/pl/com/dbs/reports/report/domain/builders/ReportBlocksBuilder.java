@@ -17,8 +17,6 @@ public interface ReportBlocksBuilder {
 	 * Process blocks.
 	 */
 	ReportBlocksBuilder build();
-	
-	ReportBlocksBuilder addParameter(final String key, final String value);
 
 	/**
 	 * Results: content

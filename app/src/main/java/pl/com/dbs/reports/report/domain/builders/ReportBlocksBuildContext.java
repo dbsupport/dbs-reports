@@ -3,15 +3,16 @@
  */
 package pl.com.dbs.reports.report.domain.builders;
 
+import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import pl.com.dbs.reports.api.report.ReportLoggings;
+import pl.com.dbs.reports.api.report.ReportParameter;
+
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import lombok.extern.slf4j.Slf4j;
-
-import org.apache.commons.lang.StringUtils;
-
-import pl.com.dbs.reports.api.report.ReportLoggings;
 
 /**
  * Inflater context .
@@ -27,13 +28,18 @@ public class ReportBlocksBuildContext {
 	private LinkedList<ReportTextBlock> blocks;
 	
 	
-	public ReportBlocksBuildContext(ReportTextBlock root, Map<String, String> params, StringBuilder sb) {
+	public ReportBlocksBuildContext(ReportTextBlock root, List<ReportParameter> params, StringBuilder sb) {
 		this.blocks = root.getBlocks();
-		this.params = params;
 		this.sb = sb;
+		//convert to map..
+		this.params = Maps.newHashMap();
+		for (ReportParameter parameter : params) {
+			this.params.put(parameter.getName(), parameter.getValue());
+		}
+
 		//..add parameters log..
 		final StringBuilder lsb = new StringBuilder();
-		for (Map.Entry<String, String> param : params.entrySet()) {
+		for (Map.Entry<String, String> param : this.params.entrySet()) {
 			if (!StringUtils.isBlank(param.getValue())) {
 				String value = param.getValue().length()>255?(param.getValue().substring(0, 255)+".."):param.getValue();
 				lsb.append(param.getKey()).append("=").append(value).append(System.getProperty("line.separator"));

@@ -40,6 +40,8 @@ public class ParameterController {
 	private static final Logger logger = LoggerFactory.getLogger(ParameterController.class);
 	static final String FORM_DB_KEY = "parametersdbeditform";
 	static final String FORM_APP_KEY = "parametersappeditform";
+	static final String FORM_FTP_KEY = "parametersftpeditform";
+	static final String FORM_SSH_KEY = "parametersssheditform";
 	
 	@Autowired private Alerts alerts;
 	@Autowired private ParameterService parameterService;
@@ -55,13 +57,29 @@ public class ParameterController {
     public ParameterEditForm formapp() {
 		ParameterEditForm form = new ParameterEditForm(ParameterScope.APP);
 		return form;
-    }	
-	
+    }
+
+	@ModelAttribute(FORM_FTP_KEY)
+	public ParameterEditForm formftp() {
+		ParameterEditForm form = new ParameterEditForm(ParameterScope.FTP);
+		return form;
+	}
+
+	@ModelAttribute(FORM_SSH_KEY)
+	public ParameterEditForm formssh() {
+		ParameterEditForm form = new ParameterEditForm(ParameterScope.SSH);
+		return form;
+	}
+
 	@RequestMapping(value="/param/edit", method = RequestMethod.GET)
     public String edit(Model model, @ModelAttribute(FORM_DB_KEY) final ParameterEditForm formdb, 
-    								@ModelAttribute(FORM_APP_KEY) final ParameterEditForm formapp) {
+    								@ModelAttribute(FORM_APP_KEY) final ParameterEditForm formapp,
+					   				@ModelAttribute(FORM_FTP_KEY) final ParameterEditForm formftp,
+					   				@ModelAttribute(FORM_SSH_KEY) final ParameterEditForm formssh) {
 		formdb.reset(parameterService.find(formdb.getFilter()));
 		formapp.reset(parameterService.find(formapp.getFilter()));
+		formftp.reset(parameterService.find(formftp.getFilter()));
+		formssh.reset(parameterService.find(formssh.getFilter()));
 		return "parameter/parameter-edit";
     }		
 	
@@ -82,7 +100,7 @@ public class ParameterController {
 	}
 	
 	@RequestMapping(value= "/param/edit/app", method = RequestMethod.POST)
-    public String edit(@Valid @ModelAttribute(FORM_APP_KEY) final ParameterEditForm formapp, 
+    public String editapp(@Valid @ModelAttribute(FORM_APP_KEY) final ParameterEditForm formapp,
     					BindingResult results, 
     				    HttpServletRequest request,
     				    HttpSession session) {
@@ -90,9 +108,28 @@ public class ParameterController {
 		ProfileSession.update(parameterService.find(ParameterService.APP_HELP_FILE), request);
 		
 		return "redirect:/param/edit";
-	}	
-	
-	
+	}
+
+	@RequestMapping(value= "/param/edit/ftp", method = RequestMethod.POST)
+	public String editftp(@Valid @ModelAttribute(FORM_FTP_KEY) final ParameterEditForm formftp,
+					   BindingResult results,
+					   HttpServletRequest request,
+					   HttpSession session) {
+		edit(formftp, session);
+
+		return "redirect:/param/edit";
+	}
+
+	@RequestMapping(value= "/param/edit/ssh", method = RequestMethod.POST)
+	public String editssh(@Valid @ModelAttribute(FORM_SSH_KEY) final ParameterEditForm formssh,
+						  BindingResult results,
+						  HttpServletRequest request,
+						  HttpSession session) {
+		edit(formssh, session);
+
+		return "redirect:/param/edit";
+	}
+
 	private void edit(final ParameterEditForm form, HttpSession session) {
 		for (ParameterEditForm.Param param : form.getParams()) {
 			try {

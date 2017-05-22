@@ -137,7 +137,6 @@ If PREFIX: CLIENT - queries client DB.</xs:documentation>
 			<xs:enumeration value="max"/>
 			<xs:enumeration value="before"/>
 			<xs:enumeration value="after"/>
-			<xs:enumeration value="single"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:annotation/>

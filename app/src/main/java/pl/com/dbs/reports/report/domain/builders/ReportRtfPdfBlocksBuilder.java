@@ -6,9 +6,11 @@ package pl.com.dbs.reports.report.domain.builders;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
+import pl.com.dbs.reports.api.report.ReportParameter;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflater;
 
@@ -27,7 +29,7 @@ import com.lowagie.text.rtf.parser.RtfParser;
 @Slf4j
 public final class ReportRtfPdfBlocksBuilder extends ReportTextBlocksBuilder {
 	
-	public ReportRtfPdfBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflater inflater, final Map<String, String> params) {
+	public ReportRtfPdfBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflater inflater, final List<ReportParameter> params) {
 		super(transformate, inflater, params);
 	}
 	

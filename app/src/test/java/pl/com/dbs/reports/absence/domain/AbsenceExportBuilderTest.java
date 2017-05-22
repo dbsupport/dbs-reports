@@ -9,8 +9,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import pl.com.dbs.reports.TestFileHelper;
+import pl.com.dbs.reports.report.PatternFactoryDefaultTest;
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -43,8 +46,8 @@ public class AbsenceExportBuilderTest {
 		absences.add(build("53092605017","8975640","ZZ","5260309174","2017-05-02","2017-05-26","2017-05-01","2017-05-08","689861407","POL","POL0010002",null,"CHR"));
 		absences.add(build("51030218017","8975712","ZZ","5260309174","2017-05-04","2017-05-05","2017-05-01","2017-05-04","689861457","POL","POL0010054",null,"ODR"));
 		absences.add(build("65010503688","8975250","ZZ","5260309174","2017-05-04","2017-05-18","2017-05-01","2017-05-04","689861410","POL","POL0010005","AB","CHR"));
-		absences.add(build("60040210197","8978223","ZZ","5260309174","2017-04-21","2017-05-01","2017-05-01","2017-05-02","689861492","POL","POL0010089","S","CHR"));
-		absences.add(build("60040210197","8978223","ZZ","5260309174","2017-05-02","2017-06-21","2017-05-01","2017-05-02","689861492","POL","POL0010089","C","CHR"));
+		absences.add(build("60040210197","8978223","ZZ","5260309174","2017-04-21","2017-05-02","2017-05-01","2017-05-02","689861492","POL","POL0010089","S","CHR"));
+		absences.add(build("60040210197","8978223","ZZ","5260309174","2017-05-03","2017-06-21","2017-05-01","2017-05-02","689861492","POL","POL0010089","C","CHR"));
 		absences.add(build("67042809321","8979789","ZZ","5260309174","2017-05-02","2017-05-03","2017-05-01","2017-05-02","689861413","POL","POL0010008",null,"CHR"));
 		absences.add(build("67042809321","8979789","ZZ","5260309174","2017-05-04","2017-05-15","2017-05-01","2017-05-02","689861413","POL","POL0010008","S","CHR"));
 		absences.add(build("52062416116","8977814","ZZ","5260309174","2017-05-01","2017-05-02","2017-05-01","2017-05-02","689861494","POL","POL0010091",null,"CHR"));
@@ -87,4 +90,38 @@ public class AbsenceExportBuilderTest {
 				.build();
 	}
 
+//	private marshall(String filename) {
+//
+//	}
+//
+//	private List<String> marshallAbsenceOutput(AbsenceOutput output) {
+//		String SEPARATOR = "\",\"";
+//		StringBuilder sb = new StringBuilder();
+//		sb.append("absences.add(build(\"")
+//				.append(output.pesel).append(SEPARATOR)
+//				.append(output.number).append(SEPARATOR)
+//				.append(output.series).append(SEPARATOR)
+//				.append(output.nip).append(SEPARATOR)
+//				.append(DATE_FORMAT.format(output.dateFrom)).append(SEPARATOR)
+//				.append(DATE_FORMAT.format(output.dateTo)).append(SEPARATOR)
+//				.append(DATE_FORMAT.format(output.employmentDate)).append(SEPARATOR)
+//				.append(DATE_FORMAT.format(output.date)).append(SEPARATOR)
+//				.append(output.nudoss).append(SEPARATOR)
+//				.append(output.socdos).append(SEPARATOR)
+//				.append(output.matcle).append(SEPARATOR)
+//				.append(output.sicknessCode).append(SEPARATOR)
+//				.append(output.motifa).append("\"));");
+//
+//		return sb.toString();
+//	}
+//
+//	private File read(String src) {
+//		File file = null;
+//		try {
+//			URL url = PatternFactoryDefaultTest.class.getClassLoader().getResource(src);
+//			file = new File(url.toURI());
+//		} catch (URISyntaxException e) {}
+//		if (!file.exists()) throw new IllegalStateException();
+//		return file;
+//	}
 }

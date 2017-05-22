@@ -94,7 +94,7 @@
                     <div class="step-content">
                     	<div class="step-pane active" id="step${step}">
                     		<div class="row form-wrapper">
-                    			<div class="col-md-8">                  
+                    			<div class="col-md-8">
 
 								<tiles:insertAttribute name="content"/>
 

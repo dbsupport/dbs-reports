@@ -3,16 +3,22 @@
  */
 package pl.com.dbs.reports.report.web.form;
 
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import pl.com.dbs.reports.api.report.ReportParameter;
+import pl.com.dbs.reports.api.report.ReportParameterType;
 import pl.com.dbs.reports.api.report.pattern.PatternFormat;
 import pl.com.dbs.reports.report.domain.ReportGenerationContext;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.support.web.form.DForm;
+import pl.com.dbs.reports.support.web.form.IFormParameter;
+import pl.com.dbs.reports.support.web.form.IFormParameters;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 
 /**
@@ -81,5 +87,75 @@ public class ReportGenerationForm extends DForm implements ReportGenerationConte
 	
 	public String getFullname() {
 		return name+"."+format.getReportExtension();
-	}	
+	}
+
+	@Override
+	public List<List<ReportParameter>> getParameters() {
+		List<List<ReportParameter>> parameters = Lists.newArrayList();
+		for (final IFormParameters params : fetchParameters()) {
+			List<ReportParameter> rparams = convert(params.getParameters());
+			if (params.isDivisibled()) {
+				rparams.add(new ReportParameter() {
+
+					@Override
+					public String getName() {
+						return params.getName();
+					}
+
+					@Override
+					public String getValue() {
+						return params.getValue();
+					}
+
+					@Override
+					public String getDescription() {
+						return null;
+					}
+
+					@Override
+					public ReportParameterType getType() {
+						return ReportParameterType.DIVISIBLE;
+					}
+				});
+			}
+			parameters.add(rparams);
+		}
+
+		return parameters;
+	}
+
+	private List<ReportParameter> convert(final List<IFormParameter> parameters) {
+		return Lists.newArrayList(Iterables.transform(parameters, new Function<IFormParameter, ReportParameter>() {
+			@Override
+			public ReportParameter apply(IFormParameter input) {
+				return convert(input);
+			}
+		}));
+	}
+
+	private ReportParameter convert(final IFormParameter param) {
+		return new ReportParameter() {
+
+			@Override
+			public String getName() {
+				return param.getName();
+			}
+
+			@Override
+			public String getValue() {
+				return param.getFile()==null ? param.getValue() : readFile(param.getFile());
+			}
+
+			@Override
+			public String getDescription() {
+				return param.getDescription();
+			}
+
+			@Override
+			public ReportParameterType getType() {
+				return param.getFile()!=null ? ReportParameterType.FILE : ReportParameterType.TEXT;
+			}
+		};
+	}
+
 }

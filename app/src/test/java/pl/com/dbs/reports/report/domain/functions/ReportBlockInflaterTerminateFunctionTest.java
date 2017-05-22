@@ -9,14 +9,18 @@ import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pl.com.dbs.reports.api.report.ReportParameter;
 import pl.com.dbs.reports.report.ReportLogTestAppender;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuildContext;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuildTerminationException;
@@ -32,13 +36,13 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
  */
 public class ReportBlockInflaterTerminateFunctionTest {
 	private ReportTextBlock root;
-	private ReportBlocksBuildContext context; 
-	private Map<String, String> params;
+	private ReportBlocksBuildContext context;
+	private List<ReportParameter> params;
 	protected ReportLogTestAppender testAppender;
 	
 	@Before
 	public void doBeforeEachTestCase() {
-		params = new HashMap<String, String>();
+		params = Lists.newArrayList();
 		
 		root = mock(ReportTextBlock.class);
 		when(root.getBlocks()).thenReturn(new LinkedList<ReportTextBlock>());
@@ -57,6 +61,7 @@ public class ReportBlockInflaterTerminateFunctionTest {
 	@Test
 	public void poprawnie_wykryj() {
 		String msg = "Przerywam bo dalej nie ma sensu";
+		Map<String, String> params = Maps.newHashMap();
 		params.put("OUT_TERMINATE", "Result:1|msg:"+msg);
 		ReportBlockInflaterTerminateFunction f = new ReportBlockInflaterTerminateFunction();
 		

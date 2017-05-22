@@ -3,23 +3,20 @@
  */
 package pl.com.dbs.reports.report.domain.builders;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.lang.StringUtils;
-
+import pl.com.dbs.reports.api.report.ReportParameter;
 import pl.com.dbs.reports.api.report.pattern.PatternInflater;
 import pl.com.dbs.reports.api.report.pattern.PatternTransformate;
 import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflater;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Report blocks builder for text formats.
@@ -42,38 +39,30 @@ public class ReportTextBlocksBuilder implements ReportBlocksBuilder {
 	protected ReportTextBlock root;
 	private ReportTextBlockInflater inflater;
 	private List<ReportBlockInflation> inflations;
-	private Map<String, String> parameters;
+	private List<ReportParameter> parameters;
 	private StringBuilder sb;
 	
 	public ReportTextBlocksBuilder(final PatternTransformate transformate) {
 		content = transformate.getContent();
-		parameters = new HashMap<String, String>();
+		parameters = Lists.newArrayList();
 		sb = new StringBuilder();
 		resolveInflations(transformate);
 		resolveInput();
 	}
 	
-	public ReportTextBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflater inflater, final Map<String, String> params) {
+	public ReportTextBlocksBuilder(final PatternTransformate transformate, ReportTextBlockInflater inflater, final List<ReportParameter> params) {
 		this(transformate);
 		this.inflater = inflater;
 		addParameters(params);
 	}
 	
-	private ReportTextBlocksBuilder addParameters(Map<String, String> parameters) {
+	private ReportTextBlocksBuilder addParameters(List<ReportParameter> parameters) {
 		if (parameters!=null) {
-			for (Map.Entry<String, String> parameter : parameters.entrySet()) 
-				this.parameters.put(parameter.getKey(), parameter.getValue());
+			this.parameters.addAll(parameters);
 		}
 		return this;
 	}	
-	
-	@Override
-	public ReportTextBlocksBuilder addParameter(final String key, final String value) {
-		if (parameters!=null&&!StringUtils.isBlank(key)) {
-			this.parameters.put(key, value);
-		}
-		return this;
-	}	
+
 	
 	/**
 	 * Content. Either before as well as after construction.

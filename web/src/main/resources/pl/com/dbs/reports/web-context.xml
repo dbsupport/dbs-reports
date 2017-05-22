@@ -84,8 +84,8 @@
 		<property name="defaultEncoding" value="UTF-8"/>
 		<property name="basenames">
 			<list>
-        		<value>classpath:/web</value>
-        		<value>classpath:/app</value>
+        		<value>classpath:web</value>
+        		<value>classpath:app</value>
         	</list>
     	</property>
     </bean>  

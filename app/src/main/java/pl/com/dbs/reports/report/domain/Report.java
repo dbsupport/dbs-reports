@@ -11,14 +11,11 @@ import pl.com.dbs.reports.profile.domain.Profile;
 import pl.com.dbs.reports.report.domain.ReportPhase.ReportPhaseStatus;
 import pl.com.dbs.reports.report.pattern.domain.ReportPattern;
 import pl.com.dbs.reports.report.pattern.domain.ReportPatternFormat;
+import pl.com.dbs.reports.report.pattern.domain.ReportPatternTransformate;
 import pl.com.dbs.reports.support.db.domain.AEntity;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 
 /**
@@ -56,12 +53,10 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 	
 	@Embedded
 	private ReportPatternFormat format;	
-	
-    @ElementCollection
-    @MapKeyColumn(name="name")
-    @Column(name="value")
-    @CollectionTable(name="tre_report_parameter", joinColumns=@JoinColumn(name="report_id"))
-    private Map<String, String> parameters = new HashMap<String, String>(); 
+
+	@OneToMany(mappedBy="report", orphanRemoval=true)
+	//@OrderBy("name")
+	private List<ReportParameter> parameters = new ArrayList<ReportParameter>();
 	
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name="pattern_id")	
@@ -187,8 +182,11 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
     	return this;
     }
     
-    public Report parameters(Map<String, String> params) {
+    public Report parameters(List<ReportParameter> params) {
     	this.parameters = params;
+		for (ReportParameter param : params) {
+			param.report(this);
+		}
     	return this;
     }
     
@@ -213,7 +211,11 @@ public class Report extends AEntity implements pl.com.dbs.reports.api.report.Rep
 	}
 
 	@Override
-	public Map<String, String> getParameters() {
+	public List<? extends pl.com.dbs.reports.api.report.ReportParameter> getParameters() {
+		return parameters;
+	}
+
+	public List<ReportParameter> getParametersAsList() {
 		return parameters;
 	}
 

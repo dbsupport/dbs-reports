@@ -7,7 +7,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
- * Created by Krzysztof Kaziura (krzysztof.kaziura@contractors.roche.com) on 2017-05-19.
+ * @author Krzysztof Kaziura | krzysztof.kaziura@gmail.com | http://www.lazydevelopers.pl
+ * @copyright (c) 2017
  */
 public class TestFileHelper {
 

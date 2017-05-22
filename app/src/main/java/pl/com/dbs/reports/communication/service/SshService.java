@@ -30,10 +30,10 @@ public class SshService {
 	private ParameterService parameterService;
 	private static final int BUFFER_SIZE = 1024;
 
-	@Value("#{new Integer.parseInt('${ssh.service.sleep.time}')}")
+	@Value("${ssh.service.sleep.time}")
 	Integer sleepTime;
 
-	@Value("#{new Integer.parseInt('${ssh.service.try.counter}')}")
+	@Value("${ssh.service.try.counter}")
 	Integer tries;
 
 	@Autowired

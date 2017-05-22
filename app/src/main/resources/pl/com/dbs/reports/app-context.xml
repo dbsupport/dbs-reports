@@ -22,8 +22,11 @@
     <aop:aspectj-autoproxy>
         <aop:include name="report\.processing\.service\.aspect"/>
     </aop:aspectj-autoproxy>
-    
-    
+
+
+    <context:property-placeholder ignore-resource-not-found="true" location="classpath:app.properties" />
+    <!--<util:properties id="properties" location="classpath:app.properties"/>-->
+
     <!-- task:annotation-driven executor="tasks.executor" scheduler="tasks.scheduler"/>
     
     <task:executor id="tasks.executor" pool-size="5" rejection-policy="CALLER_RUNS"/>

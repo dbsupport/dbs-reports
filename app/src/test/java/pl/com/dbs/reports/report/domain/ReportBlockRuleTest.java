@@ -11,20 +11,28 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import pl.com.dbs.reports.api.report.*;
+import pl.com.dbs.reports.api.report.ReportParameter;
 import pl.com.dbs.reports.report.PatternFactoryDefaultTest;
 import pl.com.dbs.reports.report.domain.builders.ReportBlocksBuilder;
 import pl.com.dbs.reports.report.domain.builders.ReportTextBlocksBuilder;
 import pl.com.dbs.reports.report.domain.builders.inflaters.ReportTextBlockInflaterDefault;
 import pl.com.dbs.reports.report.pattern.domain.ReportPatternTransformate;
 import pl.com.dbs.reports.security.domain.SessionContext;
+
+import javax.annotation.Nullable;
 
 /**
  * Rules tests base.
@@ -36,13 +44,13 @@ import pl.com.dbs.reports.security.domain.SessionContext;
 @PrepareForTest(SessionContext.class)
 public abstract class ReportBlockRuleTest {
 	private ReportTextBlockInflaterDefault inflater;
-	Map<String, String> params;
+	List<ReportParameter> params;
 	
 
 	@Before
 	public void doBeforeEachTestCase() {
 		inflater = new ReportTextBlockInflaterDefault();
-		params = new HashMap<String, String>();
+		params = Lists.newArrayList();
 	}
 	
 	@After  
@@ -83,5 +91,16 @@ public abstract class ReportBlockRuleTest {
 	    output.close();
 	    input.close();
 	    return output.toByteArray();
-	}	
+	}
+
+	String findParamByName(final String name) {
+		ReportParameter parameter = Iterables.find(this.params, new Predicate<ReportParameter>() {
+			@Override
+			public boolean apply(@Nullable ReportParameter input) {
+				return input.getName().equals(name);
+			}
+		});
+
+		return parameter!=null ? parameter.getValue() : null;
+	}
 }

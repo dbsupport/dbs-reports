@@ -72,7 +72,7 @@
                 tableName="tpa_parameter">
             <column name="id" type="bigint" valueNumeric="111"/>
             <column name="key" type="varchar(64)" value="client.db.url"/>
-            <column name="value" type="bytea" value="jdbc:oracle:thin:@10.131.44.1:1521:LPHR"/>
+            <column name="value" type="bytea" value="jdbc:oracle:thin:@10.131.44.3:1521:LMHR"/>
             <column name="type" type="varchar(64)" value="TEXT"/>
             <column name="scope" type="varchar(64)" value="DB"/>
         </insert>
